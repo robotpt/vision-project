@@ -23,7 +23,7 @@ Documentation for this project lives at `vision-project.readthedocs.io <https://
 Meta
 ----
 
-Audrow Nash - `audrowna@usc.edu <mailto:audrowna@usc.edu/>`_
+Audrow Nash - `audrowna@usc.edu <mailto:audrowna@usc.edu>`_
 
 Distributed under the MIT license. See `LICENSE.txt <https://github.com/robotpt/vision-project/blob/master/LICENSE.txt>`_ for more information.
 
