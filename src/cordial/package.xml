@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+
+  <name>vision_project</name>
+  <version>0.0.0</version>
+  <description>The vision_project package.</description>
+
+  <license>MIT</license>
+
+  <maintainer email="audrow@hey.com">Audrow Nash</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <export>
+    <metapackage/>
+  </export>
+
+</package>
