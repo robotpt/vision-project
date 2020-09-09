@@ -2,4 +2,4 @@
 Vision Project
 ==============
 
-.. include:: overview.rst
+.. include:: ../README.rst
