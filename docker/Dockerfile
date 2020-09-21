@@ -7,9 +7,11 @@ FROM ros:kinetic-ros-base-xenial as vision_project_min
 
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
-ARG vision_project_branch=master
+ARG vision_project_branch="master"
 
-ENV ROS_WS /root/catkin_ws
+# Environment variables
+ENV PYTHON3_VERSION="python3.8"
+ENV ROS_WS="/root/catkin_ws"
 
 # TODO: see if this can be deleted
 # Setup new ROS key + install ros packages
@@ -50,6 +52,25 @@ RUN \
 		boto3==1.12.11 \
 		soundfile==0.10.3.post1 \
 		speedtest-cli==2.1.2 \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Setup Python3 for vision-project
+RUN \
+	apt-get update -y \
+	&& apt-get install -y \
+		software-properties-common \
+		curl \
+	&& add-apt-repository ppa:deadsnakes/ppa -y \
+	&& apt-get update \
+	&& apt-get install -y \
+		${PYTHON3_VERSION} \
+		${PYTHON3_VERSION}-dev \
+		${PYTHON3_VERSION}-venv \
+	# Setup pip
+	&& curl https://bootstrap.pypa.io/get-pip.py | sudo python3.8 \
+	&& ${PYTHON3_VERSION} -m pip install \
+		rospkg \
+		catkin_pkg \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Setup HTTP server
@@ -138,15 +159,28 @@ RUN \
 	&& apt-get install -y code \
 	&& rm -rf /var/lib/apt/lists/* 
 
+# Setup Github command line tool
+RUN \
+	apt-get update \
+	&& apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 \
+	&& apt-add-repository https://cli.github.com/packages \
+	&& apt-get update \
+	&& apt-get install -y \
+		gh \
+	&& rm -rf /var/lib/apt/lists/*
+
 # Put things you want in your ~/.bashrc here
 RUN \
 	unset DEBIAN_FRONTEND \
 	&& echo " \
-alias gs='git status'\n\
-alias gl='git log --pretty=oneline --graph'\n\
 alias gb='git branch -a'\n\
-alias gg='git gui'\n\
+alias gcb='git checkout -b '\n\
 alias gd='git diff HEAD'\n\
+alias gg='git gui'\n\
+alias gl='git log --pretty=oneline --graph'\n\
+alias rh='cd $ROS_PATH'\n\
+alias gs='git status'\n\
 alias code='code --user-data-dir /root/.visual_code/'\n\
+alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 source ${ROS_WS}/devel/setup.bash\n\
 " >> ~/.bashrc
