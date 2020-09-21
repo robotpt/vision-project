@@ -1,0 +1,3 @@
+video_feedback_emailer:
+  feedback_topic: "vision_project/emailer/feedback"
+  feedback_keywords: ["good job", "work harder", "try something new"]
