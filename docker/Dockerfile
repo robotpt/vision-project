@@ -178,7 +178,7 @@ alias gcb='git checkout -b '\n\
 alias gd='git diff HEAD'\n\
 alias gg='git gui'\n\
 alias gl='git log --pretty=oneline --graph'\n\
-alias rh='cd $ROS_PATH'\n\
+alias rh='cd $ROS_WS'\n\
 alias gs='git status'\n\
 alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
