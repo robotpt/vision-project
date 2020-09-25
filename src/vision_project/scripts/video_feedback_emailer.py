@@ -12,11 +12,11 @@ class VideoFeedbackEmailer:
 
     def __init__(self):
         # get environment variables
-        to_email = os.environ.get('TO_EMAIL')
-        from_email = os.environ.get('FROM_EMAIL')
-        email_password = os.environ.get('EMAIL_PASSWORD')
-        email_host = os.environ.get('EMAIL_HOST')
-        email_port = os.environ.get('EMAIL_PORT')
+        to_email = os.environ.get('EMAIL_TO')
+        from_email = os.environ.get('ROBOT_EMAIL_ADDRESS')
+        email_password = os.environ.get('ROBOT_EMAIL_PASSWORD')
+        email_host = os.environ.get('ROBOT_EMAIL_HOST')
+        email_port = os.environ.get('ROBOT_EMAIL_PORT')
         # Make sure all environment variables a value
         if not all([to_email, from_email, email_password, email_host, email_port]):
             raise ValueError("Not all OS variables are populated")

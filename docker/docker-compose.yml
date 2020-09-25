@@ -7,10 +7,14 @@ services:
       target: vision_project_dev
       network: host
     environment:
+      EMAIL_TO:
+      ROBOT_EMAIL_ADDRESS:
+      ROBOT_EMAIL_PASSWORD:
+      ROBOT_EMAIL_HOST:
+      ROBOT_EMAIL_PORT:
       DISPLAY: $DISPLAY
       QT_GRAPHICSSYSTEM: native
-      ROS_DISTRO: kinetic
-      ROS_MASTER_URI: $ROS_MASTER_URI
+      ROS_MASTER_URI:
       IS_DOCKER_ENV: "true"
     privileged: true
     network_mode: host
