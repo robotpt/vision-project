@@ -1,0 +1,7 @@
+<launch>
+
+    <rosparam file="$(find vision_project)/config.yaml" command="load" />
+
+    <node pkg="vision_project" type="video_feedback_emailer.py" name="feedback_emailer" output="screen"/>
+
+</launch>
