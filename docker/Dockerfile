@@ -71,6 +71,7 @@ RUN \
 	&& ${PYTHON3_VERSION} -m pip install \
 		rospkg \
 		catkin_pkg \
+		email-keyword-matcher \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Setup HTTP server
