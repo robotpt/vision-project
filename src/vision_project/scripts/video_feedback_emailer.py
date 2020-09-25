@@ -39,7 +39,7 @@ class VideoFeedbackEmailer:
         rospy.init_node('vision_feedback_emailer')
         rospy.Subscriber(
             #TODO use whatever data capture does
-            rospy.get_param('data_sent_topic', 'data_sent_topic'),
+            rospy.get_param('uploader/publish_topic'),
             String,
             self._data_sent_callback,
             queue_size=1,
