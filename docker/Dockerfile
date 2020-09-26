@@ -195,9 +195,3 @@ RUN \
         && git clone https://github.com/emilyxzhou/interaction-engine.git \
 	&& git clone https://github.com/emilyxzhou/ros-vision-interaction.git \
 	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make" 
-
-RUN \
-	export PYTHONPATH="$PYTHONPATH:/root/catkin_ws/src/interaction-engine/interaction_engine" \
-	&& cd ${ROS_WS}; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make" 
-
-
