@@ -184,3 +184,20 @@ alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 source ${ROS_WS}/devel/setup.bash\n\
 " >> ~/.bashrc
+
+# ===================================================
+# Clone relevant repositories for the vision-project interaction
+# ===================================================
+FROM vision_project_dev as vision_project_interaction
+
+RUN \
+	cd ${ROS_WS}/src \
+        && git clone https://github.com/emilyxzhou/interaction-engine.git \
+	&& git clone https://github.com/emilyxzhou/ros-vision-interaction.git \
+	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make" 
+
+RUN \
+	export PYTHONPATH="$PYTHONPATH:/root/catkin_ws/src/interaction-engine/interaction_engine" \
+	&& cd ${ROS_WS}; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make" 
+
+

@@ -11,7 +11,7 @@ else
 	MODE=$1;
 fi
 
-SERVICE_NAME="vision_project_dev"
+SERVICE_NAME="vision_project_interaction"
 ROS_MASTER_URI=$ROS_MASTER_URI docker-compose up --build
 case "$MODE" in
 	terminal | terminal_debug | t )
