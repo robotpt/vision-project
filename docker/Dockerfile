@@ -192,6 +192,6 @@ FROM vision_project_dev as vision_project_interaction
 
 RUN \
 	cd ${ROS_WS}/src \
-        && git clone https://github.com/emilyxzhou/interaction-engine.git \
 	&& git clone https://github.com/emilyxzhou/ros-vision-interaction.git \
-	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make" 
+	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make" \
+	&& echo "alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'" >> ~/.bashrc
