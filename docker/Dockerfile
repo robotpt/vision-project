@@ -195,3 +195,6 @@ RUN \
 	&& git clone https://github.com/emilyxzhou/ros-vision-interaction.git \
 	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make" \
 	&& echo "alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'" >> ~/.bashrc
+
+# Change to your bucket
+ENV AWS_BUCKET_NAME my-new-bucket2378941903
