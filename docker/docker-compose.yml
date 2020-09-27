@@ -22,7 +22,7 @@ services:
       - pycharm_config:/root/.PyCharmCE2020.2.1/
       - ros_logs:/root/.ros/log
       - scratch:/root/scratch/
-      - wkspace:/root/catkin_ws/
+      - workspace:/root/catkin_ws/
       - visual_code_plugins:/root/.vscode/
       - visual_code_user_data:/root/.visual_code/
       - ./shared/:/root/shared/
@@ -55,7 +55,7 @@ services:
       - pycharm_config:/root/.PyCharmCE2020.2.1/
       - ros_logs:/root/.ros/log
       - scratch:/root/scratch/
-      - wkspace:/root/catkin_ws/
+      - workspace:/root/catkin_ws/
       - visual_code_plugins:/root/.vscode/
       - visual_code_user_data:/root/.visual_code/
       - ./shared/:/root/shared/
@@ -72,6 +72,6 @@ volumes:
   pycharm_config:
   ros_logs:
   scratch:
-  wkspace:
+  workspace:
   visual_code_user_data:
   visual_code_plugins:
