@@ -34,39 +34,6 @@ services:
       - ~/.vimrc/:/root/.vimrc/:ro
     working_dir: /root/
 
-  vision_project_interaction:
-    build:
-      context: .
-      target: vision_project_interaction
-      network: host
-    environment:
-      DISPLAY: $DISPLAY
-      QT_GRAPHICSSYSTEM: native
-      ROS_DISTRO: kinetic
-      ROS_MASTER_URI: $ROS_MASTER_URI
-      IS_DOCKER_ENV: "true"
-    privileged: true
-    network_mode: host
-    devices:
-      - /dev/dri:/dev/dri
-      - /dev/snd:/dev/snd
-    volumes:
-      - aws_config:/root/.aws/
-      - pycharm_config:/root/.PyCharmCE2020.2.1/
-      - ros_logs:/root/.ros/log
-      - scratch:/root/scratch/
-      - workspace:/root/catkin_ws/
-      - visual_code_plugins:/root/.vscode/
-      - visual_code_user_data:/root/.visual_code/
-      - ./shared/:/root/shared/
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-      - ~/.config/gh/:/root/.config/gh/:ro
-      - ~/.gitconfig/:/root/.gitconfig/:ro
-      - ~/.vim/:/root/.vim/:ro
-      - ~/.vimrc/:/root/.vimrc/:ro
-    working_dir: /root/
-
 volumes:
   aws_config:
   pycharm_config:
