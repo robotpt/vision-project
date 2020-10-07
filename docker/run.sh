@@ -6,9 +6,9 @@ cd $FILE_DIR
 
 if [ -z ${1+x} ];
 then
-        MODE="popup";
+	MODE="popup";
 else
-        MODE=$1;
+	MODE=$1;
 fi
 
 SERVICE_NAME="vision_project_dev"
