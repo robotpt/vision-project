@@ -88,12 +88,12 @@ RUN \
 	mkdir -p ${ROS_WS}/src \
 	&& cd ${ROS_WS}/src \
 	&& git clone --branch ${vision_project_branch} https://github.com/robotpt/vision-project.git \
+	&& git clone https://github.com/emilyxzhou/ros-vision-interaction.git \
 	&& git clone https://github.com/robotpt/cordial.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
 	&& git clone https://github.com/RobotWebTools/rosbridge_suite.git \
 	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
-
 
 # ======================================================
 # Copy the testing entrypoint for testing vision-project
@@ -183,4 +183,4 @@ alias gs='git status'\n\
 alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 source ${ROS_WS}/devel/setup.bash\n\
-" >> ~/.bashrc
+alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'" >> ~/.bashrc
