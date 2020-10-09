@@ -184,3 +184,5 @@ alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 source ${ROS_WS}/devel/setup.bash\n\
 alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'" >> ~/.bashrc
+
+ENV AWS_BUCKET_NAME aws-bucket-name
