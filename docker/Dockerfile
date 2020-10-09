@@ -88,7 +88,7 @@ RUN \
 	mkdir -p ${ROS_WS}/src \
 	&& cd ${ROS_WS}/src \
 	&& git clone --branch ${vision_project_branch} https://github.com/robotpt/vision-project.git \
-	&& git clone https://github.com/emilyxzhou/ros-vision-interaction.git \
+	&& git clone --recurse-submodules https://github.com/emilyxzhou/ros-vision-interaction.git \
 	&& git clone https://github.com/robotpt/cordial.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
@@ -184,3 +184,5 @@ alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 source ${ROS_WS}/devel/setup.bash\n\
 alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'" >> ~/.bashrc
+
+ENV AWS_BUCKET_NAME aws-bucket-name
