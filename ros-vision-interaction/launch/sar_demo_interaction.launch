@@ -1,0 +1,38 @@
+<launch>
+
+
+    <arg name="face_port" default="8080"/>
+    <arg name="gui_port" default="8081"/>
+    <arg name="is_launch_sound_listener" default="true" />
+    <arg name="is_record_audio" default="true" />
+    <arg name="upload_directory" value="/root/upload" />
+
+    <!-- Launch Cordial -->
+    <include file="$(find cordial_manager)/launch/manager.launch">
+        <arg name="face_port" value="$(arg face_port)"/>
+        <arg name="gui_port" value="$(arg gui_port)"/>
+        <arg name="is_launch_sound_listener" default="$(arg is_launch_sound_listener)" />
+    </include>
+
+
+    <node pkg="ros-vision-interaction" type="sar_demo.py" name="cordial_client" required="true" output="screen" />
+
+    <include file="$(find aws_uploader)/launch/aws_uploader.launch">
+        <arg name="upload_directory_path" default="$(arg upload_directory)"/>
+        <arg name="bucket_name" default="$(env AWS_BUCKET_NAME)"/>
+    </include>
+    <include file="$(find video_capture)/launch/capture.launch">
+        <arg name="output_directory" value="$(arg upload_directory)"/>
+        <arg name="image_topic" value="camera/color/image_raw"/>
+        <arg name="is_record_topic" value="data_capture/is_record"/>
+    </include>
+    <group if="$(arg is_record_audio)">
+        <include file="$(find audio_capture2)/launch/capture.launch">
+            <arg name="output_directory" value="$(arg upload_directory)"/>
+            <arg name="audio_topic" value="audio/audio"/>
+            <arg name="is_record_topic" value="data_capture/is_record"/>
+            <arg name="is_launch_audio_capture" value="true"/>
+        </include>
+    </group>
+
+</launch>

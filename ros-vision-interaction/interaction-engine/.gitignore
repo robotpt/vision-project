@@ -1,0 +1,7 @@
+*.pyc
+__pycache__
+venv/
+.idea/
+examples/example1_database.json
+examples/example2_database.json
+scratch
