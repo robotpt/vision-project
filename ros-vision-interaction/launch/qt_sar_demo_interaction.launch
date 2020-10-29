@@ -1,0 +1,21 @@
+<launch>
+    <arg name="aws_voice_name" default="Justin"/>
+    <arg name="face_port" default="8081"/>
+    <arg name="gui_port" default="8082"/>
+    <arg name="is_launch_sound_listener" default="false" />
+
+    <!-- Launch SAR interaction + Cordial -->
+    <include file="$(find ros-vision-interaction)/launch/sar_demo_interaction.launch">
+        <arg name="face_port" value="$(arg face_port)"/>
+        <arg name="gui_port" value="$(arg gui_port)"/>
+        <arg name="is_launch_sound_listener" default="$(arg is_launch_sound_listener)" />
+        <arg name="aws_voice_name" value="$(arg aws_voice_name)"/>
+    </include>
+
+    <!-- Launch QT NUC -->
+    <include file="$(find qt_robot_nuc)/launch/qt_robot_nuc.launch"/>
+
+    <!-- Relay gesture messages to QT robot -->
+    <node pkg="topic_tools" type="relay" name="gesture_relay" args="/cordial/gesture/play /qt_robot/gesture/play" />
+
+</launch>
