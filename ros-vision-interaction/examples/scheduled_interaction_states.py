@@ -33,8 +33,6 @@ database_keys = [
     Keys.WEEKEND_GREETING
 ]
 
-exit_transition = {"Next": "exit"}
-
 ask_name = State(
     name=Keys.ASK_NAME,
     message_type=Message.Type.TEXT_ENTRY,
@@ -52,7 +50,7 @@ ask_age = State(
 )
 confirm_name_and_age = State(
     name=Keys.CONFIRM_NAME_AND_AGE,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.MULTIPLE_CHOICE,
     content="Your name is {ask name} and you are {ask age} years old, is that right?",
     next_states=[Keys.ASK_NAME, Keys.GREETING],
     transitions={"Yes": Keys.GREETING, "No": Keys.ASK_NAME},
@@ -60,10 +58,9 @@ confirm_name_and_age = State(
 )
 greeting = State(
     name=Keys.GREETING,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.NO_INPUT,
     content=["Hi {ask name}!", "Hello {ask name}!"],
     next_states=["exit"],
-    transitions=exit_transition,
     database_keys_to_read=[Keys.ASK_NAME],
 )
 
@@ -82,7 +79,7 @@ first_interaction = StateCollection(
 
 how_are_you = State(
     name=Keys.HOW_ARE_YOU,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.MULTIPLE_CHOICE,
     content=["Hi {ask name}, how are you?", "Hello {ask name}, how are you doing today?"],
     next_states=[Keys.GOOD_TO_HEAR, Keys.IM_SORRY],
     transitions={"Good!": Keys.GOOD_TO_HEAR, "Not great.": Keys.IM_SORRY},
@@ -91,18 +88,16 @@ how_are_you = State(
 
 good_to_hear = State(
     name=Keys.GOOD_TO_HEAR,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.NO_INPUT,
     content=["Good to hear, have a nice day!"],
     next_states=["exit"],
-    transitions=exit_transition
 )
 
 im_sorry = State(
     name=Keys.IM_SORRY,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.NO_INPUT,
     content="I'm sorry to hear that, I hope you feel better!",
-    next_states=["exit"],
-    transitions=exit_transition
+    next_states=["exit"]
 )
 
 how_are_you_interaction_states = [
@@ -119,7 +114,7 @@ how_are_you_interaction = StateCollection(
 
 stay_hydrated = State(
     name=Keys.STAY_HYDRATED,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.MULTIPLE_CHOICE,
     content="Are you staying hydrated, {ask name}?",
     next_states=[Keys.GET_ENOUGH_SLEEP],
     transitions={"Yes": Keys.GET_ENOUGH_SLEEP, "No": Keys.GET_ENOUGH_SLEEP},
@@ -128,7 +123,7 @@ stay_hydrated = State(
 
 get_enough_sleep = State(
     name=Keys.GET_ENOUGH_SLEEP,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.MULTIPLE_CHOICE,
     content="Are you getting at least 7 hours of sleep every night?",
     next_states=[Keys.CHECK_IN_AGAIN],
     transitions={"Yes": Keys.CHECK_IN_AGAIN, "No": Keys.CHECK_IN_AGAIN}
@@ -136,7 +131,7 @@ get_enough_sleep = State(
 
 check_in_again = State(
     name=Keys.CHECK_IN_AGAIN,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.MULTIPLE_CHOICE,
     content="Let's talk again soon; how about the same time tomorrow?",
     next_states=["exit"],
     transitions={"Sure": "exit", "No, the day after": "exit"}
@@ -156,7 +151,7 @@ check_in_interaction = StateCollection(
 
 weekend_greeting = State(
     name=Keys.WEEKEND_GREETING,
-    message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
+    message_type=Message.Type.MULTIPLE_CHOICE,
     content="How's your weekend going?",
     next_states=[Keys.GOOD_TO_HEAR, Keys.IM_SORRY],
     transitions={"Great!": Keys.GOOD_TO_HEAR, "Not too good": Keys.IM_SORRY},

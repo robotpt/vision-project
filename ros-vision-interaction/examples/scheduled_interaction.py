@@ -7,7 +7,7 @@ import random
 import rospy
 import schedule
 
-from scheduled_interaction_database import \
+from scheduled_interaction_states import \
     first_interaction, how_are_you_interaction, check_in_interaction, weekend_interaction, database_keys, Keys
 
 from interaction_engine.database import Database
@@ -42,7 +42,6 @@ class ScheduledInteraction:
         self._sleep_publisher.publish(Bool(data=True))
 
     def _choose_interaction(self):
-        self._interaction_plan = []
         if self._database[Keys.IS_FIRST_INTERACTION] == "":
             self._database[Keys.IS_FIRST_INTERACTION] = "false"
             self._interaction_plan.append(first_interaction)
@@ -67,7 +66,6 @@ if __name__ == "__main__":
     example_interaction.clear_database()
 
     while not rospy.is_shutdown():
-
         rospy.logdebug("Scheduled interaction running")
         example_interaction.run_once()
-        rospy.sleep(5)
+        rospy.sleep(1.)

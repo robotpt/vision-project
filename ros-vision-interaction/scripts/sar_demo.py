@@ -40,7 +40,7 @@ jokes = {
     "robots": [
         "What is a robot's favorite snack? <break time=\"0.75s\"/>*QT/yawn*<prosody volume=\"loud\" rate=\"slow\">"
         "*happy*Computer</prosody> <prosody rate=\"slow\" pitch=\"high\">chips</prosody>. Chomp, chomp!",
-        "What is it called when a robot eats a sandwich in one chomp?<break time=\"0.75s\"/>*QT/yawn* A megabyte.",
+        "What is it called when a robot eats a sandwich in one chomp?*QT/yawn*<break time=\"0.75s\"/> A megabyte.",
         "Why did the robot marry his fiancee? <break time=\"0.75s\"/>*QT/happy*He couldn't resistor!",
         "Why did the robot go to the shoe shop? To get rebooted.",
         "A robot's collection of musical instruments will never be complete. They can never get any organs."
@@ -66,12 +66,12 @@ def make_random_joke_content():
 
 
 news_stories = [
-    "George Ahearn, who grew up in the farming town of Othello, Washington, co-founded EastWest Food Rescue after "
+    "<prosody rate=\"medium\">George Ahearn, who grew up in the farming town of Othello, Washington, co-founded EastWest Food Rescue after "
     "learning that Covid-19 was costing local farmers so much business that they were willing to destroy their crops. "
     "His non-profit has since moved three million pounds of produce from farms in eastern Washington to the western "
     "part of the state for distribution to hundreds of food banks and meal programs. Ahearn has a message for anyone "
     "who wants to make their community a better place, \"I have seen minutes of effort move thousands, and thousands "
-    "of pounds of food. Just figure out what you are passionate about and what you could get involved in.\" "
+    "of pounds of food. Just figure out what you are passionate about and what you could get involved in.\"</prosody>"
 ]
 
 ASK_TO_CHAT = "ask to chat"
@@ -165,7 +165,7 @@ joke_1 = State(
 thats_ok = State(
     name=THATS_OK,
     message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
-    content=["That's OK {what's your name}, I'm not offended, but let's plan to talk another time today or tomorrow. "
+    content=["That's OK {what's your name}, but let's plan to talk another time today or tomorrow. "
              "When is good for you?"],
     next_states=[CANT_WAIT_TO_TALK, HOW_MANY_HOURS],
     transitions={
@@ -358,7 +358,7 @@ take_a_break = State(
              "difficult</prosody></emphasis> to do things with your vision, but I know that together we <emphasis "
              "level=\"strong\"><prosody rate=\"slow\" pitch=\"high\">can</prosody></emphasis> get through it. "
              "<prosody pitch=\"high\"><prosody rate=\"slow\">For now</prosody></prosody>, let's take our minds "
-             "<prosody rate=\"slow\">off</prosody> that; we deserve a <prosody pitch=\"high\">break</prosody>."],
+             "<prosody rate=\"slow\">off</prosody> that."],
     next_states=[ASK_TO_SHARE_NEWS_STORY],
     transitions={"Next": ASK_TO_SHARE_NEWS_STORY},
     database_keys_to_read=[WHATS_YOUR_NAME]
@@ -405,9 +405,9 @@ ending_joke_contents = [
     "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> "
     "*QT/emotions/shy* Knock knock, <break strength=\"x-strong\"/><prosody pitch=\"high\">who's there</prosody><break "
     "time=\"0.5s\"/>? Eyeball. <break time=\"0.5s\"/>Eyeball who? <break time=\"0.5s\"/> "
-    "Eyeball my eyes out every time you go! <break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye!",
+    "Eyeball my eyes out every time you go! <break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now, {what's your name}!",
     "Before we say goodbye, I'd like to tell you one of my favorite jokes about robots.<break time=\"1s\"/> I'm so "
-    "good at sleeping, I can do it with my eyes closed!*QT/bye-bye**happy* Goodbye!"
+    "good at sleeping, I can do it with my eyes closed!*QT/bye-bye**happy* Goodbye for now, {what's your name}!"
 ]
 
 ending_joke = State(
@@ -416,14 +416,15 @@ ending_joke = State(
     content=random.choice(ending_joke_contents),
     next_states=["exit"],
     transitions={"Bye!": "exit"},
+    database_keys_to_read=[WHATS_YOUR_NAME]
 )
 
 after_news_story = State(
     name=AFTER_NEWS_STORY,
     message_type=Message.Type.MULTIPLE_CHOICE_ONE_COLUMN,
     content="I hope you enjoyed that <prosody pitch=\"high\">story!</prosody> Have a <prosody "
-            "pitch=\"high\">great</prosody> rest of your day. And don't forget to use your *QT/bye-bye**happy*<prosody "
-            "pitch=\"high\">magnifier</prosody>! <break time=\"0.2s\"/><prosody pitch=\"high\" rate=\"slow\">Bye-bye!</prosody>",
+            "pitch=\"high\">great</prosody> rest of your day. And don't forget to use your *happy*<prosody "
+            "pitch=\"high\">magnifier</prosody>! *QT/bye-bye*<break time=\"0.2s\"/><prosody pitch=\"high\" rate=\"slow\">Bye-bye!</prosody>",
     next_states=["exit"],
     transitions={"Bye!": "exit"},
 )
@@ -493,8 +494,8 @@ if __name__ == "__main__":
 
     while not rospy.is_shutdown():
 
-        while not interface.is_begin_interaction:
-            rospy.sleep(1)
+        # while not interface.is_begin_interaction:
+        #     rospy.sleep(1)
 
         rospy.sleep(2)
 
@@ -511,4 +512,6 @@ if __name__ == "__main__":
 
         is_record_publisher.publish(False)
 
-        interface.is_begin_interaction = False
+        rospy.sleep(20)
+
+        # interface.is_begin_interaction = False

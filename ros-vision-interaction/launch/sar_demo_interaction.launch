@@ -1,19 +1,19 @@
 <launch>
-
-    <arg name="aws_voice_name" default="Justin"/>
-    <arg name="face_port" default="8080"/>
-    <arg name="gui_port" default="8081"/>
+    <arg name="aws_voice_name" default="Kimberly"/>
+    <arg name="face_port" default="8081"/>
+    <arg name="gui_port" default="8082"/>
     <arg name="is_launch_sound_listener" default="true" />
     <arg name="is_record_audio" default="true" />
     <arg name="upload_directory" value="/root/upload" />
 
     <!-- Launch Cordial -->
     <include file="$(find cordial_manager)/launch/manager.launch">
-        <arg name="aws_voice_name" value="$(arg aws_voice_name)"/>
         <arg name="face_port" value="$(arg face_port)"/>
         <arg name="gui_port" value="$(arg gui_port)"/>
         <arg name="is_launch_sound_listener" default="$(arg is_launch_sound_listener)" />
+        <arg name="aws_voice_name" value="$(arg aws_voice_name)"/>
     </include>
+
 
     <node pkg="ros-vision-interaction" type="sar_demo.py" name="cordial_client" required="true" output="screen" />
 
