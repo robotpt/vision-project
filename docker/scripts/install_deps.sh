@@ -36,13 +36,13 @@ sudo apt-get install -y \
 	python-gst0.10 \
 	python-mock \
 	python-pyaudio
-python -m pip install --upgrade pip
-python -m pip install \
+python2 -m pip install --upgrade pip --user
+python2 -m pip install --user \
 	rospkg \
 	catkin_pkg \
 	boto3==1.12.11 \
 	soundfile==0.10.3.post1 \
-	speedtest-cli==2.1.2
+	speedtest-cli==2.1.2 
 
 # Setup Python3 - for the vision project
 sudo apt-get install -y \
@@ -67,4 +67,6 @@ sudo apt-get install -y \
 	npm
 sudo npm install http-server -g
 sudo ln -s /usr/bin/nodejs /usr/bin/node
+
+echo "Done!"
 
