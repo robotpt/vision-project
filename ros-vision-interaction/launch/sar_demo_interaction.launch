@@ -4,7 +4,7 @@
     <arg name="gui_port" default="8082"/>
     <arg name="is_launch_sound_listener" default="true" />
     <arg name="is_record_audio" default="true" />
-    <arg name="upload_directory" value="/root/upload" />
+    <arg name="upload_directory" value="~/upload" />
 
     <!-- Launch Cordial -->
     <include file="$(find cordial_manager)/launch/manager.launch">
