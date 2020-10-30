@@ -22,6 +22,7 @@ RUN \
 	&& git clone --branch ${vision_project_branch} https://github.com/robotpt/vision-project.git \
 	&& git clone https://github.com/robotpt/cordial.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
+	&& git clone https://github.com/robotpt/qt-robot-interfaces.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
 	&& git clone https://github.com/RobotWebTools/rosbridge_suite.git \
 	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
