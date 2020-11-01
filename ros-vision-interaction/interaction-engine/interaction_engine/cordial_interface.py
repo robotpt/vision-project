@@ -31,13 +31,6 @@ class CordialInterface(Interface):
         self._cordial_action_client = actionlib.SimpleActionClient(self._action_name, AskOnGuiAction)
         self._is_begin_interaction = False
 
-        self._screen_tap_listener = rospy.Subscriber(
-            "cordial/gui/event/mouse",
-            MouseEvent,
-            callback=self._screen_tap_listener_callback,
-            queue_size=1
-        )
-
         if seconds_until_timeout is not None:
             if type(seconds_until_timeout) is not int or not float:
                 raise TypeError("Timeout must be int or float")
@@ -88,14 +81,3 @@ class CordialInterface(Interface):
     def _cancel_goal(self):
         if self._cordial_action_client.get_state() == actionlib.SimpleGoalState.ACTIVE:
             self._cordial_action_client.cancel_goal()
-
-    def _screen_tap_listener_callback(self, _):
-        self._is_begin_interaction = True
-
-    @property
-    def is_begin_interaction(self):
-        return self._is_begin_interaction
-
-    @is_begin_interaction.setter
-    def is_begin_interaction(self, is_begin_interaction):
-        self._is_begin_interaction = is_begin_interaction
