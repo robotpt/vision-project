@@ -88,10 +88,10 @@
       ],
       "message type": "multiple choice one column",
       "next states": [
-        "ending joke"
+        "ending"
       ],
       "transitions": {
-        "Next": "ending joke"
+        "Next": "ending"
       }
     },
     "glad to hear": {
@@ -338,7 +338,7 @@
         "Bye!": "exit"
       }
     },
-    "ending joke": {
+    "ending": {
       "content": [
         "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> *QT/emotions/shy* Knock knock, <break strength=\"x-strong\"/><prosody pitch=\"high\">who's there</prosody><break time=\"0.5s\"/>? Eyeball. <break time=\"0.5s\"/>Eyeball who? <break time=\"0.5s\"/> Eyeball my eyes out every time you go! <break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now, {what's your name}!",
         "Before we say goodbye, I'd like to tell you one of my favorite jokes about robots.<break time=\"1s\"/> I'm so good at sleeping, I can do it with my eyes closed!*QT/bye-bye**happy* Goodbye for now, {what's your name}!"
