@@ -8,7 +8,6 @@ import rospy
 from interaction_engine.cordial_interface import CordialInterface
 from interaction_engine.database import Database
 from interaction_engine.int_engine import InteractionEngine
-from interaction_engine.message import Message
 from interaction_engine.state import State
 from interaction_engine.state_collection import StateCollection
 
@@ -17,27 +16,16 @@ from std_msgs.msg import Bool
 
 logging.basicConfig(level=logging.INFO)
 
-cwd = os.getcwd()
-database_file = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    "sar_demo.json"
-)
-interaction_json_file = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    "sar_demo_states.json"
-)
-
 
 class DemoInteraction:
 
-    def __init__(self, interaction_json_file, database_file, is_clear_database=True):
-        self._database = Database(
-            database_file=database_file
-        )
+    def __init__(self, interaction_json_file, database_file_name, is_clear_database=True):
+
         self._interface = CordialInterface(
             action_name="cordial/say_and_ask_on_gui",
             seconds_until_timeout=None
         )
+
         with open(interaction_json_file) as f:
             interaction_setup_dict = json.load(f)
         self._jokes = interaction_setup_dict["jokes"]
@@ -47,10 +35,16 @@ class DemoInteraction:
             interaction_setup_dict["states"],
             interaction_setup_dict["joke prefaces"]
         )
+        state_names = [state.name for state in states]
+
         self._state_collection = StateCollection(
             name="demo interaction",
             init_state_name="ask to chat",
             states=states
+        )
+        self._database = Database(
+            database_file_name=database_file_name,
+            default_database_keys=state_names
         )
         self._is_record_publisher = rospy.Publisher("data_capture/is_record", Bool, queue_size=1)
         self._screen_tap_listener = rospy.Subscriber(
@@ -144,7 +138,17 @@ class DemoInteraction:
 
 if __name__ == "__main__":
 
-    demo_interaction = DemoInteraction(interaction_json_file, database_file)
+    interaction_json_file = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "sar_demo_states.json"
+    )
+    database_file_name = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "sar_demo.json"
+    )
+
+    demo_interaction = DemoInteraction(interaction_json_file, database_file_name)
 
     while not rospy.is_shutdown():
         demo_interaction.run_once()
+
