@@ -8,8 +8,8 @@ import rospy
 from interaction_engine.cordial_interface import CordialInterface
 from interaction_engine.database import Database
 from interaction_engine.int_engine import InteractionEngine
-from interaction_engine.state import State
 from interaction_engine.state_collection import StateCollection
+from interaction_engine.utils import json_load_byteified
 
 from cordial_msgs.msg import MouseEvent
 from std_msgs.msg import Bool
@@ -27,20 +27,19 @@ class DemoInteraction:
         )
 
         with open(interaction_json_file) as f:
-            interaction_setup_dict = json.load(f)
+            interaction_setup_dict = json_load_byteified(f)
         self._jokes = interaction_setup_dict["jokes"]
         self._news_stories = interaction_setup_dict["news stories"]
 
-        states_from_json = self._add_joke_and_news_content_to_states_dict(
-            interaction_setup_dict["states"],
-            interaction_setup_dict["joke prefaces"]
-        )
-        state_names = [str(state_name) for state_name in states_from_json.keys()]
+        self._states_dict_from_json = interaction_setup_dict["states"]
+        self._add_joke_and_news_content_to_states_dict(interaction_setup_dict["joke prefaces"])
+
+        state_names = [state_name for state_name in self._states_dict_from_json.keys()]
 
         self._state_collection = StateCollection(
             name="demo interaction",
             init_state_name="ask to chat",
-            states=states_from_json
+            states=self._states_dict_from_json
         )
         self._database = Database(
             database_file_name=database_file_name,
@@ -57,6 +56,7 @@ class DemoInteraction:
         self._is_start_interaction = False
 
         if is_clear_database:
+            self._is_clear_database = is_clear_database
             self._database.clear_entire_database()
 
     def run_once(self):
@@ -71,19 +71,23 @@ class DemoInteraction:
         self._is_start_interaction = False
         self._sleep_publisher.publish(True)
 
-    def _add_joke_and_news_content_to_states_dict(self, states_from_json, joke_prefaces):
-        state_names = states_from_json.keys()
+        if self._is_clear_database:
+            self._database.clear_entire_database()
+
+    def _add_joke_and_news_content_to_states_dict(self, joke_prefaces):
+        state_names = self._states_dict_from_json.keys()
         for state_name in state_names:
-            if "joke" in str(states_from_json[state_name]):
-                states_from_json[state_name]["content"] = self._make_random_joke_content(joke_prefaces)
-            if str(states_from_json[state_name]) == "share news story":
-                states_from_json[state_name]["content"] = str(random.choice(self._news_stories))
-        return states_from_json
+            if "tell joke" in state_name:
+                self._states_dict_from_json[state_name]["content"].append(
+                    self._make_random_joke_content(joke_prefaces)
+                )
+            if "news story state" in state_name:
+                self._states_dict_from_json[state_name]["content"].append(random.choice(self._news_stories))
 
     def _make_random_joke_content(self, joke_prefaces):
-        joke_category = str(random.choice(self._jokes.keys()))
-        joke_content = str(random.choice(joke_prefaces).format(category=joke_category))
-        joke = str(random.choice(self._jokes[joke_category]))
+        joke_category = random.choice(self._jokes.keys())
+        joke_content = random.choice(joke_prefaces).format(category=joke_category)
+        joke = random.choice(self._jokes[joke_category])
         joke_content += " <break time=\"1s\"/>" + joke
         self._jokes[joke_category].remove(joke)
         return joke_content

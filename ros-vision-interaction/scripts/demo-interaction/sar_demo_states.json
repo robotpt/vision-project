@@ -47,10 +47,10 @@
       ],
       "message type": "multiple choice one column",
       "next states": [
-        "joke 1"
+        "tell joke 1"
       ],
       "transitions": {
-        "Next": "joke 1"
+        "Next": "tell joke 1"
       }
     },
     "that's ok": {
@@ -189,7 +189,7 @@
         "Next": "liven things up"
       }
     },
-    "joke 1": {
+    "tell joke 1": {
       "content": [],
       "message type": "multiple choice one column",
       "next states": [
@@ -199,7 +199,7 @@
         "Next": "did you use magnifier"
       }
     },
-    "joke 2": {
+    "tell joke 2": {
       "content": [],
       "message type": "multiple choice one column",
       "next states": [
@@ -215,10 +215,10 @@
       ],
       "message type": "multiple choice one column",
       "next states": [
-        "joke 2"
+        "tell joke 2"
       ],
       "transitions": {
-        "Next": "joke 2"
+        "Next": "tell joke 2"
       }
     },
     "show me": {
@@ -309,14 +309,14 @@
       "message type": "multiple choice one column",
       "next states": [
         "no news story response",
-        "share news story"
+        "news story state"
       ],
       "transitions": {
         "Not right now": "no news story response",
-        "Good": "share news story"
+        "Good": "news story state"
       }
     },
-    "share news story": {
+    "news story state": {
       "content": [],
       "message type": "multiple choice one column",
       "next states": [
