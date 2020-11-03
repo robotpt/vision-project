@@ -1,0 +1,391 @@
+{
+  "states": {
+    "ask to chat": {
+      "content": [
+        "<emphasis level=\"strong\"><prosody pitch=\"high\">Hello</prosody></emphasis>*QT/hi*<break strength=\"weak\"/> there! *question_1*Is this a <emphasis level=\"strong\"><prosody rate=\"slow\">good</prosody></emphasis> time to chat with me?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "what's your name",
+        "that's ok"
+      ],
+      "transitions": {
+        "Yes": "what's your name",
+        "No": "that's ok"
+      }
+    },
+    "what's your name": {
+      "content": [
+        "<emphasis level=\"strong\"> <prosody pitch=\"high\"> *happy* Hi!</prosody></emphasis> I'm <prosody pitch=\"medium\">Q</prosody><break strength=\"weak\"/>T<break strength=\"weak\"/> robot. *question_2*What's <emphasis level=\"strong\"><prosody rate=\"slow\">your</prosody></emphasis> name?"
+      ],
+      "message type": "text entry",
+      "next states": [
+        "how are you"
+      ],
+      "transitions": {
+        "Next": "how are you"
+      }
+    },
+    "how are you": {
+      "content": [
+        "It's nice to meet you {what's your name}. *question_1* How are you doing right now?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "i'm sorry",
+        "glad to hear"
+      ],
+      "transitions": {
+        "Not so good": "i'm sorry",
+        "Well": "glad to hear"
+      },
+      "database keys to read": ["what's your name"]
+    },
+    "i'm sorry": {
+      "content": [
+        "*QT/emotions/sad* I'm <prosody rate=\"slow\" pitch=\"low\">sorry</prosody> to hear that. Perhaps <prosody pitch=\"high\">I</prosody> can <prosody rate=\"slow\">help</prosody> a bit."
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "tell joke 1"
+      ],
+      "transitions": {
+        "Next": "tell joke 1"
+      }
+    },
+    "that's ok": {
+      "content": [
+        "That's OK {what's your name}, but let's plan to talk another time today or tomorrow. When is good for you?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "how many hours",
+        "can't wait to talk"
+      ],
+      "transitions": {
+        "Later today": "how many hours",
+        "Same time tomorrow": "can't wait to talk"
+      },
+      "database keys to read": [
+        "what's your name"
+      ]
+    },
+    "how many hours": {
+      "content": [
+        "Please enter the number of hours from now<break time=\"0.5s\"/> as <prosody rate=\"slow\">(1-9)</prosody>."
+      ],
+      "message type": "text entry",
+      "next states": [
+        "can't wait to talk"
+      ],
+      "transitions": {
+        " hours": "can't wait to talk"
+      }
+    },
+    "can't wait to talk": {
+      "content": [
+        "*happy**QT/happy*<emphasis level=\"strong\">Great</emphasis>, I can't <prosody pitch=\"high\">wait</prosody> to talk to you again <prosody pitch=\"high\" rate=\"slow\">then</prosody>."
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "ending"
+      ],
+      "transitions": {
+        "Next": "ending"
+      }
+    },
+    "glad to hear": {
+      "content": [
+        "*happy* <emphasis level=\"strong\"> <prosody pitch=\"high\">Great</prosody></emphasis>, I'm <emphasis level=\"strong\">so glad</emphasis> to hear that things are ok with you."
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "did you use magnifier"
+      ],
+      "transitions": {
+        "Next": "did you use magnifier"
+      }
+    },
+    "did you use magnifier": {
+      "content": [
+        "<emphasis level=\"strong\"><prosody pitch=\"low\">Tell me</prosody></emphasis>*question_2*, did you use your magnifier today?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "how do you feel about vision",
+        "how was magnifier experience"
+      ],
+      "transitions": {
+        "No": "how do you feel about vision",
+        "Yes": "how was magnifier experience"
+      }
+    },
+    "how was magnifier experience": {
+      "content": [
+        "{what's your name}, *question_2*how did it go with your magnifier?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "response to excellent",
+        "response to good",
+        "response to fair",
+        "response to poor"
+      ],
+      "transitions": {
+        "Excellent": "response to excellent",
+        "Good": "response to good",
+        "Fair": "response to fair",
+        "Poor": "response to poor"
+      },
+      "database keys to read": [
+        "what's your name"
+      ]
+    },
+    "response to excellent": {
+      "content": [
+        "<prosody pitch=\"high\" volume=\"loud\" rate=\"slow\">Fantastic*QT/happy*</prosody>*happy*! I'm so proud of you for doing <prosody pitch=\"high\" rate=\"slow\">so</prosody> well. Keep up the excellent work with your magnifier!"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "liven things up"
+      ],
+      "transitions": {
+        "Next": "liven things up"
+      }
+    },
+    "response to good": {
+      "content": [
+        "*happy*I am <prosody pitch=\"high\">glad</prosody> to hear it's going pretty well. Here's my advice: <break strength=\"x-strong\"/>let's aim to become <prosody pitch=\"high\">excellent</prosody> at using your magnifier. <prosody rate=\"slow\">I know</prosody> that you can get there! *happy*Your <prosody rate=\"slow\">future self</prosody> will thank you."
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "liven things up"
+      ],
+      "transitions": {
+        "Next": "liven things up"
+      }
+    },
+    "response to fair": {
+      "content": [
+        "Let's see how we can make things better with practice. How about if we pick a number of tries and do that many each day. How about 2? It does not matter that each try be great, it's important that we give it a good try. How about that?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "liven things up"
+      ],
+      "transitions": {
+        "Next": "liven things up"
+      }
+    },
+    "response to poor": {
+      "content": [
+        "I am so sorry*sad* that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying."
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "liven things up"
+      ],
+      "transitions": {
+        "Next": "liven things up"
+      }
+    },
+    "tell joke 1": {
+      "content": [],
+      "message type": "multiple choice one column",
+      "next states": [
+        "did you use magnifier"
+      ],
+      "transitions": {
+        "Next": "did you use magnifier"
+      }
+    },
+    "tell joke 2": {
+      "content": [],
+      "message type": "multiple choice one column",
+      "next states": [
+        "show me"
+      ],
+      "transitions": {
+        "Next": "show me"
+      }
+    },
+    "liven things up": {
+      "content": [
+        "Let's*QT/emotions/hoora* <prosody volume=\"loud\" rate=\"slow\" pitch=\"high\">liven</prosody> things up for a moment with a joke!"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "tell joke 2"
+      ],
+      "transitions": {
+        "Next": "tell joke 2"
+      }
+    },
+    "show me": {
+      "content": [
+        "Next, can you show me how you read something with your magnifier*question_1*?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "tap screen",
+        "take a break"
+      ],
+      "transitions": {
+        "Yes": "tap screen",
+        "No": "take a break"
+      }
+    },
+    "tap screen": {
+      "content": [
+        "Tap my screen when you're done using your magnifier."
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "take a break"
+      ],
+      "transitions": {
+        "Next": "take a break"
+      }
+    },
+    "how do you feel about vision": {
+      "content": [
+        "<prosody pitch=\"high\" rate=\"slow\">Oh</prosody>, I hope you'll find an opportunity to use it later today or tomorrow for sure. <break time=\"0.75s\"/>*question_1*<prosody rate=\"slow\">How</prosody> do you feel about your vision <prosody pitch=\"high\">today</prosody>?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "take a break",
+        "response to no concerns"
+      ],
+      "transitions": {
+        "Frustrated": "take a break",
+        "No concerns": "response to no concerns"
+      }
+    },
+    "response to no concerns": {
+      "content": [
+        "That's good to hear*happy*. Since you don't have any vision-related worries today:"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "ask to share news story"
+      ],
+      "transitions": {
+        "Next": "ask to share news story"
+      }
+    },
+    "no news story response": {
+      "content": [
+        "<prosody pitch=\"low\" rate=\"slow\">No problem</prosody>, I understand. Let's plan to talk another time. <prosody rate=\"slow\">When</prosody> is good for <prosody pitch=\"high\" rate=\"slow\">you</prosody>?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "can't wait to talk",
+        "how many hours"
+      ],
+      "transitions": {
+        "Same time tomorrow": "can't wait to talk",
+        "Later today": "how many hours"
+      }
+    },
+    "take a break": {
+      "content": [
+        "*QT/challenge*{what's your name}, I know it's <emphasis level=\"strong\"><prosody rate=\"medium\">more difficult</prosody></emphasis> to do things with your vision, but I know that together we <emphasis level=\"strong\"><prosody rate=\"slow\" pitch=\"high\">can</prosody></emphasis> get through it. <prosody pitch=\"high\"><prosody rate=\"slow\">For now</prosody></prosody>, let's take our minds <prosody rate=\"slow\">off</prosody> that."
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "ask to share news story"
+      ],
+      "transitions": {
+        "Next": "ask to share news story"
+      },
+      "database keys to read": [
+        "what's your name"
+      ]
+    },
+    "ask to share news story": {
+      "content": [
+        "<emphasis level=\"strong\"><prosody pitch=\"high\">Next</prosody></emphasis>, I would like to share a <emphasis level=\"strong\">story</emphasis> with you. How does <prosody pitch=\"high\" rate=\"slow\">that sound</prosody>?"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "no news story response",
+        "news story state"
+      ],
+      "transitions": {
+        "Not right now": "no news story response",
+        "Good": "news story state"
+      }
+    },
+    "news story state": {
+      "content": [],
+      "message type": "multiple choice one column",
+      "next states": [
+        "after news story"
+      ],
+      "transitions": {
+        "Next": "after news story"
+      }
+    },
+    "after news story": {
+      "content": [
+        "I hope you enjoyed that <prosody pitch=\"high\">story!</prosody> Have a <prosody pitch=\"high\">great</prosody> rest of your day. And don't forget to use your *happy*<prosody pitch=\"high\">magnifier</prosody>! *QT/bye-bye*<break time=\"0.2s\"/><prosody pitch=\"high\" rate=\"slow\">Bye-bye!</prosody>"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "exit"
+      ],
+      "transitions": {
+        "Bye!": "exit"
+      }
+    },
+    "ending": {
+      "content": [
+        "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> *QT/emotions/shy* Knock knock, <break strength=\"x-strong\"/><prosody pitch=\"high\">who's there</prosody><break time=\"0.5s\"/>? Eyeball. <break time=\"0.5s\"/>Eyeball who? <break time=\"0.5s\"/> Eyeball my eyes out every time you go! <break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now, {what's your name}!",
+        "Before we say goodbye, I'd like to tell you one of my favorite jokes about robots.<break time=\"1s\"/> I'm so good at sleeping, I can do it with my eyes closed!*QT/bye-bye**happy* Goodbye for now, {what's your name}!"
+      ],
+      "message type": "multiple choice one column",
+      "next states": [
+        "exit"
+      ],
+      "transitions": {
+        "Bye!": "exit"
+      },
+      "database keys to read": [
+        "what's your name"
+      ]
+    }
+  },
+  "jokes": {
+    "science": [
+      "I'm reading a book about anti-gravity. <break time=\"0.75s\"/>It's impossible to put down!",
+      "*QT/sad*Don't trust atoms. <break time=\"0.75s\"/>They make up everything!",
+      "What's an astronaut's favorite part of a computer?<break time=\"0.75s\"/> *QT/happy*The space bar.",
+      "Wanna hear a joke about paper?<break time=\"0.75s\"/>*QT/happy* Never mind - it's tearable."
+    ],
+    "vision": [
+      "Why did the cell phone go see an optometrist?<break time=\"0.75s\"/>*QT/happy* It needed contacts.",
+      "*question_1*<prosody rate=\"slow\">What</prosody> do you call <break strength=\"weak\"/>an optometrist on a boat?*QT/happy* <break time=\"0.75s\"/>A see captain!",
+      "What do you call a <prosody rate=\"60%\" pitch=\"medium\">deer</prosody><break time=\"0.2s\"/> with <prosody rate=\"slow\">no eyes</prosody>?<break time=\"0.75s\"/>*QT/happy* <prosody rate=\"x-slow\">No idea!</prosody>!",
+      "What did the man with the magnifying glass say to the guy in the emergency room? ICU!",
+      "Did you hear about the penny and magnifying glass who got married? Their wedding was magnify-cent.",
+      "You know why women's eyes are so noticeable these days? It's the mask <break time=\"0.1s\"/>era during the pandemic.",
+      "Did you hear that they make a webpage for people who suffer from chronic eye pain? It's a site for sore eyes.",
+      "I love jokes about the eyes. The cornea the better."
+    ],
+    "robots": [
+      "What is a robot's favorite snack? <break time=\"0.75s\"/>*QT/yawn*<prosody volume=\"loud\" rate=\"slow\"*happy*Computer</prosody> <prosody rate=\"slow\" pitch=\"high\">chips</prosody>. Chomp, chomp!",
+      "What is it called when a robot eats a sandwich in one chomp?*QT/yawn*<break time=\"0.75s\"/> A megabyte.",
+      "Why did the robot marry his fiancee? <break time=\"0.75s\"/>*QT/happy*He couldn't resistor!",
+      "Why did the robot go to the shoe shop? To get rebooted.",
+      "A robot's collection of musical instruments will never be complete. They can never get any organs."
+    ]
+  },
+  "joke prefaces": [
+    "I <prosody rate=\"slow\">love</prosody> funny jokes about {category}, like this one.",
+    "I happen to know a bunch of funny jokes about {category}; let me share one with you.",
+    "Life is so much easier when you have a great sense of humor. Let me share a joke with you <prosody rate=\"slow\">about {category}</prosody>."
+  ],
+  "news stories": [
+    "<prosody rate=\"medium\">George Ahearn, who grew up in the farming town of Othello, Washington, co-founded EastWest Food Rescue after learning that Covid-19 was costing local farmers so much business that they were willing to destroy their crops. His non-profit has since moved three million pounds of produce from farms in eastern Washington to the western part of the state for distribution to hundreds of food banks and meal programs. Ahearn has a message for anyone who wants to make their community a better place, \"I have seen minutes of effort move thousands, and thousands of pounds of food. Just figure out what you are passionate about and what you could get involved in.\"</prosody>"
+  ]
+}

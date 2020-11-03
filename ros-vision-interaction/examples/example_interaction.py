@@ -89,7 +89,7 @@ default_database_keys = [
 ]
 
 database_manager = Database(
-    database_file=database_file,
+    database_file_name=database_file,
     default_database_keys=default_database_keys
 )
 

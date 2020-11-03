@@ -15,14 +15,16 @@ class StateCollection(object):
             states,
             exit_code="exit",
     ):
+        self._states = {}
+        if type(states) is dict:
+            self._build_states_from_dict(states)
+        else:
+            for state in states:
+                self.add_state(state)
 
-        valid_state_names = [state.name for state in states]
+        valid_state_names = [state_name for state_name in self._states.keys()]
         self._init_state = self._check_init_state(init_state_name, valid_state_names)
         self._exit_code = exit_code
-
-        self._states = {}
-        for state in states:
-            self.add_state(state)
 
         if type(name) is not str:
             raise TypeError("Graph name must be a string.")
@@ -54,6 +56,45 @@ class StateCollection(object):
                     unreachable = False
             if unreachable:
                 logging.warning("{} is unreachable.".format(state.name))
+
+    def _build_states_from_dict(self, states_from_json):
+        state_names = states_from_json.keys()
+        for state_name in state_names:
+            name = state_name
+            message_type = states_from_json[state_name]["message type"]
+            content = [content for content in states_from_json[state_name]["content"]]
+            next_states = [next_state for next_state in states_from_json[state_name]["next states"]]
+            transitions = states_from_json[state_name]["transitions"]
+            # optional parameters; this check is to prevent key errors
+            try:
+                database_key_to_write = str(states_from_json[state_name]["database key to write"])
+            except KeyError:
+                database_key_to_write = None
+            try:
+                database_keys_to_read = [
+                    str(key_to_read) for key_to_read in states_from_json[state_name]["database keys to read"]
+                ]
+            except KeyError:
+                database_keys_to_read = None
+            try:
+                args = [
+                    arg for arg in states_from_json[state_name]["args"]
+                ]
+            except KeyError:
+                args = None
+
+            new_state = State(
+                name=name,
+                message_type=message_type,
+                content=content,
+                next_states=next_states,
+                transitions=transitions,
+                database_key_to_write=database_key_to_write,
+                database_keys_to_read=database_keys_to_read,
+                args=args
+            )
+
+            self.add_state(new_state)
 
     @property
     def states(self):

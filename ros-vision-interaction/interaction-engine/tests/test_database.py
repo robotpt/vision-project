@@ -10,26 +10,6 @@ class TestDatabase(unittest.TestCase):
     # def setUp(self):
     # self._database = Database("test_database.json")
 
-    def test_make_sure_database_file_is_valid(self):
-        with mock.patch("__builtin__.open", mock.mock_open(read_data="data")):
-            valid_database_names = [
-                "test_database_1.json",
-                "test_database_2.json",
-                "test_database_3.json",
-            ]
-            for valid_database_name in valid_database_names:
-                database = Database(valid_database_name)
-                self.assertEqual(database.database_file, valid_database_name)
-            invalid_database_names = [
-                "test_database.txt",
-            ]
-            for invalid_database_name in invalid_database_names:
-                self.assertRaises(
-                    TypeError,
-                    Database,
-                    invalid_database_name
-                )
-
     def test_check_default_database_keys(self):
         with mock.patch("__builtin__.open", mock.mock_open(read_data="data")):
             database = Database("test_database.json")

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import json
 import logging
+import os
 
 from interaction_engine.utils import get_database_from_file
 
@@ -9,19 +10,29 @@ logging.basicConfig(level=logging.INFO)
 
 class Database(object):
 
-    def __init__(self, database_file, default_database_keys=None):
+    def __init__(self, database_file_name, default_database_keys=None):
 
-        self._database_file = self._make_sure_database_file_is_valid(database_file)
+        self._database_file = self._make_sure_database_file_is_valid(database_file_name)
         self._check_default_database_keys(default_database_keys)
         self._database = self._set_initial_db(default_database_keys)
 
-    def _make_sure_database_file_is_valid(self, database_file):
-        if database_file is not None:
-            if type(database_file) is not str:
-                raise TypeError("Not a valid file name.")
-            if not database_file.endswith(".json"):
-                raise TypeError("Must be a .json file.")
-        return database_file
+    def _make_sure_database_file_is_valid(self, database_file_name):
+        if type(database_file_name) is not str:
+            raise TypeError("Not a valid file name.")
+        if not database_file_name.endswith(".json"):
+            raise TypeError("Must be a .json file.")
+        if not os.path.exists(database_file_name):
+            logging.info("Creating new file: {}".format(database_file_name))
+            database_file = open(
+                os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)),
+                    database_file_name
+                ),
+                "w"
+            )
+            database_file_name = database_file.name
+
+        return database_file_name
 
     def _check_default_database_keys(self, default_database_keys):
         if default_database_keys is not None:
