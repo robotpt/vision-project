@@ -141,6 +141,50 @@ class TestStateCollection(unittest.TestCase):
             0
         )
 
+    def test_build_states_from_dict(self):
+        states_dict = {
+            "hello there": {
+                "content": ["Hello there!"],
+                "message type": "multiple choice one column",
+                "next states": ["what's your name"],
+                "transitions": {"Hello": "what's your name"}
+            },
+            "what's your name": {
+                "content": ["What's your name?"],
+                "message type": "text entry",
+                "next states": ["exit"],
+                "transitions": {"Next": "exit"}
+            },
+        }
+        state_collection = StateCollection(
+            name="test state collection with dict",
+            init_state_name="hello there",
+            states=states_dict
+        )
+        expected_states = [
+            State(
+                name="hello there",
+                content=["Hello there!"],
+                message_type="multiple choice one column",
+                next_states=["what's your name"],
+                transitions={"Hello": "what's your name"}
+            ),
+            State(
+                name="what's your name",
+                content=["What's your name?"],
+                message_type="text entry",
+                next_states=["exit"],
+                transitions={"Next": "exit"}
+            )
+        ]
+        for expected_state in expected_states:
+            actual_state = state_collection.states[expected_state.name]
+            self.assertEqual(expected_state.name, actual_state.name)
+            self.assertEqual(expected_state.next_states, actual_state.next_states)
+            self.assertEqual(expected_state.transitions, actual_state.transitions)
+            self.assertEqual(expected_state.message.content, actual_state.message.content)
+            self.assertEqual(expected_state.message.message_type, actual_state.message.message_type)
+
 
 if __name__ == '__main__':
     unittest.main()
