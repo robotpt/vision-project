@@ -60,11 +60,11 @@ class StateCollection(object):
     def _build_states_from_dict(self, states_from_json):
         state_names = states_from_json.keys()
         for state_name in state_names:
-            name = str(state_name)
-            message_type = str(states_from_json[state_name]["message type"])
-            content = [str(content) for content in states_from_json[state_name]["content"]]
-            next_states = [str(next_state) for next_state in states_from_json[state_name]["next states"]]
-            transitions = self._make_transitions_from_json(states_from_json[state_name]["transitions"])
+            name = state_name
+            message_type = states_from_json[state_name]["message type"]
+            content = [content for content in states_from_json[state_name]["content"]]
+            next_states = [next_state for next_state in states_from_json[state_name]["next states"]]
+            transitions = states_from_json[state_name]["transitions"]
             # optional parameters; this check is to prevent key errors
             try:
                 database_key_to_write = str(states_from_json[state_name]["database key to write"])
@@ -78,7 +78,7 @@ class StateCollection(object):
                 database_keys_to_read = None
             try:
                 args = [
-                    str(arg) for arg in states_from_json[state_name]["args"]
+                    arg for arg in states_from_json[state_name]["args"]
                 ]
             except KeyError:
                 args = None
@@ -95,16 +95,6 @@ class StateCollection(object):
             )
 
             self.add_state(new_state)
-
-    def _make_transitions_from_json(self, json_transitions):
-        # This function converts unicode from JSON to strings for the state's transitions
-        keys = [str(key) for key in json_transitions.keys()]
-        values = [str(value) for value in json_transitions.values()]
-        transitions = {}
-        for i in range(len(keys)):
-            transitions[keys[i]] = values[i]
-
-        return transitions
 
     @property
     def states(self):
