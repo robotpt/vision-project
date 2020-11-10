@@ -91,7 +91,7 @@ class RosDiscordCog(commands.Cog):
 
         try:
             choice: discord.Message = await self._bot.wait_for(
-                "message", check=is_correct, timeout=10.0
+                "message", check=is_correct, timeout=20.0
             )
         except asyncio.TimeoutError:
             return await message.channel.send(
