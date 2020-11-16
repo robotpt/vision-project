@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import json
 
-from graphviz import Digraph
-
 
 def make_sure_is_list(content):
     if type(content) is str:
