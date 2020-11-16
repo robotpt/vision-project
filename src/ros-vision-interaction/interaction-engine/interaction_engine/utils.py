@@ -43,21 +43,3 @@ def _byteify(data, ignore_dicts=False):
             for key, value in data.iteritems()
         }
     return data
-
-
-def vizualize_graph(state_collection):
-    graph = Digraph(name=state_collection.name, format="png")
-    node_names = [state_name for state_name in state_collection.states.keys()]
-    for name in node_names:
-        # node_label = ""
-        # for string in state_collection.states[name].message.content:
-        #     node_label += string + "\n"
-        node_label = name
-        graph.node(name, node_label)
-    for state_name in state_collection.states.keys():
-        state = state_collection.states[state_name]
-        for i in range(len(state.transitions.keys())):
-            option = state.message.options[i]
-            graph.edge(state.name, state.transitions[i], label=option)
-
-    graph.view(cleanup=True)
