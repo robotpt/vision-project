@@ -164,6 +164,7 @@ class StateCollection(object):
 
     def visualize(self, show_content=False):
         graph = Digraph(name=self._name, format="png")
+        graph.attr("node", shape="box")
         node_names = [state_name for state_name in self._states.keys()]
         for name in node_names:
             if show_content:
