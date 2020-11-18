@@ -41,3 +41,14 @@ Finally, you will have to build your catkin workspace with :code:`catkin_make` f
 .. code-block:: bash
 
     source /root/catkin_ws/devel/setup.bash && rostest cordial_gui test_cordial_gui_actions.test && rostest cordial_gui test_cordial_gui_pubs_and_subs.test && rostest cordial_manager test_cordial_manager_actions.test && rostest cordial_manager test_cordial_manager_pubs_and_subs.test && rostest cordial_manager test_cordial_manager_services.test
+
+
+Visualizing the interaction
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The content of the interaction is contained in a :code:`StateCollection` object. Use :code:`StateCollection.visualize()` to view a flowchart of the interaction. By default, the flowchart displays only the name of each node; set the :code:`show_content` parameter to :code:`True` to display the entire message.
+
+Here is an example:
+
+.. figure:: images/sample_graph.png
+    :align: center

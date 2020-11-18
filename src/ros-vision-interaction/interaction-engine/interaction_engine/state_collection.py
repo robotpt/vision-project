@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 import logging
+import os
 
 from interaction_engine.state import State
+from interaction_engine.utils import json_load_byteified
+
+from graphviz import Digraph
 
 logging.basicConfig(level=logging.INFO)
 
@@ -157,3 +161,40 @@ class StateCollection(object):
 
     def reset(self):
         self._current_state = self._init_state
+
+    def visualize(self, show_content=False):
+        graph = Digraph(name=self._name, format="png")
+        graph.attr("node", shape="box")
+        node_names = [state_name for state_name in self._states.keys()]
+        for name in node_names:
+            if show_content:
+                node_label = ""
+                for string in self._states[name].message.content:
+                    node_label += string + "\n"
+            else:
+                node_label = name
+            graph.node(name, node_label)
+        for state_name in self._states.keys():
+            state = self._states[state_name]
+            for i in range(len(state.transitions.keys())):
+                option = state.message.options[i]
+                graph.edge(state.name, state.transitions[i], label=option)
+
+        graph.view(cleanup=True)
+
+
+if __name__ == "__main__":
+    interaction_json_file = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "../../scripts/demo-interaction/sar_demo_states.json"
+    )
+    with open(interaction_json_file) as f:
+        interaction_setup_dict = json_load_byteified(f)
+    states_dict_from_json = interaction_setup_dict["states"]
+    state_collection = StateCollection(
+        name="demo interaction",
+        init_state_name="ask to chat",
+        states=states_dict_from_json
+    )
+
+    state_collection.visualize()
