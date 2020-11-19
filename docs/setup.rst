@@ -48,8 +48,12 @@ Running the interaction remotely
 
 Create a Dataplicity account and sign on. Go to the devices tab and then click "+ Add New Device".  Copy or enter this command into a terminal on QT's body PC and enter QT's password 'qtrobot'.  After that runs, remote access should be setup.  You can confirm this by clicking the added device and confirming that you can explore the file system.
 
-To run the interaction, first run :code:`su qtrobot` and enter :code:`qtrobot`. Next, enter :code:`cd ~/vision-project/docker && ./run.sh run` to start the interaction.
+To run the vision project interaction, first run :code:`su qtrobot` and enter :code:`qtrobot` for the password. Next, enter :code:`cd ~/vision-project/docker && ./run.sh run` to start the interaction.
 
+Then, you can access the GUI from either :code:`192.168.1.207:8082/low_vision.html` or :code:`192.168.1.209:8082/low_vision.html` depending on which QT you are using.
+
+.. note::
+    Currently, the interaction starts automatically once you access the GUI. After the interaction finishes, it will wait 20 seconds before restarting. Eventually, the interaction will be set to begin only after the GUI screen is clicked/tapped.
 
 Visualizing the interaction
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
