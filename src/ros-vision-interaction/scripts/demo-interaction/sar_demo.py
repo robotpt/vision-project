@@ -65,8 +65,8 @@ class DemoInteraction:
             database_manager=self._database,
             interface=self._interface
         )
-        while not self._is_start_interaction:
-            rospy.sleep(1)
+        # while not self._is_start_interaction:
+        #     rospy.sleep(1)
         interaction_engine.run()
         self._is_start_interaction = False
         self._sleep_publisher.publish(True)
@@ -111,4 +111,5 @@ if __name__ == "__main__":
 
     while not rospy.is_shutdown():
         demo_interaction.run_once()
+        rospy.sleep(25)
 

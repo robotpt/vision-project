@@ -16,7 +16,7 @@
     },
     "what's your name": {
       "content": [
-        "<emphasis level=\"strong\"> <prosody pitch=\"high\"> *happy* Hi!</prosody></emphasis> I'm <prosody pitch=\"medium\">Q</prosody><break strength=\"weak\"/>T<break strength=\"weak\"/> robot. *question_2*What's <emphasis level=\"strong\"><prosody rate=\"slow\">your</prosody></emphasis> name?"
+        "Hello there, my name is QT and it's wonderful to meet you! In case you're wondering, my gender pronoun is <prosody rate=\"slow\">it</prosody>. I am really looking forward to interacting with you! I can share stories, tell funny jokes, hope to help you with your magnifier, and will ask you questions. I would like to ask you to please touch the black buttons on the tablet screen to let me know your responses as we interact. Next, I would like to get to know more about you. What's your name?"
       ],
       "message type": "text entry",
       "next states": [
@@ -340,8 +340,8 @@
     },
     "ending": {
       "content": [
-        "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> *QT/emotions/shy* Knock knock, <break strength=\"x-strong\"/><prosody pitch=\"high\">who's there</prosody><break time=\"0.5s\"/>? Eyeball. <break time=\"0.5s\"/>Eyeball who? <break time=\"0.5s\"/> Eyeball my eyes out every time you go! <break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now, {what's your name}!",
-        "Before we say goodbye, I'd like to tell you one of my favorite jokes about robots.<break time=\"1s\"/> I'm so good at sleeping, I can do it with my eyes closed!*QT/bye-bye**happy* Goodbye for now, {what's your name}!"
+        "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> *QT/emotions/shy* Knock knock, <break strength=\"x-strong\"/><prosody pitch=\"high\">who's there</prosody><break time=\"0.5s\"/>? Eyeball. <break time=\"0.5s\"/>Eyeball who? <break time=\"0.5s\"/> Eyeball my eyes out every time you go! <break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now {what's your name}!",
+        "Before we say goodbye, I'd like to tell you one of my favorite jokes about robots.<break time=\"1s\"/> I'm so good at sleeping, I can do it with my eyes closed!*QT/bye-bye**happy* Goodbye for now {what's your name}!"
       ],
       "message type": "multiple choice one column",
       "next states": [
@@ -386,6 +386,6 @@
     "Life is so much easier when you have a great sense of humor. Let me share a joke with you <prosody rate=\"slow\">about {category}</prosody>."
   ],
   "news stories": [
-    "<prosody rate=\"medium\">George Ahearn, who grew up in the farming town of Othello, Washington, co-founded EastWest Food Rescue after learning that Covid-19 was costing local farmers so much business that they were willing to destroy their crops. His non-profit has since moved three million pounds of produce from farms in eastern Washington to the western part of the state for distribution to hundreds of food banks and meal programs. Ahearn has a message for anyone who wants to make their community a better place, \"I have seen minutes of effort move thousands, and thousands of pounds of food. Just figure out what you are passionate about and what you could get involved in.\"</prosody>"
+    "<prosody rate=\"slow\">George Ahearn, who grew up in the farming town of Othello, Washington, co-founded EastWest Food Rescue after learning that Covid-19 was costing local farmers so much business that they were willing to destroy their crops. His non-profit has since moved three million pounds of produce from farms in eastern Washington to the western part of the state for distribution to hundreds of food banks and meal programs. Ahearn has a message for anyone who wants to make their community a better place, \"I have seen minutes of effort move thousands, and thousands of pounds of food. Just figure out what you are passionate about and what you could get involved in.\"</prosody>"
   ]
 }
