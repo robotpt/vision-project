@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+install:
+  - pip install .
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install coveralls
+script:
+  - pytest --cov=interaction_engine/
+after_success:
+  - coveralls
+notifications:
+  slack: interaction-lab:sKgJdsIGRbzIuhesRODOc1Xw

@@ -1,0 +1,3 @@
+from interaction_engine.text_populator.populator import TextPopulator
+from interaction_engine.text_populator.variety_populator import VarietyPopulator
+from interaction_engine.text_populator.database_populator import DatabasePopulator
