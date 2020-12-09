@@ -3,8 +3,8 @@ Setup
 
 There are two ways to setup this project. The easiest and cleanest is to use a Docker container. However, if you need the interaction to run upon bootup, you are probably better off setting up this project on your local machine (not in a Docker container). Below are instructions for both of these methods.
 
-On Docker
-^^^^^^^^^
+Using the Docker Container
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 To run a Docker container, go into the :code:`docker` directory in this project's repository and run the :code:`run` script. Note that you can pass in various arguments to the run script:
   * :code:`./run.sh run` will start the vision project's interaction
   * :code:`./run.sh terminal` will give you access to a terminal inside the Docker container. Note, if you want additional terminals you can :code:`docker exec` into the running container.
@@ -20,8 +20,8 @@ To run a Docker container, go into the :code:`docker` directory in this project'
         export AWS_SECRET_KEY="<my secret key>"
 
 
-On your local machine
-^^^^^^^^^^^^^^^^^^^^^
+In Your Current Environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To run the interaction on your local machine, you'll need to install several packages. If you have :code:`make` installed (:code:`sudo apt update; sudo apt install -y make`, on Ubuntu 16.04), you install the necessary dependencies with :code:`make install_deps`. If you don't have :code:`make` installed, you can also access the script with :code:`./docker/scripts/install_deps.sh`.
 
