@@ -41,7 +41,7 @@ class DirectedGraph(BaseMessenger):
         is_exit_node = False
         for node in nodes:
             for transition_node in node.transitions:
-                if transition_node is exit_code:
+                if transition_node == exit_code:
                     is_exit_node = True
                 elif transition_node not in list(self._nodes_dict.keys()):
                     raise ValueError(f"Not all transitions are valid: '{transition_node}'")
@@ -85,7 +85,7 @@ class DirectedGraph(BaseMessenger):
         if not self.is_active:
             raise RuntimeError("Currently inactive")
         new_node = self._nodes_dict[self.current_node].get_transition(user_input)
-        if new_node is self._exit_code:
+        if new_node == self._exit_code:
             self._is_active = False
         else:
             self._current_node_name = new_node
