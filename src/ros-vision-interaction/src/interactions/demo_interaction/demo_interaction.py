@@ -29,7 +29,7 @@ class DemoInteraction:
         is_record_topic='data_capture/is_record',
         screen_tap_topic='cordial/gui/event/mouse',
         interface=None,
-        is_clear_database=False
+        is_clear_database=True
     ):
         with open(interaction_json_file) as f:
             interaction_setup_dict = json.load(f)
