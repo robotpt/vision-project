@@ -18,7 +18,7 @@
     },
     "how are you": {
       "content": [
-        "It's nice to meet you {'db': 'user_name'}. *question_1* How are you doing right now?"
+        "It's nice to meet you {'db': 'user_name', 'default value': ''. *question_1* How are you doing right now?"
       ],
       "message_type": "multiple choice",
       "transitions": ["i'm sorry","glad to hear"],
@@ -36,7 +36,7 @@
     },
     "that's ok": {
       "content": [
-        "That's OK {'db': 'user_name'}, but let's plan to talk another time today or tomorrow. When is good for you?"
+        "That's OK {'db': 'user_name', 'default value': ''} but let's plan to talk another time today or tomorrow. When is good for you?"
       ],
       "message_type": "multiple choice",
       "transitions": ["how many hours", "can't wait to talk"],
@@ -76,7 +76,7 @@
     },
     "how was magnifier experience": {
       "content": [
-        "{'db': 'user_name'}, *question_2*how did it go with your magnifier?"
+        "{'db': 'user_name', 'default value': ''}, *question_2*how did it go with your magnifier?"
       ],
       "message_type": "multiple choice",
       "transitions": [
@@ -188,7 +188,7 @@
     },
     "take a break": {
       "content": [
-        "*QT/challenge*{'db': 'user_name'}, I know it's <emphasis level=\"strong\"><prosody rate=\"medium\">more difficult</prosody></emphasis> to do things with your vision, but I know that together we <emphasis level=\"strong\"><prosody rate=\"slow\" pitch=\"high\">can</prosody></emphasis> get through it. <prosody pitch=\"high\"><prosody rate=\"slow\">For now</prosody></prosody>, let's take our minds <prosody rate=\"slow\">off</prosody> that."
+        "*QT/challenge*{'db': 'user_name', 'default value': ''}, I know it's <emphasis level=\"strong\"><prosody rate=\"medium\">more difficult</prosody></emphasis> to do things with your vision, but I know that together we <emphasis level=\"strong\"><prosody rate=\"slow\" pitch=\"high\">can</prosody></emphasis> get through it. <prosody pitch=\"high\"><prosody rate=\"slow\">For now</prosody></prosody>, let's take our minds <prosody rate=\"slow\">off</prosody> that."
       ],
       "message_type": "multiple choice",
       "transitions": ["ask to share news story"],
@@ -219,7 +219,7 @@
       "options": [ "Bye!"]
     },
     "ending": {
-      "content": "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> {'var': 'ending_joke'}<break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now {'db': 'user_name'}!",
+      "content": "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> {'var': 'ending_joke'}<break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now {'db': 'user_name', 'default value': ''}!",
       "message_type": "multiple choice",
       "transitions": ["exit"],
       "options": ["Bye!"]
