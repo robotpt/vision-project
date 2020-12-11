@@ -1,0 +1,21 @@
+{
+  "Hi": [
+    "Hi",
+    "Hello"
+  ],
+  "chat": [
+    "chat",
+    "speak",
+    "talk"
+  ],
+  "jokes": [
+    "[insert joke here]"
+  ],
+  "news_story": [
+    "[insert news story here]"
+  ],
+  "ending_joke": [
+    "I'm so good at sleeping, I can do it with my eyes closed!",
+    "*QT/emotions/shy* Knock knock, <break strength=\"x-strong\"/><prosody pitch=\"high\">who's there</prosody><break time=\"0.5s\"/>? Eyeball. <break time=\"0.5s\"/>Eyeball who? <break time=\"0.5s\"/> Eyeball my eyes out every time you go!"
+  ]
+}
