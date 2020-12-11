@@ -1,1 +1,1 @@
-from demo_interaction.vision_interaction import DemoInteraction
+from demo_interaction.demo_interaction import DemoInteraction
