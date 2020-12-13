@@ -1,67 +1,51 @@
 {
   "ask to chat": {
-      "content": [
-        "<emphasis level=\"strong\"><prosody pitch=\"high\">Hello</prosody></emphasis>*QT/hi*<break strength=\"weak\"/> there! *question_1*Is this a <emphasis level=\"strong\"><prosody rate=\"slow\">good</prosody></emphasis> time to chat with me?"
-      ],
+      "content": "{'var': 'ask to chat'}",
       "message_type": "multiple choice",
-      "transitions": ["what's your name","that's ok"],
+      "transitions": ["what's your name","talk another time"],
       "options": ["Yes", "No"]
     },
     "what's your name": {
-      "content": [
-        "Hello there, my name is QT and it's wonderful to meet you! In case you're wondering, my gender pronoun is <prosody rate=\"slow\">it</prosody>. I am really looking forward to interacting with you! I can share stories, tell funny jokes, hope to help you with your magnifier, and will ask you questions. I would like to ask you to please touch the black buttons on the tablet screen to let me know your responses as we interact. Next, I would like to get to know more about you. What's your name?"
-      ],
+      "content": "Hello there, my name is QT and it's wonderful to meet you! In case you're wondering, my gender pronoun is <prosody rate=\"slow\">it</prosody>. I am really looking forward to interacting with you! I can share stories, tell funny jokes, hope to help you with your magnifier, and will ask you questions. I would like to ask you to please touch the black buttons on the tablet screen to let me know your responses as we interact. Next, I would like to get to know more about you. What's your name?",
       "message_type": "text entry",
       "transitions": ["how are you"],
       "options": ["Next"],
       "result_db_key": "user_name"
     },
     "how are you": {
-      "content": [
-        "It's nice to meet you {'db': 'user_name', 'default value': ''. *question_1* How are you doing right now?"
-      ],
+      "content": "It's nice to meet you {'db': 'user_name', 'default value': ''}. *question_1* How are you doing right now?",
       "message_type": "multiple choice",
-      "transitions": ["i'm sorry","glad to hear"],
+      "transitions": ["i am sorry","glad to hear"],
       "options": ["Not so good","Well"]
     },
-    "i'm sorry": {
-      "content": [
-        "*QT/emotions/sad* I'm <prosody rate=\"slow\" pitch=\"low\">sorry</prosody> to hear that. Perhaps <prosody pitch=\"high\">I</prosody> can <prosody rate=\"slow\">help</prosody> a bit."
-      ],
+    "i am sorry": {
+      "content": "{'var': 'i am sorry'}",
       "message_type": "multiple choice",
       "transitions": [
         "tell joke 1"
       ],
       "options": ["Next"]
     },
-    "that's ok": {
-      "content": [
-        "That's OK {'db': 'user_name', 'default value': ''} but let's plan to talk another time today or tomorrow. When is good for you?"
-      ],
+    "talk another time": {
+      "content": "That's OK {'db': 'user_name', 'default value': ''} but let's plan to talk another time today or tomorrow. When is good for you?",
       "message_type": "multiple choice",
       "transitions": ["how many hours", "can't wait to talk"],
       "options": ["Later today", "Same time tomorrow"]
     },
     "how many hours": {
-      "content": [
-        "Please enter the number of hours from now<break time=\"0.5s\"/> as <prosody rate=\"slow\">(1-9)</prosody>."
-      ],
+      "content": "Please enter the number of hours from now<break time=\"0.5s\"/> as <prosody rate=\"slow\">(1-9)</prosody>.",
       "message_type": "text entry",
       "transitions": ["can't wait to talk"],
       "options": [" hours"]
     },
     "can't wait to talk": {
-      "content": [
-        "*happy**QT/happy*<emphasis level=\"strong\">Great</emphasis>, I can't <prosody pitch=\"high\">wait</prosody> to talk to you again <prosody pitch=\"high\" rate=\"slow\">then</prosody>."
-      ],
+      "content": "*happy**QT/happy*<emphasis level=\"strong\">{'var': 'Great'}</emphasis>, I can't <prosody pitch=\"high\">wait</prosody> to talk to you again <prosody pitch=\"high\" rate=\"slow\">then</prosody>.",
       "message_type": "multiple choice",
       "transitions": ["ending"],
       "options": ["Next"]
     },
     "glad to hear": {
-      "content": [
-        "*happy* <emphasis level=\"strong\"> <prosody pitch=\"high\">Great</prosody></emphasis>, I'm <emphasis level=\"strong\">so glad</emphasis> to hear that things are ok with you."
-      ],
+      "content": "{'var': 'glad to hear'}",
       "message_type": "multiple choice",
       "transitions": ["did you use magnifier"],
       "options": ["Next"]
@@ -75,9 +59,7 @@
       "options": ["No", "Yes"]
     },
     "how was magnifier experience": {
-      "content": [
-        "{'db': 'user_name', 'default value': ''}, *question_2*how did it go with your magnifier?"
-      ],
+      "content": "{'db': 'user_name', 'default value': ''}, *question_2*how did it go with your magnifier?",
       "message_type": "multiple choice",
       "transitions": [
         "response to excellent",
@@ -93,133 +75,113 @@
       ]
     },
     "response to excellent": {
-      "content": [
-        "<prosody pitch=\"high\" volume=\"loud\" rate=\"slow\">Fantastic*QT/happy*</prosody>*happy*! I'm so proud of you for doing <prosody pitch=\"high\" rate=\"slow\">so</prosody> well. Keep up the excellent work with your magnifier!"
-      ],
+      "content": "{'var': 'response to excellent'}",
       "message_type": "multiple choice",
       "transitions": ["liven things up"],
       "options": ["Next"]
     },
     "response to good": {
-      "content": [
-        "*happy*I am <prosody pitch=\"high\">glad</prosody> to hear it's going pretty well. Here's my advice: <break strength=\"x-strong\"/>let's aim to become <prosody pitch=\"high\">excellent</prosody> at using your magnifier. <prosody rate=\"slow\">I know</prosody> that you can get there! *happy*Your <prosody rate=\"slow\">future self</prosody> will thank you."
-      ],
+      "content": "{'var': 'response to good'}",
       "message_type": "multiple choice",
       "transitions": ["liven things up"],
       "options": ["Next"]
     },
     "response to fair": {
-      "content": [
-        "Let's see how we can make things better with practice. How about if we pick a number of tries and do that many each day. How about 2? It does not matter that each try be great, it's important that we give it a good try. How about that?"
-      ],
+      "content": "{'var': 'response to fair'}",
       "message_type": "multiple choice",
       "transitions": ["liven things up"],
       "options": ["Next"]
     },
     "response to poor": {
-      "content": [
-        "I am so sorry*sad* that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying."
-      ],
+      "content": "{'var': 'response to poor'}",
       "message_type": "multiple choice",
       "transitions": ["liven things up"],
       "options": ["Next"]
     },
     "tell joke 1": {
-      "content": ["{'var': 'jokes'}"],
+      "content": ["{'var': 'joke'}"],
       "message_type": "multiple choice",
       "transitions": ["did you use magnifier"],
       "options": ["Next"]
     },
     "tell joke 2": {
-      "content": ["{'var': 'jokes'}"],
+      "content": ["{'var': 'joke'}"],
       "message_type": "multiple choice",
       "transitions": ["show me"],
       "options": ["Next"]
     },
     "liven things up": {
-      "content": [
-        "Let's*QT/emotions/hoora* <prosody volume=\"loud\" rate=\"slow\" pitch=\"high\">liven</prosody> things up for a moment with a joke!"
-      ],
+      "content": "Let's*QT/emotions/hoora* <prosody volume=\"loud\" rate=\"slow\" pitch=\"high\">liven</prosody> things up for a moment with a joke!",
       "message_type": "multiple choice",
       "transitions": ["tell joke 2"],
       "options": ["Next"]
     },
     "show me": {
-      "content": [
-        "Next, can you show me how you read something with your magnifier*question_1*?"
-      ],
+      "content": "Next, can you show me how you read something with your magnifier*question_1*?",
       "message_type": "multiple choice",
-      "transitions": ["tap screen", "take a break"],
+      "transitions": ["tap screen", "response to frustrated"],
       "options": ["Yes", "No"]
     },
     "tap screen": {
-      "content": [
-        "Tap my screen when you're done using your magnifier."
-      ],
+      "content": "Tap my screen when you're done using your magnifier.",
       "message_type": "multiple choice",
       "transitions": [
-        "take a break"
+        "how do you feel about vision"
       ],
       "options": ["Next"]
     },
     "how do you feel about vision": {
-      "content": [
-        "<prosody pitch=\"high\" rate=\"slow\">Oh</prosody>, I hope you'll find an opportunity to use it later today or tomorrow for sure. <break time=\"0.75s\"/>*question_1*<prosody rate=\"slow\">How</prosody> do you feel about your vision <prosody pitch=\"high\">today</prosody>?"
-      ],
+      "content": "<prosody pitch=\"high\" rate=\"slow\">Oh</prosody>, I hope you'll find an opportunity to use it later today or tomorrow for sure. <break time=\"0.75s\"/>*question_1*<prosody rate=\"slow\">How</prosody> do you feel about your vision <prosody pitch=\"high\">today</prosody>?",
       "message_type": "multiple choice",
-      "transitions": ["take a break", "response to no concerns"],
+      "transitions": ["response to frustrated", "response to no concerns"],
       "options": ["Frustrated", "No concerns"]
     },
     "response to no concerns": {
-      "content": [
-        "That's good to hear*happy*. Since you don't have any vision-related worries today:"
-      ],
+      "content": "{'var': 'response to no concerns'}",
       "message_type": "multiple choice",
       "transitions": ["ask to share news story"],
       "options": ["Next"]
     },
     "no news story response": {
-      "content": [
-        "<prosody pitch=\"low\" rate=\"slow\">No problem</prosody>, I understand. Let's plan to talk another time. <prosody rate=\"slow\">When</prosody> is good for <prosody pitch=\"high\" rate=\"slow\">you</prosody>?"
-      ],
+      "content": "{'var': 'plan to talk again'}",
       "message_type": "multiple choice",
       "transitions": ["can't wait to talk", "how many hours"],
       "options": ["Same time tomorrow", "Later today"]
     },
-    "take a break": {
-      "content": [
-        "*QT/challenge*{'db': 'user_name', 'default value': ''}, I know it's <emphasis level=\"strong\"><prosody rate=\"medium\">more difficult</prosody></emphasis> to do things with your vision, but I know that together we <emphasis level=\"strong\"><prosody rate=\"slow\" pitch=\"high\">can</prosody></emphasis> get through it. <prosody pitch=\"high\"><prosody rate=\"slow\">For now</prosody></prosody>, let's take our minds <prosody rate=\"slow\">off</prosody> that."
-      ],
+    "response to frustrated": {
+      "content": "{'var': 'response to frustrated'}",
       "message_type": "multiple choice",
       "transitions": ["ask to share news story"],
       "options": ["Next"]
     },
     "ask to share news story": {
-      "content": [
-        "<emphasis level=\"strong\"><prosody pitch=\"high\">Next</prosody></emphasis>, I would like to share a <emphasis level=\"strong\">story</emphasis> with you. How does <prosody pitch=\"high\" rate=\"slow\">that sound</prosody>?"
-      ],
+      "content": "<emphasis level=\"strong\"><prosody pitch=\"high\">Next</prosody></emphasis>, let's take our minds off reading. I would like to share a <emphasis level=\"strong\">story</emphasis> with you. How does <prosody pitch=\"high\" rate=\"slow\">that sound</prosody>?",
       "message_type": "multiple choice",
       "transitions": ["no news story response", "news story state"],
       "options": ["Not right now", "Good"]
     },
     "news story state": {
-      "content": ["'{'var': 'news_story'}"],
+      "content": "{'var': 'news story'}",
       "message_type": "multiple choice",
-      "transitions": ["after news story"],
+      "transitions": ["read me something"],
       "options": ["Next"]
     },
-    "after news story": {
-      "content": [
-        "I hope you enjoyed that <prosody pitch=\"high\">story!</prosody> Have a <prosody pitch=\"high\">great</prosody> rest of your day. And don't forget to use your *happy*<prosody pitch=\"high\">magnifier</prosody>! *QT/bye-bye*<break time=\"0.2s\"/><prosody pitch=\"high\" rate=\"slow\">Bye-bye!</prosody>"
-      ],
+    "read me something": {
+      "content": "{'var': 'read me something'} Tap 'Next' when you're done!",
       "message_type": "multiple choice",
       "transitions": [
-        "exit"
+        "ending"
       ],
-      "options": [ "Bye!"]
+      "options": [ "Next"]
     },
     "ending": {
-      "content": "Before we say goodbye, I'd like to tell you one of my favorite jokes about eyes and vision.<break time=\"1s\"/> {'var': 'ending_joke'}<break strength=\"x-strong\"/>*QT/bye-bye**happy* Goodbye for now {'db': 'user_name', 'default value': ''}!",
+      "content": "{'var': 'ending'}",
+      "message_type": "multiple choice",
+      "transitions": ["exit"],
+      "options": ["Bye!"]
+    },
+  "ending joke": {
+      "content": "{'var': 'ending joke'}",
       "message_type": "multiple choice",
       "transitions": ["exit"],
       "options": ["Bye!"]
