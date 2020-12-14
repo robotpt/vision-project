@@ -19,7 +19,7 @@ ENV ROS_WS="/root/catkin_ws"
 RUN \
 	mkdir -p ${ROS_WS}/src \
 	&& cd ${ROS_WS}/src \
-	&& git clone --branch ${vision_project_branch} https://github.com/robotpt/vision-project.git \
+	&& git clone --branch ${vision_project_branch} --recurse-submodules https://github.com/robotpt/vision-project.git \
 	&& git clone https://github.com/robotpt/cordial.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
