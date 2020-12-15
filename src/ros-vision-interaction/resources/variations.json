@@ -3,7 +3,7 @@
     "{'var': 'Hi'} there! Is this a good time to {'var': 'chat'} with me?",
     "{'var': 'Hi'} my friend! Are you able to {'var': 'chat'} with me right now?",
     "Greetings! Am I catching you at a good time to {'var': 'chat'}?",
-    "{'var': 'Hi'} {'db': 'user_name'}! Let me know if this is a good time to {'var': 'chat'}?"
+    "{'var': 'Hi'} {'db': 'user_name', 'default value': ''}! Let me know if this is a good time to {'var': 'chat'}?"
   ],
   "did you use magnifier": [
     "Tell me, did you use your magnifier since we last spoke?",
@@ -78,12 +78,12 @@
     "Success involves the courage to continue when things are tough. Don't wish it were easier, instead, wish you were better and work to make that dream a reality by persevering with your magnifier each and every time."
   ],
   "response to frustrated": [
-    "{'db': 'user_name'} I know it's more difficult to do things with your vision, but together we can get through it.",
-    "{'db': 'user_name'} I realize that it is more challenging to do things with your vision, but I am here for you.",
-    "{'db': 'user_name'} I understand that it is not easy to read with your vision, but I am here to help support you while learning to use your magnifier.",
-    "{'db': 'user_name'} I bet that there are some things that are difficult to see, but stick with your magnifier while working with me, and reading should become easier with practice.",
-    "{'db': 'user_name'} All people with vision loss get frustrated at times, but together we can overcome it. If you keep working with your magnifier, I bet you'll improve and feel less frustrated.",
-    "{'db': 'user_name'} It's totally normal to feel frustrated sometimes, and the more you work at using your magnifier, it will get better!"
+    "{'db': 'user_name', 'default value': ''} I know it's more difficult to do things with your vision, but together we can get through it.",
+    "{'db': 'user_name', 'default value': ''} I realize that it is more challenging to do things with your vision, but I am here for you.",
+    "{'db': 'user_name', 'default value': ''} I understand that it is not easy to read with your vision, but I am here to help support you while learning to use your magnifier.",
+    "{'db': 'user_name', 'default value': ''} I bet that there are some things that are difficult to see, but stick with your magnifier while working with me, and reading should become easier with practice.",
+    "{'db': 'user_name', 'default value': ''} All people with vision loss get frustrated at times, but together we can overcome it. If you keep working with your magnifier, I bet you'll improve and feel less frustrated.",
+    "{'db': 'user_name', 'default value': ''} It's totally normal to feel frustrated sometimes, and the more you work at using your magnifier, it will get better!"
   ],
   "response to good": [
     "I am glad to hear it's going pretty well. Here's my advice: Let's aim to become great with your magnifier. I know that you can get there! Your future self will thank you.",

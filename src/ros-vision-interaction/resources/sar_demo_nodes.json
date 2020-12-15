@@ -119,8 +119,8 @@
   "show me": {
     "content": "Next, can you show me how you read something with your magnifier*question_1*?",
     "message_type": "multiple choice",
-    "transitions": ["tap screen", "response to frustrated"],
-    "options": ["Yes", "No"]
+    "transitions": ["tap screen", "ask to share news story"],
+    "options": ["Yes", "Not right now"]
   },
   "tap screen": {
     "content": "Tap my screen when you're done using your magnifier.",
@@ -139,7 +139,7 @@
   "response to no concerns": {
     "content": "{'var': 'response to no concerns'}",
     "message_type": "multiple choice",
-    "transitions": ["ask to share news story"],
+    "transitions": ["show me"],
     "options": ["Next"]
   },
   "no news story response": {
