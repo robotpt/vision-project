@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.8
 
 import actionlib
 import os
 import rospy
 from cordial_msgs.msg import AskOnGuiAction, AskOnGuiGoal
 
-from demo_interaction import DemoInteraction
+from interactions import DemoInteraction
 
 from interaction_engine.json_database import Database
 from interaction_engine.interfaces import Interface
