@@ -15,7 +15,7 @@
     </include>
 
 
-    <node pkg="ros-vision-interaction" type="sar_demo.py" name="cordial_client" required="true" output="screen" />
+    <node pkg="ros-vision-interaction" type="cordial_interface.py" name="cordial_client" required="true" output="screen" />
 
     <include file="$(find aws_uploader)/launch/aws_uploader.launch">
         <arg name="upload_directory_path" default="$(arg upload_directory)"/>
