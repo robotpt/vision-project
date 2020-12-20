@@ -8,6 +8,7 @@ FROM ros:kinetic-ros-base-xenial as vision_project_min
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
 ARG vision_project_branch="master"
+ARG vision_project_remote="https://github.com/robotpt/vision-project.git"
 ARG INSTALL_SCRIPT="install_deps.sh"
 
 # Install dependencies
@@ -19,7 +20,7 @@ ENV ROS_WS="/root/catkin_ws"
 RUN \
 	mkdir -p ${ROS_WS}/src \
 	&& cd ${ROS_WS}/src \
-	&& git clone --branch ${vision_project_branch} --recurse-submodules https://github.com/robotpt/vision-project.git \
+	&& git clone --branch ${vision_project_branch} --recurse-submodules ${vision_project_remote} \
 	&& git clone https://github.com/robotpt/cordial.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \

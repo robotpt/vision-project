@@ -14,15 +14,17 @@ jobs:
       - name: Set branch name for pull request
         if: github.event_name == 'pull_request'
         run: echo "BRANCH_NAME=${{github.event.pull_request.head.ref}}" >> $GITHUB_ENV
+        run: echo "REMOTE_URL=${{github.event.pull_request.repo.html_url}}" >> $GITHUB_ENV
       - name: Set branch name
         if: github.event_name != 'pull_request'
         run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        run: echo "REMOTE_URL=https://github.com/robotpt/vision-project.git" >> $GITHUB_ENV
       - name: Echo branch name
         run: echo ${BRANCH_NAME}
 
       - name: Build Docker container
         run: |
-          docker build --target vision_project_test --build-arg vision_project_branch=${BRANCH_NAME} --tag test docker/
+          docker build --target vision_project_test --build-arg vision_project_remote=${REMOTE_URL} vision_project_branch=${BRANCH_NAME} --tag test docker/
       - name: Run tests in the Docker container
         run: |
           docker run test us-west-1 json ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
