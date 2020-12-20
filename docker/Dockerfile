@@ -28,11 +28,20 @@ RUN \
 	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
 
 
-# ======================================================
-# Copy the testing entrypoint for testing vision-project
-# ======================================================
-FROM vision_project_min as vision_project_test
-COPY ./scripts/test_entrypoint.sh /entrypoint.sh
+# ==============================================================
+# Copy the testing entrypoint for testing vision-project for PRs
+# ==============================================================
+FROM vision_project_min as vision_project_test_pr
+COPY ./scripts/test_pr.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+# ====================================================================
+# Copy the testing entrypoint for testing vision-project for all tests
+# ====================================================================
+# Note that this runs AWS tests, so you must have your AWS credentials
+# set
+FROM vision_project_min as vision_project_test_full
+COPY ./scripts/test_full.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 
