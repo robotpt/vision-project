@@ -13,8 +13,10 @@ jobs:
       - name: Set remote and branch name
         run: |
           echo "REMOTE_URL=https://github.com/${GITHUB_REPOSITORY}.git" >> $GITHUB_ENV
-          echo "Remote: ${REMOTE_URL}"
           echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+      - name: Echo remote and branch name
+        run: |
+          echo "Remote: ${REMOTE_URL}"
           echo "Branch: ${BRANCH_NAME}"
 
       - name: Build Docker container
