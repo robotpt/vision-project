@@ -8,6 +8,7 @@ FROM ros:kinetic-ros-base-xenial as vision_project_min
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
 ARG vision_project_branch="master"
+ARG vision_project_remote="https://github.com/robotpt/vision-project.git"
 ARG INSTALL_SCRIPT="install_deps.sh"
 
 # Install dependencies
@@ -19,7 +20,7 @@ ENV ROS_WS="/root/catkin_ws"
 RUN \
 	mkdir -p ${ROS_WS}/src \
 	&& cd ${ROS_WS}/src \
-	&& git clone --branch ${vision_project_branch} --recurse-submodules https://github.com/robotpt/vision-project.git \
+	&& git clone --branch ${vision_project_branch} --recurse-submodules ${vision_project_remote} \
 	&& git clone https://github.com/robotpt/cordial.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
@@ -27,11 +28,20 @@ RUN \
 	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
 
 
-# ======================================================
-# Copy the testing entrypoint for testing vision-project
-# ======================================================
-FROM vision_project_min as vision_project_test
-COPY ./scripts/test_entrypoint.sh /entrypoint.sh
+# ==============================================================
+# Copy the testing entrypoint for testing vision-project for PRs
+# ==============================================================
+FROM vision_project_min as vision_project_test_pr
+COPY ./scripts/test_pr.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+# ====================================================================
+# Copy the testing entrypoint for testing vision-project for all tests
+# ====================================================================
+# Note that this runs AWS tests, so you must have your AWS credentials
+# set
+FROM vision_project_min as vision_project_test_full
+COPY ./scripts/test_full.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 
