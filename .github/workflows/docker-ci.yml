@@ -14,7 +14,7 @@ jobs:
       - name: Set branch name for pull request
         if: github.event_name == 'pull_request'
         run: |
-          echo "REMOTE_URL=${{github.event.pull_request.repo.html_url}}" >> $GITHUB_ENV
+          echo "REMOTE_URL=${{github.event.pull_request.head.repo.html_url}}" >> $GITHUB_ENV
           echo "BRANCH_NAME=${{github.event.pull_request.head.ref}}" >> $GITHUB_ENV
       - name: Set branch name
         if: github.event_name != 'pull_request'
