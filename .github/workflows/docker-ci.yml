@@ -24,7 +24,7 @@ jobs:
       - name: Echo remote and branch name
         run: |
           echo "Remote: ${REMOTE_URL}"
-          echo ${BRANCH_NAME}
+          echo "Branch: ${BRANCH_NAME}"
 
       - name: Build Docker container
         run: |
