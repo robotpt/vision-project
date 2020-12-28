@@ -5,7 +5,7 @@ import os
 import rospy
 from cordial_msgs.msg import AskOnGuiAction, AskOnGuiGoal
 
-from interactions import DemoInteraction
+from controllers import DemoInteractionController
 
 from interaction_engine.json_database import Database
 from interaction_engine.interfaces import Interface
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     database_file_name = os.path.join(resources_directory, 'state_database.json')
 
     interface = CordialInterface(database_file_name=database_file_name)
-    demo_interaction = DemoInteraction(
+    demo_interaction = DemoInteractionController(
         interaction_json_file=demo_interaction_json_file,
         start_node_name="ask to chat",
         database_file_name=database_file_name,
