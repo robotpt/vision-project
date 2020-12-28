@@ -6,7 +6,7 @@ import os
 
 package_dirs = {
     'interactions': os.path.join('src', 'ros_vision_interaction', 'interactions'),
-    'interaction_engine': os.path.join('src', 'interaction-engine', 'interaction_engine'),
+    'interaction_engine': os.path.join('src', 'interaction_engine', 'interaction_engine'),
 }
 
 d = generate_distutils_setup(

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
 
-  <name>ros-vision-interaction</name>
+  <name>ros_vision_interaction</name>
   <version>0.0.0</version>
   <description>The cordial_interaction package</description>
   <maintainer email="emilyzho@usc.edu">Emily Zhou</maintainer>

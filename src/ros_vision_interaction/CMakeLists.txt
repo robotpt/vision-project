@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(ros-vision-interaction)
+project(ros_vision_interaction)
 
 find_package(catkin REQUIRED COMPONENTS
   cordial_msgs
