@@ -1,3 +1,3 @@
-[submodule "src/ros-vision-interaction/src/interaction-engine"]
-	path = src/ros-vision-interaction/src/interaction-engine
+[submodule "src/ros_vision_interaction/src/interaction_engine"]
+	path = src/ros_vision_interaction/src/interaction_engine
 	url = https://github.com/robotpt/interaction-engine.git
