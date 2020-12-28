@@ -17,7 +17,7 @@ from std_msgs.msg import Bool
 logging.basicConfig(level=logging.INFO)
 
 
-class DemoInteraction:
+class DemoInteractionController:
 
     def __init__(
         self,
