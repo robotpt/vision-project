@@ -1,3 +1,4 @@
 string type
 ---
+bool is_interaction_successful
 ---

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.8
 import actionlib
 import datetime
 import json
@@ -16,12 +16,15 @@ from interaction_engine.text_populator import DatabasePopulator, VarietyPopulato
 
 from interfaces import CordialInterface
 
-from ros_vision_interaction.msg import StartInteractionAction, StartInteractionActionGoal, StartInteractionFeedback, StartInteractionResult
+from ros_vision_interaction.msg import StartInteractionAction, StartInteractionFeedback, StartInteractionResult
+
+from std_msgs.msg import Bool
 
 logging.basicConfig(level=logging.INFO)
 
 
 class BehaviorController:
+
     class Interactions:
         FIRST_INTERACTION = "first interaction"
         SCHEDULED_INTERACTION = "scheduled interaction"
@@ -36,19 +39,22 @@ class BehaviorController:
         ]
 
     def __init__(
-            self,
-            interactions_json_file,
-            state_database_file,
-            variations_json_file=None,
-            interface=None,
+        self,
+        interactions_json_file,
+        state_database_file,
+        variations_json_file=None,
+        start_interaction_action_name="vision_project/start_interaction",
+        interface=None,
+        is_debug=False
     ):
         self._state_database = Database(database_file_name=state_database_file)
         if interface is None:
             interface = TerminalClientAndServerInterface(database=self._state_database)
         self._interface = interface
 
+        # set up action server
         self._start_interaction_action_server = actionlib.SimpleActionServer(
-            'vision_project/start_interaction',
+            start_interaction_action_name,
             StartInteractionAction,
             self.run_interaction_once,
             auto_start=False
@@ -56,6 +62,11 @@ class BehaviorController:
         self._start_interaction_action_server.register_preempt_callback(self._preempt_callback)
         self._start_interaction_action_server.start()
 
+        self._database_populator = DatabasePopulator(database=self._state_database)
+        self._variety_populator = VarietyPopulator(files=variations_json_file)
+        self._text_populator = TextPopulator(self._variety_populator, self._database_populator)
+
+        # build dictionary of graph name: graph
         self._build_interaction_dict = {
             BehaviorController.Interactions.FIRST_INTERACTION: self._build_first_interaction,
             BehaviorController.Interactions.PROMPTED_INTERACTION: self._build_prompted_interaction,
@@ -64,21 +75,18 @@ class BehaviorController:
         self._graphs_dict = self._build_all_possible_graphs_from_file(interactions_json_file)
         self._planner = MessagerPlanner([p for p in self._graphs_dict.values()])
 
-        self._database_populator = DatabasePopulator(database=self._state_database)
-        self._variety_populator = VarietyPopulator(files=variations_json_file)
-        self._text_populator = TextPopulator(self._variety_populator, self._database_populator)
+        self._is_debug = is_debug
 
     def _build_all_possible_graphs_from_file(self, interactions_json_file):
         interaction_dict = {}
         with open(interactions_json_file) as f:
             interaction_setup_dict = json.load(f)
         for graph_name in interaction_setup_dict:
-            interaction_dict[graph_name] = self._build_graph_from_json(interaction_setup_dict[graph_name])
+            interaction_dict[graph_name] = self._build_graph_from_json(graph_name, interaction_setup_dict[graph_name])
 
         return interaction_dict
 
-    def _build_graph_from_json(self, graph_dict):
-        graph_name = graph_dict["graph_name"]
+    def _build_graph_from_json(self, graph_name, graph_dict):
         start_node_name = graph_dict["start_node_name"]
         nodes = []
 
@@ -126,16 +134,23 @@ class BehaviorController:
         if interaction_type not in self._build_interaction_dict.keys():
             raise ValueError("Not a valid interaction type")
 
-        interaction = self._build_interaction_dict[interaction_type](self._planner)
-        engine = InteractionEngine(
-            self._interface,
-            self._planner,
-            interaction
-        )
+        result = StartInteractionResult()
+
+        if not self._is_debug:
+            interaction = self._build_interaction_dict[interaction_type](self._planner)
+            engine = InteractionEngine(
+                self._interface,
+                self._planner,
+                interaction
+            )
+        else:
+            seconds_to_sleep_for_tests = 3
+            rospy.sleep(seconds_to_sleep_for_tests)
+            result.is_interaction_successful = True
 
         if not self._start_interaction_action_server.is_preempt_requested():
             rospy.loginfo("Setting goal as succeeded")
-            self._start_interaction_action_server.set_succeeded(StartInteractionResult())
+            self._start_interaction_action_server.set_succeeded(result)
 
     def _build_first_interaction(self, planner):
         rospy.loginfo("Building first interaction")
@@ -156,9 +171,10 @@ class BehaviorController:
 
 if __name__ == "__main__":
     rospy.init_node("behavior_controller")
+    is_debug = rospy.get_param("vision_project/is_debug", default=True)
 
     resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources'
-    interactions_json_file_name = os.path.join(resources_directory, 'sar_demo_nodes.json')
+    interactions_json_file_name = os.path.join(resources_directory, 'long_term_interaction_nodes.json')
     variation_file_name = os.path.join(resources_directory, 'variations.json')
     database_file_name = os.path.join(resources_directory, 'long_term_interaction_state_db.json')
 
@@ -168,7 +184,8 @@ if __name__ == "__main__":
         interactions_json_file=interactions_json_file_name,
         state_database_file=database_file_name,
         variations_json_file=variation_file_name,
-        interface=interface
+        interface=interface,
+        is_debug=is_debug
     )
 
     rospy.spin()

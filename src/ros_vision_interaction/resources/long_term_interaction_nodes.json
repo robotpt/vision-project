@@ -1,0 +1,46 @@
+{
+	"greeting": {
+		"nodes": {
+			"greeting": {
+				"transitions": ["exit"],
+				"content": "Hello!",
+				"options": ["Hi!"],
+				"message_type": "multiple choice"
+			}
+		},
+		"start_node_name": "greeting"
+	},
+	"scheduled graph": {
+		"nodes": {
+			"scheduled node": {
+				"transitions": ["exit"],
+				"content": "This is a scheduled interaction!",
+				"options": ["Next"],
+				"message_type": "multiple choice"
+			}
+		},
+		"start_node_name": "scheduled node"
+	},
+	"prompted graph": {
+		"nodes": {
+			"prompted node": {
+				"transitions": ["exit"],
+				"content": "This is a prompted interaction!",
+				"options": ["Next"],
+				"message_type": "multiple choice"
+			}
+		},
+		"start_node_name": "prompted node"
+	},
+	"reading evaluation": {
+		"nodes": {
+			"evaluation node": {
+				"transitions": ["exit"],
+				"content": "This is a reading evaluation.",
+				"options": ["Next"],
+				"message_type": "multiple choice"
+			}
+		},
+		"start_node_name": "evaluation node"
+	}
+}
