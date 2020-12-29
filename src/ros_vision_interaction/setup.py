@@ -6,6 +6,7 @@ import os
 
 package_dirs = {
     'controllers': os.path.join('src', 'ros_vision_interaction', 'controllers'),
+    'interfaces': os.path.join('src', 'ros_vision_interaction', 'interfaces'),
     'interaction_engine': os.path.join('src', 'interaction_engine', 'interaction_engine'),
 }
 
