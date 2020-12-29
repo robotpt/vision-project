@@ -1,6 +1,10 @@
+#!/usr/bin/env python
+import actionlib
 import datetime
 import json
 import logging
+import os
+import rospy
 import schedule
 
 from interaction_engine.engine import InteractionEngine
@@ -10,6 +14,10 @@ from interaction_engine.messager import Message, Node, DirectedGraph
 from interaction_engine.planner import MessagerPlanner
 from interaction_engine.text_populator import DatabasePopulator, VarietyPopulator, TextPopulator
 
+from interfaces import CordialInterface
+
+from ros_vision_interaction.msg import StartInteractionAction, StartInteractionActionGoal, StartInteractionFeedback, StartInteractionResult
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -18,6 +26,14 @@ class BehaviorController:
         FIRST_INTERACTION = "first interaction"
         SCHEDULED_INTERACTION = "scheduled interaction"
         PROMPTED_INTERACTION = "prompted interaction"
+        READING_EVALUATION = "reading evaluation"
+
+        POSSIBLE_INTERACTIONS = [
+            FIRST_INTERACTION,
+            SCHEDULED_INTERACTION,
+            PROMPTED_INTERACTION,
+            READING_EVALUATION,
+        ]
 
     def __init__(
             self,
@@ -30,6 +46,15 @@ class BehaviorController:
         if interface is None:
             interface = TerminalClientAndServerInterface(database=self._state_database)
         self._interface = interface
+
+        self._start_interaction_action_server = actionlib.SimpleActionServer(
+            'vision_project/start_interaction',
+            StartInteractionAction,
+            self.run_interaction_once,
+            auto_start=False
+        )
+        self._start_interaction_action_server.register_preempt_callback(self._preempt_callback)
+        self._start_interaction_action_server.start()
 
         self._build_interaction_dict = {
             BehaviorController.Interactions.FIRST_INTERACTION: self._build_first_interaction,
@@ -95,23 +120,56 @@ class BehaviorController:
             start_node=start_node_name
         )
 
-    def run_interaction_once(self, interaction_type):
+    # start interaction action callback
+    def run_interaction_once(self, goal):
+        interaction_type = goal.type
         if interaction_type not in self._build_interaction_dict.keys():
             raise ValueError("Not a valid interaction type")
 
-        # call a helper method that inserts graphs into the planner
-        # interaction = self._build_interaction_dict[interaction_type](self._planner)
-        # engine = InteractionEngine(
-        #     self._possible_interaction_types,
-        #     self._planner,
-        #     interaction
-        # )
+        interaction = self._build_interaction_dict[interaction_type](self._planner)
+        engine = InteractionEngine(
+            self._interface,
+            self._planner,
+            interaction
+        )
+
+        if not self._start_interaction_action_server.is_preempt_requested():
+            rospy.loginfo("Setting goal as succeeded")
+            self._start_interaction_action_server.set_succeeded(StartInteractionResult())
 
     def _build_first_interaction(self, planner):
-        pass
+        rospy.loginfo("Building first interaction")
+        return planner
 
     def _build_prompted_interaction(self, planner):
-        pass
+        rospy.loginfo("Building prompted interaction")
+        return planner
 
     def _build_scheduled_interaction(self, planner):
-        pass
+        rospy.loginfo("Building scheduled interaction")
+        return planner
+
+    def _preempt_callback(self):
+        rospy.loginfo("Preempt requested for interaction server")
+        self._start_interaction_action_server.set_preempted()
+
+
+if __name__ == "__main__":
+    rospy.init_node("behavior_controller")
+
+    resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources'
+    interactions_json_file_name = os.path.join(resources_directory, 'sar_demo_nodes.json')
+    variation_file_name = os.path.join(resources_directory, 'variations.json')
+    database_file_name = os.path.join(resources_directory, 'long_term_interaction_state_db.json')
+
+    interface = CordialInterface(database_file_name=database_file_name)
+
+    behavior_controller = BehaviorController(
+        interactions_json_file=interactions_json_file_name,
+        state_database_file=database_file_name,
+        variations_json_file=variation_file_name,
+        interface=interface
+    )
+
+    rospy.spin()
+
