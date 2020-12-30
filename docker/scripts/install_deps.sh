@@ -58,7 +58,11 @@ sudo apt-get install -y \
 curl https://bootstrap.pypa.io/get-pip.py | sudo python3.8
 ${PYTHON3_VERSION} -m pip install --user \
 	rospkg \
-	catkin_pkg
+	catkin_pkg \
+	awscli \
+	freezegun==1.0.0 \
+	robotpt_common_utils==0.0.8 \
+	schedule==0.6.0
 
 
 # Setup HTTP server
