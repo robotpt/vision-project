@@ -3,7 +3,7 @@
 # =======================================================
 # The minimum requirements for running the vision-project
 # =======================================================
-FROM ros:kinetic-ros-base-xenial as vision_project_min
+FROM osrf/ros:kinetic-desktop-full as vision_project_min
 
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
