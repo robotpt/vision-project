@@ -1,6 +1,4 @@
 <launch>
-    <param name="vision_project/is_debug" value="True" />
-
     <node pkg="ros_vision_interaction" type="behavior_controller.py" name="behavior_controller"/>
     <test test-name="test_behavior_controller_ros" pkg="ros_vision_interaction" type="test_behavior_controller_ros.py"/>
 </launch>

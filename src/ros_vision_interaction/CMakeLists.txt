@@ -18,7 +18,7 @@ catkin_python_setup()
 
 if (CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  add_rostest(tests/test_behavior_controller_ros.test)
+  add_rostest(test/test_behavior_controller_ros.test)
 endif()
 
 generate_messages(DEPENDENCIES
