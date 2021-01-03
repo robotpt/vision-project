@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="ros_vision_interaction" type="main_controller.py" name="main_controller" output="screen" />
+</launch>
