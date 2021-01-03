@@ -2,27 +2,30 @@
 
 import actionlib
 import os
+import pymongo
 import rospy
 from cordial_msgs.msg import AskOnGuiAction, AskOnGuiGoal
 
-from interaction_engine.json_database import Database
 from interaction_engine.interfaces import Interface
 from interaction_engine.messager import Message
+
+from mongodb_statedb import StateDb
 
 
 class CordialInterface(Interface):
 
     def __init__(
             self,
+            mongodb_statedb,
             action_name="cordial/say_and_ask_on_gui",
             database_file_name=None,
             seconds_until_timeout=None,
             is_create_db_key_if_not_exist=True,
     ):
-        database = Database(database_file_name)
+        self._state_database = mongodb_statedb
         super().__init__(
             self.call_ask_action_service,
-            database=database,
+            database=self._state_database,
             is_create_db_key_if_not_exist=is_create_db_key_if_not_exist
         )
 

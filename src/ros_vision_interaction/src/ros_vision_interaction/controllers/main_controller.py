@@ -3,35 +3,36 @@ import actionlib
 import datetime
 import logging
 import os
+import pymongo
 import rospy
 import schedule
 
-from interaction_engine.engine import InteractionEngine
-from interaction_engine.json_database import Database
-from controllers import BehaviorController
-from interaction_engine.text_populator import DatabasePopulator, VarietyPopulator, TextPopulator
+from mongodb_statedb import StateDb
 
 from cordial_msgs.msg import MouseEvent
-from std_msgs.msg import Bool
+from mongodb_statedb import StateDb
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
+from std_msgs.msg import Bool
 
 logging.basicConfig(level=logging.INFO)
+
+START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
 
 
 class MainController:
 
     def __init__(
         self,
-        state_database_file,
+        mongodb_statedb,
+        state_database_file=None,
         is_go_to_sleep_topic='cordial/sleep',
         is_record_topic='data_capture/is_record',
         screen_tap_topic='cordial/gui/event/mouse',
-        start_interaction_action_name="vision_project/start_interaction",
+        start_interaction_action_name=START_INTERACTION_ACTION_NAME,
         is_debug=False
     ):
-
-        self._state_database = Database(database_file_name=state_database_file)
-        self._set_initial_db_keys(self._state_database)
+        self._state_database = mongodb_statedb
+        self._set_initial_db_keys()
 
         # action client to start interaction
         self._start_interaction_client = actionlib.SimpleActionClient(
@@ -58,8 +59,16 @@ class MainController:
     def _update(self):
         pass
 
-    def _set_initial_db_keys(self, db):
-        db["user_name"] = ""
+    def _set_initial_db_keys(self):
+        keys = [
+            "user_name",
+            "time_for_next_interaction"
+        ]
+        for key in keys:
+            try:
+                state_database.create(key, None)
+            except KeyError:
+                rospy.loginfo("{} already exists".format(key))
 
     def _screen_tap_listener_callback(self, _):
         self._is_start_interaction = True
@@ -88,9 +97,21 @@ if __name__ == "__main__":
     resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources'
     database_file_name = os.path.join(resources_directory, 'long_term_interaction_state_db.json')
 
+    # set up database
+    host = rospy.get_param(
+        "mongodb/host",
+        "localhost"
+    )
+    port = rospy.get_param(
+        "mongodb/port",
+        62345
+    )
+    state_database = StateDb(
+        pymongo.MongoClient(host, port)
+    )
+
     main_controller = MainController(
-        state_database_file=database_file_name,
-        is_debug=is_debug
+        mongodb_statedb=state_database,
     )
 
     rospy.spin()

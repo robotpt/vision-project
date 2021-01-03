@@ -1,9 +1,10 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/python3.8
 import actionlib
 import datetime
 import json
 import logging
 import os
+import pymongo
 import rospy
 import schedule
 
@@ -13,18 +14,16 @@ from interaction_engine.json_database import Database
 from interaction_engine.messager import Message, Node, DirectedGraph
 from interaction_engine.planner import MessagerPlanner
 from interaction_engine.text_populator import DatabasePopulator, VarietyPopulator, TextPopulator
-
 from interfaces import CordialInterface
-
+from mongodb_statedb import StateDb
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionFeedback, StartInteractionResult
-
-from std_msgs.msg import Bool
 
 logging.basicConfig(level=logging.INFO)
 
+START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
+
 
 class BehaviorController:
-
     class Interactions:
         FIRST_INTERACTION = "first interaction"
         SCHEDULED_INTERACTION = "scheduled interaction"
@@ -39,15 +38,15 @@ class BehaviorController:
         ]
 
     def __init__(
-        self,
-        interactions_json_file,
-        state_database_file,
-        variations_json_file=None,
-        start_interaction_action_name="vision_project/start_interaction",
-        interface=None,
-        is_debug=False
+            self,
+            interactions_json_file,
+            mongodb_statedb,
+            text_populator=None,
+            interface=None,
+            start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
-        self._state_database = Database(database_file_name=state_database_file)
+        self._state_database = mongodb_statedb
+
         if interface is None:
             interface = TerminalClientAndServerInterface(database=self._state_database)
         self._interface = interface
@@ -60,23 +59,20 @@ class BehaviorController:
             auto_start=False
         )
         self._start_interaction_action_server.register_preempt_callback(self._preempt_callback)
-        self._start_interaction_action_server.start()
 
-        self._database_populator = DatabasePopulator(database=self._state_database)
-        self._variety_populator = VarietyPopulator(files=variations_json_file)
-        self._text_populator = TextPopulator(self._variety_populator, self._database_populator)
+        self._text_populator = text_populator
 
-        # build dictionary of graph name: graph
-        self._build_interaction_dict = {
-            BehaviorController.Interactions.FIRST_INTERACTION: self._build_first_interaction,
-            BehaviorController.Interactions.PROMPTED_INTERACTION: self._build_prompted_interaction,
-            BehaviorController.Interactions.SCHEDULED_INTERACTION: self._build_scheduled_interaction,
-        }
         self._graphs_dict = self._build_all_possible_graphs_from_file(interactions_json_file)
         self._planner = MessagerPlanner([p for p in self._graphs_dict.values()])
 
-        self._is_debug = is_debug
+        self._is_debug = rospy.get_param(
+            "controllers/is_debug",
+            False
+        )
 
+        self._start_interaction_action_server.start()
+
+    # creates a dictionary of graph name: graph from a single json file
     def _build_all_possible_graphs_from_file(self, interactions_json_file):
         interaction_dict = {}
         with open(interactions_json_file) as f:
@@ -86,6 +82,7 @@ class BehaviorController:
 
         return interaction_dict
 
+    # builds a single DirectedGraph from a dictionary defined in the interaction json file
     def _build_graph_from_json(self, graph_name, graph_dict):
         start_node_name = graph_dict["start_node_name"]
         nodes = []
@@ -131,18 +128,19 @@ class BehaviorController:
     # start interaction action callback
     def run_interaction_once(self, goal):
         interaction_type = goal.type
-        if interaction_type not in self._build_interaction_dict.keys():
+        if interaction_type not in BehaviorController.Interactions.POSSIBLE_INTERACTIONS:
             raise ValueError("Not a valid interaction type")
 
         result = StartInteractionResult()
 
         if not self._is_debug:
-            interaction = self._build_interaction_dict[interaction_type](self._planner)
             engine = InteractionEngine(
                 self._interface,
                 self._planner,
-                interaction
+                list(self._graphs_dict.values())
             )
+            engine.run()
+            rospy.loginfo("Interaction finished")
         else:
             seconds_to_sleep_for_tests = 3
             rospy.sleep(seconds_to_sleep_for_tests)
@@ -171,22 +169,34 @@ class BehaviorController:
 
 if __name__ == "__main__":
     rospy.init_node("behavior_controller")
-    is_debug = rospy.get_param("vision_project/is_debug", default=True)
 
     resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources'
     interactions_json_file_name = os.path.join(resources_directory, 'long_term_interaction_nodes.json')
     variation_file_name = os.path.join(resources_directory, 'variations.json')
-    database_file_name = os.path.join(resources_directory, 'long_term_interaction_state_db.json')
 
-    interface = CordialInterface(database_file_name=database_file_name)
+    # set up database
+    host = rospy.get_param(
+        "mongodb/host",
+        "localhost"
+    )
+    port = rospy.get_param(
+        "mongodb/port",
+        62345
+    )
+    state_database = StateDb(
+        pymongo.MongoClient(host, port)
+    )
+
+    database_populator = DatabasePopulator(database=state_database)
+    variety_populator = VarietyPopulator(files=variation_file_name)
+    text_populator = TextPopulator(variety_populator, database_populator)
+    interface = CordialInterface(state_database)
 
     behavior_controller = BehaviorController(
         interactions_json_file=interactions_json_file_name,
-        state_database_file=database_file_name,
-        variations_json_file=variation_file_name,
-        interface=interface,
-        is_debug=is_debug
+        mongodb_statedb=state_database,
+        text_populator=text_populator,
+        interface=interface
     )
 
     rospy.spin()
-
