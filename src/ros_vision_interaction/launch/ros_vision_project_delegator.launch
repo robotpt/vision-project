@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="ros_vision_interaction" type="ros_vision_project_manager.py" name="ros_vision_project_manager" output="screen" />
+</launch>

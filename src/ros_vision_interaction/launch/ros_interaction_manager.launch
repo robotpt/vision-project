@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="ros_interaction_manager" output="screen" />
+</launch>

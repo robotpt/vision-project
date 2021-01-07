@@ -1,3 +1,3 @@
-from controllers.behavior_controller import BehaviorController
 from controllers.demo_interaction_controller import DemoInteractionController
-from controllers.main_controller import MainController
+from controllers.interaction_manager import InteractionManager
+from controllers.vision_project_delegator import VisionProjectDelegator

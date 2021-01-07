@@ -1,4 +1,0 @@
-<launch>
-    <node pkg="ros_vision_interaction" type="main_controller.py" name="main_controller"/>
-    <test test-name="test_main_controller_ros" pkg="ros_vision_interaction" type="test_main_controller_ros.py"/>
-</launch>

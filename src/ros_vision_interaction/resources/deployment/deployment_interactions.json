@@ -1,0 +1,73 @@
+{
+	"introduce QT": {
+		"nodes": {
+			"introduction": {
+				"transitions": ["exit"],
+				"content": "Hi, my name is QT!",
+				"options": ["Nice to meet you"],
+				"message_type": "multiple choice"
+			}
+		},
+		"start_node_name": "introduction"
+	},
+	"first interaction": {
+		"nodes": {
+			"ask_name": {
+				"transitions": ["exit"],
+				"content": "What's your name?",
+				"options": [" is my name."],
+				"message_type": "text entry",
+				"result_db_key": "user_name"
+			}
+		},
+		"start_node_name": "ask_name"
+	},
+	"greeting": {
+		"nodes": {
+			"greeting": {
+				"transitions": ["exit"],
+				"content": "Hello {'db': 'user_name', 'default value': ''}!",
+				"options": ["Hi!"],
+				"message_type": "multiple choice"
+			}
+		},
+		"start_node_name": "greeting"
+	},
+	"scheduled interaction": {
+		"nodes": {
+			"scheduled node": {
+				"transitions": ["exit"],
+				"content": "[scheduled interaction] When would you like to talk next?",
+				"args": ["15", "12:00"],
+				"options": ["Next"],
+				"message_type": "time entry",
+				"result_db_key": "time_for_next_interaction"
+			}
+		},
+		"start_node_name": "scheduled node"
+	},
+	"prompted interaction": {
+		"nodes": {
+			"prompted node": {
+				"transitions": ["exit"],
+				"content": "[prompted interaction] When would you like to talk next?",
+				"args": ["15", "12:00"],
+				"options": ["Next"],
+				"message_type": "time entry",
+				"result_db_key": "time_for_next_interaction"
+			}
+		},
+		"start_node_name": "prompted node"
+	},
+	"reading evaluation": {
+		"nodes": {
+			"evaluation node": {
+				"transitions": ["exit"],
+				"content": "This is a reading evaluation.",
+				"options": ["Next"],
+				"message_type": "multiple choice"
+			}
+		},
+		"start_node_name": "evaluation node"
+	}
+}
