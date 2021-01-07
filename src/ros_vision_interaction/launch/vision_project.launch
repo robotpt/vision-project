@@ -6,6 +6,8 @@
     <arg name="is_record_audio" default="true" />
     <arg name="upload_directory" value="/root/upload" />
 
+    <rosparam file="$(find ros_vision_interaction)/config/config.yaml" command="load"/>
+
     <!-- launch cordial -->
     <include file="$(find cordial_manager)/launch/manager.launch">
         <arg name="face_port" value="$(arg face_port)"/>
@@ -41,7 +43,8 @@
     <node pkg="ros_vision_interaction" type="launch_mongodb_server.sh" name="mongodb_server" output="screen"/>
 
     <!-- launch controllers -->
-    <node pkg="ros_vision_interaction" type="main_controller.py" name="main_controller" output="screen"/>
-    <node pkg="ros_vision_interaction" type="behavior_controller.py" name="behavior_controller" output="screen"/>
-
+    <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
+    <!--
+    <node pkg="ros_vision_interaction" type="ros_behavior_controller.py" name="behavior_controller" output="screen"/>
+    -->
 </launch>
