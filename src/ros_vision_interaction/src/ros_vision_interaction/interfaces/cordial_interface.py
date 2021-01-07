@@ -9,20 +9,17 @@ from cordial_msgs.msg import AskOnGuiAction, AskOnGuiGoal
 from interaction_engine.interfaces import Interface
 from interaction_engine.messager import Message
 
-from mongodb_statedb import StateDb
-
 
 class CordialInterface(Interface):
 
     def __init__(
             self,
-            mongodb_statedb,
+            state_database,
             action_name="cordial/say_and_ask_on_gui",
-            database_file_name=None,
             seconds_until_timeout=None,
             is_create_db_key_if_not_exist=True,
     ):
-        self._state_database = mongodb_statedb
+        self._state_database = state_database
         super().__init__(
             self.call_ask_action_service,
             database=self._state_database,
