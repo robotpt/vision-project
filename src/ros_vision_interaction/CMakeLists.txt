@@ -18,7 +18,6 @@ catkin_python_setup()
 
 if (CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  add_rostest(test/test_behavior_controller_ros.test)
 endif()
 
 generate_messages(DEPENDENCIES
@@ -30,6 +29,8 @@ catkin_package(CATKIN_DEPENDS
   actionlib_msgs
   message_runtime
 )
+
+install(PROGRAMS scripts/launch_mongodb_server.sh DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
