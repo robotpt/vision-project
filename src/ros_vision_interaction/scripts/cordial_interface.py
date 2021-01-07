@@ -78,12 +78,14 @@ class CordialInterface(Interface):
 
 if __name__ == "__main__":
 
-    resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources'
+    resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/'
     demo_interaction_json_file = os.path.join(resources_directory, 'sar_demo_nodes.json')
     variation_file_name = os.path.join(resources_directory, 'variations.json')
     database_file_name = os.path.join(resources_directory, 'state_database.json')
 
-    interface = CordialInterface(database_file_name=database_file_name)
+    interface = CordialInterface(
+        database_file_name=database_file_name,
+    )
     demo_interaction = DemoInteractionController(
         interaction_json_file=demo_interaction_json_file,
         start_node_name="ask to chat",
