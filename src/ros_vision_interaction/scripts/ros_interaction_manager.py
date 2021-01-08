@@ -1,17 +1,15 @@
 #!/usr/bin/python3.8
 import actionlib
 import datetime
-import json
 import os
 import pymongo
 import rospy
 import schedule
 
-from controllers import InteractionManager
-from interaction_engine.text_populator import DatabasePopulator, VarietyPopulator, TextPopulator
-from interfaces import CordialInterface
 from mongodb_statedb import StateDb
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionFeedback, StartInteractionResult
+from vision_interaction.controllers import InteractionManager
+from vision_interaction.interfaces import CordialInterface
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
 
@@ -73,10 +71,6 @@ class RosInteractionManager:
 if __name__ == "__main__":
     rospy.init_node("interaction_manager")
 
-    resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/'
-    interactions_json_file_name = os.path.join(resources_directory, 'deployment_interactions.json')
-    variation_file_name = os.path.join(resources_directory, 'variations.json')
-
     # set up state database
     host = rospy.get_param(
         "mongodb/host",
@@ -90,15 +84,10 @@ if __name__ == "__main__":
         pymongo.MongoClient(host, port)
     )
 
-    database_populator = DatabasePopulator(database=state_database)
-    variety_populator = VarietyPopulator(files=variation_file_name)
-    text_populator = TextPopulator(variety_populator, database_populator)
     interface = CordialInterface(state_database)
 
     interaction_manager = InteractionManager(
-        interactions_json_file=interactions_json_file_name,
         mongodb_statedb=state_database,
-        text_populator=text_populator,
         interface=interface
     )
 

@@ -1,14 +1,13 @@
 #!/usr/bin/env python3.8
 import actionlib
 import datetime
-import logging
 import os
 import pprint
 import pymongo
 import rospy
 import schedule
 
-from controllers import VisionProjectDelegator
+from vision_interaction.controllers import VisionProjectDelegator
 from cordial_msgs.msg import MouseEvent
 from mongodb_statedb import StateDb
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
@@ -60,7 +59,7 @@ class RosVisionProjectManager:
     def delegate_interaction(self):
         self._start_interaction_client.wait_for_server()
 
-        interaction_type = self._delegator.get_interaction_type()
+        interaction_type = self._delegator.determine_interaction_type()
         start_interaction_goal = StartInteractionGoal()
         start_interaction_goal.type = interaction_type
 
@@ -80,7 +79,7 @@ class RosVisionProjectManager:
 if __name__ == "__main__":
     rospy.init_node("main_controller")
 
-    resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources'
+    resources_directory = rospy.get_param("vision-project/resources/path/deployment")
 
     # set up database
     host = rospy.get_param(

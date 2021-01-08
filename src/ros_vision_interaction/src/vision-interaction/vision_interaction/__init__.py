@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3.8
 
 import pymongo as _pymongo
 import os as _os
@@ -10,7 +10,7 @@ from interaction_engine.text_populator import VarietyPopulator as _VarietyPopula
 from mongodb_statedb import StateDb as _StateDb
 
 
-_resources_directory = _rospy.get_param('vision-project/resources/path')
+_resources_directory = _rospy.get_param('vision-project/resources/path/deployment')
 _variation_file = _os.path.join(_resources_directory, 'variations.json')
 
 # set up database

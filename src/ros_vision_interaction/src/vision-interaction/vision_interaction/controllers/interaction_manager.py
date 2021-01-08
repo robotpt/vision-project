@@ -1,19 +1,18 @@
 #!/usr/bin/python3.8
 import datetime
-import json
 import logging
-import os
-import rospy
 import schedule
 
 from interaction_engine.engine import InteractionEngine
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
+from vision_interaction.interactions import Interactions
 
 logging.basicConfig(level=logging.INFO)
 
 
 class InteractionManager:
+
     class Interactions:
         FIRST_INTERACTION = "first interaction"
         PROMPTED_INTERACTION = "prompted interaction"
@@ -30,7 +29,6 @@ class InteractionManager:
     def __init__(
             self,
             mongodb_statedb,
-            text_populator=None,
             interface=None
     ):
         self._state_database = mongodb_statedb
@@ -39,9 +37,7 @@ class InteractionManager:
             interface = TerminalClientAndServerInterface(database=self._state_database)
         self._interface = interface
 
-        self._planner = None
-
-        self._text_populator = text_populator
+        self._planner = MessagerPlanner(Interactions.POSSIBLE_GRAPHS)
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in InteractionManager.Interactions.POSSIBLE_INTERACTIONS:
@@ -51,7 +47,7 @@ class InteractionManager:
         engine = InteractionEngine(
             self._interface,
             self._planner,
-            list(self._graphs_dict.values())
+            Interactions.POSSIBLE_GRAPHS
         )
         engine.run()
 
@@ -60,27 +56,30 @@ class InteractionManager:
             InteractionManager.Interactions.FIRST_INTERACTION: self._build_first_interaction,
             InteractionManager.Interactions.PROMPTED_INTERACTION: self._build_prompted_interaction,
             InteractionManager.Interactions.SCHEDULED_INTERACTION: self._build_scheduled_interaction,
-            InteractionManager.Interactions.READING_EVALUATION:
-                lambda planner: planner.insert(self._graphs_dict["reading evaluation"]),
+            InteractionManager.Interactions.READING_EVALUATION: self._build_reading_evaluation,
         }
 
         return build_interaction_dict[interaction_type](planner)
 
     def _build_first_interaction(self, planner):
-        rospy.loginfo("Building first interaction")
-        planner.insert(self._graphs_dict["introduce QT"])
-        planner.insert(self._graphs_dict["first interaction"])
+        logging.info("Building first interaction")
+        planner.insert(Interactions.INTRODUCE_QT)
+        planner.insert(Interactions.FIRST_INTERACTION)
         return planner
 
     def _build_prompted_interaction(self, planner):
-        rospy.loginfo("Building prompted interaction")
-        planner.insert(self._graphs_dict["greeting"])
-        planner.insert(self._graphs_dict["prompted interaction"])
+        logging.info("Building prompted interaction")
+        planner.insert(Interactions.GREETING)
+        planner.insert(Interactions.PROMPTED_INTERACTION)
         return planner
 
     def _build_scheduled_interaction(self, planner):
-        rospy.loginfo("Building scheduled interaction")
-        planner.insert(self._graphs_dict["greeting"])
-        planner.insert(self._graphs_dict["scheduled interaction"])
+        logging.info("Building scheduled interaction")
+        planner.insert(Interactions.GREETING)
+        planner.insert(Interactions.SCHEDULED_INTERACTION)
         return planner
 
+    def _build_reading_evaluation(self, planner):
+        logging.info("Building reading evaluation")
+        planner.insert(Interactions.READING_EVALUATION)
+        return planner
