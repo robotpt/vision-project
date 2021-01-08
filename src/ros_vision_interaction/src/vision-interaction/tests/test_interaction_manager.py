@@ -9,12 +9,10 @@ from controllers import InteractionManager
 def interaction_manager(statedb):
     with mock.patch('builtins.open') as mock_open:
         mock_open.side_effect = mock.mock_open(read_data="{}")
-        mock_text_populator = mock.MagicMock()
         mock_interface = mock.MagicMock()
         manager = InteractionManager(
             interactions_json_file="interactions.json",
             mongodb_statedb=statedb,
-            text_populator=mock_text_populator,
             interface=mock_interface
         )
     return manager

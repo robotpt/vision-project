@@ -22,13 +22,18 @@ class VisionProjectDelegator:
 
         self._is_start_interaction = False
 
-    def get_interaction_type(self):
-        return None
+    def determine_interaction_type(self):
+        if self._is_first_interaction():
+            return "first interaction"
+
+    def _is_first_interaction(self):
+        return not self._state_database.is_set("first interaction time")
 
     def _set_initial_db_keys(self):
         keys = [
-            "user_name",
-            "time_for_next_interaction"
+            "user name",
+            "time for next interaction",
+            "first interaction time"
         ]
         for key in keys:
             try:

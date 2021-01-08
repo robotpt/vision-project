@@ -2,4 +2,4 @@
 import pytest
 import datetime
 
-from controllers import VisionProjectManager
+from controllers import VisionProjectDelegator
