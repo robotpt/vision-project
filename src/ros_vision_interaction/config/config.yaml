@@ -1,5 +1,11 @@
 mongodb:
   host: 'localhost'
   port: 62345
-controllers:
-  is_debug: True
+vision-project:
+  controllers:
+    is_debug: False
+  resources:
+    path:
+      demo: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/'
+      deployment: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/'
+

@@ -78,7 +78,7 @@ class CordialInterface(Interface):
 
 if __name__ == "__main__":
 
-    resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/'
+    resources_directory = rospy.get_param("vision-project/resources/path/demo")
     demo_interaction_json_file = os.path.join(resources_directory, 'sar_demo_nodes.json')
     variation_file_name = os.path.join(resources_directory, 'variations.json')
     database_file_name = os.path.join(resources_directory, 'state_database.json')
