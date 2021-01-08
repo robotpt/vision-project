@@ -12,21 +12,21 @@
 	},
 	"first interaction": {
 		"nodes": {
-			"ask_name": {
+			"ask name": {
 				"transitions": ["exit"],
 				"content": "What's your name?",
 				"options": [" is my name."],
 				"message_type": "text entry",
-				"result_db_key": "user_name"
+				"result_db_key": "user name"
 			}
 		},
-		"start_node_name": "ask_name"
+		"start_node_name": "ask name"
 	},
 	"greeting": {
 		"nodes": {
 			"greeting": {
 				"transitions": ["exit"],
-				"content": "Hello {'db': 'user_name', 'default value': ''}!",
+				"content": "Hello {'db': 'user name', 'default value': ''}!",
 				"options": ["Hi!"],
 				"message_type": "multiple choice"
 			}
@@ -41,7 +41,7 @@
 				"args": ["15", "12:00"],
 				"options": ["Next"],
 				"message_type": "time entry",
-				"result_db_key": "time_for_next_interaction"
+				"result_db_key": "time for next interaction"
 			}
 		},
 		"start_node_name": "scheduled node"
@@ -54,7 +54,7 @@
 				"args": ["15", "12:00"],
 				"options": ["Next"],
 				"message_type": "time entry",
-				"result_db_key": "time_for_next_interaction"
+				"result_db_key": "time for next interaction"
 			}
 		},
 		"start_node_name": "prompted node"
