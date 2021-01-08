@@ -18,7 +18,6 @@ class VisionProjectDelegator:
             is_clear_state=False
     ):
         self._state_database = mongodb_statedb
-        self._set_initial_db_keys()
 
         self._is_start_interaction = False
 
@@ -28,15 +27,3 @@ class VisionProjectDelegator:
 
     def _is_first_interaction(self):
         return not self._state_database.is_set("first interaction time")
-
-    def _set_initial_db_keys(self):
-        keys = [
-            "user name",
-            "time for next interaction",
-            "first interaction time"
-        ]
-        for key in keys:
-            try:
-                self._state_database.create(key, None)
-            except KeyError:
-                logging.info("{} already exists".format(key))

@@ -6,7 +6,7 @@ import schedule
 from interaction_engine.engine import InteractionEngine
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
-from vision_interaction.interactions import Interactions
+from interactions import Interactions
 
 logging.basicConfig(level=logging.INFO)
 

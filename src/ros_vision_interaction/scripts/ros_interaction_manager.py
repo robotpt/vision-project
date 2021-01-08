@@ -6,10 +6,11 @@ import pymongo
 import rospy
 import schedule
 
-from mongodb_statedb import StateDb
+from controllers import InteractionManager
+from data_structures import state_database
+from interfaces import CordialInterface
+
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionFeedback, StartInteractionResult
-from vision_interaction.controllers import InteractionManager
-from vision_interaction.interfaces import CordialInterface
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
 
@@ -70,19 +71,6 @@ class RosInteractionManager:
 
 if __name__ == "__main__":
     rospy.init_node("interaction_manager")
-
-    # set up state database
-    host = rospy.get_param(
-        "mongodb/host",
-        "localhost"
-    )
-    port = rospy.get_param(
-        "mongodb/port",
-        62345
-    )
-    state_database = StateDb(
-        pymongo.MongoClient(host, port)
-    )
 
     interface = CordialInterface(state_database)
 

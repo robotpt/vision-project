@@ -1,1 +1,1 @@
-from vision_interaction.interactions.interactions import Interactions
+from interactions.interactions import Interactions

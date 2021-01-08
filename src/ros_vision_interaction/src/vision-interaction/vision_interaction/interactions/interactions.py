@@ -1,9 +1,10 @@
 import json
+import logging
 import os
 
 from interaction_engine.messager import Message, Node, DirectedGraph
 
-from vision_interaction import text_populator
+from data_structures import text_populator
 
 resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/'
 INTERACTIONS_FILE_NAME = os.path.join(resources_directory, 'deployment_interactions.json')

@@ -7,16 +7,18 @@ import pymongo
 import rospy
 import schedule
 
-from vision_interaction.controllers import VisionProjectDelegator
-from cordial_msgs.msg import MouseEvent
+from controllers import VisionProjectDelegator
+from data_structures import state_database
 from mongodb_statedb import StateDb
+
+from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
 from std_msgs.msg import Bool
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
 
 
-class RosVisionProjectManager:
+class RosVisionProjectDelegator:
 
     def __init__(
             self,
@@ -81,24 +83,11 @@ if __name__ == "__main__":
 
     resources_directory = rospy.get_param("vision-project/resources/path/deployment")
 
-    # set up database
-    host = rospy.get_param(
-        "mongodb/host",
-        "localhost"
-    )
-    port = rospy.get_param(
-        "mongodb/port",
-        62345
-    )
-    state_database = StateDb(
-        pymongo.MongoClient(host, port)
-    )
-
     vision_project_delegator = VisionProjectDelegator(
         mongodb_statedb=state_database,
         is_clear_state=True
     )
 
-    ros_vision_project_manager = RosVisionProjectManager(vision_project_delegator)
+    ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)
 
     rospy.spin()

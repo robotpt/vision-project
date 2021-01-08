@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.8
 
+import logging as _logging
 import pymongo as _pymongo
 import os as _os
 import rospy as _rospy
@@ -22,11 +23,22 @@ _port = _rospy.get_param(
     "mongodb/port",
     62345
 )
-_state_database = _StateDb(
+state_database = _StateDb(
     _pymongo.MongoClient(_host, _port)
 )
 
-_database_populator = _DatabasePopulator(_state_database)
+_keys = [
+    "user name",
+    "time for next interaction",
+    "first interaction time"
+]
+for key in _keys:
+    try:
+        state_database.create(key, None)
+    except KeyError:
+        _logging.info("{} already exists".format(key))
+
+# set up populators
+_database_populator = _DatabasePopulator(state_database)
 _variety_populator = _VarietyPopulator(_variation_file)
 text_populator = _TextPopulator(_variety_populator, _database_populator)
-
