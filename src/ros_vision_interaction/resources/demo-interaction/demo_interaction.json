@@ -22,10 +22,10 @@
                 "options": [
                     "Next"
                 ],
-                "result_db_key": "user_name"
+                "result_db_key": "user name"
             },
             "how are you": {
-                "content": "It's nice to meet you {'db': 'user_name', 'default value': ''}. *question_1* How are you doing right now?",
+                "content": "It's nice to meet you {'db': 'user name', 'default value': ''}. *question_1* How are you doing right now?",
                 "message_type": "multiple choice",
                 "transitions": [
                     "i am sorry",
@@ -47,7 +47,7 @@
                 ]
             },
             "talk another time": {
-                "content": "That's OK {'db': 'user_name', 'default value': ''} but let's plan to talk another time today or tomorrow. When is good for you?",
+                "content": "That's OK {'db': 'user name', 'default value': ''} but let's plan to talk another time today or tomorrow. When is good for you?",
                 "message_type": "multiple choice",
                 "transitions": [
                     "how many hours",
@@ -101,7 +101,7 @@
                 ]
             },
             "how was magnifier experience": {
-                "content": "{'db': 'user_name', 'default value': ''}, *question_2*how did it go with your magnifier?",
+                "content": "{'db': 'user name', 'default value': ''}, *question_2*how did it go with your magnifier?",
                 "message_type": "multiple choice",
                 "transitions": [
                     "response to excellent",
