@@ -34,17 +34,11 @@ class RosInteractionManager:
         self._start_interaction_action_server.register_preempt_callback(self._preempt_callback)
 
         self._is_debug = rospy.get_param(
-            "controllers/is_debug",
+            "vision-project/controllers/is_debug",
             False
         )
 
-        self._update_scheduler = schedule.Scheduler()
-        self._update_scheduler.every(15).seconds.do(self._update)
-
         self._start_interaction_action_server.start()
-
-    def _update(self):
-        pass
 
     # start interaction action callback
     def run_manager_once(self, goal):
@@ -70,6 +64,7 @@ class RosInteractionManager:
 
 
 if __name__ == "__main__":
+
     rospy.init_node("interaction_manager")
 
     interface = CordialInterface(state_database)

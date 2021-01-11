@@ -2,14 +2,11 @@
 import actionlib
 import datetime
 import os
-import pprint
-import pymongo
 import rospy
 import schedule
 
 from controllers import VisionProjectDelegator
 from data_structures import state_database
-from mongodb_statedb import StateDb
 
 from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
@@ -50,18 +47,32 @@ class RosVisionProjectDelegator:
         self._update_scheduler = schedule.Scheduler()
         self._update_scheduler.every(15).seconds.do(self.update)
 
+        # interaction scheduler
+        self._interaction_scheduler = schedule.Scheduler()
+        self._interaction_scheduler.every(15).seconds.do(self.interaction_update)
+
         self._is_debug = rospy.get_param(
-            "controllers/is_debug",
+            "vision-project/controllers/is_debug",
             False
         )
 
-    def update(self):
-        rospy.loginfo("Updating")
+    def run_schedulers_once(self):
+        self._update_scheduler.run_pending()
+        self._interaction_scheduler.run_pending()
 
-    def delegate_interaction(self):
+    def update(self):
+        pass
+
+    def interaction_update(self):
+        rospy.loginfo("Running interaction update")
+        interaction_type = self._delegator.determine_interaction_type()
+        if interaction_type is not None:
+            rospy.loginfo("Delegating interaction: {}".format(interaction_type))
+            self.delegate_interaction(interaction_type)
+
+    def delegate_interaction(self, interaction_type):
         self._start_interaction_client.wait_for_server()
 
-        interaction_type = self._delegator.determine_interaction_type()
         start_interaction_goal = StartInteractionGoal()
         start_interaction_goal.type = interaction_type
 
@@ -71,23 +82,26 @@ class RosVisionProjectDelegator:
             self._start_interaction_client.send_goal(start_interaction_goal)
             self._start_interaction_client.wait_for_result()
 
-    def _get_time_string_without_milliseconds(self, time):
-        return time.strftime("%H:%M:%S")
+        return
 
     def _screen_tap_listener_callback(self, _):
         self._is_start_interaction = True
 
 
 if __name__ == "__main__":
-    rospy.init_node("main_controller")
 
-    resources_directory = rospy.get_param("vision-project/resources/path/deployment")
+    rospy.init_node("vision_project_delegator")
+
+    is_run_demo_interaction = rospy.get_param("vision-project/is_run_demo_interaction")
 
     vision_project_delegator = VisionProjectDelegator(
         mongodb_statedb=state_database,
-        is_clear_state=True
+        is_run_demo_interaction=is_run_demo_interaction,
+        is_clear_state=True,
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)
 
-    rospy.spin()
+    while not rospy.is_shutdown():
+        ros_vision_project_delegator.run_schedulers_once()
+        rospy.sleep(1)
