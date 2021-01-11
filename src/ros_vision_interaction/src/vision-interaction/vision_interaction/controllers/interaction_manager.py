@@ -14,12 +14,14 @@ logging.basicConfig(level=logging.INFO)
 class InteractionManager:
 
     class Interactions:
+        DEMO_INTERACTION = "demo interaction"
         FIRST_INTERACTION = "first interaction"
         PROMPTED_INTERACTION = "prompted interaction"
         SCHEDULED_INTERACTION = "scheduled interaction"
         READING_EVALUATION = "reading evaluation"
 
         POSSIBLE_INTERACTIONS = [
+            DEMO_INTERACTION,
             FIRST_INTERACTION,
             SCHEDULED_INTERACTION,
             PROMPTED_INTERACTION,
@@ -53,6 +55,7 @@ class InteractionManager:
 
     def build_interaction(self, interaction_type, planner):
         build_interaction_dict = {
+            InteractionManager.Interactions.DEMO_INTERACTION: self._build_demo_interaction,
             InteractionManager.Interactions.FIRST_INTERACTION: self._build_first_interaction,
             InteractionManager.Interactions.PROMPTED_INTERACTION: self._build_prompted_interaction,
             InteractionManager.Interactions.SCHEDULED_INTERACTION: self._build_scheduled_interaction,
@@ -61,25 +64,36 @@ class InteractionManager:
 
         return build_interaction_dict[interaction_type](planner)
 
+    def _build_demo_interaction(self, planner):
+        logging.info("Building first interaction")
+        planner.insert(
+            Interactions.DEMO_INTERACTION,
+            post_hook=self._set_last_interaction_time
+        )
+        return planner
+
     def _build_first_interaction(self, planner):
         logging.info("Building first interaction")
         planner.insert(Interactions.INTRODUCE_QT)
-        planner.insert(Interactions.FIRST_INTERACTION)
+        planner.insert(Interactions.FIRST_INTERACTION, post_hook=self._set_last_interaction_time)
         return planner
 
     def _build_prompted_interaction(self, planner):
         logging.info("Building prompted interaction")
         planner.insert(Interactions.GREETING)
-        planner.insert(Interactions.PROMPTED_INTERACTION)
+        planner.insert(Interactions.PROMPTED_INTERACTION, post_hook=self._set_last_interaction_time)
         return planner
 
     def _build_scheduled_interaction(self, planner):
         logging.info("Building scheduled interaction")
         planner.insert(Interactions.GREETING)
-        planner.insert(Interactions.SCHEDULED_INTERACTION)
+        planner.insert(Interactions.SCHEDULED_INTERACTION, post_hook=self._set_last_interaction_time)
         return planner
 
     def _build_reading_evaluation(self, planner):
         logging.info("Building reading evaluation")
-        planner.insert(Interactions.READING_EVALUATION)
+        planner.insert(Interactions.READING_EVALUATION, post_hook=self._set_last_interaction_time)
         return planner
+
+    def _set_last_interaction_time(self):
+        self._state_database.set("last interaction time", datetime.datetime.now())

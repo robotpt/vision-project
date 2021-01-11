@@ -10,9 +10,12 @@ from interaction_engine.text_populator import DatabasePopulator as _DatabasePopu
 from interaction_engine.text_populator import VarietyPopulator as _VarietyPopulator
 from mongodb_statedb import StateDb as _StateDb
 
+_demo_resources_directory = _rospy.get_param('vision-project/resources/path/demo')
+_demo_variation_file = _os.path.join(_demo_resources_directory, 'variations.json')
 
-_resources_directory = _rospy.get_param('vision-project/resources/path/deployment')
-_variation_file = _os.path.join(_resources_directory, 'variations.json')
+_deployment_resources_directory = _rospy.get_param('vision-project/resources/path/deployment')
+_deployment_variation_file = _os.path.join(_deployment_resources_directory, 'variations.json')
+
 
 # set up database
 _host = _rospy.get_param(
@@ -28,9 +31,10 @@ state_database = _StateDb(
 )
 
 _keys = [
+    "first interaction time",
+    "last interaction time",
+    "next checkin time",
     "user name",
-    "time for next interaction",
-    "first interaction time"
 ]
 for key in _keys:
     try:
@@ -40,5 +44,8 @@ for key in _keys:
 
 # set up populators
 _database_populator = _DatabasePopulator(state_database)
-_variety_populator = _VarietyPopulator(_variation_file)
-text_populator = _TextPopulator(_variety_populator, _database_populator)
+_demo_variety_populator = _VarietyPopulator(_demo_variation_file)
+_deployment_variety_populator = _VarietyPopulator(_deployment_variation_file)
+
+demo_text_populator = _TextPopulator(_demo_variety_populator, _database_populator)
+deployment_text_populator = _TextPopulator(_deployment_variety_populator, _database_populator)
