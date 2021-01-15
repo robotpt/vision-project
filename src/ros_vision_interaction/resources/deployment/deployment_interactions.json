@@ -13,11 +13,20 @@
 	"first interaction": {
 		"nodes": {
 			"ask name": {
-				"transitions": ["exit"],
+				"transitions": ["next checkin"],
 				"content": "What's your name?",
 				"options": [" is my name."],
 				"message_type": "text entry",
 				"result_db_key": "user name"
+			},
+			"next checkin": {
+				"transitions": ["exit"],
+				"content": "[first interaction] When would you like to talk next?",
+				"args": ["15", "12:00"],
+				"options": ["Next"],
+				"message_type": "time entry",
+				"result_convert_from_str_fn": "next_day_checkin_datetime",
+				"result_db_key": "next checkin time"
 			}
 		},
 		"start_node_name": "ask name"
@@ -41,7 +50,8 @@
 				"args": ["15", "12:00"],
 				"options": ["Next"],
 				"message_type": "time entry",
-				"result_db_key": "time for next interaction"
+				"result_convert_from_str_fn": "next_day_checkin_datetime",
+				"result_db_key": "next checkin time"
 			}
 		},
 		"start_node_name": "scheduled node"
@@ -54,7 +64,8 @@
 				"args": ["15", "12:00"],
 				"options": ["Next"],
 				"message_type": "time entry",
-				"result_db_key": "time for next interaction"
+				"result_convert_from_str_fn": "same_day_checkin_datetime",
+				"result_db_key": "next checkin time"
 			}
 		},
 		"start_node_name": "prompted node"
