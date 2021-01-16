@@ -5,17 +5,16 @@ import pymongo as _pymongo
 import os as _os
 import rospy as _rospy
 
+from data_structures.engine_statedb import EngineStateDb as StateDb
 from interaction_engine.text_populator import TextPopulator as _TextPopulator
 from interaction_engine.text_populator import DatabasePopulator as _DatabasePopulator
 from interaction_engine.text_populator import VarietyPopulator as _VarietyPopulator
-from mongodb_statedb import StateDb as _StateDb
 
 _demo_resources_directory = _rospy.get_param('vision-project/resources/path/demo')
 _demo_variation_file = _os.path.join(_demo_resources_directory, 'variations.json')
 
 _deployment_resources_directory = _rospy.get_param('vision-project/resources/path/deployment')
 _deployment_variation_file = _os.path.join(_deployment_resources_directory, 'variations.json')
-
 
 # set up database
 _host = _rospy.get_param(
@@ -26,7 +25,7 @@ _port = _rospy.get_param(
     "mongodb/port",
     62345
 )
-state_database = _StateDb(
+state_database = StateDb(
     _pymongo.MongoClient(_host, _port)
 )
 
