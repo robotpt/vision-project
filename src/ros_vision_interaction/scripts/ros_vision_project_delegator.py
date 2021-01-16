@@ -8,7 +8,6 @@ import schedule
 from controllers import VisionProjectDelegator
 from data_structures import state_database
 
-from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
 from std_msgs.msg import Bool
 
@@ -20,9 +19,7 @@ class RosVisionProjectDelegator:
     def __init__(
             self,
             vision_project_delegator,
-            is_go_to_sleep_topic='cordial/sleep',
             is_record_topic='data_capture/is_record',
-            screen_tap_topic='cordial/gui/event/mouse',
             start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._delegator = vision_project_delegator
@@ -35,21 +32,10 @@ class RosVisionProjectDelegator:
 
         # ROS publishers and subscribers
         self._is_record_publisher = rospy.Publisher(is_record_topic, Bool, queue_size=1)
-        self._screen_tap_listener = rospy.Subscriber(
-            screen_tap_topic,
-            MouseEvent,
-            callback=self._screen_tap_listener_callback,
-            queue_size=1
-        )
-        self._sleep_publisher = rospy.Publisher(is_go_to_sleep_topic, Bool, queue_size=1)
 
         # update scheduler
-        self._update_scheduler = schedule.Scheduler()
-        self._update_scheduler.every(15).seconds.do(self.update)
-
-        # interaction scheduler
-        self._interaction_scheduler = schedule.Scheduler()
-        self._interaction_scheduler.every(15).seconds.do(self.interaction_update)
+        self._scheduler = schedule.Scheduler()
+        self._scheduler.every(10).seconds.do(self.update)
 
         self._is_debug = rospy.get_param(
             "vision-project/controllers/is_debug",
@@ -57,14 +43,10 @@ class RosVisionProjectDelegator:
         )
 
     def run_schedulers_once(self):
-        self._update_scheduler.run_pending()
-        self._interaction_scheduler.run_pending()
+        self._scheduler.run_pending()
 
     def update(self):
-        pass
-
-    def interaction_update(self):
-        rospy.loginfo("Running interaction update")
+        rospy.loginfo("Running update")
         interaction_type = self._delegator.determine_interaction_type()
         if interaction_type is not None:
             rospy.loginfo("Delegating interaction: {}".format(interaction_type))
@@ -83,9 +65,6 @@ class RosVisionProjectDelegator:
             self._start_interaction_client.wait_for_result()
 
         return
-
-    def _screen_tap_listener_callback(self, _):
-        self._is_start_interaction = True
 
 
 if __name__ == "__main__":

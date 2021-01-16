@@ -10,7 +10,9 @@ from controllers import InteractionManager
 from data_structures import state_database
 from interfaces import CordialInterface
 
-from ros_vision_interaction.msg import StartInteractionAction, StartInteractionFeedback, StartInteractionResult
+from cordial_msgs.msg import MouseEvent
+from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal, StartInteractionFeedback, StartInteractionResult
+from std_msgs.msg import Bool
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
 
@@ -20,9 +22,20 @@ class RosInteractionManager:
     def __init__(
             self,
             interaction_manager,
+            is_go_to_sleep_topic='cordial/sleep',
+            screen_tap_topic='cordial/gui/event/mouse',
             start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._interaction_manager = interaction_manager
+        self._is_engine_running = False
+
+        self._screen_tap_listener = rospy.Subscriber(
+            screen_tap_topic,
+            MouseEvent,
+            callback=self._screen_tap_listener_callback,
+            queue_size=1
+        )
+        self._sleep_publisher = rospy.Publisher(is_go_to_sleep_topic, Bool, queue_size=1)
 
         # set up action server
         self._start_interaction_action_server = actionlib.SimpleActionServer(
@@ -33,18 +46,24 @@ class RosInteractionManager:
         )
         self._start_interaction_action_server.register_preempt_callback(self._preempt_callback)
 
+        self._is_run_demo = rospy.get_param(
+            "vision-project/is_run_demo_interaction",
+            False
+        )
+
         self._is_debug = rospy.get_param(
             "vision-project/controllers/is_debug",
             False
         )
+        rospy.loginfo(self._is_run_demo)
 
         self._start_interaction_action_server.start()
 
     # start interaction action callback
     def run_manager_once(self, goal):
         interaction_type = goal.type
-
         result = StartInteractionResult()
+        self._is_engine_running = True
 
         if not self._is_debug:
             self._interaction_manager.run_interaction_once(interaction_type)
@@ -57,10 +76,19 @@ class RosInteractionManager:
         if not self._start_interaction_action_server.is_preempt_requested():
             rospy.loginfo("Setting goal as succeeded")
             self._start_interaction_action_server.set_succeeded(result)
+        self._is_engine_running = False
 
     def _preempt_callback(self):
         rospy.loginfo("Preempt requested for interaction server")
         self._start_interaction_action_server.set_preempted()
+
+    def _screen_tap_listener_callback(self, _):
+        if not self._is_engine_running and not self._is_run_demo:
+            self.run_manager_once(StartInteractionGoal("prompted interaction"))
+
+    @property
+    def is_engine_running(self):
+        return self._is_engine_running
 
 
 if __name__ == "__main__":
