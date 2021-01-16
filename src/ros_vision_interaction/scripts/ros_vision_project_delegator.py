@@ -75,8 +75,7 @@ if __name__ == "__main__":
 
     vision_project_delegator = VisionProjectDelegator(
         mongodb_statedb=state_database,
-        is_run_demo_interaction=is_run_demo_interaction,
-        is_clear_state=True,
+        is_run_demo_interaction=is_run_demo_interaction
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)

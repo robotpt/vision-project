@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
-TIME_BETWEEN_DEMO_INTERACTIONS = datetime.timedelta(minutes=15)
+TIME_BETWEEN_DEMO_INTERACTIONS = datetime.timedelta(minutes=5)
 TIME_WINDOW_FOR_CHECKIN = datetime.timedelta(seconds=30)
 
 
@@ -15,20 +15,15 @@ class VisionProjectDelegator:
     def __init__(
             self,
             mongodb_statedb,
-            is_run_demo_interaction=False,
-            is_clear_state=False
+            is_run_demo_interaction=False
     ):
         self._state_database = mongodb_statedb
 
         self._is_run_demo_interaction = is_run_demo_interaction
         self._is_run_interaction = False
 
-        self._is_clear_state = is_clear_state
-        if self._is_clear_state:
-            self._state_database.clear_all()
-
-    def update(self):
-        pass
+        if self._is_run_demo_interaction:
+            self._reset_database()
 
     def determine_interaction_type(self):
         logging.info("Determining interaction type")
@@ -60,3 +55,8 @@ class VisionProjectDelegator:
         start_time = self._state_database.get("next checkin time") - TIME_WINDOW_FOR_CHECKIN
         end_time = self._state_database.get("next checkin time") + TIME_WINDOW_FOR_CHECKIN
         return start_time < current_time < end_time
+
+    def _reset_database(self):
+        keys = self._state_database.get_keys()
+        for key in keys:
+            self._state_database.set(key, None)
