@@ -129,4 +129,4 @@ export PYTHONPATH='${PYTHONPATH}:/root/catkin_ws/src/mongodb-statedb'\n\
 alias rvi='roslaunch ros_vision_interaction vision_project.launch'\n\
 source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
-ENV AWS_BUCKET_NAME ezhou-interaction-lab
+ENV AWS_BUCKET_NAME your-bucket-name
