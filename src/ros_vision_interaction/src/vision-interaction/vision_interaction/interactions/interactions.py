@@ -1,16 +1,18 @@
 import json
 import os
-import rospy
+# import rospy
 
+from data_structures import demo_resources_directory, \
+    deployment_resources_directory, \
+    demo_text_populator, \
+    deployment_text_populator
 from interaction_engine.messager import Message, Node, DirectedGraph
 
-from data_structures import demo_text_populator, deployment_text_populator
-
-deployment_resources_directory = rospy.get_param('vision-project/resources/path/deployment')
+# deployment_resources_directory = rospy.get_param('vision-project/resources/path/deployment')
 DEPLOYMENT_INTERACTIONS_FILE_NAME = os.path.join(deployment_resources_directory, 'deployment_interactions.json')
 DEPLOYMENT_VARIATIONS_FILE_NAME = os.path.join(deployment_resources_directory, 'variations.json')
 
-demo_resources_directory = rospy.get_param('vision-project/resources/path/demo')
+# demo_resources_directory = rospy.get_param('vision-project/resources/path/demo')
 DEMO_INTERACTIONS_FILE_NAME = os.path.join(demo_resources_directory, 'demo_interaction.json')
 DEMO_VARIATIONS_FILE_NAME = os.path.join(demo_resources_directory, 'variations.json')
 
@@ -24,7 +26,7 @@ with open(DEMO_INTERACTIONS_FILE_NAME) as f:
 def build_graph_from_json(
         interactions_dict,
         graph_name,
-        text_populator,
+        text_populator=None,
         speaking_rate=None
 ):
     graph_dict = interactions_dict[graph_name]

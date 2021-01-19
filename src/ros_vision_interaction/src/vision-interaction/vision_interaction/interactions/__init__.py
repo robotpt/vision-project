@@ -1,1 +1,1 @@
-from interactions.interactions import Interactions
+from interactions.interactions import Interactions, build_graph_from_json
