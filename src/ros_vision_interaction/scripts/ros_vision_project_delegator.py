@@ -55,6 +55,7 @@ class RosVisionProjectDelegator:
             self.delegate_interaction(interaction_type)
 
     def delegate_interaction(self, interaction_type):
+        self._is_record_publisher.publish(True)
         self._start_interaction_client.wait_for_server()
 
         start_interaction_goal = StartInteractionGoal()
@@ -65,7 +66,7 @@ class RosVisionProjectDelegator:
             rospy.loginfo("Sending goal to start interaction")
             self._start_interaction_client.send_goal(start_interaction_goal)
             self._start_interaction_client.wait_for_result()
-        return
+        self._is_record_publisher.publish(False)
 
 
 if __name__ == "__main__":

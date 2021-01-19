@@ -62,8 +62,8 @@ ${PYTHON3_VERSION} -m pip install --user \
 	awscli \
 	freezegun==1.0.0 \
 	robotpt_common_utils==0.0.8 \
-	schedule==0.6.0
-
+	schedule==0.6.0 \
+	pymongo
 
 # Setup HTTP server
 sudo apt-get install -y \

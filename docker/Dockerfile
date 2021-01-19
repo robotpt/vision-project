@@ -7,7 +7,7 @@ FROM osrf/ros:kinetic-desktop-full as vision_project_min
 
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
-ARG vision_project_branch="master"
+ARG vision_project_branch="emilyxzhou/working-demo"
 ARG vision_project_remote="https://github.com/robotpt/vision-project.git"
 ARG INSTALL_SCRIPT="install_deps.sh"
 
@@ -20,8 +20,9 @@ ENV ROS_WS="/root/catkin_ws"
 RUN \
 	mkdir -p ${ROS_WS}/src \
 	&& cd ${ROS_WS}/src \
-	&& git clone --branch ${vision_project_branch} --recurse-submodules ${vision_project_remote} \
+	&& git clone --single-branch --branch ${vision_project_branch} --recurse-submodules ${vision_project_remote} \
 	&& git clone https://github.com/robotpt/cordial.git \
+	&& git clone https://github.com/emilyxzhou/mongodb-statedb.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
 	&& git clone https://github.com/RobotWebTools/rosbridge_suite.git \
@@ -124,6 +125,8 @@ alias rh='cd $ROS_WS'\n\
 alias gs='git status'\n\
 alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
-source ${ROS_WS}/devel/setup.bash\n\
-alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'" >> ~/.bashrc
+export PYTHONPATH='${PYTHONPATH}:/root/catkin_ws/src/mongodb-statedb'\n\
+alias rvi='roslaunch ros_vision_interaction vision_project.launch'\n\
+source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
+ENV AWS_BUCKET_NAME ezhou-interaction-lab
