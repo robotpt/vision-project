@@ -6,7 +6,7 @@ import rospy
 import schedule
 
 from controllers import VisionProjectDelegator
-from data_structures import state_database
+from data_structures import param_database, state_database
 
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
 from std_msgs.msg import Bool
@@ -23,6 +23,8 @@ class RosVisionProjectDelegator:
             start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._delegator = vision_project_delegator
+        self._state_database = state_database
+        self._param_database = param_database
 
         # action client to start interaction
         self._start_interaction_client = actionlib.SimpleActionClient(
@@ -63,7 +65,6 @@ class RosVisionProjectDelegator:
             rospy.loginfo("Sending goal to start interaction")
             self._start_interaction_client.send_goal(start_interaction_goal)
             self._start_interaction_client.wait_for_result()
-
         return
 
 
@@ -74,7 +75,8 @@ if __name__ == "__main__":
     is_run_demo_interaction = rospy.get_param("vision-project/is_run_demo_interaction")
 
     vision_project_delegator = VisionProjectDelegator(
-        mongodb_statedb=state_database,
+        statedb=state_database,
+        paramdb=param_database,
         is_run_demo_interaction=is_run_demo_interaction
     )
 

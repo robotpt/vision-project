@@ -7,11 +7,14 @@ import rospy
 import schedule
 
 from controllers import InteractionManager
-from data_structures import state_database
+from data_structures import param_database, state_database
 from interfaces import CordialInterface
 
 from cordial_msgs.msg import MouseEvent
-from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal, StartInteractionFeedback, StartInteractionResult
+from ros_vision_interaction.msg import StartInteractionAction, \
+    StartInteractionGoal, \
+    StartInteractionFeedback, \
+    StartInteractionResult
 from std_msgs.msg import Bool
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
@@ -27,6 +30,7 @@ class RosInteractionManager:
             start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._interaction_manager = interaction_manager
+        self._state_database = state_database
         self._is_engine_running = False
 
         self._screen_tap_listener = rospy.Subscriber(
@@ -55,7 +59,6 @@ class RosInteractionManager:
             "vision-project/controllers/is_debug",
             False
         )
-        rospy.loginfo(self._is_run_demo)
 
         self._start_interaction_action_server.start()
 
@@ -76,6 +79,8 @@ class RosInteractionManager:
         if not self._start_interaction_action_server.is_preempt_requested():
             rospy.loginfo("Setting goal as succeeded")
             self._start_interaction_action_server.set_succeeded(result)
+
+        self._state_database.set("last interaction time", datetime.datetime.now())
         self._is_engine_running = False
 
     def _preempt_callback(self):
@@ -94,11 +99,16 @@ class RosInteractionManager:
 if __name__ == "__main__":
 
     rospy.init_node("interaction_manager")
+    seconds_until_timeout = rospy.get_param("vision-project/seconds_until_interaction_timeout")
 
-    interface = CordialInterface(state_database)
+    interface = CordialInterface(
+        state_database,
+        seconds_until_timeout=seconds_until_timeout
+    )
 
     interaction_manager = InteractionManager(
-        mongodb_statedb=state_database,
+        statedb=state_database,
+        paramdb=param_database,
         interface=interface
     )
 
