@@ -37,7 +37,7 @@ class CordialInterface(Interface):
                 raise ValueError("Timeout must be greater than 0")
         self._seconds_until_timeout = seconds_until_timeout
 
-        rospy.on_shutdown(self._cancel_goal)
+        rospy.on_shutdown(self.cancel_goal)
 
     def call_ask_action_service(self, message):
         rospy.loginfo("Calling action")
@@ -65,6 +65,7 @@ class CordialInterface(Interface):
                 rospy.loginfo("Time passed: {}; goal cancelled".format(feedback.time_passed))
                 self._cordial_action_client.cancel_goal()
 
-    def _cancel_goal(self):
+    def cancel_goal(self):
+        rospy.loginfo("Cordial interface canceling goal")
         if self._cordial_action_client.get_state() == actionlib.SimpleGoalState.ACTIVE:
             self._cordial_action_client.cancel_goal()
