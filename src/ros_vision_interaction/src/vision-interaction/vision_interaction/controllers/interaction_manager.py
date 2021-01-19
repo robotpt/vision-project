@@ -30,10 +30,12 @@ class InteractionManager:
 
     def __init__(
             self,
-            mongodb_statedb,
+            statedb,
+            paramdb,
             interface=None
     ):
-        self._state_database = mongodb_statedb
+        self._state_database = statedb
+        self._param_database = paramdb
 
         if interface is None:
             interface = TerminalClientAndServerInterface(database=self._state_database)
@@ -75,24 +77,28 @@ class InteractionManager:
     def _build_first_interaction(self, planner):
         logging.info("Building first interaction")
         planner.insert(Interactions.INTRODUCE_QT)
-        planner.insert(Interactions.FIRST_INTERACTION, post_hook=self._set_last_interaction_time)
+        # planner.insert(Interactions.FIRST_INTERACTION, post_hook=self._set_last_interaction_time)
+        planner.insert(Interactions.FIRST_INTERACTION)
         return planner
 
     def _build_prompted_interaction(self, planner):
         logging.info("Building prompted interaction")
         planner.insert(Interactions.GREETING)
-        planner.insert(Interactions.PROMPTED_INTERACTION, post_hook=self._set_last_interaction_time)
+        # planner.insert(Interactions.PROMPTED_INTERACTION, post_hook=self._set_last_interaction_time)
+        planner.insert(Interactions.PROMPTED_INTERACTION)
         return planner
 
     def _build_scheduled_interaction(self, planner):
         logging.info("Building scheduled interaction")
         planner.insert(Interactions.GREETING)
-        planner.insert(Interactions.SCHEDULED_INTERACTION, post_hook=self._set_last_interaction_time)
+        # planner.insert(Interactions.SCHEDULED_INTERACTION, post_hook=self._set_last_interaction_time)
+        planner.insert(Interactions.SCHEDULED_INTERACTION)
         return planner
 
     def _build_reading_evaluation(self, planner):
         logging.info("Building reading evaluation")
-        planner.insert(Interactions.READING_EVALUATION, post_hook=self._set_last_interaction_time)
+        # planner.insert(Interactions.READING_EVALUATION, post_hook=self._set_last_interaction_time)
+        planner.insert(Interactions.READING_EVALUATION)
         return planner
 
     def _set_last_interaction_time(self):

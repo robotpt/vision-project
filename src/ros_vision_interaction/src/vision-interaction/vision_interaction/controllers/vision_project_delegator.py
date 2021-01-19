@@ -2,22 +2,21 @@
 import datetime
 import logging
 
-
 logging.basicConfig(level=logging.INFO)
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
-TIME_BETWEEN_DEMO_INTERACTIONS = datetime.timedelta(minutes=5)
-TIME_WINDOW_FOR_CHECKIN = datetime.timedelta(seconds=30)
 
 
 class VisionProjectDelegator:
 
     def __init__(
             self,
-            mongodb_statedb,
+            statedb,
+            paramdb,
             is_run_demo_interaction=False
     ):
-        self._state_database = mongodb_statedb
+        self._state_database = statedb
+        self._param_database = paramdb
 
         self._is_run_demo_interaction = is_run_demo_interaction
         self._is_run_interaction = False
@@ -35,7 +34,9 @@ class VisionProjectDelegator:
             if last_interaction_time is None:
                 self._is_run_interaction = True
             else:
-                self._is_run_interaction = current_time - last_interaction_time > TIME_BETWEEN_DEMO_INTERACTIONS
+                self._is_run_interaction = \
+                    current_time - last_interaction_time > \
+                    datetime.timedelta(minutes=self._param_database["minutes between demo interactions"])
             if self._is_run_interaction:
                 interaction_type = "demo interaction"
         else:
@@ -52,8 +53,9 @@ class VisionProjectDelegator:
 
     def _is_time_for_scheduled_interaction(self):
         current_time = datetime.datetime.now()
-        start_time = self._state_database.get("next checkin time") - TIME_WINDOW_FOR_CHECKIN
-        end_time = self._state_database.get("next checkin time") + TIME_WINDOW_FOR_CHECKIN
+        checkin_window = datetime.timedelta(seconds=self._param_database["time window for checkin"])
+        start_time = self._state_database.get("next checkin time") - checkin_window
+        end_time = self._state_database.get("next checkin time") + checkin_window
         return start_time < current_time < end_time
 
     def _reset_database(self):
