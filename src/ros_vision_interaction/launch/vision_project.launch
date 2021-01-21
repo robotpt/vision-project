@@ -1,4 +1,5 @@
 <launch>
+    <arg name="is_launch_controllers" default="true"/>
     <arg name="aws_voice_name" default="Justin"/>
     <arg name="face_port" default="8081"/>
     <arg name="gui_port" default="8082"/>
@@ -43,8 +44,10 @@
     </include>
 
     <!-- launch controllers -->
-    <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
-    <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="interaction_manager" output="screen"/>
+    <group if="$(arg is_launch_controllers)">
+        <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
+        <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="interaction_manager" output="screen"/>
+    </group>
 
     <!-- launch mongodb log -->
     <include file="$(find mongodb_store)/launch/mongodb_store.launch">
@@ -53,7 +56,5 @@
     </include>
 
     <node pkg="ros_vision_interaction" type="mongodb_record_topics.sh" name="mongodb_log" respawn="true" output="screen" />
-
-
 
 </launch>
