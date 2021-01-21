@@ -6,7 +6,7 @@ import schedule
 from interaction_engine.engine import InteractionEngine
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
-from interactions import Interactions
+from interaction_builder import InteractionBuilder
 
 logging.basicConfig(level=logging.INFO)
 
@@ -32,16 +32,19 @@ class InteractionManager:
             self,
             statedb,
             paramdb,
+            interaction_builder,
             interface=None
     ):
         self._state_database = statedb
         self._param_database = paramdb
 
+        self._interaction_builder = interaction_builder
+
         if interface is None:
             interface = TerminalClientAndServerInterface(database=self._state_database)
         self._interface = interface
 
-        self._planner = MessagerPlanner(Interactions.POSSIBLE_GRAPHS)
+        self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in InteractionManager.Interactions.POSSIBLE_INTERACTIONS:
@@ -51,7 +54,7 @@ class InteractionManager:
         engine = InteractionEngine(
             self._interface,
             self._planner,
-            Interactions.POSSIBLE_GRAPHS
+            self._interaction_builder.possible_graphs
         )
         engine.run()
 
@@ -69,36 +72,36 @@ class InteractionManager:
     def _build_demo_interaction(self, planner):
         logging.info("Building first interaction")
         planner.insert(
-            Interactions.DEMO_INTERACTION,
-            post_hook=self._set_last_interaction_time
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.DEMO_INTERACTION]
+            # post_hook=self._set_last_interaction_time
         )
         return planner
 
     def _build_first_interaction(self, planner):
         logging.info("Building first interaction")
-        planner.insert(Interactions.INTRODUCE_QT)
+        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_QT])
         # planner.insert(Interactions.FIRST_INTERACTION, post_hook=self._set_last_interaction_time)
-        planner.insert(Interactions.FIRST_INTERACTION)
+        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.FIRST_INTERACTION])
         return planner
 
     def _build_prompted_interaction(self, planner):
         logging.info("Building prompted interaction")
-        planner.insert(Interactions.GREETING)
+        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
         # planner.insert(Interactions.PROMPTED_INTERACTION, post_hook=self._set_last_interaction_time)
-        planner.insert(Interactions.PROMPTED_INTERACTION)
+        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_INTERACTION])
         return planner
 
     def _build_scheduled_interaction(self, planner):
         logging.info("Building scheduled interaction")
-        planner.insert(Interactions.GREETING)
+        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
         # planner.insert(Interactions.SCHEDULED_INTERACTION, post_hook=self._set_last_interaction_time)
-        planner.insert(Interactions.SCHEDULED_INTERACTION)
+        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_INTERACTION])
         return planner
 
     def _build_reading_evaluation(self, planner):
         logging.info("Building reading evaluation")
         # planner.insert(Interactions.READING_EVALUATION, post_hook=self._set_last_interaction_time)
-        planner.insert(Interactions.READING_EVALUATION)
+        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.READING_EVALUATION])
         return planner
 
     def _set_last_interaction_time(self):

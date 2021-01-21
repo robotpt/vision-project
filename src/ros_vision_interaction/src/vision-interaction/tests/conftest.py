@@ -5,6 +5,7 @@ import mongomock
 import pytest
 
 from engine_statedb import EngineStateDb as StateDb
+from interaction_builder import InteractionBuilder
 
 
 DATABASE_NAME = 'vision_project'
@@ -34,7 +35,7 @@ STATE_TEST_VALUES = (
 )
 STATE_PAIRS = zip(STATE_TEST_KEYS, STATE_TEST_VALUES)
 
-TIME_BETWEEN_DEMO_INTERACTIONS_KEY = "time between demo interactions"
+TIME_BETWEEN_DEMO_INTERACTIONS_KEY = "time between demo interaction_builder"
 TIME_WINDOW_FOR_CHECKIN_KEY = "time window for checkin"
 TIME_BETWEEN_DEMO_INTERACTIONS_VALUE = 15
 TIME_WINDOW_FOR_CHECKIN_VALUE = 15
@@ -90,3 +91,99 @@ def paramdb(param_mongo_client):
         database_name=DATABASE_NAME,
         collection_name=PARAM_COLLECTION_NAME
     )
+
+
+@pytest.fixture
+def interaction_builder(statedb):
+    demo_interaction_dict = {
+        "demo interaction": {
+            "nodes": {
+                "demo": {
+                    "content": "demo",
+                    "message_type": "multiple choice",
+                    "transitions": "exit",
+                    "options": "Next"
+                }
+            },
+            "start_node_name": "demo"
+        }
+    }
+    deployment_interaction_dict = {
+        "first interaction": {
+            "nodes": {
+                "first": {
+                    "content": "first interaction",
+                    "message_type": "multiple choice",
+                    "transitions": "exit",
+                    "options": "Next"
+                }
+            },
+            "start_node_name": "first"
+        },
+        "greeting": {
+            "nodes": {
+                "greeting": {
+                    "content": "greeting",
+                    "message_type": "multiple choice",
+                    "transitions": "exit",
+                    "options": "Next"
+                }
+            },
+            "start_node_name": "greeting"
+        },
+        "introduce QT": {
+            "nodes": {
+                "introduce QT": {
+                    "content": "introduce QT",
+                    "message_type": "multiple choice",
+                    "transitions": "exit",
+                    "options": "Next"
+                }
+            },
+            "start_node_name": "introduce QT"
+        },
+        "prompted interaction": {
+            "nodes": {
+                "prompted interaction": {
+                    "content": "prompted interaction",
+                    "message_type": "multiple choice",
+                    "transitions": "exit",
+                    "options": "Next"
+                }
+            },
+            "start_node_name": "prompted interaction"
+        },
+        "reading evaluation": {
+            "nodes": {
+                "reading evaluation": {
+                    "content": "reading evaluation",
+                    "message_type": "multiple choice",
+                    "transitions": "exit",
+                    "options": "Next"
+                }
+            },
+            "start_node_name": "reading evaluation"
+        },
+        "scheduled interaction": {
+            "nodes": {
+                "scheduled interaction": {
+                    "content": "scheduled interaction",
+                    "message_type": "multiple choice",
+                    "transitions": "exit",
+                    "options": "Next"
+                }
+            },
+            "start_node_name": "scheduled interaction"
+        }
+    }
+    with mock.patch('builtins.open', mock.mock_open(read_data="{}")) as mock_open:
+        handlers = [mock_open.return_value, mock.mock_open(read_data="{}").return_value]
+        mock_open.side_effect = handlers
+        builder = InteractionBuilder(
+            demo_interaction_dict=demo_interaction_dict,
+            demo_variations_file="variations.json",
+            deployment_interaction_dict=deployment_interaction_dict,
+            deployment_variations_file="variations.json",
+            statedb=statedb
+        )
+    return builder

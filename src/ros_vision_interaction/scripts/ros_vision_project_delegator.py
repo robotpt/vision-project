@@ -2,11 +2,13 @@
 import actionlib
 import datetime
 import os
+import pymongo
 import rospy
 import schedule
 
 from controllers import VisionProjectDelegator
-from data_structures import param_database, state_database
+from engine_statedb import EngineStateDb as StateDb
+from vision_project_tools import init_db
 
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
 from std_msgs.msg import Bool
@@ -73,6 +75,33 @@ if __name__ == "__main__":
     rospy.init_node("vision_project_delegator")
 
     is_run_demo_interaction = rospy.get_param("vision-project/is_run_demo_interaction")
+
+    DATABASE_NAME = "vision-project"
+    host = rospy.get_param("mongodb/host")
+    port = rospy.get_param("mongodb/port")
+    state_database = StateDb(
+        pymongo.MongoClient(host, port),
+        database_name=DATABASE_NAME,
+        collection_name="state_db"
+    )
+    state_db_key_values = {
+        "first interaction time": None,
+        "last interaction time": None,
+        "next checkin time": None,
+        "user name": None
+    }
+    init_db(state_database, state_db_key_values)
+
+    param_database = StateDb(
+        pymongo.MongoClient(host, port),
+        database_name=DATABASE_NAME,
+        collection_name="param_db"
+    )
+    param_db_keys = {
+        "minutes between demo interactions": 5,
+        # add units
+        "time window for checkin": 15
+    }
 
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,

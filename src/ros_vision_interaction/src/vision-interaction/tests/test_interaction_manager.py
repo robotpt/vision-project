@@ -7,11 +7,12 @@ from controllers import InteractionManager
 
 
 @pytest.fixture
-def interaction_manager(statedb, paramdb):
+def interaction_manager(statedb, paramdb, interaction_builder):
     with mock.patch('builtins.open') as mock_open:
         mock_open.side_effect = mock.mock_open(read_data="{}")
         manager = InteractionManager(
             statedb=statedb,
-            paramdb=paramdb
+            paramdb=paramdb,
+            interaction_builder=interaction_builder
         )
     return manager

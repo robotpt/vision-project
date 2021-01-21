@@ -1,14 +1,16 @@
 #!/usr/bin/python3.8
 import actionlib
 import datetime
-import os
+import json
 import pymongo
 import rospy
 import schedule
 
 from controllers import InteractionManager
-from data_structures import param_database, state_database
+from engine_statedb import EngineStateDb as StateDb
+from interaction_builder import InteractionBuilder
 from interfaces import CordialInterface
+from vision_project_tools import init_db
 
 from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, \
@@ -99,16 +101,66 @@ class RosInteractionManager:
 if __name__ == "__main__":
 
     rospy.init_node("interaction_manager")
+
     seconds_until_timeout = rospy.get_param("vision-project/seconds_until_interaction_timeout")
+
+    DATABASE_NAME = "vision-project"
+    host = rospy.get_param("mongodb/host")
+    port = rospy.get_param("mongodb/port")
+    state_database = StateDb(
+        pymongo.MongoClient(host, port),
+        database_name=DATABASE_NAME,
+        collection_name="state_db"
+    )
+    state_db_key_values = {
+        "first interaction time": None,
+        "last interaction time": None,
+        "next checkin time": None,
+        "user name": None
+    }
+    init_db(state_database, state_db_key_values)
+
+    param_database = StateDb(
+        pymongo.MongoClient(host, port),
+        database_name=DATABASE_NAME,
+        collection_name="param_db"
+    )
+    param_db_keys = {
+        "minutes between demo interactions": 5,
+        # add units
+        "time window for checkin": 15
+    }
+
+    init_db(param_database, param_db_keys)
+
+    demo_interaction_file = rospy.get_param("vision-project/resources/demo/interactions")
+    deployment_interaction_file = rospy.get_param("vision-project/resources/deployment/interactions")
+
+    demo_variations_file = rospy.get_param("vision-project/resources/demo/variations")
+    deployment_variations_file = rospy.get_param("vision-project/resources/deployment/variations")
+
+    with open(demo_interaction_file) as f:
+        demo_interaction_dict = json.load(f)
+    with open(deployment_interaction_file) as f:
+        deployment_interaction_dict = json.load(f)
 
     interface = CordialInterface(
         state_database,
         seconds_until_timeout=seconds_until_timeout
     )
 
+    interaction_builder = InteractionBuilder(
+        demo_interaction_dict=demo_interaction_dict,
+        demo_variations_file=demo_variations_file,
+        deployment_interaction_dict=deployment_interaction_dict,
+        deployment_variations_file=deployment_variations_file,
+        statedb=state_database
+    )
+
     interaction_manager = InteractionManager(
         statedb=state_database,
         paramdb=param_database,
+        interaction_builder=interaction_builder,
         interface=interface
     )
 

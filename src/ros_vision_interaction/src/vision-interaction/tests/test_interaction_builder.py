@@ -1,7 +1,8 @@
-from interactions import build_graph_from_json
+import mock
+import pytest
 
 
-def test_build_graph_from_json():
+def test_build_graph_from_json(interaction_builder):
     test_graph_dict = {
         "test_directed_graph": {
             "start_node_name": "node1",
@@ -22,7 +23,7 @@ def test_build_graph_from_json():
         }
     }
     graph_name = list(test_graph_dict.keys())[0]
-    test_directed_graph = build_graph_from_json(test_graph_dict, graph_name)
+    test_directed_graph = interaction_builder.build_graph_from_json(test_graph_dict, graph_name)
     nodes_dict_from_graph = test_directed_graph._nodes_dict
 
     assert "node1" in nodes_dict_from_graph.keys()
