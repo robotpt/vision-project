@@ -1,0 +1,4 @@
+SoundFile
+speedtest-cli
+boto3
+pydub

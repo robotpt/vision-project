@@ -112,6 +112,14 @@ RUN \
 		gh \
 	&& rm -rf /var/lib/apt/lists/*
 
+# Installing pip for Python 2.7 manually since pip-21 is unsupported for python2.7 from Jan 2021
+RUN wget https://bootstrap.pypa.io/2.7/get-pip.py
+RUN python get-pip.py
+
+# Python deps
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
 # Put things you want in your ~/.bashrc here
 RUN \
 	unset DEBIAN_FRONTEND \
@@ -129,4 +137,5 @@ export PYTHONPATH='${PYTHONPATH}:/root/catkin_ws/src/mongodb-statedb'\n\
 alias rvi='roslaunch ros_vision_interaction vision_project.launch'\n\
 source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
-ENV AWS_BUCKET_NAME your-bucket-name
+# Getting the value of AWS_BUCKET_NAME from local env variable in docker-compose.yml
+# ENV AWS_BUCKET_NAME your-bucket-name
