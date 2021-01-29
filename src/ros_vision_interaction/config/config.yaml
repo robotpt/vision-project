@@ -4,12 +4,13 @@ mongodb:
 vision-project:
   controllers:
     is_debug: False
-  is_run_demo_interaction: True
+  is_run_demo_interaction: False
   seconds_until_interaction_timeout: 45
   resources:
     demo:
       interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/demo_interaction.json'
       variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/variations.json'
     deployment:
+      test_interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/test_interactions.json'
       interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/deployment_interactions.json'
       variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/variations.json'
