@@ -13,10 +13,12 @@ class VisionProjectDelegator:
             self,
             statedb,
             paramdb,
+            checkin_window_seconds=15,
             is_run_demo_interaction=False
     ):
         self._state_database = statedb
         self._param_database = paramdb
+        self._checkin_window_seconds = datetime.timedelta(seconds=checkin_window_seconds)
 
         self._is_run_demo_interaction = is_run_demo_interaction
         self._is_run_interaction = False
@@ -53,9 +55,8 @@ class VisionProjectDelegator:
 
     def _is_time_for_scheduled_interaction(self):
         current_time = datetime.datetime.now()
-        checkin_window = datetime.timedelta(seconds=self._param_database["time window for checkin"])
-        start_time = self._state_database.get("next checkin time") - checkin_window
-        end_time = self._state_database.get("next checkin time") + checkin_window
+        start_time = self._state_database.get("next checkin time") - self._checkin_window_seconds
+        end_time = self._state_database.get("next checkin time") + self._checkin_window_seconds
         return start_time < current_time < end_time
 
     def _reset_database(self):

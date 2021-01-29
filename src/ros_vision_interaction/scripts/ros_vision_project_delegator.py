@@ -105,9 +105,12 @@ if __name__ == "__main__":
         "time window for checkin": 30
     }
 
+    checkin_window_seconds = rospy.get_param("vision-project/controllers/seconds_between_updates")
+
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,
         paramdb=param_database,
+        checkin_window_seconds=checkin_window_seconds,
         is_run_demo_interaction=is_run_demo_interaction
     )
 
