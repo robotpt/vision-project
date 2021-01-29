@@ -7,8 +7,8 @@ import rospy
 import schedule
 
 from controllers import VisionProjectDelegator
-from engine_statedb import EngineStateDb as StateDb
 from vision_project_tools import init_db
+from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
 from std_msgs.msg import Bool
@@ -86,6 +86,8 @@ if __name__ == "__main__":
     )
     state_db_key_values = {
         "first interaction time": None,
+        "good time to chat": None,
+        "is done reading evaluation today": False,
         "last interaction time": None,
         "next checkin time": None,
         "user name": None
@@ -100,7 +102,7 @@ if __name__ == "__main__":
     param_db_keys = {
         "minutes between demo interactions": 5,
         # add units
-        "time window for checkin": 15
+        "time window for checkin": 30
     }
 
     vision_project_delegator = VisionProjectDelegator(
