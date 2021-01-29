@@ -6,7 +6,6 @@ import os
 
 package_dirs = {
     'controllers': os.path.join('src', 'vision-interaction', 'vision_interaction', 'controllers'),
-    'engine_statedb': os.path.join('src', 'vision-interaction', 'vision_interaction', 'engine_statedb'),
     'interaction_builder': os.path.join('src', 'vision-interaction', 'vision_interaction', 'interaction_builder'),
     'interfaces': os.path.join('src', 'vision-interaction', 'vision_interaction', 'interfaces'),
     'vision_project_tools': os.path.join('src', 'vision-interaction', 'vision_interaction', 'vision_project_tools'),

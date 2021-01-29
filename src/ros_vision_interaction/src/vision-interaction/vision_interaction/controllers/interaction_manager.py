@@ -1,12 +1,11 @@
 #!/usr/bin/python3.8
 import datetime
 import logging
-import schedule
 
-from interaction_engine.engine import InteractionEngine
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
 from interaction_builder import InteractionBuilder
+from vision_project_tools.vision_engine import VisionInteractionEngine as InteractionEngine
 
 logging.basicConfig(level=logging.INFO)
 
@@ -45,6 +44,7 @@ class InteractionManager:
         self._interface = interface
 
         self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
+        self._current_node_name = None
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in InteractionManager.Interactions.POSSIBLE_INTERACTIONS:
@@ -56,7 +56,8 @@ class InteractionManager:
             self._planner,
             self._interaction_builder.possible_graphs
         )
-        engine.run()
+        for node_name in engine.run():
+            self._current_node_name = node_name
 
     def build_interaction(self, interaction_type, planner):
         build_interaction_dict = {
@@ -106,3 +107,7 @@ class InteractionManager:
 
     def _set_last_interaction_time(self):
         self._state_database.set("last interaction time", datetime.datetime.now())
+
+    @property
+    def current_node_name(self):
+        return self._current_node_name

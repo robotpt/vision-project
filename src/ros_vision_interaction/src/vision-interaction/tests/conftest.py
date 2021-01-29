@@ -4,9 +4,8 @@ import mock
 import mongomock
 import pytest
 
-from engine_statedb import EngineStateDb as StateDb
 from interaction_builder import InteractionBuilder
-
+from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
 DATABASE_NAME = 'vision_project'
 STATE_COLLECTION_NAME = 'state'
