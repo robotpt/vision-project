@@ -4,6 +4,7 @@ mongodb:
 vision-project:
   controllers:
     is_debug: False
+    seconds_between_updates: 15
   is_run_demo_interaction: False
   seconds_until_interaction_timeout: 45
   resources:
