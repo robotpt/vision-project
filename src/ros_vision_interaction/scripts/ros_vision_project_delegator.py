@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.8
 import actionlib
 import datetime
-import os
 import pymongo
 import rospy
 import schedule
@@ -27,6 +26,7 @@ class RosVisionProjectDelegator:
         self._delegator = vision_project_delegator
         self._state_database = state_database
         self._param_database = param_database
+        self._seconds_between_updates = rospy.get_param("vision-project/controllers/seconds_between_updates")
 
         # action client to start interaction
         self._start_interaction_client = actionlib.SimpleActionClient(
@@ -39,7 +39,7 @@ class RosVisionProjectDelegator:
 
         # update scheduler
         self._scheduler = schedule.Scheduler()
-        self._scheduler.every(10).seconds.do(self.update)
+        self._scheduler.every(self._seconds_between_updates).seconds.do(self.update)
 
         self._is_debug = rospy.get_param(
             "vision-project/controllers/is_debug",
