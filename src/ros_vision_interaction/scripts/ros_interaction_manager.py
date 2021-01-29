@@ -7,10 +7,10 @@ import rospy
 import schedule
 
 from controllers import InteractionManager
-from engine_statedb import EngineStateDb as StateDb
 from interaction_builder import InteractionBuilder
 from interfaces import CordialInterface
 from vision_project_tools import init_db
+from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
 from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, \
@@ -27,12 +27,15 @@ class RosInteractionManager:
     def __init__(
             self,
             interaction_manager,
+            state_database,
+            param_database,
             is_go_to_sleep_topic='cordial/sleep',
             screen_tap_topic='cordial/gui/event/mouse',
             start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._interaction_manager = interaction_manager
         self._state_database = state_database
+        self._param_database = param_database
         self._is_engine_running = False
 
         self._screen_tap_listener = rospy.Subscriber(
@@ -91,7 +94,18 @@ class RosInteractionManager:
 
     def _screen_tap_listener_callback(self, _):
         if not self._is_engine_running and not self._is_run_demo:
-            self.run_manager_once(StartInteractionGoal("prompted interaction"))
+            if self._is_in_scheduled_time_window():
+                interaction = "scheduled interaction"
+            else:
+                interaction = "prompted interaction"
+            self.run_manager_once(StartInteractionGoal(interaction))
+
+    def _is_in_scheduled_time_window(self):
+        current_time = datetime.datetime.now()
+        checkin_window = datetime.timedelta(minutes=self._param_database["time window for checkin"])
+        start_time = self._state_database.get("next checkin time") - checkin_window
+        end_time = self._state_database.get("next checkin time") + checkin_window
+        return start_time < current_time < end_time
 
     @property
     def is_engine_running(self):
@@ -134,7 +148,7 @@ if __name__ == "__main__":
     init_db(param_database, param_db_keys)
 
     demo_interaction_file = rospy.get_param("vision-project/resources/demo/interactions")
-    deployment_interaction_file = rospy.get_param("vision-project/resources/deployment/interactions")
+    deployment_interaction_file = rospy.get_param("vision-project/resources/deployment/test_interactions")
 
     demo_variations_file = rospy.get_param("vision-project/resources/demo/variations")
     deployment_variations_file = rospy.get_param("vision-project/resources/deployment/variations")
@@ -164,6 +178,10 @@ if __name__ == "__main__":
         interface=interface
     )
 
-    ros_interaction_manager = RosInteractionManager(interaction_manager)
+    ros_interaction_manager = RosInteractionManager(
+        interaction_manager,
+        state_database,
+        param_database
+    )
 
     rospy.spin()
