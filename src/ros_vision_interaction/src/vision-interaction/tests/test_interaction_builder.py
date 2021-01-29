@@ -23,7 +23,7 @@ def test_build_graph_from_json(interaction_builder):
         }
     }
     graph_name = list(test_graph_dict.keys())[0]
-    test_directed_graph = interaction_builder.build_graph_from_json(test_graph_dict, graph_name)
+    test_directed_graph = interaction_builder.build_graph_from_dict(test_graph_dict, graph_name)
     nodes_dict_from_graph = test_directed_graph._nodes_dict
 
     assert "node1" in nodes_dict_from_graph.keys()
