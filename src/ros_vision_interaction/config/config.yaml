@@ -5,6 +5,8 @@ vision-project:
   controllers:
     is_debug: False
     seconds_between_updates: 15
+    minutes_between_interactions: 0
+    time_window_for_scheduled: 30
   is_run_demo_interaction: False
   seconds_until_interaction_timeout: 45
   resources:
@@ -14,4 +16,5 @@ vision-project:
     deployment:
       test_interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/test_interactions.json'
       interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/deployment_interactions.json'
-      variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/variations.json'
+      interaction-variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/interaction_variations.json'
+      grit-dialogue: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/grit_dialogue.json'

@@ -97,7 +97,7 @@
                 "content": "I am so sorry that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying.",
                 "options": "Next",
                 "message_type": "multiple choice"
-            },
+            }
         },
         "start_node_name": "how do you feel"
     }
