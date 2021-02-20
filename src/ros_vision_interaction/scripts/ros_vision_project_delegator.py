@@ -20,12 +20,12 @@ class RosVisionProjectDelegator:
     def __init__(
             self,
             vision_project_delegator,
-            is_record_topic='data_capture/is_record',
+            is_record_interaction_topic='data_capture/is_record_interaction',
+            is_record_evaluation_topic='data_capture/is_record_evaluation',
             start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._delegator = vision_project_delegator
         self._state_database = state_database
-        self._param_database = param_database
         self._seconds_between_updates = rospy.get_param("vision-project/controllers/seconds_between_updates")
 
         # action client to start interaction
@@ -35,7 +35,8 @@ class RosVisionProjectDelegator:
         )
 
         # ROS publishers and subscribers
-        self._is_record_publisher = rospy.Publisher(is_record_topic, Bool, queue_size=1)
+        self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)
+        self._is_record_evaluation_publisher = rospy.Publisher(is_record_evaluation_topic, Bool, queue_size=1)
 
         # update scheduler
         self._scheduler = schedule.Scheduler()
@@ -46,11 +47,12 @@ class RosVisionProjectDelegator:
             False
         )
 
-    def run_schedulers_once(self):
+    def run_scheduler_once(self):
         self._scheduler.run_pending()
 
     def update(self):
         rospy.loginfo("Running update")
+        self._delegator.update()
         interaction_type = self._delegator.determine_interaction_type()
         if interaction_type is not None:
             rospy.loginfo("Delegating interaction: {}".format(interaction_type))
@@ -85,31 +87,26 @@ if __name__ == "__main__":
         collection_name="state_db"
     )
     state_db_key_values = {
+        "evaluation start time": None,
+        "evaluation stop time": None,
         "first interaction time": None,
-        "good time to chat": None,
-        "is done reading evaluation today": False,
+        "good to chat": None,
+        "is done evaluation today": False,
+        "is off checkin": None,
+        "is run prompted": False,
         "last interaction time": None,
-        "next checkin time": None,
-        "user name": None
+        "last update datetime"
+        "next checkin datetime": None,
+        "reading performance": {},  # the keys will be datetimes, and the values will be reading speed in WPM (float)
+        "recording start time": None,
+        "user name": None,
     }
     init_db(state_database, state_db_key_values)
-
-    param_database = StateDb(
-        pymongo.MongoClient(host, port),
-        database_name=DATABASE_NAME,
-        collection_name="param_db"
-    )
-    param_db_keys = {
-        "minutes between demo interactions": 5,
-        # add units
-        "time window for checkin": 30
-    }
 
     checkin_window_seconds = rospy.get_param("vision-project/controllers/seconds_between_updates")
 
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,
-        paramdb=param_database,
         checkin_window_seconds=checkin_window_seconds,
         is_run_demo_interaction=is_run_demo_interaction
     )
@@ -117,5 +114,5 @@ if __name__ == "__main__":
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)
 
     while not rospy.is_shutdown():
-        ros_vision_project_delegator.run_schedulers_once()
+        ros_vision_project_delegator.run_scheduler_once()
         rospy.sleep(1)

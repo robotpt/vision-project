@@ -5,7 +5,8 @@
     <arg name="gui_port" default="8082"/>
     <arg name="is_launch_sound_listener" default="false"/>
     <arg name="is_record_audio" default="true"/>
-    <arg name="upload_directory" value="/root/upload"/>
+    <arg name="interaction_upload_directory" value="/root/interaction_upload"/>
+    <arg name="evaluation_upload_directory" value="/root/evaluation_upload"/>
 
     <arg name="mongodb_path" default="/root/mongodb_log" />
     <arg name="mongodb_port" default="62345" />
@@ -27,20 +28,32 @@
     <node pkg="topic_tools" type="relay" name="gesture_relay" args="/cordial/gesture/play /qt_robot/gesture/play" />
 
     <!-- launch data capture services -->
+    <!-- audio and video capture for entire interaction -->
     <include file="$(find aws_uploader)/launch/aws_uploader.launch">
-        <arg name="upload_directory_path" default="$(arg upload_directory)"/>
+        <arg name="upload_directory_path" default="$(arg interaction_upload_directory)"/>
         <arg name="bucket_name" default="$(env AWS_BUCKET_NAME)"/>
     </include>
     <include file="$(find video_capture)/launch/capture.launch">
-        <arg name="output_directory" value="$(arg upload_directory)"/>
+        <arg name="output_directory" value="$(arg interaction_upload_directory)"/>
         <arg name="image_topic" value="camera/color/image_raw"/>
-        <arg name="is_record_topic" value="data_capture/is_record"/>
+        <arg name="is_record_topic" value="data_capture/is_record_interaction"/>
     </include>
     <include file="$(find audio_capture2)/launch/capture.launch">
-        <arg name="output_directory" value="$(arg upload_directory)"/>
+        <arg name="output_directory" value="$(arg interaction_upload_directory)"/>
         <arg name="audio_topic" value="audio/audio"/>
-        <arg name="is_record_topic" value="data_capture/is_record"/>
+        <arg name="is_record_topic" value="data_capture/is_record_interaction"/>
         <arg name="is_launch_audio_capture" value="true"/>
+    </include>
+    <!-- audio capture for reading evaluation -->
+    <include file="$(find aws_uploader)/launch/aws_uploader.launch">
+        <arg name="upload_directory_path" default="$(arg evaluation_upload_directory)"/>
+        <arg name="bucket_name" default="$(env AWS_BUCKET_NAME)"/>
+    </include>
+    <include file="$(find audio_capture2)/launch/capture.launch">
+        <arg name="output_directory" value="$(arg evaluation_upload_directory)"/>
+        <arg name="audio_topic" value="audio/audio"/>
+        <arg name="is_record_topic" value="data_capture/is_record_evaluation"/>
+        <arg name="is_launch_audio_capture" value="false"/>
     </include>
 
     <!-- launch controllers -->

@@ -1,84 +1,129 @@
 {
-    "introduce QT": {
-        "nodes": {
-            "introduction": {
-                "transitions": ["exit"],
-                "content": "Hi, my name is QT!",
-                "options": ["Nice to meet you"],
-                "message_type": "multiple choice"
-            }
-        },
-        "start_node_name": "introduction"
-    },
-    "first interaction": {
-        "nodes": {
-            "ask name": {
-                "transitions": ["next checkin"],
-                "content": "What's your name?",
-                "options": [" is my name."],
-                "message_type": "text entry",
-                "result_db_key": "user name"
-            },
-            "next checkin": {
-                "transitions": ["exit"],
-                "content": "[first interaction] When would you like to talk next?",
-                "args": ["15", "12:00"],
-                "options": ["Next"],
-                "message_type": "time entry",
-                "result_convert_from_str_fn": "next_day_checkin_datetime",
-                "result_db_key": "next checkin time"
-            }
-        },
-        "start_node_name": "ask name"
-    },
     "greeting": {
         "nodes": {
             "greeting": {
                 "transitions": ["exit"],
-                "content": "Hello {'db': 'user name', 'default value': ''}!",
-                "options": ["Hi!"],
-                "message_type": "multiple choice"
+                "content": "Hello there!",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
             }
         },
         "start_node_name": "greeting"
     },
-    "scheduled interaction": {
+    "first checkin": {
         "nodes": {
-            "scheduled node": {
+            "first checkin": {
                 "transitions": ["exit"],
-                "content": "[scheduled interaction] When would you like to talk next?",
-                "args": ["15", "12:00"],
+                "content": "Nice to meet you, my name is QT!",
                 "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "first checkin"
+    },
+    "scheduled checkin": {
+        "nodes": {
+            "scheduled checkin": {
+                "transitions": ["exit"],
+                "content": "This is a scheduled checkin.",
+                "options": ["exit"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "scheduled checkin"
+    },
+    "prompted checkin": {
+        "nodes": {
+            "prompted checkin": {
+                "transitions": ["exit"],
+                "content": "This is a prompted checkin.",
+                "options": ["exit"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "prompted checkin"
+    },
+    "schedule next checkin": {
+        "nodes": {
+            "schedule": {
+                "transitions": ["exit"],
+                "content": "When should we plan to talk tomorrow?",
+                "options": ["Tomorrow"],
+                "args": ["15", "12:00"],
                 "message_type": "time entry",
-                "result_convert_from_str_fn": "next_day_checkin_datetime",
+                "result_convert_from_str_fn": "next day checkin time",
                 "result_db_key": "next checkin time"
             }
         },
-        "start_node_name": "scheduled node"
+        "start_node_name": "schedule"
     },
-    "prompted interaction": {
+    "evaluation": {
         "nodes": {
-            "prompted node": {
+            "evaluation": {
                 "transitions": ["exit"],
-                "content": "[prompted interaction] When would you like to talk next?",
-                "args": ["15", "12:00"],
+                "content": "[reading evaluation]",
                 "options": ["Next"],
-                "message_type": "time entry",
-                "result_convert_from_str_fn": "same_day_checkin_datetime",
-                "result_db_key": "next checkin time"
+                "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "prompted node"
+        "start_node_name": "evaluation"
     },
-    "reading evaluation": {
+    "ask to chat": {
         "nodes": {
-            "evaluation node": {
+            "ask to chat": {
+                "transitions": ["exit", "that's ok"],
+                "content": "Is this a good time to chat?",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "good to chat"
+            },
+            "that's ok": {
                 "transitions": ["exit"],
-                "content": "This is a reading evaluation.",
+                "content": "That's alright.",
                 "options": ["Next"],
-                "message_type": "multiple choice"
+                "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "evaluation node"
+        "start_node_name": "ask to chat"
+    },
+    "talk about vision": {
+        "nodes": {
+            "talk about vision": {
+                "transitions": ["automated response to patient"],
+                "content": "Please tell me how you're feeling about your vision.",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "automated response to patient": {
+                "transitions": ["exit"],
+                "content": "[automated response]",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "talk about vision"
+    },
+    "goodbye": {
+        "nodes": {
+            "goodbye": {
+                "transitions": ["exit"],
+                "content": "Goodbye!",
+                "options": ["Bye!"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "goodbye"
+    },
+    "ask to do scheduled": {
+        "nodes": {
+            "ask to do scheduled": {
+                "transitions": ["exit"],
+                "content": "Would you like to do the reading evaluation now?",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is off checkin"
+            }
+        },
+        "start_node_name": "ask to do scheduled"
     }
 }

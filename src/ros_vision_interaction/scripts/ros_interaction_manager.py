@@ -28,15 +28,12 @@ class RosInteractionManager:
             self,
             interaction_manager,
             state_database,
-            param_database,
             is_go_to_sleep_topic='cordial/sleep',
             screen_tap_topic='cordial/gui/event/mouse',
             start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._interaction_manager = interaction_manager
         self._state_database = state_database
-        self._param_database = param_database
-        self._is_engine_running = False
 
         self._screen_tap_listener = rospy.Subscriber(
             screen_tap_topic,
@@ -55,23 +52,24 @@ class RosInteractionManager:
         )
         self._start_interaction_action_server.register_preempt_callback(self._preempt_callback)
 
-        self._is_run_demo = rospy.get_param(
-            "vision-project/is_run_demo_interaction",
-            False
+        self._minutes_between_interactions = datetime.timedelta(
+            rospy.get_param("vision-project/controllers/minutes_between_interactions")
+        )
+        self._time_window_for_scheduled = datetime.timedelta(
+            rospy.get_param("vision-project/controllers/minutes_between_interactions")
         )
 
         self._is_debug = rospy.get_param(
             "vision-project/controllers/is_debug",
             False
         )
-
         self._start_interaction_action_server.start()
 
     # start interaction action callback
     def run_manager_once(self, goal):
+        self._state_database.set("is interaction finished", False)
         interaction_type = goal.type
         result = StartInteractionResult()
-        self._is_engine_running = True
 
         if not self._is_debug:
             self._interaction_manager.run_interaction_once(interaction_type)
@@ -86,30 +84,20 @@ class RosInteractionManager:
             self._start_interaction_action_server.set_succeeded(result)
 
         self._state_database.set("last interaction time", datetime.datetime.now())
-        self._is_engine_running = False
 
     def _preempt_callback(self):
         rospy.loginfo("Preempt requested for interaction server")
         self._start_interaction_action_server.set_preempted()
 
     def _screen_tap_listener_callback(self, _):
-        if not self._is_engine_running and not self._is_run_demo:
-            if self._is_in_scheduled_time_window():
-                interaction = "scheduled interaction"
-            else:
-                interaction = "prompted interaction"
+        if self.is_interaction_finished() and \
+            self._state_database.get("last interaction time") - datetime.datetime.now() > self._minutes_between_interactions:
+            rospy.loginfo("Starting prompted interaction")
+            interaction = "prompted interaction"
             self.run_manager_once(StartInteractionGoal(interaction))
 
-    def _is_in_scheduled_time_window(self):
-        current_time = datetime.datetime.now()
-        checkin_window = datetime.timedelta(minutes=self._param_database["time window for checkin"])
-        start_time = self._state_database.get("next checkin time") - checkin_window
-        end_time = self._state_database.get("next checkin time") + checkin_window
-        return start_time < current_time < end_time
-
-    @property
-    def is_engine_running(self):
-        return self._is_engine_running
+    def is_interaction_finished(self):
+        return self._state_database.get("is interaction finished")
 
 
 if __name__ == "__main__":
@@ -127,34 +115,27 @@ if __name__ == "__main__":
         collection_name="state_db"
     )
     state_db_key_values = {
+        "evaluation start time": None,
+        "evaluation stop time": None,
         "first interaction time": None,
+        "good to chat": None,
+        "is done evaluation today": False,
+        "is off checkin": None,
+        "is run prompted": False,
         "last interaction time": None,
-        "next checkin time": None,
-        "user name": None
+        "last update datetime"
+        "next checkin datetime": None,
+        "reading performance": {},  # the keys will be datetimes, and the values will be reading speed in WPM (float)
+        "recording start time": None,
+        "user name": None,
     }
     init_db(state_database, state_db_key_values)
 
-    param_database = StateDb(
-        pymongo.MongoClient(host, port),
-        database_name=DATABASE_NAME,
-        collection_name="param_db"
-    )
-    param_db_keys = {
-        "minutes between demo interactions": 5,
-        # add units
-        "time window for checkin": 15
-    }
-
-    init_db(param_database, param_db_keys)
-
-    demo_interaction_file = rospy.get_param("vision-project/resources/demo/interactions")
     deployment_interaction_file = rospy.get_param("vision-project/resources/deployment/test_interactions")
 
-    demo_variations_file = rospy.get_param("vision-project/resources/demo/variations")
-    deployment_variations_file = rospy.get_param("vision-project/resources/deployment/variations")
+    interaction_variations_file = rospy.get_param("vision-project/resources/deployment/interaction-variations")
+    grit_dialogue_variations = rospy.get_param("vision-project/resources/deployment/grit-dialogue")
 
-    with open(demo_interaction_file) as f:
-        demo_interaction_dict = json.load(f)
     with open(deployment_interaction_file) as f:
         deployment_interaction_dict = json.load(f)
 
@@ -164,16 +145,13 @@ if __name__ == "__main__":
     )
 
     interaction_builder = InteractionBuilder(
-        demo_interaction_dict=demo_interaction_dict,
-        demo_variations_file=demo_variations_file,
-        deployment_interaction_dict=deployment_interaction_dict,
-        deployment_variations_file=deployment_variations_file,
+        interaction_dict=deployment_interaction_dict,
+        variations_files=interaction_variations_file,
         statedb=state_database
     )
 
     interaction_manager = InteractionManager(
         statedb=state_database,
-        paramdb=param_database,
         interaction_builder=interaction_builder,
         interface=interface
     )
@@ -181,7 +159,6 @@ if __name__ == "__main__":
     ros_interaction_manager = RosInteractionManager(
         interaction_manager,
         state_database,
-        param_database
     )
 
     rospy.spin()

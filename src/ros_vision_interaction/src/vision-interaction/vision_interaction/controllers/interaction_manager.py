@@ -13,29 +13,25 @@ logging.basicConfig(level=logging.INFO)
 class InteractionManager:
 
     class Interactions:
-        DEMO_INTERACTION = "demo interaction"
         FIRST_INTERACTION = "first interaction"
         PROMPTED_INTERACTION = "prompted interaction"
         SCHEDULED_INTERACTION = "scheduled interaction"
-        READING_EVALUATION = "reading evaluation"
+        EVALUATION = "evaluation"
 
         POSSIBLE_INTERACTIONS = [
-            DEMO_INTERACTION,
             FIRST_INTERACTION,
             SCHEDULED_INTERACTION,
             PROMPTED_INTERACTION,
-            READING_EVALUATION,
+            EVALUATION,
         ]
 
     def __init__(
             self,
             statedb,
-            paramdb,
             interaction_builder,
             interface=None
     ):
         self._state_database = statedb
-        self._param_database = paramdb
 
         self._interaction_builder = interaction_builder
 
@@ -50,63 +46,97 @@ class InteractionManager:
         if interaction_type not in InteractionManager.Interactions.POSSIBLE_INTERACTIONS:
             raise ValueError("Not a valid interaction type")
 
-        self.build_interaction(interaction_type, self._planner)
+        self.build_interaction(interaction_type)
+        self.run_engine_once()
+
+    def run_engine_once(self):
         engine = InteractionEngine(
             self._interface,
             self._planner,
             self._interaction_builder.possible_graphs
         )
-        for node_name in engine.run():
+        for node_name in engine.modified_run(self._planner):
             self._current_node_name = node_name
 
-    def build_interaction(self, interaction_type, planner):
+    def build_interaction(self, interaction_type):
         build_interaction_dict = {
-            InteractionManager.Interactions.DEMO_INTERACTION: self._build_demo_interaction,
             InteractionManager.Interactions.FIRST_INTERACTION: self._build_first_interaction,
             InteractionManager.Interactions.PROMPTED_INTERACTION: self._build_prompted_interaction,
             InteractionManager.Interactions.SCHEDULED_INTERACTION: self._build_scheduled_interaction,
-            InteractionManager.Interactions.READING_EVALUATION: self._build_reading_evaluation,
+            InteractionManager.Interactions.EVALUATION: self._build_reading_evaluation,
         }
 
-        return build_interaction_dict[interaction_type](planner)
+        return build_interaction_dict[interaction_type]()
 
-    def _build_demo_interaction(self, planner):
+    def _build_first_interaction(self):
         logging.info("Building first interaction")
-        planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.DEMO_INTERACTION]
-            # post_hook=self._set_last_interaction_time
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.FIRST_CHECKIN],
+            post_hook=self._set_vars_after_first_interaction
         )
-        return planner
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN],
+            post_hook=self._set_vars_after_interaction
+        )
+        return self._planner
 
-    def _build_first_interaction(self, planner):
-        logging.info("Building first interaction")
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_QT])
-        # planner.insert(Interactions.FIRST_INTERACTION, post_hook=self._set_last_interaction_time)
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.FIRST_INTERACTION])
-        return planner
-
-    def _build_prompted_interaction(self, planner):
+    def _build_prompted_interaction(self):
         logging.info("Building prompted interaction")
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
-        # planner.insert(Interactions.PROMPTED_INTERACTION, post_hook=self._set_last_interaction_time)
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_INTERACTION])
-        return planner
+        self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
+        if not self._state_database.get("is done evaluation today"):
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED],
+                post_hook=self._set_is_off_checkin
+            )
+        else:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+                post_hook=self._set_vars_after_interaction
+            )
+        return self._planner
 
-    def _build_scheduled_interaction(self, planner):
+    def _build_scheduled_interaction(self):
         logging.info("Building scheduled interaction")
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
-        # planner.insert(Interactions.SCHEDULED_INTERACTION, post_hook=self._set_last_interaction_time)
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_INTERACTION])
-        return planner
+        if not self._is_off_checkin():
+            self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+            post_hook=self._set_vars_after_interaction
+        )
+        return self._planner
 
-    def _build_reading_evaluation(self, planner):
+    def _build_reading_evaluation(self):
         logging.info("Building reading evaluation")
-        # planner.insert(Interactions.READING_EVALUATION, post_hook=self._set_last_interaction_time)
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.READING_EVALUATION])
-        return planner
+        self._planner.insert(
+            pre_hook=lambda: self._state_database.set("evaluation start time", datetime.datetime.now()),
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+            post_hook=self._set_vars_after_evaluation
+        )
+        return self._planner
 
-    def _set_last_interaction_time(self):
-        self._state_database.set("last interaction time", datetime.datetime.now())
+    def _set_vars_after_interaction(self):
+        self._state_database.set("is interaction finished", True)
+        # self._state_database.set("last interaction time", datetime.datetime.now())
+
+    def _set_vars_after_first_interaction(self):
+        self._state_database.set("first interaction time", datetime.datetime.now())
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_evaluation(self):
+        self._state_database.set("is done evaluation today", True)
+        self._state_database.set("evaluation stop time", datetime.datetime.now())
+        self._set_vars_after_interaction()
+
+    def _set_is_off_checkin(self):
+        if self._state_database.get("is off checkin") == "Yes":
+            self._state_database.set("is off checkin", True)
+            self._state_database.set("is run prompted", False)
+        else:
+            self._state_database.set("is off checkin", False)
+            self._state_database.set("is run prompted", True)
+
+    def _is_off_checkin(self):
+        return self._state_database.get("is off checkin")
 
     @property
     def current_node_name(self):
