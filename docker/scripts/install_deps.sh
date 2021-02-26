@@ -36,7 +36,7 @@ sudo apt-get install -y \
 	python-gst0.10 \
 	python-mock \
 	python-pyaudio
-python -m pip install --upgrade pip
+python -m pip install --upgrade pip==20.3.3
 python -m pip install \
 	rospkg \
 	catkin_pkg \
