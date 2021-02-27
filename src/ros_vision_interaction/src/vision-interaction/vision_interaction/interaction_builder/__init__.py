@@ -20,6 +20,7 @@ class InteractionBuilder:
         SCHEDULED_CHECKIN = "scheduled checkin"
         SCHEDULE_NEXT_CHECKIN = "schedule next checkin"
         TALK_ABOUT_VISION = "talk about vision"
+        TOO_MANY_CHECKINS = "too many checkins"
 
     def __init__(
             self,
@@ -87,6 +88,11 @@ class InteractionBuilder:
                 InteractionBuilder.Graphs.TALK_ABOUT_VISION,
                 self._text_populator,
             ),
+            InteractionBuilder.Graphs.TOO_MANY_CHECKINS: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.TOO_MANY_CHECKINS,
+                self._text_populator,
+            )
         }
 
         self._possible_graphs = [graph for graph in self._interactions.values()]

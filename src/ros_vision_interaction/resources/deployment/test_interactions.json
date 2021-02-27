@@ -125,5 +125,16 @@
             }
         },
         "start_node_name": "ask to do scheduled"
+    },
+    "too many checkins": {
+         "nodes": {
+            "too many checkins": {
+                "transitions": ["exit"],
+                "content": "> 3 checkins, talk more tomorrow!",
+                "options": ["Oops"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "too many checkins"
     }
 }
