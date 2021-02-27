@@ -13,16 +13,19 @@ STATE_COLLECTION_NAME = 'state'
 PARAM_COLLECTION_NAME = 'params'
 
 STATE_DB_KEYS_AND_VALUES = {
-        "first interaction time": None,
+        "first interaction datetime": None,
         "good to chat": None,
         "is done evaluation today": False,
-        "last interaction time": None,
+        "is interaction finished": True,
+        "is off checkin": False,
+        "is prompted by user": False,
+        "is run prompted": False,
+        "last interaction datetime": None,
         "last update datetime": None,
         "next checkin datetime": datetime.datetime(2021, 2, 6, 1, 30),
+        "number of prompted today": 0,
+        "reading performance": {},
         "user name": None,
-        "is off checkin": False,
-        "is interaction finished": False,
-        "is run prompted": False
     }
 
 TIME_WINDOW_FOR_CHECKIN_KEY = "time window for checkin"
@@ -67,7 +70,7 @@ def interaction_builder(statedb):
         mock_open.side_effect = handlers
         builder = InteractionBuilder(
             interaction_dict=deployment_interaction_dict,
-            variations_file="interaction_variations.json",
+            variations_files="interaction_variations.json",
             statedb=statedb
         )
     return builder
