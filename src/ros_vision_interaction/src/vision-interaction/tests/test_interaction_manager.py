@@ -37,11 +37,11 @@ def interaction_manager(statedb, interaction_builder, monkeypatch):
 def test_run_first_interaction(interaction_manager, statedb):
     assert not interaction_manager._state_database.is_set("first interaction")
     interaction_manager.run_interaction_once("first interaction")
-    assert interaction_manager._state_database.is_set("first interaction time")
+    assert interaction_manager._state_database.is_set("first interaction datetime")
 
 
 def test_run_scheduled_interaction(interaction_manager, statedb):
     with freezegun.freeze_time("2021-02-10"):
-        # assert not statedb.is_set("last interaction time")
+        assert not statedb.is_set("last interaction time")
         interaction_manager.run_interaction_once("scheduled interaction")
         assert statedb.is_set("is done evaluation today")
