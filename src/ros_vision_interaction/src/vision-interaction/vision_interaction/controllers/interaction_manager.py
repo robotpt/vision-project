@@ -85,7 +85,7 @@ class InteractionManager:
         )
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN],
-            post_hook=self._set_vars_after_interaction
+            post_hook=self._state_database.set("is interaction finished", True)
         )
         return self._planner
 
@@ -106,7 +106,7 @@ class InteractionManager:
             )
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
-            post_hook=self._set_vars_after_interaction
+            post_hook=self._state_database.set("is interaction finished", True)
         )
         return self._planner
 
@@ -115,7 +115,7 @@ class InteractionManager:
         self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
-            post_hook=self._set_vars_after_interaction
+            post_hook=self._set_vars_after_scheduled
         )
         return self._planner
 
@@ -131,7 +131,7 @@ class InteractionManager:
         logging.info("Building checkin limit reminder")
         self._planner.insert(
             plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.TOO_MANY_CHECKINS],
-            post_hook=self._set_vars_after_interaction
+            post_hook=self._state_database.set("is interaction finished", True)
         )
         return self._planner
 
@@ -141,24 +141,29 @@ class InteractionManager:
     def _set_vars_after_prompted(self):
         number_of_prompted_today = self._state_database.get("number of prompted today") + 1
         self._state_database.set("number of prompted today", number_of_prompted_today)
-        self._set_vars_after_interaction()
+        self._state_database.set("is interaction finished", True)
+        self._state_database.set("is run prompted content", False)
+        self._state_database.set("is prompted by user", False)
 
     def _set_vars_after_first_interaction(self):
         self._state_database.set("first interaction datetime", datetime.datetime.now())
-        self._set_vars_after_interaction()
+        self._state_database.set("is interaction finished", True)
 
     def _set_vars_after_evaluation(self):
         self._state_database.set("is done evaluation today", True)
         # also need to calculate and save reading speed
-        self._set_vars_after_interaction()
+        self._state_database.set("is interaction finished", True)
+
+    def _set_vars_after_scheduled(self):
+        self._state_database.set("is prompted by user", False)
 
     def _set_is_off_checkin(self):
         if self._state_database.get("is off checkin") == "Yes":
             self._state_database.set("is off checkin", True)
-            self._state_database.set("is run prompted", False)
+            self._state_database.set("is run prompted content", False)
         else:
             self._state_database.set("is off checkin", False)
-            self._state_database.set("is run prompted", True)
+            self._state_database.set("is run prompted content", True)
 
     @property
     def current_node_name(self):
