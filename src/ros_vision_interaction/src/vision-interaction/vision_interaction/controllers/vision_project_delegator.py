@@ -31,19 +31,17 @@ class VisionProjectDelegator:
     def update(self):
         if not self._state_database.is_set("last update datetime"):
             self._state_database.set("last update datetime", datetime.datetime.now())
-        if datetime.datetime.now().day > self._state_database.get("last update datetime").day:
+        if datetime.datetime.now().date() > self._state_database.get("last update datetime").date():
             self._state_database.set("is done evaluation today", False)
         self._state_database.set("last update datetime", datetime.datetime.now())
 
-    def determine_interaction_type(self):
+    def get_interaction_type(self):
         logging.info("Determining interaction type")
-        interaction_type = None
 
         if self._is_first_interaction():
             interaction_type = Interactions.FIRST_INTERACTION
         else:
             if self._state_database.get("is prompted by user"):
-                self._state_database.set("is prompted by user", False)
                 if not self._state_database.get("is done evaluation today"):
                     is_in_scheduled_window = self._is_in_window(
                         self._state_database.get("next checkin datetime"),
@@ -56,15 +54,15 @@ class VisionProjectDelegator:
                         interaction_type = Interactions.ASK_TO_DO_SCHEDULED
                 else:
                     interaction_type = Interactions.PROMPTED_INTERACTION
-            # if not prompted by user
             else:
                 if self._is_off_checkin():
                     interaction_type = Interactions.EVALUATION
-                elif self._state_database.get("is run prompted"):
-                    self._state_database.set("is run prompted", False)
+                elif self._state_database.get("is run prompted content"):
                     interaction_type = Interactions.PROMPTED_INTERACTION
                 elif self._is_time_for_scheduled_interaction():
                     interaction_type = Interactions.SCHEDULED_INTERACTION
+                else:
+                    interaction_type = None
         return interaction_type
 
     def _is_first_interaction(self):
