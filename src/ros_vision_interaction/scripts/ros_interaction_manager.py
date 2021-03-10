@@ -92,7 +92,7 @@ if __name__ == "__main__":
         "is interaction finished": True,
         "is off checkin": None,
         "is prompted by user": False,
-        "is run prompted": False,
+        "is run prompted content": False,
         "last interaction datetime": None,
         "last update datetime"
         "next checkin datetime": None,

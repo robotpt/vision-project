@@ -19,7 +19,7 @@ STATE_DB_KEYS_AND_VALUES = {
         "is interaction finished": True,
         "is off checkin": False,
         "is prompted by user": False,
-        "is run prompted": False,
+        "is run prompted content": False,
         "last interaction datetime": None,
         "last update datetime": None,
         "next checkin datetime": datetime.datetime(2021, 2, 6, 1, 30),

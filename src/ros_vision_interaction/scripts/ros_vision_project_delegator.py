@@ -69,7 +69,7 @@ class RosVisionProjectDelegator:
     def update(self):
         rospy.loginfo("Running update")
         self._delegator.update()
-        interaction_type = self._delegator.determine_interaction_type()
+        interaction_type = self._delegator.get_interaction_type()
         if interaction_type is not None:
             rospy.loginfo("Delegating interaction: {}".format(interaction_type))
             self.delegate_interaction(interaction_type)
@@ -89,6 +89,7 @@ class RosVisionProjectDelegator:
 
     def _screen_tap_listener_callback(self, _):
         last_interaction_time = self._state_database.get("last interaction datetime")
+        # TODO: change time btwn interactions to a few seconds
         if last_interaction_time is not None:
             enough_time_passed = datetime.datetime.now() - self._state_database.get("last interaction datetime") \
                                  > self._minutes_between_interactions
@@ -123,7 +124,7 @@ if __name__ == "__main__":
         "is interaction finished": True,
         "is off checkin": None,
         "is prompted by user": False,
-        "is run prompted": False,
+        "is run prompted content": False,
         "last interaction datetime": None,
         "last update datetime"
         "next checkin datetime": None,
