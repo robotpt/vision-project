@@ -5,7 +5,10 @@ from catkin_pkg.python_setup import generate_distutils_setup
 import os
 
 package_dirs = {
-    'interactions': os.path.join('src', 'ros_vision_interaction', 'interactions'),
+    'controllers': os.path.join('src', 'vision-interaction', 'vision_interaction', 'controllers'),
+    'interaction_builder': os.path.join('src', 'vision-interaction', 'vision_interaction', 'interaction_builder'),
+    'interfaces': os.path.join('src', 'vision-interaction', 'vision_interaction', 'interfaces'),
+    'vision_project_tools': os.path.join('src', 'vision-interaction', 'vision_interaction', 'vision_project_tools'),
     'interaction_engine': os.path.join('src', 'interaction_engine', 'interaction_engine'),
 }
 

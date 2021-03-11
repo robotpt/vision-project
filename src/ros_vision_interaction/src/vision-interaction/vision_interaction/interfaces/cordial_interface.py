@@ -2,12 +2,10 @@
 
 import actionlib
 import os
+import pymongo
 import rospy
 from cordial_msgs.msg import AskOnGuiAction, AskOnGuiGoal
 
-from interactions import DemoInteraction
-
-from interaction_engine.json_database import Database
 from interaction_engine.interfaces import Interface
 from interaction_engine.messager import Message
 
@@ -16,17 +14,15 @@ class CordialInterface(Interface):
 
     def __init__(
             self,
+            state_database,
             action_name="cordial/say_and_ask_on_gui",
-            database_file_name=None,
             seconds_until_timeout=None,
-
             is_create_db_key_if_not_exist=True,
-            node_name='cordial_client',
     ):
-        database = Database(database_file_name)
+        self._state_database = state_database
         super().__init__(
             self.call_ask_action_service,
-            database=database,
+            database=self._state_database,
             is_create_db_key_if_not_exist=is_create_db_key_if_not_exist
         )
 
@@ -41,9 +37,7 @@ class CordialInterface(Interface):
                 raise ValueError("Timeout must be greater than 0")
         self._seconds_until_timeout = seconds_until_timeout
 
-        rospy.init_node(node_name)
-
-        rospy.on_shutdown(self._cancel_goal)
+        rospy.on_shutdown(self.cancel_goal)
 
     def call_ask_action_service(self, message):
         rospy.loginfo("Calling action")
@@ -71,27 +65,7 @@ class CordialInterface(Interface):
                 rospy.loginfo("Time passed: {}; goal cancelled".format(feedback.time_passed))
                 self._cordial_action_client.cancel_goal()
 
-    def _cancel_goal(self):
+    def cancel_goal(self):
+        rospy.loginfo("Cordial interface canceling goal")
         if self._cordial_action_client.get_state() == actionlib.SimpleGoalState.ACTIVE:
             self._cordial_action_client.cancel_goal()
-
-
-if __name__ == "__main__":
-
-    resources_directory = '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources'
-    demo_interaction_json_file = os.path.join(resources_directory, 'sar_demo_nodes.json')
-    variation_file_name = os.path.join(resources_directory, 'variations.json')
-    database_file_name = os.path.join(resources_directory, 'state_database.json')
-
-    interface = CordialInterface(database_file_name=database_file_name)
-    demo_interaction = DemoInteraction(
-        interaction_json_file=demo_interaction_json_file,
-        start_node_name="ask to chat",
-        database_file_name=database_file_name,
-        variation_file_name=variation_file_name,
-        interface=interface
-    )
-
-    while not rospy.is_shutdown():
-        demo_interaction.run_once()
-        rospy.sleep(25)

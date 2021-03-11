@@ -1,0 +1,160 @@
+{
+    "improved": [
+        "{'var': 'improved-1a'} You worked hard and succeeded with the task! You've done a {'var': 'improved-1b'} job with using your magnifier!",
+        "Hard work can be {'var': 'improved-2a'} and I can see your progress. {'var': 'improved-2b'}",
+        "{'var': 'improved-3a'} I am so proud of your {'var': 'improved-3b'}!",
+        "I know that reading with a magnifier is {'var': 'improved-4a'}, but you tried hard and you {'var': 'improved-4b'}!",
+        "I know this practice may be {'var': 'improved-4a'}, but you {'var': 'improved-4b'}!",
+        "You've worked really hard and deserve recognition for your accomplishment! {'var': 'improved-5a'}",
+        "Wow! This practice is {'var': 'improved-6a'}, but you've made it and done a really {'var': 'improved-6b'} job!",
+        "Using a magnifier to read is not an easy task, but you've made a lot of progress so far! I believe if you continue practicing, you will become even more successful!",
+        "Wow, you've really improved! I am so happy that you have gotten better and better with using your magnifier, great job!"
+    ],
+    "declined": [
+        "I'm sure you will get better if you try hard and be persistent! Let's set a goal to work hard at this next time!",
+        "I know it feels like you'll never get past this, but you will. Your performance today doesn't mean that you're a failure. It just means you hit a bump in the road or are having a bad day. Keep trying and you will succeed the next time!",
+        "This might not be the best time for you to do this task today. How about taking a break and giving it another try either later today or tomorrow? You've already done a great job on previous tasks and I believe you will improve next time! Don't give up!",
+        "Sometimes, taking a break is important. I know you've given it a good try, and I think now is a good time to rest and refresh yourself. I bet that next time will be better!",
+        "I'm so glad that you keep practicing. And how about we take a break now? It'll get your mind off of things and let you recharge a little bit.",
+        "Each day is different and eventually you'll achieve your best performance after more and more practice. I am so glad that you are not giving up and I believe you will do better next time.",
+        "No matter how you do each day, just remember that practice makes perfect! So as long as you do not give up, you will improve eventually!",
+        "Today may not be your best day, but that's totally ok. I believe in you. Don't be too hard on yourself, just give yourself a break for now, and keep practicing later or tomorrow."
+    ],
+    "stable": [
+        "Learning new things might be tough, so I am really glad you've been working hard at it so far and done a great job in this practice! I believe in you, that if you keep trying, you will do better!",
+        "You're on the path to improving. You will get there with more practice. {'var': 'stable-1a'}",
+        "I've watched you put in the time and effort to improve with your magnifier, and I am so proud of your persistent efforts. {'var': 'stable-2a'}",
+        "Keep up the hard work! {'var': 'stable-3a'} will help you master using a magnifier!",
+        "Although you may not be completely accustomed to using a magnifier to read, your hard work makes me believe that you will get even better in no time!",
+        "Learning to improve your use of the magnifier is an important process, and I am impressed that you are so committed to it. Stay positive and persistent!",
+        "By being incredibly persistent with your practice, you are really working toward mastering the skill of using your vision and the magnifier! {'var': 'stable-4a'}!"
+    ],
+    "transition": [
+        "I highly encourage you to {'var': 't-1a'} because at first it might seem to be {'var': 't-1b'}, but I know you can tackle it!",
+        "Challenging yourself with more difficult tasks can help you improve your skills better and faster!",
+        "Challenging yourself with more demanding tasks will help you improve and develop your skills.",
+        "Challenging yourself with more demanding tasks will enable you to become better more quickly and faster.",
+        "Difficult activities will allow you to improve and enhance your ability!",
+        "If you keep trying hard even when the tasks are demanding, you will become so much better at mastering the skills needed for magnifier use.",
+        "Continuing to attempt more difficult tasks will help you to improve gradually.",
+        "If you keep at it when the tasks are more challenging, you're going to become a lot better over time with practice.",
+        "When these tasks become more difficult, you should continue to try hard to improve your skills and ability.",
+        "If you try harder when the tasks are tougher, you will gain new skills that will make you so much better.",
+        "I see how well you take on new challenges. And I love it!",
+        "You're not afraid to push yourself. I am impressed!",
+        "You're not afraid of trying new things and that makes me proud of you!",
+        "The greatest barrier to success is the fear of challenges and the unwillingness to keep practicing. You've done a great job in all previous attempts and there's no barrier in your way to success! So keep up your hard work with practicing!",
+        "You are not afraid of challenging yourself with learning new techniques, and that's incredible! I know we will both see the progress over time."
+    ],
+    "improved-1a": [
+        "Hooray!",
+        "Bravo!",
+        "Congratulations!",
+        "Woohoo!"
+    ],
+    "improved-1b": [
+        "marvelous",
+        "magnificent",
+        "terrific",
+        "fabulous",
+        "superb",
+        "fantastic"
+    ],
+    "improved-2a": [
+        "worthwhile",
+        "rewarding",
+        "valuable",
+        "beneficial",
+        "worth it"
+    ],
+    "improved-2b": [
+        "I am so proud of you!",
+        "I'm so happy for you!",
+        "You make me proud!",
+        "I'm so pleased for you!",
+        "I am really glad for you!"
+    ],
+    "improved-3a": [
+        "You accomplished this task!",
+        "You nailed it!",
+        "You did it!",
+        "You've succeeded!",
+        "Way to go!",
+        "You are a true champion!"
+    ],
+    "improved-3b": [
+        "persistence",
+        "effort",
+        "tenacity",
+        "perseverance",
+        "determination"
+    ],
+    "improved-4a": [
+        "hard",
+        "tough",
+        "difficult",
+        "challenging",
+        "not easy"
+    ],
+    "improved-4b": [
+        "really nailed it",
+        "excelled at it",
+        "were very successful",
+        "did a fantastic job",
+        "are a real champ"
+    ],
+    "improved-5a": [
+        "So proud of you!",
+        "I could not be more proud of you!",
+        "That's impressive!",
+        "I'm impressed!",
+        "I really admire you!",
+        "Your effort is truly admirable!"
+    ],
+    "improved-6a": [
+        "difficult",
+        "not easy",
+        "challenging",
+        "quite hard"
+    ],
+    "improved-6b": [
+        "excellent",
+        "fantastic",
+        "fabulous",
+        "great",
+        "superb"
+    ],
+    "stable-1a": [
+        "Keep up the hard work!",
+        "Great perseverance! Keep it up!",
+        "You're on the right track!"
+    ],
+    "stable-2a": [
+        "Keep up the good work! You will soon achieve even more success.",
+        "Keep it up! Aim high and you will get there.",
+        "Strive for success and you'll realize the benefits of your hard work.",
+        "Your persistence will pay off."
+    ],
+    "stable-3a": [
+        "Keep up the good work!",
+        "Keep working on it; you're getting there.",
+        "Keep persevering and you'll have it."
+    ],
+    "stable-4a": [
+        "Persistence",
+        "Determination",
+        "Tenacity",
+        "Your willpower"
+    ],
+    "t-1a": [
+        "Keep giving this reading task your best try.",
+        "Try to do every task to the best of your ability.",
+        "Give these tougher reading tasks a shot!"
+    ],
+    "t-1b": [
+        "challenging",
+        "difficult",
+        "hard",
+        "tough"
+    ]
+}

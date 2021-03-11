@@ -1,0 +1,74 @@
+{
+    "Bye": [
+        "Bye",
+        "Bye-bye",
+        "Good-bye"
+    ],
+    "chat": [
+        "chat",
+        "speak",
+        "talk"
+    ],
+    "chatted": [
+        "chatted",
+        "talked",
+        "spoke"
+    ],
+    "great": [
+        "great",
+        "terrific",
+        "fantastic",
+        "fabulous",
+        "excellent",
+        "wonderful",
+        "awesome",
+        "super"
+    ],
+    "Great": [
+        "Great",
+        "Terrific",
+        "Fantastic",
+        "Fabulous",
+        "Excellent",
+        "Wonderful",
+        "Awesome",
+        "Super"
+    ],
+    "Hi": [
+        "Hi",
+        "Hello"
+    ],
+    "joke category": [
+        "{'var': 'robot joke'}",
+        "{'var': 'science joke'}",
+        "{'var': 'vision joke'}"
+    ],
+    "joke": [
+        "I <prosody rate=\"slow\">love</prosody> funny jokes, like this one. {'var': 'joke category'}",
+        "I happen to know a bunch of funny jokes; let me share one with you. {'var': 'joke category'}",
+        "Life is so much easier when you have a great sense of humor. Let me share a joke with you! {'var': 'joke category'}"
+    ],
+    "robot joke": [
+        "What is a robot's favorite snack? <break time=\"0.75s\"/>*QT/yawn*<prosody volume=\"loud\" rate=\"slow\"*happy*Computer</prosody> <prosody rate=\"slow\" pitch=\"high\">chips</prosody>. Chomp, chomp!",
+        "What is it called when a robot eats a sandwich in one chomp?*QT/yawn*<break time=\"0.75s\"/> A megabyte.",
+        "Why did the robot marry his fiancee? <break time=\"0.75s\"/>*QT/happy*He couldn't resistor!",
+        "Why did the robot go to the shoe shop? To get rebooted.",
+        "A robot's collection of musical instruments will never be complete. They can never get any organs."
+    ],
+    "science joke": [
+        "I'm reading a book about anti-gravity. <break time=\"0.75s\"/>It's impossible to put down!",
+        "*QT/sad*Don't trust atoms. <break time=\"0.75s\"/>They make up everything!",
+        "What's an astronaut's favorite part of a computer?<break time=\"0.75s\"/> *QT/happy*The space bar.",
+        "Wanna hear a joke about paper?<break time=\"0.75s\"/>*QT/happy* Never mind - it's tearable."
+    ],
+    "vision joke": [
+        "Why did the cell phone go see an optometrist?<break time=\"0.75s\"/>*QT/happy* It needed contacts.",
+        "*question_1*<prosody rate=\"slow\">What</prosody> do you call <break strength=\"weak\"/>an optometrist on a boat?*QT/happy* <break time=\"0.75s\"/>A see captain!",
+        "What do you call a <prosody rate=\"60%\" pitch=\"medium\">deer</prosody><break time=\"0.2s\"/> with <prosody rate=\"slow\">no eyes</prosody>?<break time=\"0.75s\"/>*QT/happy* <prosody rate=\"x-slow\">No idea!</prosody>",
+        "What did the man with the magnifying glass say to the guy in the emergency room? ICU!",
+        "Did you hear about the penny and magnifying glass who got married? Their wedding was magnify-cent.",
+        "You know why women's eyes are so noticeable these days? It's the mask <break time=\"0.1s\"/>era during the pandemic.",
+        "Did you hear that they make a webpage for people who suffer from chronic eye pain? It's a site for sore eyes.",
+        "I love jokes about the eyes. The cornea the better."
+      ]
+}
