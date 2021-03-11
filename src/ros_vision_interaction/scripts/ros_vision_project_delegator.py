@@ -31,12 +31,12 @@ class RosVisionProjectDelegator:
             minutes=rospy.get_param("vision-project/controllers/minutes_between_interactions")
         )
         self._scheduled_time_window_minutes = datetime.timedelta(
-            minutes=rospy.get_param("vision-project/controllers/scheduled_time_window_minutes")
+            minutes=rospy.get_param("vision-project/controllers/scheduled_window_minutes")
         )
 
         self._delegator = vision_project_delegator
         self._state_database = state_database
-        self._seconds_between_updates = rospy.get_param("vision-project/controllers/seconds_between_updates")
+        self._seconds_between_updates = rospy.get_param("vision-project/controllers/update_window_seconds")
 
         # action client to start interaction
         self._start_interaction_client = actionlib.SimpleActionClient(
