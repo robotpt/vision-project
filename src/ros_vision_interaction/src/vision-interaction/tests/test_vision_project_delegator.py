@@ -8,11 +8,17 @@ from controllers import VisionProjectDelegator
 
 @pytest.fixture
 def vision_project_delegator(statedb):
+    # TODO: make params env variables
     return VisionProjectDelegator(
         statedb,
         update_window_seconds=15,
         minutes_between_interactions=1
     )
+
+
+def check_database_values(statedb, **kwargs):
+    for key, value in kwargs.items():
+        assert statedb.get(key) == value
 
 
 def test_determine_first_interaction(vision_project_delegator, statedb):
@@ -147,7 +153,176 @@ def test_is_done_reading_evaluation(vision_project_delegator, statedb):
         assert not statedb.get("is done eval today")
         assert vision_project_delegator.get_interaction_type() == "scheduled interaction"
 
-    # check no interaction is called when valid time but evaluation already done
+        # check no interaction is called when valid time but evaluation already done
         with freezegun.freeze_time("2021-02-11 2:00:00"):
             statedb.set("is done eval today", True)
             assert vision_project_delegator.get_interaction_type() is None
+
+
+def test_new_day_update(vision_project_delegator, statedb):
+    test_periods = [
+        [
+            "2021-03-15 00:00:00",
+            "2021-03-16 00:00:00",
+            "2021-03-17 00:00:00",
+            "2021-03-18 00:00:00",
+            "2021-03-19 00:00:00",
+            "2021-03-20 00:00:00",
+            "2021-03-21 00:00:00",
+        ],
+        # month changes during test period
+        [
+            "2021-02-25 00:00:00",
+            "2021-02-26 00:00:00",
+            "2021-02-27 00:00:00",
+            "2021-02-28 00:00:00",
+            "2021-03-01 00:00:00",
+            "2021-03-02 00:00:00",
+            "2021-03-03 00:00:00",
+        ],
+        # year changes during test period
+        [
+            "2020-12-29 00:00:00",
+            "2020-12-30 00:00:00",
+            "2020-12-31 00:00:00",
+            "2021-01-01 00:00:00",
+            "2021-01-02 00:00:00",
+            "2021-01-03 00:00:00",
+            "2021-01-04 00:00:00",
+        ]
+    ]
+    for period in test_periods:
+        vision_project_delegator._reset_database()
+        # day 1
+        with freezegun.freeze_time(period[0]):
+            vision_project_delegator.update()
+            first_interaction_datetime = datetime.datetime(2021, 3, 15, 2, 0, 0, 0)
+            statedb.set("first interaction datetime", first_interaction_datetime)
+            statedb.set("last interaction datetime", first_interaction_datetime)
+            statedb.set("is done eval today", True)
+        # day 2
+        with freezegun.freeze_time(period[1]):
+            vision_project_delegator.update()
+            expected_values = {
+                "num of days since last eval": 0,
+                "num of days since last prompt": 1,
+                "num of days since last perseverance": 1,
+                "num of days since last mindfulness": 1,
+                "num of days since last goal setting": 1,
+            }
+            check_database_values(statedb, **expected_values)
+        # day 3
+        with freezegun.freeze_time(period[2]):
+            vision_project_delegator.update()
+            expected_values = {
+                "is done eval today": False,
+                "is done prompted today": False,
+                "is done perseverance today": False,
+                "is done mindfulness today": False,
+                "is done goal setting today": False,
+            }
+            check_database_values(statedb, **expected_values)
+            expected_values = {
+                "num of days since last eval": 1,
+                "num of days since last prompt": 2,
+                "num of days since last perseverance": 2,
+                "num of days since last mindfulness": 2,
+                "num of days since last goal setting": 2,
+            }
+            check_database_values(statedb, **expected_values)
+            statedb.set("is done eval today", True)
+            statedb.set("is done prompted today", True)
+            statedb.set("is done perseverance today", True)
+            statedb.set("is done mindfulness today", True)
+            statedb.set("is done goal setting today", True)
+        # day 4
+        with freezegun.freeze_time(period[3]):
+            vision_project_delegator.update()
+            expected_values = {
+                "is done eval today": False,
+                "is done prompted today": False,
+                "is done perseverance today": False,
+                "is done mindfulness today": False,
+                "is done goal setting today": False,
+            }
+            check_database_values(statedb, **expected_values)
+            expected_values = {
+                "num of days since last eval": 0,
+                "num of days since last prompt": 0,
+                "num of days since last perseverance": 0,
+                "num of days since last mindfulness": 0,
+                "num of days since last goal setting": 0,
+            }
+            check_database_values(statedb, **expected_values)
+            statedb.set("is done eval today", True)
+            statedb.set("is done prompted today", True)
+            statedb.set("is done perseverance today", True)
+            statedb.set("is done mindfulness today", True)
+            statedb.set("is done goal setting today", True)
+        # day 5
+        with freezegun.freeze_time(period[4]):
+            vision_project_delegator.update()
+            expected_values = {
+                "is done eval today": False,
+                "is done prompted today": False,
+                "is done perseverance today": False,
+                "is done mindfulness today": False,
+                "is done goal setting today": False,
+            }
+            check_database_values(statedb, **expected_values)
+            expected_values = {
+                "num of days since last eval": 0,
+                "num of days since last prompt": 0,
+                "num of days since last perseverance": 0,
+                "num of days since last mindfulness": 0,
+                "num of days since last goal setting": 0,
+            }
+            check_database_values(statedb, **expected_values)
+            statedb.set("is done eval today", False)
+            statedb.set("is done prompted today", True)
+            statedb.set("is done perseverance today", False)
+            statedb.set("is done mindfulness today", True)
+            statedb.set("is done goal setting today", True)
+        # day 6
+        with freezegun.freeze_time(period[5]):
+            vision_project_delegator.update()
+            expected_values = {
+                "is done eval today": False,
+                "is done prompted today": False,
+                "is done perseverance today": False,
+                "is done mindfulness today": False,
+                "is done goal setting today": False,
+            }
+            check_database_values(statedb, **expected_values)
+            expected_values = {
+                "num of days since last eval": 1,
+                "num of days since last prompt": 0,
+                "num of days since last perseverance": 1,
+                "num of days since last mindfulness": 0,
+                "num of days since last goal setting": 0,
+            }
+            check_database_values(statedb, **expected_values)
+            statedb.set("is done eval today", False)
+            statedb.set("is done prompted today", True)
+            statedb.set("is done perseverance today", False)
+            statedb.set("is done mindfulness today", False)
+            statedb.set("is done goal setting today", True)
+        # day 7
+        with freezegun.freeze_time(period[6]):
+            vision_project_delegator.update()
+            expected_values = {
+                "is done eval today": False,
+                "is done prompted today": False,
+                "is done perseverance today": False,
+                "is done mindfulness today": False,
+                "is done goal setting today": False,
+            }
+            check_database_values(statedb, **expected_values)
+            expected_values = {
+                "num of days since last eval": 2,
+                "num of days since last prompt": 0,
+                "num of days since last perseverance": 2,
+                "num of days since last mindfulness": 1,
+                "num of days since last goal setting": 0,
+            }
+            check_database_values(statedb, **expected_values)
