@@ -32,11 +32,20 @@ class VisionProjectDelegator:
         if not self._state_database.is_set("last update datetime"):
             self._state_database.set("last update datetime", datetime.datetime.now())
         if self._is_new_day():
-            if not self._state_database.get("is done eval today"):
-                num_of_days_since_last_eval = self._state_database.get("num of days since last eval")
-                self._state_database.set("num of days since last eval", num_of_days_since_last_eval + 1)
-            else:
-                self._state_database.set("is done eval today", False)
+            keys_to_update = {
+                "is done eval today": "num of days since last eval",
+                "is done prompted today": "num of days since last prompt",
+                "is done perseverance today": "num of days since last perseverance",
+                "is done mindfulness today": "num of days since last mindfulness",
+                "is done goal setting today": "num of days since last goal setting"
+            }
+            for key in keys_to_update:
+                if not self._state_database.get(key):
+                    old_value = self._state_database.get(keys_to_update[key])
+                    self._state_database.set(keys_to_update[key], old_value + 1)
+                else:
+                    self._state_database.set(key, 0)
+                self._state_database.set(key, False)
         self._state_database.set("last update datetime", datetime.datetime.now())
 
     def _is_new_day(self):
@@ -117,6 +126,13 @@ class VisionProjectDelegator:
         return start_time <= time_to_check <= end_time
 
     def _reset_database(self):
-        keys = self._state_database.get_keys()
-        for key in keys:
-            self._state_database.set(key, None)
+        self._state_database.set("is done eval today", False)
+        self._state_database.set("is done prompted today", False)
+        self._state_database.set("is done perseverance today", False)
+        self._state_database.set("is done mindfulness today", False)
+        self._state_database.set("is done goal setting today", False)
+        self._state_database.set("num of days since last eval", 0)
+        self._state_database.set("num of days since last prompt", 0)
+        self._state_database.set("num of days since last perseverance", 0)
+        self._state_database.set("num of days since last mindfulness", 0)
+        self._state_database.set("num of days since last goal setting", 0)
