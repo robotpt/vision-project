@@ -44,7 +44,7 @@ class VisionProjectDelegator:
                     old_value = self._state_database.get(keys_to_update[key])
                     self._state_database.set(keys_to_update[key], old_value + 1)
                 else:
-                    self._state_database.set(key, 0)
+                    self._state_database.set(keys_to_update[key], 0)
                 self._state_database.set(key, False)
         self._state_database.set("last update datetime", datetime.datetime.now())
 
