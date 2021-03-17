@@ -44,4 +44,4 @@ def test_run_scheduled_interaction(interaction_manager, statedb):
     with freezegun.freeze_time("2021-02-10"):
         assert not statedb.is_set("last interaction time")
         interaction_manager.run_interaction_once("scheduled interaction")
-        assert statedb.is_set("is done evaluation today")
+        assert statedb.is_set("is done eval today")

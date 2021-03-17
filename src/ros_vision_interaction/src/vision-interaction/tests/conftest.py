@@ -13,31 +13,24 @@ STATE_COLLECTION_NAME = 'state'
 PARAM_COLLECTION_NAME = 'params'
 
 STATE_DB_KEYS_AND_VALUES = {
+        "average eval score": None,
+        "current eval score": None,
         "first interaction datetime": None,
-        "good to chat": None,
-        "is done evaluation today": False,
-        "is interaction finished": True,
-        "is off checkin": False,
+        "good time to talk": False,
+        "is done eval today": False,
+        "is interaction finished": False,
         "is prompted by user": False,
         "is run prompted content": False,
+        "last eval score": None,
         "last interaction datetime": None,
         "last update datetime": None,
-        "next checkin datetime": datetime.datetime(2021, 2, 6, 1, 30),
-        "number of prompted today": 0,
-        "reading performance": {},
-        "user name": None,
+        "next checkin datetime": None,
+        "num of days since last eval": 0,
+        "num of days since last prompt": 0,
+        "num of days since last perseverance": 0,
+        "num of days since last mindfulness": 0,
+        "num of days since last goal setting": 0,
     }
-
-TIME_WINDOW_FOR_CHECKIN_KEY = "time window for checkin"
-TIME_WINDOW_FOR_CHECKIN_VALUE = 15
-
-PARAM_TEST_KEYS = (
-    TIME_WINDOW_FOR_CHECKIN_KEY,
-)
-PARAM_TEST_VALUES = (
-    TIME_WINDOW_FOR_CHECKIN_VALUE,
-)
-PARAM_PAIRS = zip(PARAM_TEST_KEYS, PARAM_TEST_VALUES)
 
 
 @pytest.fixture
