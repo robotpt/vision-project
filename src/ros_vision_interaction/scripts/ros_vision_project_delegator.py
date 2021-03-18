@@ -118,19 +118,27 @@ if __name__ == "__main__":
         collection_name="state_db"
     )
     state_db_key_values = {
+        "average eval score": None,
+        "current eval score": None,
         "first interaction datetime": None,
-        "good to chat": None,
-        "is done evaluation today": False,
-        "is interaction finished": True,
-        "is off checkin": None,
+        "good time to talk": False,
+        "is done eval today": False,
+        "is done prompted today": False,
+        "is done perseverance today": False,
+        "is done mindfulness today": False,
+        "is done goal setting today": False,
+        "is interaction finished": False,
         "is prompted by user": False,
         "is run prompted content": False,
+        "last eval score": None,
         "last interaction datetime": None,
-        "last update datetime"
+        "last update datetime": None,
         "next checkin datetime": None,
-        "number of prompted today": 0,
-        "reading performance": {},  # the keys will be datetimes, and the values will be reading speed in WPM (float)
-        "user name": None,
+        "num of days since last eval": 0,
+        "num of days since last prompt": 0,
+        "num of days since last perseverance": 0,
+        "num of days since last mindfulness": 0,
+        "num of days since last goal setting": 0,
     }
     init_db(state_database, state_db_key_values)
 

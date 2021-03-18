@@ -12,19 +12,21 @@ logging.basicConfig(level=logging.INFO)
 
 class Interactions:
 
+    ASK_TO_DO_EVALUATION = "ask to do evaluation"
+    EVALUATION = "evaluation"
     FIRST_INTERACTION = "first interaction"
-    ASK_TO_DO_SCHEDULED = "ask to do scheduled"
+    PROMPTED_CONTENT = "prompted content"
     PROMPTED_INTERACTION = "prompted interaction"
     SCHEDULED_INTERACTION = "scheduled interaction"
-    EVALUATION = "evaluation"
     TOO_MANY_CHECKINS = "too many checkins"
 
     POSSIBLE_INTERACTIONS = [
-        ASK_TO_DO_SCHEDULED,
-        FIRST_INTERACTION,
-        SCHEDULED_INTERACTION,
-        PROMPTED_INTERACTION,
+        ASK_TO_DO_EVALUATION,
         EVALUATION,
+        FIRST_INTERACTION,
+        PROMPTED_CONTENT,
+        PROMPTED_INTERACTION,
+        SCHEDULED_INTERACTION,
         TOO_MANY_CHECKINS
     ]
 
@@ -66,7 +68,7 @@ class InteractionManager:
 
     def build_interaction(self, interaction_type):
         build_interaction_dict = {
-            Interactions.ASK_TO_DO_SCHEDULED: self._build_ask_to_do_scheduled,
+            Interactions.ASK_TO_DO_EVALUATION: self._build_ask_to_do_scheduled,
             Interactions.FIRST_INTERACTION: self._build_first_interaction,
             Interactions.PROMPTED_INTERACTION: self._build_prompted_interaction,
             Interactions.SCHEDULED_INTERACTION: self._build_scheduled_interaction,
