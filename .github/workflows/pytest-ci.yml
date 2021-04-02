@@ -22,10 +22,10 @@ jobs:
         submodules: true
 
       - name: Checkout mongodb-statedb
-          uses: actions/checkout@v2
-          with:
-            repository: audrow/mongodb-statedb
-            path: mongodb-statedb
+        uses: actions/checkout@v2
+        with:
+          repository: audrow/mongodb-statedb
+          path: mongodb-statedb
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
