@@ -1,7 +1,5 @@
 #!/usr/bin/python3.8
-import datetime
 import freezegun
-import mock
 import pytest
 
 from controllers import InteractionManager
