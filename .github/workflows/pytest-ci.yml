@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependencies for interaction-engine
         run: pip install .
-        working-directory: ${{ github.workspace }}/vision-project/src/ros_vision_interaction/src/interaction-engine
+        working-directory: ${{ github.workspace }}/vision-project/src/ros_vision_interaction/src/interaction_engine
 
       - name: Install dependencies for vision-project
         run: pip install .
