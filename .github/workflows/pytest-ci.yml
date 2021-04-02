@@ -6,7 +6,8 @@ on:
     - cron: '0 0 * * *'
 
 defaults:
-  working-directory: ./src/ros_vision_interaction/src/vision-interaction
+  run:
+    working-directory: ./src/ros_vision_interaction/src/vision-interaction
 
 jobs:
   build:
@@ -29,3 +30,4 @@ jobs:
           pip install .
       - name: Run tests
         run: pytest
+        working-directory: ./src/ros_vision_interaction/src/vision-interaction/tests
