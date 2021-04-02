@@ -5,10 +5,6 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
-defaults:
-  run:
-    working-directory: ./src/ros_vision_interaction/src/vision-interaction
-
 jobs:
   build:
     name: Test Vision Project
@@ -19,15 +15,29 @@ jobs:
         python-version: [ 3.6, 3.7, 3.8 ]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout vision-project
+        uses: actions/checkout@v2
+        with:
+          path: main
+        submodules: true
+
+      - name: Checkout mongodb-statedb
+          uses: actions/checkout@v2
+          with:
+            repository: audrow/mongodb-statedb
+            path: mongodb-statedb
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Setup the project and install dependencies
         run: |
           python -m pip install --upgrade pip==20.3.3
           pip install .
+        working-directory: ./src/ros_vision_interaction/src/vision-interaction
+
       - name: Run tests
         run: pytest
         working-directory: ./src/ros_vision_interaction/src/vision-interaction/tests
