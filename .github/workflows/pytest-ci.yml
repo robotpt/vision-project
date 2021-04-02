@@ -18,7 +18,7 @@ jobs:
       - name: Checkout vision-project
         uses: actions/checkout@v2
         with:
-          path: main
+          path: $GITHUB_WORKSPACE/vision-project
           submodules: true
 
       - name: Checkout mongodb-statedb
@@ -34,10 +34,11 @@ jobs:
 
       - name: Setup the project and install dependencies
         run: |
+          pwd
           python -m pip install --upgrade pip==20.3.3
           pip install .
-        working-directory: ./src/ros_vision_interaction/src/vision-interaction
+        working-directory: $GITHUB_WORKSPACE/vision-interaction
 
       - name: Run tests
         run: pytest
-        working-directory: ./src/ros_vision_interaction/src/vision-interaction/tests
+        working-directory: $GITHUB_WORKSPACE/vision-interaction/tests
