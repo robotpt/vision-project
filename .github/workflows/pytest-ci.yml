@@ -33,10 +33,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies for mongodb-statedb
-          run: |
-            python -m pip install --upgrade pip==20.3.3
-            pip install .
-          working-directory: ${{ github.workspace }}/mongodb-statedb
+        run: |
+          python -m pip install --upgrade pip==20.3.3
+          pip install .
+        working-directory: ${{ github.workspace }}/mongodb-statedb
 
       - name: Install dependencies for interaction-engine
         run: pip install .
