@@ -2,6 +2,7 @@
 import actionlib
 import datetime
 import json
+import os
 import pymongo
 import rospy
 
@@ -11,7 +12,7 @@ from interfaces import CordialInterface
 from vision_project_tools import init_db
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
-from ros_vision_interaction.msg import StartInteractionAction, StartInteractionFeedback, StartInteractionResult
+from ros_vision_interaction.msg import StartInteractionAction, StartInteractionResult
 from std_msgs.msg import Bool
 
 START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
@@ -110,10 +111,14 @@ if __name__ == "__main__":
     }
     init_db(state_database, state_db_key_values)
 
-    deployment_interaction_file = rospy.get_param("vision-project/resources/deployment/test_interactions")
+    # set up resources paths
+    cwd = os.path.dirname(os.path.abspath(__file__))
+    resources_directory = os.path.join(cwd, '..', 'resources')
 
-    interaction_variations_file = rospy.get_param("vision-project/resources/deployment/interaction-variations")
-    grit_dialogue_variations = rospy.get_param("vision-project/resources/deployment/grit-dialogue")
+    deployment_interaction_file = os.path.join(resources_directory, 'deployment', 'deployment_interactions.json')
+
+    interaction_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
+    grit_dialogue_variations = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
 
     with open(deployment_interaction_file) as f:
         deployment_interaction_dict = json.load(f)

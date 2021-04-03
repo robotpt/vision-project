@@ -5,7 +5,6 @@ import pymongo
 import rospy
 import schedule
 
-from controllers.interaction_manager import Interactions
 from controllers import VisionProjectDelegator
 from vision_project_tools import init_db
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb

@@ -10,12 +10,12 @@ vision-project:
   params:
     seconds_until_interaction_timeout: 30
     max_number_of_prompted: 3
-  resources:
-    demo:
-      interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/demo_interaction.json'
-      variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/variations.json'
-    deployment:
-      test_interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/test_interactions.json'
-      interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/deployment_interactions.json'
-      interaction-variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/interaction_variations.json'
-      grit-dialogue: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/grit_dialogue.json'
+#  resources:
+#    demo:
+#      interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/demo_interaction.json'
+#      variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/demo-interaction/variations.json'
+#    deployment:
+#      test_interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/test_interactions.json'
+#      interactions: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/deployment_interactions.json'
+#      interaction-variations: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/interaction_variations.json'
+#      grit-dialogue: '/root/catkin_ws/src/vision-project/src/ros_vision_interaction/resources/deployment/grit_dialogue.json'
