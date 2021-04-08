@@ -2,7 +2,6 @@ import datetime
 
 from interaction_engine.messager.directed_graph import DirectedGraph
 from interaction_engine.messager.node import Node
-from interaction_engine.planner.messanger_planner import MessagerPlanner
 from interaction_engine.text_populator import TextPopulator
 from interaction_engine.text_populator import DatabasePopulator
 from interaction_engine.text_populator import VarietyPopulator
@@ -14,13 +13,16 @@ class InteractionBuilder:
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
         EVALUATION = "evaluation"
         FIRST_CHECKIN = "first checkin"
+        GOAL_SETTING = "goal setting"
         GOODBYE = "goodbye"
         GREETING = "greeting"
+        MINDFULNESS = "mindfulness"
+        PERSEVERANCE = "perseverance"
         PROMPTED_CHECKIN = "prompted checkin"
         SCHEDULED_CHECKIN = "scheduled checkin"
         SCHEDULE_NEXT_CHECKIN = "schedule next checkin"
         TALK_ABOUT_VISION = "talk about vision"
-        TOO_MANY_CHECKINS = "too many checkins"
+        TOO_MANY_PROMPTED = "too many prompted"
 
     def __init__(
             self,
@@ -58,6 +60,11 @@ class InteractionBuilder:
                 InteractionBuilder.Graphs.FIRST_CHECKIN,
                 self._text_populator,
             ),
+            InteractionBuilder.Graphs.GOAL_SETTING: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.GOAL_SETTING,
+                self._text_populator,
+            ),
             InteractionBuilder.Graphs.GOODBYE: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.GOODBYE,
@@ -66,6 +73,16 @@ class InteractionBuilder:
             InteractionBuilder.Graphs.GREETING: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.GREETING,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.MINDFULNESS: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.MINDFULNESS,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.PERSEVERANCE: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.PERSEVERANCE,
                 self._text_populator,
             ),
             InteractionBuilder.Graphs.PROMPTED_CHECKIN: self.build_graph_from_dict(
@@ -88,9 +105,9 @@ class InteractionBuilder:
                 InteractionBuilder.Graphs.TALK_ABOUT_VISION,
                 self._text_populator,
             ),
-            InteractionBuilder.Graphs.TOO_MANY_CHECKINS: self.build_graph_from_dict(
+            InteractionBuilder.Graphs.TOO_MANY_PROMPTED: self.build_graph_from_dict(
                 self._interaction_dict,
-                InteractionBuilder.Graphs.TOO_MANY_CHECKINS,
+                InteractionBuilder.Graphs.TOO_MANY_PROMPTED,
                 self._text_populator,
             )
         }
@@ -136,7 +153,7 @@ class InteractionBuilder:
 
             if speaking_rate is not None:
                 node_info["content"] = "<prosody rate=\"{speaking_rate}\">".format(speaking_rate=speaking_rate) + \
-                          node_info["content"] + "</prosody> "
+                                       node_info["content"] + "</prosody> "
 
             if node_info["result_convert_from_str_fn"] == "next day checkin time":
                 node_info["result_convert_from_str_fn"] = self.next_day_checkin_time_from_str
@@ -169,7 +186,7 @@ class InteractionBuilder:
         current_datetime = datetime.datetime.now()
         current_day = current_datetime.day
         return current_datetime.replace(
-            day=current_day+1,
+            day=current_day + 1,
             hour=next_checkin_time.hour,
             minute=next_checkin_time.minute
         )

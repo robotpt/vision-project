@@ -52,7 +52,7 @@
                 "args": ["15", "12:00"],
                 "message_type": "time entry",
                 "result_convert_from_str_fn": "next day checkin time",
-                "result_db_key": "next checkin time"
+                "result_db_key": "next checkin datetime"
             }
         },
         "start_node_name": "schedule"
@@ -126,15 +126,48 @@
         },
         "start_node_name": "ask to do scheduled"
     },
-    "too many checkins": {
+    "too many prompted": {
          "nodes": {
-            "too many checkins": {
+            "too many prompted": {
                 "transitions": ["exit"],
                 "content": "> 3 checkins, talk more tomorrow!",
                 "options": ["Oops"],
                 "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "too many checkins"
+        "start_node_name": "too many prompted"
+    },
+    "perseverance": {
+        "nodes": {
+            "perseverance": {
+                "transitions": ["perseverance","exit"],
+                "content": "[perseverance reading]",
+                "options": ["Continue", "Stop"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "perseverance"
+    },
+    "goal setting": {
+        "nodes": {
+            "goal setting": {
+                "transitions": ["exit"],
+                "content": "[goal setting]",
+                "options": ["Exit"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "goal setting"
+    },
+    "mindfulness": {
+        "nodes": {
+            "mindfulness": {
+                "transitions": ["exit"],
+                "content": "[mindfulness]",
+                "options": ["Exit"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "mindfulness"
     }
 }
