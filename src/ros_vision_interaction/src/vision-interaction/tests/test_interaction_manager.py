@@ -43,3 +43,18 @@ def test_run_scheduled_interaction(interaction_manager, statedb):
         assert not statedb.is_set("last interaction time")
         interaction_manager.run_interaction_once("scheduled interaction")
         assert statedb.is_set("is done eval today")
+
+
+def test_run_reading_evaluation(interaction_manager, statedb):
+    current_eval_index = statedb.get("reading eval index")
+    interaction_manager.run_interaction_once("scheduled interaction")
+    assert statedb.is_set("is done eval today")
+    assert statedb.get("is interaction finished")
+    assert statedb.get("reading eval index") == current_eval_index + 1
+
+
+def test_run_prompted_interaction(interaction_manager, statedb):
+    with freezegun.freeze_time("2021-02-10"):
+        assert statedb.get("num of prompted today") == 0
+        interaction_manager.run_interaction_once("prompted interaction")
+        assert statedb.get("num of prompted today") == 1
