@@ -15,8 +15,6 @@ from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionResult
 from std_msgs.msg import Bool
 
-START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
-
 
 class RosInteractionManager:
 
@@ -24,15 +22,15 @@ class RosInteractionManager:
             self,
             interaction_manager,
             state_database,
-            is_go_to_sleep_topic='cordial/sleep',
-            start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._interaction_manager = interaction_manager
         self._state_database = state_database
 
+        is_go_to_sleep_topic = rospy.get_param('cordial/sleep_topic')
         self._sleep_publisher = rospy.Publisher(is_go_to_sleep_topic, Bool, queue_size=1)
 
         # set up action server
+        start_interaction_action_name = rospy.get_param("controllers/is_start_interaction")
         self._start_interaction_action_server = actionlib.SimpleActionServer(
             start_interaction_action_name,
             StartInteractionAction,
@@ -115,7 +113,7 @@ if __name__ == "__main__":
     cwd = os.path.dirname(os.path.abspath(__file__))
     resources_directory = os.path.join(cwd, '..', 'resources')
 
-    deployment_interaction_file = os.path.join(resources_directory, 'deployment', 'deployment_interactions.json')
+    deployment_interaction_file = os.path.join(resources_directory, 'deployment', 'test_interactions.json')
 
     interaction_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
     grit_dialogue_variations = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
