@@ -18,7 +18,7 @@ class Interactions:
     PROMPTED_CONTENT = "prompted content"
     PROMPTED_INTERACTION = "prompted interaction"
     SCHEDULED_INTERACTION = "scheduled interaction"
-    TOO_MANY_CHECKINS = "too many checkins"
+    TOO_MANY_PROMPTED = "too many prompted"
 
     POSSIBLE_INTERACTIONS = [
         ASK_TO_DO_EVALUATION,
@@ -27,7 +27,7 @@ class Interactions:
         PROMPTED_CONTENT,
         PROMPTED_INTERACTION,
         SCHEDULED_INTERACTION,
-        TOO_MANY_CHECKINS
+        TOO_MANY_PROMPTED
     ]
 
 
@@ -50,127 +50,166 @@ class InteractionManager:
         self._current_node_name = None
         self._current_interaction_type = None
 
+        self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
+
     def run_interaction_once(self, interaction_type):
         if interaction_type not in Interactions.POSSIBLE_INTERACTIONS:
             raise ValueError("Not a valid interaction type")
 
-        planner = self.build_interaction(interaction_type)
-        self.run_engine_once(planner)
+        self.build_interaction(interaction_type)
+        self.run_engine_once()
 
-    def run_engine_once(self, planner):
+    def run_engine_once(self):
         engine = InteractionEngine(
             self._interface,
-            planner,
+            self._planner,
             self._interaction_builder.possible_graphs
         )
-        for node_name in engine.modified_run(planner):
+        for node_name in engine.modified_run(self._planner):
             self._current_node_name = node_name
 
     def build_interaction(self, interaction_type):
-        build_interaction_dict = {
-            Interactions.ASK_TO_DO_EVALUATION: self._build_ask_to_do_scheduled,
-            Interactions.FIRST_INTERACTION: self._build_first_interaction,
-            Interactions.PROMPTED_INTERACTION: self._build_prompted_interaction,
-            Interactions.SCHEDULED_INTERACTION: self._build_scheduled_interaction,
-            Interactions.EVALUATION: self._build_reading_evaluation,
-            Interactions.TOO_MANY_CHECKINS: self._build_too_many_checkins
-        }
+        self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
+        if interaction_type == Interactions.ASK_TO_DO_EVALUATION:
+            self._build_ask_to_do_evaluation()
+        elif interaction_type == Interactions.FIRST_INTERACTION:
+            self._build_first_interaction()
+        elif interaction_type == Interactions.PROMPTED_INTERACTION:
+            self._build_prompted_interaction()
+        elif interaction_type == Interactions.SCHEDULED_INTERACTION:
+            self._build_scheduled_interaction()
+        elif interaction_type == Interactions.EVALUATION:
+            self._build_reading_evaluation()
+        elif interaction_type == Interactions.TOO_MANY_PROMPTED:
+            self._build_too_many_prompted()
+        else:
+            raise ValueError("Not a valid interaction type")
 
-        return build_interaction_dict[interaction_type]()
+        return self._planner
 
     def _build_first_interaction(self):
-        planner = MessagerPlanner(self._interaction_builder.possible_graphs)
         logging.info("Building first interaction")
-        planner.insert(
+        self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.FIRST_CHECKIN],
             post_hook=self._set_vars_after_first_interaction
         )
-        planner.insert(
+        self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN],
-            post_hook=self._state_database.set("is interaction finished", True)
+            post_hook=self._set_vars_after_scheduling_next_checkin
         )
-        return planner
-
-    def _build_ask_to_do_scheduled(self):
-        planner = MessagerPlanner(self._interaction_builder.possible_graphs)
-        logging.info("Building ask to do scheduled")
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
-        planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED],
-            post_hook=self._set_is_off_checkin
-        )
-        return planner
-
-    def _build_prompted_interaction(self):
-        planner = MessagerPlanner(self._interaction_builder.possible_graphs)
-        logging.info("Building prompted interaction")
-        if self._state_database.get("is done evaluation today"):
-            planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING]
-            )
-        planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
-            post_hook=self._state_database.set("is interaction finished", True)
-        )
-        return planner
-
-    def _build_scheduled_interaction(self):
-        planner = MessagerPlanner(self._interaction_builder.possible_graphs)
-        logging.info("Building scheduled interaction")
-        planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
-        planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
-            post_hook=self._set_vars_after_scheduled
-        )
-        return planner
-
-    def _build_reading_evaluation(self):
-        planner = MessagerPlanner(self._interaction_builder.possible_graphs)
-        logging.info("Building reading evaluation")
-        planner.insert(
-            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
-            post_hook=self._set_vars_after_evaluation
-        )
-        return planner
-
-    def _build_too_many_checkins(self):
-        planner = MessagerPlanner(self._interaction_builder.possible_graphs)
-        logging.info("Building checkin limit reminder")
-        planner.insert(
-            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.TOO_MANY_CHECKINS],
-            post_hook=self._state_database.set("is interaction finished", True)
-        )
-        return planner
-
-    def _set_vars_after_interaction(self):
-        self._state_database.set("is interaction finished", True)
-
-    def _set_vars_after_prompted(self):
-        number_of_prompted_today = self._state_database.get("number of prompted today") + 1
-        self._state_database.set("number of prompted today", number_of_prompted_today)
-        self._state_database.set("is interaction finished", True)
-        self._state_database.set("is run prompted content", False)
-        self._state_database.set("is prompted by user", False)
+        return self._planner
 
     def _set_vars_after_first_interaction(self):
         self._state_database.set("first interaction datetime", datetime.datetime.now())
         self._state_database.set("is interaction finished", True)
+        self._state_database.set("last interaction datetime", datetime.datetime.now())
 
-    def _set_vars_after_evaluation(self):
-        self._state_database.set("is done evaluation today", True)
-        # also need to calculate and save reading speed
+    def _set_vars_after_scheduling_next_checkin(self):
+        self._set_vars_after_interaction()
+
+    def _build_ask_to_do_evaluation(self):
+        logging.info("Building ask to do scheduled")
+        self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED],
+            post_hook=self._set_vars_after_ask_for_eval,
+        )
+        return self._planner
+
+    def _set_vars_after_ask_for_eval(self):
+        self._state_database.set("is prompted by user", False)
         self._state_database.set("is interaction finished", True)
+        if self._state_database.get("is off checkin") == "Yes":
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+                post_hook=self._set_vars_after_evaluation
+            )
+        else:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN]
+            )
+        self._state_database.set("last interaction datetime", datetime.datetime.now())
+        # might need to insert "schedule next interaction" here
+
+    def _build_prompted_interaction(self):
+        logging.info("Building prompted interaction")
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING]
+        )
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+            self._set_vars_after_prompted
+        )
+        return self._planner
+
+    def _set_vars_after_prompted(self):
+        num_of_prompted_today = self._state_database.get("num of prompted today") + 1
+        self._state_database.set("num of prompted today", num_of_prompted_today)
+        self._state_database.set("is prompted by user", False)
+        self._state_database.set("is done prompted today", True)
+        self._set_vars_after_interaction()
+
+    def _build_scheduled_interaction(self):
+        logging.info("Building scheduled interaction")
+        self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
+        # scheduled checkin should end w asking whether or not participant
+        # wants to do the evaluation right now
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+            post_hook=self._set_vars_after_scheduled
+        )
+        self._planner.insert(
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+            post_hook=self._set_vars_after_evaluation
+        )
+        self._planner.insert(
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
+        )
+        return self._planner
 
     def _set_vars_after_scheduled(self):
         self._state_database.set("is prompted by user", False)
+        self._state_database.set("next checkin datetime", None)
+        self._set_vars_after_interaction()
 
-    def _set_is_off_checkin(self):
-        if self._state_database.get("is off checkin") == "Yes":
-            self._state_database.set("is off checkin", True)
-            self._state_database.set("is run prompted content", False)
-        else:
-            self._state_database.set("is off checkin", False)
-            self._state_database.set("is run prompted content", True)
+    def _build_reading_evaluation(self):
+        logging.info("Building reading evaluation")
+        self._planner.insert(
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+            post_hook=self._set_vars_after_evaluation
+        )
+        return self._planner
+
+    def _set_vars_after_evaluation(self):
+        self._state_database.set("is done eval today", True)
+        eval_index = self._state_database.get("reading eval index")
+        self._state_database.set("reading eval index", eval_index + 1)
+        # also need to calculate and save reading speed
+        self._set_vars_after_interaction()
+
+    def _build_too_many_prompted(self):
+        logging.info("Building checkin limit reminder")
+        self._planner.insert(
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.TOO_MANY_PROMPTED],
+            post_hook=self._set_vars_after_too_many_prompted
+        )
+        return self._planner
+
+    def _set_vars_after_too_many_prompted(self):
+        self._state_database.set("is prompted by user", False)
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_interaction(self):
+        self._state_database.set("is interaction finished", True)
+        self._state_database.set("last interaction datetime", datetime.datetime.now())
+
+    def _is_do_mindfulness(self):
+        return self._state_database.get("negative feelings")
+
+    def _is_do_goal_setting(self):
+        return self._state_database.get("negative feelings") \
+            and self._state_database.get("num of days since last goal setting") >= 7 \
+            and self._state_database.get("current eval score") < self._state_database.get("average eval score")
 
     @property
     def current_node_name(self):
