@@ -13,18 +13,12 @@ from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
 from std_msgs.msg import Bool
 
-START_INTERACTION_ACTION_NAME = "vision_project/start_interaction"
-
 
 class RosVisionProjectDelegator:
 
     def __init__(
             self,
             vision_project_delegator,
-            is_record_interaction_topic='data_capture/is_record_interaction',
-            is_record_evaluation_topic='data_capture/is_record_evaluation',
-            screen_tap_topic='cordial/gui/event/mouse',
-            start_interaction_action_name=START_INTERACTION_ACTION_NAME,
     ):
         self._minutes_between_interactions = datetime.timedelta(
             minutes=rospy.get_param("vision-project/controllers/minutes_between_interactions")
@@ -38,14 +32,20 @@ class RosVisionProjectDelegator:
         self._seconds_between_updates = rospy.get_param("vision-project/controllers/update_window_seconds")
 
         # action client to start interaction
+        start_interaction_action_name = rospy.get_param("controllers/is_start_interaction")
         self._start_interaction_client = actionlib.SimpleActionClient(
             start_interaction_action_name,
             StartInteractionAction
         )
 
         # ROS publishers and subscribers
+        is_record_interaction_topic = rospy.get_param("controllers/is_record/interaction")
+        is_record_evaluation_topic = rospy.get_param("controllers/is_record/evaluation")
+        is_record_perseverance_topic = rospy.get_param("controllers/is_record/perseverance")
+        screen_tap_topic = rospy.get_param("cordial/screen_tap")
         self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)
         self._is_record_evaluation_publisher = rospy.Publisher(is_record_evaluation_topic, Bool, queue_size=1)
+        self._is_record_perseverance_publisher = rospy.Publisher(is_record_perseverance_topic, Bool, queue_size=1)
         self._screen_tap_listener = rospy.Subscriber(
             screen_tap_topic,
             MouseEvent,
