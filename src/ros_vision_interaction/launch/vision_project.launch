@@ -11,6 +11,7 @@
     <arg name="mongodb_port" default="62345" />
 
     <rosparam file="$(find ros_vision_interaction)/config/config.yaml" command="load"/>
+    <rosparam file="$(find ros_vision_interaction)/topic_parameters.yaml" command="load"/>
 
     <!-- launch cordial -->
     <include file="$(find cordial_manager)/launch/manager.launch">
