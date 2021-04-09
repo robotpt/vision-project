@@ -140,7 +140,7 @@
     "perseverance": {
         "nodes": {
             "perseverance": {
-                "transitions": ["perseverance","exit"],
+                "transitions": ["exit"],
                 "content": "[perseverance reading]",
                 "options": ["Continue", "Stop"],
                 "message_type": "multiple choice one column"
