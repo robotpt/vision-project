@@ -39,6 +39,7 @@ services:
 
 volumes:
   aws_config:
+  mongodb_log:
   pycharm_config:
   ros_logs:
   scratch:
