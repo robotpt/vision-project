@@ -64,8 +64,6 @@ class RosInteractionManager:
             rospy.loginfo("Setting goal as succeeded")
             self._start_interaction_action_server.set_succeeded(result)
 
-        self._state_database.set("last interaction datetime", datetime.datetime.now())
-
     def _preempt_callback(self):
         rospy.loginfo("Preempt requested for interaction server")
         self._start_interaction_action_server.set_preempted()
