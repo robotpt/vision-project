@@ -9,6 +9,8 @@ from vision_project_tools.vision_engine import VisionInteractionEngine as Intera
 
 logging.basicConfig(level=logging.INFO)
 
+MAX_NUMBER_OF_PERSEVERANCE = 3
+
 
 class Interactions:
 
@@ -101,8 +103,7 @@ class InteractionManager:
 
     def _set_vars_after_first_interaction(self):
         self._state_database.set("first interaction datetime", datetime.datetime.now())
-        self._state_database.set("is interaction finished", True)
-        self._state_database.set("last interaction datetime", datetime.datetime.now())
+        self._set_vars_after_interaction()
 
     def _set_vars_after_scheduling_next_checkin(self):
         self._set_vars_after_interaction()
@@ -117,8 +118,6 @@ class InteractionManager:
         return self._planner
 
     def _set_vars_after_ask_for_eval(self):
-        self._state_database.set("is prompted by user", False)
-        self._state_database.set("is interaction finished", True)
         if self._state_database.get("is off checkin") == "Yes":
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
@@ -128,7 +127,7 @@ class InteractionManager:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN]
             )
-        self._state_database.set("last interaction datetime", datetime.datetime.now())
+        self._set_vars_after_interaction()
         # might need to insert "schedule next interaction" here
 
     def _build_prompted_interaction(self):
@@ -196,10 +195,11 @@ class InteractionManager:
         return self._planner
 
     def _set_vars_after_too_many_prompted(self):
-        self._state_database.set("is prompted by user", False)
         self._set_vars_after_interaction()
+        self._state_database.set("is prompted by user", False)
 
     def _set_vars_after_interaction(self):
+        self._state_database.set("is prompted by user", False)
         self._state_database.set("is interaction finished", True)
         self._state_database.set("last interaction datetime", datetime.datetime.now())
 
