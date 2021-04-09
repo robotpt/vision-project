@@ -10,12 +10,14 @@ INITIAL_STATE_DB = {
     "average eval score": None,
     "current eval score": None,
     "first interaction datetime": None,
+    "good to chat": None,
     "is done eval today": False,
     "is done prompted today": False,
     "is done perseverance today": False,
     "is done mindfulness today": False,
     "is done goal setting today": False,
     "is interaction finished": False,
+    "is off checkin": None,
     "is prompted by user": False,
     "last eval score": None,
     "last interaction datetime": None,
@@ -28,6 +30,7 @@ INITIAL_STATE_DB = {
     "num of days since last mindfulness": 0,
     "num of days since last goal setting": 0,
     "num of prompted today": 0,
+    "perseverance counter": 0,
     "reading eval index": 0,
     "reading eval data": {
 
@@ -62,6 +65,7 @@ class VisionProjectDelegator:
         if self._is_new_day():
             self._update_graph_keys()
             self._state_database.set("num of prompted today", 0)
+            self._state_database.set("perseverance counter", 0)
             self._state_database.set("negative feelings", None)
         self._state_database.set("last update datetime", datetime.datetime.now())
 
@@ -139,7 +143,8 @@ class VisionProjectDelegator:
 
     def _is_run_prompted_interaction(self):
         return self._state_database.get("is prompted by user") and \
-            self._state_database.get("is done eval today")
+            self._state_database.get("is done eval today") and \
+               self._state_database.get("num of prompted today") < self._max_num_of_prompted_per_day
 
     def _is_run_too_many_prompted(self):
         return self._state_database.get("is prompted by user") and \
@@ -151,17 +156,5 @@ class VisionProjectDelegator:
         return start_time <= time_to_check <= end_time
 
     def _reset_database(self):
-        self._state_database.set("first interaction datetime", None)
-        self._state_database.set("last interaction datetime", None)
-        self._state_database.set("last update datetime", None)
-        self._state_database.set("next checkin datetime", None)
-        self._state_database.set("is done eval today", False)
-        self._state_database.set("is done prompted today", False)
-        self._state_database.set("is done perseverance today", False)
-        self._state_database.set("is done mindfulness today", False)
-        self._state_database.set("is done goal setting today", False)
-        self._state_database.set("num of days since last eval", 0)
-        self._state_database.set("num of days since last prompt", 0)
-        self._state_database.set("num of days since last perseverance", 0)
-        self._state_database.set("num of days since last mindfulness", 0)
-        self._state_database.set("num of days since last goal setting", 0)
+        for key in INITIAL_STATE_DB:
+            self._state_database.set(key, INITIAL_STATE_DB[key])
