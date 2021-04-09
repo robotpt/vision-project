@@ -21,6 +21,7 @@ services:
       - /dev/snd:/dev/snd
     volumes:
       - aws_config:/root/.aws/
+      - mongodb_log:/root/mongodb_log
       - pycharm_config:/root/.PyCharmCE2020.2.1/
       - ros_logs:/root/.ros/log
       - scratch:/root/scratch/
