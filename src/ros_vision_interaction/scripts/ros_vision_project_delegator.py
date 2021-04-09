@@ -98,11 +98,9 @@ class RosVisionProjectDelegator:
         else:
             enough_time_passed = False
 
-        if self.is_interaction_finished() and enough_time_passed:
+        if self._state_database.get("is interaction finished") and enough_time_passed:
+            rospy.loginfo("is prompted by user: True")
             self._state_database.set("is prompted by user", True)
-
-    def is_interaction_finished(self):
-        return self._state_database.get("is interaction finished")
 
 
 if __name__ == "__main__":
@@ -122,11 +120,13 @@ if __name__ == "__main__":
     update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
     scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
     minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
+    max_num_of_prompted_per_day = rospy.get_param("vision-project/params/max_num_of_prompted_per_day")
 
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
+        max_num_of_prompted_per_day=max_num_of_prompted_per_day
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)
