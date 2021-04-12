@@ -126,13 +126,14 @@ def interaction_builder(statedb):
         "ask to do perseverance": {
             "nodes": {
                 "ask to do perseverance": {
-                    "transitions": ["Yes","No"],
+                    "transitions": ["exit"],
                     "content": "Would you like to do some additional reading?",
-                    "options": ["Yes","No"],
+                    "options": ["Yes", "No"],
                     "message_type": "multiple choice one column",
                     "result_db_key": "is start perseverance"
                 }
-            }
+            },
+            "start_node_name": "ask to do perseverance"
         },
         "talk about vision": {
             "nodes": {
@@ -175,7 +176,7 @@ def interaction_builder(statedb):
             "start_node_name": "ask to do scheduled"
         },
         "too many prompted": {
-             "nodes": {
+            "nodes": {
                 "too many prompted": {
                     "transitions": ["exit"],
                     "content": "> 3 checkins, talk more tomorrow!",
@@ -231,7 +232,6 @@ def interaction_builder(statedb):
             "start_node_name": "reward"
         }
     }
-
 
     with mock.patch('builtins.open', mock.mock_open(read_data="{}")) as mock_open:
         handlers = [mock_open.return_value, mock.mock_open(read_data="{}").return_value]

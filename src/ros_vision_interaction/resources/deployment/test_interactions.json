@@ -89,13 +89,14 @@
     "ask to do perseverance": {
         "nodes": {
             "ask to do perseverance": {
-                "transitions": ["Yes","No"],
+                "transitions": ["exit"],
                 "content": "Would you like to do some additional reading?",
                 "options": ["Yes","No"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "is start perseverance"
             }
-        }
+        },
+        "start_node_name": "ask to do perseverance"
     },
     "talk about vision": {
         "nodes": {
