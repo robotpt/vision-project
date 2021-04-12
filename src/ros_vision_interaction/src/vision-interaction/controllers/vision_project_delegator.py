@@ -7,7 +7,6 @@ from controllers.interaction_manager import Interactions
 logging.basicConfig(level=logging.INFO)
 
 INITIAL_STATE_DB = {
-    "average eval score": 0,
     "current eval score": 0,
     "first interaction datetime": None,
     "good to chat": None,
@@ -91,7 +90,11 @@ class VisionProjectDelegator:
             self._state_database.set(key, False)
 
     def _update_act_variables(self):
-        pass
+        last_5_scores = self._state_database.get("last 5 eval scores")
+        if len(last_5_scores) == 5:
+            last_5_scores.pop(0)
+        last_5_scores.append(self._state_database.get("current eval score"))
+        self._state_database.set("last 5 eval scores"), last_5_scores
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")

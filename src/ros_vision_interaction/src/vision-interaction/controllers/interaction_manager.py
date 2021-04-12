@@ -234,16 +234,20 @@ class InteractionManager:
         self._state_database.set("perseverance counter", perseverance_counter)
 
     def _is_do_mindfulness(self):
-        return self._state_database.get("negative feelings") \
-            and self._state_database.get("current eval score") < self._state_database.get("average eval score")
+        last_5_scores = self._state_database.get("last 5 eval scores")
+        average_eval_score = sum(last_5_scores)/len(last_5_scores)
+        return self._state_database.get("negative feelings") <= 3 \
+            and self._state_database.get("current eval score") < average_eval_score
 
     def _is_do_goal_setting(self):
+        last_5_scores = self._state_database.get("last 5 eval scores")
+        average_eval_score = sum(last_5_scores)/len(last_5_scores)
         num_of_days_since_additional_reading = self._state_database.get("num of days since last prompt") + \
                                                self._state_database.get("num of days since last perseverance")
         return self._state_database.get("negative feelings") \
             and self._state_database.get("num of days since last goal setting") >= 7 \
             and num_of_days_since_additional_reading > 3 \
-            and self._state_database.get("current eval score") < self._state_database.get("average eval score")
+            and self._state_database.get("current eval score") < average_eval_score
 
     @property
     def current_node_name(self):
