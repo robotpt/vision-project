@@ -7,10 +7,11 @@ from controllers.interaction_manager import Interactions
 logging.basicConfig(level=logging.INFO)
 
 INITIAL_STATE_DB = {
-    "average eval score": None,
-    "current eval score": None,
+    "average eval score": 0,
+    "current eval score": 0,
     "first interaction datetime": None,
     "good to chat": None,
+    "is continue perseverance": None,
     "is done eval today": False,
     "is done prompted today": False,
     "is done perseverance today": False,
@@ -19,6 +20,7 @@ INITIAL_STATE_DB = {
     "is interaction finished": False,
     "is off checkin": None,
     "is prompted by user": False,
+    "is start perseverance": False,
     "last eval score": None,
     "last interaction datetime": None,
     "last update datetime": None,
@@ -87,6 +89,9 @@ class VisionProjectDelegator:
             else:
                 self._state_database.set(keys_to_check[key], 0)
             self._state_database.set(key, False)
+
+    def _update_act_variables(self):
+        pass
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")

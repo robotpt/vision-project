@@ -17,7 +17,6 @@ class Interactions:
     ASK_TO_DO_EVALUATION = "ask to do evaluation"
     EVALUATION = "evaluation"
     FIRST_INTERACTION = "first interaction"
-    PROMPTED_CONTENT = "prompted content"
     PROMPTED_INTERACTION = "prompted interaction"
     SCHEDULED_INTERACTION = "scheduled interaction"
     TOO_MANY_PROMPTED = "too many prompted"
@@ -26,7 +25,6 @@ class Interactions:
         ASK_TO_DO_EVALUATION,
         EVALUATION,
         FIRST_INTERACTION,
-        PROMPTED_CONTENT,
         PROMPTED_INTERACTION,
         SCHEDULED_INTERACTION,
         TOO_MANY_PROMPTED
@@ -39,7 +37,8 @@ class InteractionManager:
             self,
             statedb,
             interaction_builder,
-            interface=None
+            interface=None,
+            max_num_of_perseverance_readings=5
     ):
         self._state_database = statedb
 
@@ -53,6 +52,8 @@ class InteractionManager:
         self._current_interaction_type = None
 
         self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
+
+        self._max_num_of_perseverance_readings = max_num_of_perseverance_readings
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in Interactions.POSSIBLE_INTERACTIONS:
@@ -162,7 +163,8 @@ class InteractionManager:
             post_hook=self._set_vars_after_evaluation
         )
         self._planner.insert(
-            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
+            post_hook=self._set_vars_after_ask_to_do_perseverance
         )
         return self._planner
 
@@ -203,12 +205,44 @@ class InteractionManager:
         self._state_database.set("is interaction finished", True)
         self._state_database.set("last interaction datetime", datetime.datetime.now())
 
+    def _set_vars_after_ask_to_do_perseverance(self):
+        if self._state_database.get("is start perseverance") == "Yes":
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
+                post_hook=self._set_vars_after_perseverance
+            )
+        else:
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN]
+            )
+
+    def _set_vars_after_perseverance(self):
+        if self._state_database.get("perseverance counter") >= self._max_num_of_perseverance_readings:
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD]
+            )
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN]
+            )
+        else:
+            if self._state_database.get("is continue perseverance") == "Continue":
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
+                    post_hook=self._set_vars_after_perseverance
+                )
+        perseverance_counter = self._state_database.get("perseverance counter") + 1
+        self._state_database.set("perseverance counter", perseverance_counter)
+
     def _is_do_mindfulness(self):
-        return self._state_database.get("negative feelings")
+        return self._state_database.get("negative feelings") \
+            and self._state_database.get("current eval score") < self._state_database.get("average eval score")
 
     def _is_do_goal_setting(self):
+        num_of_days_since_additional_reading = self._state_database.get("num of days since last prompt") + \
+                                               self._state_database.get("num of days since last perseverance")
         return self._state_database.get("negative feelings") \
             and self._state_database.get("num of days since last goal setting") >= 7 \
+            and num_of_days_since_additional_reading > 3 \
             and self._state_database.get("current eval score") < self._state_database.get("average eval score")
 
     @property
