@@ -48,7 +48,9 @@
                 "content": "Please input the reading material ID",
                 "options": ["Next"],
                 "message_type": "numpad",
-                "result_db_key": "current reading id"
+                "tests": "check reading id",
+                "error_message": "Please enter the correct ID.",
+                "error_options": ["Oops"]
             }
         },
         "start_node_name": "check"

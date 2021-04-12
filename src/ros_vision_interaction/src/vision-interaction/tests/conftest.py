@@ -1,5 +1,4 @@
 #!/usr/bin/python3.8
-import json
 import mock
 import mongomock
 import pytest
@@ -85,7 +84,10 @@ def interaction_builder(statedb):
                     "content": "Please input the reading material ID",
                     "options": ["Next"],
                     "message_type": "numpad",
-                    "result_db_key": "current reading id"
+                    "result_db_key": "current reading id",
+                    "tests": "check reading id",
+                    "error_message": "Please enter the correct ID.",
+                    "error_options": ["Oops"]
                 }
             },
             "start_node_name": "check"

@@ -161,6 +161,7 @@ class InteractionBuilder:
                 "result_convert_from_str_fn": str,
                 "result_db_key": None,
                 "is_append_result": False,
+                "tests": None,
                 "is_confirm": False,
                 "error_message": "Please enter a valid input",
                 "error_options": ("Okay", "Oops")
@@ -176,6 +177,9 @@ class InteractionBuilder:
             if node_info["result_convert_from_str_fn"] == "next day checkin time":
                 node_info["result_convert_from_str_fn"] = self.next_day_checkin_time_from_str
 
+            if node_info["tests"] == "check reading id":
+                node_info["tests"] = self.check_reading_id
+
             node = Node(
                 name=node_name,
                 transitions=node_info["transitions"],
@@ -186,6 +190,7 @@ class InteractionBuilder:
                 result_convert_from_str_fn=node_info["result_convert_from_str_fn"],
                 result_db_key=node_info["result_db_key"],
                 is_append_result=node_info["is_append_result"],
+                tests=node_info["tests"],
                 is_confirm=node_info["is_confirm"],
                 error_message=node_info["error_message"],
                 error_options=node_info["error_options"],
@@ -208,6 +213,15 @@ class InteractionBuilder:
             hour=next_checkin_time.hour,
             minute=next_checkin_time.minute
         )
+
+    def check_reading_id(self, reading_id):
+        eval_index = self._statedb.get("reading eval index")
+        try:
+            expected_id = self._statedb.get("reading eval data")[eval_index]["id"]
+            correct_id = reading_id == expected_id
+        except IndexError:
+            correct_id = True
+        return correct_id
 
     @property
     def interactions(self):

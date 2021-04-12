@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 
 INITIAL_STATE_DB = {
     "current eval score": 0,
-    "current reading id": 0,
+    "current reading id": None,
     "first interaction datetime": None,
     "good to chat": None,
     "is continue perseverance": None,
@@ -34,9 +34,16 @@ INITIAL_STATE_DB = {
     "num of prompted today": 0,
     "perseverance counter": 0,
     "reading eval index": 0,
-    "reading eval data": {
-
-    }
+    "reading eval data": [
+        {
+            "id": '1234',
+            "type": "sustained"
+        },
+        {
+            "id": None,
+            "type": "spot reading"
+        },
+    ]
 }
 
 

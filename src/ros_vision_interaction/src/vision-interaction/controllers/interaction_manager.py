@@ -81,8 +81,6 @@ class InteractionManager:
             self._build_prompted_interaction()
         elif interaction_type == Interactions.SCHEDULED_INTERACTION:
             self._build_scheduled_interaction()
-        elif interaction_type == Interactions.EVALUATION:
-            self._build_reading_evaluation()
         elif interaction_type == Interactions.TOO_MANY_PROMPTED:
             self._build_too_many_prompted()
         else:
@@ -121,6 +119,9 @@ class InteractionManager:
     def _set_vars_after_ask_for_eval(self):
         if self._state_database.get("is off checkin") == "Yes":
             self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.CHECK_READING_ID]
+            )
+            self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
                 post_hook=self._set_vars_after_evaluation
             )
@@ -157,6 +158,9 @@ class InteractionManager:
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
             post_hook=self._set_vars_after_scheduled
+        )
+        self._planner.insert(
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.CHECK_READING_ID]
         )
         self._planner.insert(
             plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
