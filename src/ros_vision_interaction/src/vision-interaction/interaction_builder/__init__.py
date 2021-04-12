@@ -12,6 +12,7 @@ class InteractionBuilder:
         ASK_TO_CHAT = "ask to chat"
         ASK_TO_DO_PERSEVERANCE = "ask to do perseverance"
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
+        CHECK_READING_ID = "check reading id"
         EVALUATION = "evaluation"
         FIRST_CHECKIN = "first checkin"
         GOAL_SETTING = "goal setting"
@@ -55,6 +56,11 @@ class InteractionBuilder:
             InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.CHECK_READING_ID: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.CHECK_READING_ID,
                 self._text_populator,
             ),
             InteractionBuilder.Graphs.EVALUATION: self.build_graph_from_dict(

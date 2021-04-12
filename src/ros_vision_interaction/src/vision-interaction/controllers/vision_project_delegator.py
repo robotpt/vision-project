@@ -8,6 +8,7 @@ logging.basicConfig(level=logging.INFO)
 
 INITIAL_STATE_DB = {
     "current eval score": 0,
+    "current reading id": 0,
     "first interaction datetime": None,
     "good to chat": None,
     "is continue perseverance": None,

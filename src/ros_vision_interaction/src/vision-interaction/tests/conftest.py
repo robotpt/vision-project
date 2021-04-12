@@ -59,7 +59,7 @@ def interaction_builder(statedb):
                 "ask to do perseverance": {
                     "transitions": ["exit"],
                     "content": "Would you like to do some additional reading?",
-                    "options": ["Yes","No"],
+                    "options": ["Yes", "No"],
                     "message_type": "multiple choice one column",
                     "result_db_key": "is start perseverance"
                 }
@@ -77,6 +77,18 @@ def interaction_builder(statedb):
                 }
             },
             "start_node_name": "ask to do scheduled"
+        },
+        "check reading id": {
+            "nodes": {
+                "check": {
+                    "transitions": ["exit"],
+                    "content": "Please input the reading material ID",
+                    "options": ["Next"],
+                    "message_type": "numpad",
+                    "result_db_key": "current reading id"
+                }
+            },
+            "start_node_name": "check"
         },
         "evaluation": {
             "nodes": {
@@ -221,7 +233,7 @@ def interaction_builder(statedb):
             "start_node_name": "talk about vision"
         },
         "too many prompted": {
-             "nodes": {
+            "nodes": {
                 "too many prompted": {
                     "transitions": ["exit"],
                     "content": "> 3 checkins, talk more tomorrow!",
