@@ -94,6 +94,8 @@ if __name__ == "__main__":
     interaction_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
     grit_dialogue_variations = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
 
+    max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
+
     with open(deployment_interaction_file) as f:
         deployment_interaction_dict = json.load(f)
 
@@ -111,7 +113,8 @@ if __name__ == "__main__":
     interaction_manager = InteractionManager(
         statedb=state_database,
         interaction_builder=interaction_builder,
-        interface=interface
+        interface=interface,
+        max_num_of_perseverance_readings=max_num_of_perseverance_readings
     )
 
     ros_interaction_manager = RosInteractionManager(

@@ -10,6 +10,7 @@ vision-project:
   params:
     seconds_until_interaction_timeout: 30
     max_num_of_prompted_per_day: 2
+    max_num_of_perseverance_readings: 5
   data:
       evaluation: '/root/evaluation'
       data_capture: '/root/upload'

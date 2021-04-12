@@ -10,6 +10,7 @@ from interaction_engine.text_populator import VarietyPopulator
 class InteractionBuilder:
     class Graphs:
         ASK_TO_CHAT = "ask to chat"
+        ASK_TO_DO_PERSEVERANCE = "ask to do perseverance"
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
         EVALUATION = "evaluation"
         FIRST_CHECKIN = "first checkin"
@@ -19,6 +20,7 @@ class InteractionBuilder:
         MINDFULNESS = "mindfulness"
         PERSEVERANCE = "perseverance"
         PROMPTED_CHECKIN = "prompted checkin"
+        REWARD = "reward"
         SCHEDULED_CHECKIN = "scheduled checkin"
         SCHEDULE_NEXT_CHECKIN = "schedule next checkin"
         TALK_ABOUT_VISION = "talk about vision"
@@ -43,6 +45,11 @@ class InteractionBuilder:
             InteractionBuilder.Graphs.ASK_TO_CHAT: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.ASK_TO_CHAT,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE,
                 self._text_populator,
             ),
             InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED: self.build_graph_from_dict(
@@ -88,6 +95,11 @@ class InteractionBuilder:
             InteractionBuilder.Graphs.PROMPTED_CHECKIN: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.PROMPTED_CHECKIN,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.REWARD: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.REWARD,
                 self._text_populator,
             ),
             InteractionBuilder.Graphs.SCHEDULED_CHECKIN: self.build_graph_from_dict(

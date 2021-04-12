@@ -86,6 +86,17 @@
         },
         "start_node_name": "ask to chat"
     },
+    "ask to do perseverance": {
+        "nodes": {
+            "ask to do perseverance": {
+                "transitions": ["Yes","No"],
+                "content": "Would you like to do some additional reading?",
+                "options": ["Yes","No"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is start perseverance"
+            }
+        }
+    },
     "talk about vision": {
         "nodes": {
             "talk about vision": {
@@ -169,5 +180,17 @@
             }
         },
         "start_node_name": "mindfulness"
+    },
+    "reward": {
+        "nodes": {
+            "reward": {
+                "transitions": ["exit"],
+                "content": "[reward from QT]",
+                "options": ["Exit"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is continue perseverance"
+            }
+        },
+        "start_node_name": "reward"
     }
 }

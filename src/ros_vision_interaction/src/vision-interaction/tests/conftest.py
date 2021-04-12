@@ -123,6 +123,17 @@ def interaction_builder(statedb):
             },
             "start_node_name": "ask to chat"
         },
+        "ask to do perseverance": {
+            "nodes": {
+                "ask to do perseverance": {
+                    "transitions": ["Yes","No"],
+                    "content": "Would you like to do some additional reading?",
+                    "options": ["Yes","No"],
+                    "message_type": "multiple choice one column",
+                    "result_db_key": "is start perseverance"
+                }
+            }
+        },
         "talk about vision": {
             "nodes": {
                 "talk about vision": {
@@ -177,7 +188,7 @@ def interaction_builder(statedb):
         "perseverance": {
             "nodes": {
                 "perseverance": {
-                    "transitions": ["perseverance","exit"],
+                    "transitions": ["exit"],
                     "content": "[perseverance reading]",
                     "options": ["Continue", "Stop"],
                     "message_type": "multiple choice one column"
@@ -206,8 +217,21 @@ def interaction_builder(statedb):
                 }
             },
             "start_node_name": "mindfulness"
+        },
+        "reward": {
+            "nodes": {
+                "reward": {
+                    "transitions": ["exit"],
+                    "content": "[reward from QT]",
+                    "options": ["Exit"],
+                    "message_type": "multiple choice one column",
+                    "result_db_key": "is continue perseverance"
+                }
+            },
+            "start_node_name": "reward"
         }
     }
+
 
     with mock.patch('builtins.open', mock.mock_open(read_data="{}")) as mock_open:
         handlers = [mock_open.return_value, mock.mock_open(read_data="{}").return_value]
