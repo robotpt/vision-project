@@ -35,14 +35,16 @@ INITIAL_STATE_DB = {
     "perseverance counter": 0,
     "reading eval index": 0,
     "reading eval data": [
-        {
-            "id": '1234',
-            "type": "sustained"
-        },
-        {
-            "id": None,
-            "type": "spot reading"
-        },
+        # {
+        #     "id": '1234',
+        #     "type": "sustained",
+        #     "word count": 100
+        # },
+        # {
+        #     "id": None,
+        #     "type": "spot reading",
+        #     "word count": None
+        # },
     ]
 }
 
@@ -50,12 +52,12 @@ INITIAL_STATE_DB = {
 class VisionProjectDelegator:
 
     def __init__(
-        self,
-        statedb,
-        update_window_seconds=5,
-        scheduled_window_minutes=15,
-        minutes_between_interactions=1,
-        max_num_of_prompted_per_day=3
+            self,
+            statedb,
+            update_window_seconds=5,
+            scheduled_window_minutes=15,
+            minutes_between_interactions=1,
+            max_num_of_prompted_per_day=3
     ):
         self._state_database = statedb
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
@@ -142,8 +144,8 @@ class VisionProjectDelegator:
             )
 
             is_time = is_in_update_window or \
-                (is_prompted_in_scheduled_window and not self._state_database.get("is done eval today") and
-                 self._state_database.get("is prompted by user"))
+                      (is_prompted_in_scheduled_window and not self._state_database.get("is done eval today") and
+                       self._state_database.get("is prompted by user"))
 
         return is_time
 
@@ -160,7 +162,7 @@ class VisionProjectDelegator:
     def _is_run_prompted_interaction(self):
         return self._state_database.get("is prompted by user") and \
             self._state_database.get("is done eval today") and \
-               self._state_database.get("num of prompted today") < self._max_num_of_prompted_per_day
+            self._state_database.get("num of prompted today") < self._max_num_of_prompted_per_day
 
     def _is_run_too_many_prompted(self):
         return self._state_database.get("is prompted by user") and \
