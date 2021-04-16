@@ -21,10 +21,10 @@ INITIAL_STATE_DB = {
     "is off checkin": None,
     "is prompted by user": False,
     "is start perseverance": False,
-    "last eval score": None,
+    "last 5 eval scores": [],
     "last interaction datetime": None,
     "last update datetime": None,
-    "negative feelings": None,
+    "feelings index": None,
     "next checkin datetime": None,
     "num of days since last eval": 0,
     "num of days since last prompt": 0,
@@ -64,9 +64,10 @@ class VisionProjectDelegator:
             self._state_database.set("last update datetime", datetime.datetime.now())
         if self._is_new_day():
             self._daily_state_update()
+            self._update_act_variables()
             self._state_database.set("num of prompted today", 0)
             self._state_database.set("perseverance counter", 0)
-            self._state_database.set("negative feelings", None)
+            self._state_database.set("feelings index", None)
         self._state_database.set("last update datetime", datetime.datetime.now())
 
     def _is_new_day(self):
@@ -93,7 +94,7 @@ class VisionProjectDelegator:
         if len(last_5_scores) == 5:
             last_5_scores.pop(0)
         last_5_scores.append(self._state_database.get("current eval score"))
-        self._state_database.set("last 5 eval scores"), last_5_scores
+        self._state_database.set("last 5 eval scores", last_5_scores)
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")
