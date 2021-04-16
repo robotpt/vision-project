@@ -34,18 +34,7 @@ INITIAL_STATE_DB = {
     "num of prompted today": 0,
     "perseverance counter": 0,
     "reading eval index": 0,
-    "reading eval data": [
-        # {
-        #     "id": '1234',
-        #     "type": "sustained",
-        #     "word count": 100
-        # },
-        # {
-        #     "id": None,
-        #     "type": "spot reading",
-        #     "word count": None
-        # },
-    ]
+    "reading eval data": []
 }
 
 
@@ -74,7 +63,7 @@ class VisionProjectDelegator:
         if not self._state_database.is_set("last update datetime"):
             self._state_database.set("last update datetime", datetime.datetime.now())
         if self._is_new_day():
-            self._update_graph_keys()
+            self._daily_state_update()
             self._state_database.set("num of prompted today", 0)
             self._state_database.set("perseverance counter", 0)
             self._state_database.set("negative feelings", None)
@@ -83,7 +72,7 @@ class VisionProjectDelegator:
     def _is_new_day(self):
         return datetime.datetime.now().date() > self._state_database.get("last update datetime").date()
 
-    def _update_graph_keys(self):
+    def _daily_state_update(self):
         keys_to_check = {
             "is done eval today": "num of days since last eval",
             "is done prompted today": "num of days since last prompt",
