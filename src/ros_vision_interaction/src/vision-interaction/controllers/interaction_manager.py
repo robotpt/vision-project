@@ -9,8 +9,6 @@ from vision_project_tools.vision_engine import VisionInteractionEngine as Intera
 
 logging.basicConfig(level=logging.INFO)
 
-MAX_NUMBER_OF_PERSEVERANCE = 3
-
 
 class Interactions:
 
@@ -88,6 +86,15 @@ class InteractionManager:
 
         return self._planner
 
+    def _build_ask_to_do_evaluation(self):
+        logging.info("Building ask to do scheduled")
+        self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED],
+            post_hook=self._set_vars_after_ask_for_eval,
+        )
+        return self._planner
+
     def _build_first_interaction(self):
         logging.info("Building first interaction")
         self._planner.insert(
@@ -100,38 +107,6 @@ class InteractionManager:
         )
         return self._planner
 
-    def _set_vars_after_first_interaction(self):
-        self._state_database.set("first interaction datetime", datetime.datetime.now())
-        self._set_vars_after_interaction()
-
-    def _set_vars_after_scheduling_next_checkin(self):
-        self._set_vars_after_interaction()
-
-    def _build_ask_to_do_evaluation(self):
-        logging.info("Building ask to do scheduled")
-        self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
-        self._planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED],
-            post_hook=self._set_vars_after_ask_for_eval,
-        )
-        return self._planner
-
-    def _set_vars_after_ask_for_eval(self):
-        if self._state_database.get("is off checkin") == "Yes":
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.CHECK_READING_ID]
-            )
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
-                post_hook=self._set_vars_after_evaluation
-            )
-        else:
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN]
-            )
-        self._set_vars_after_interaction()
-        # might need to insert "schedule next interaction" here
-
     def _build_prompted_interaction(self):
         logging.info("Building prompted interaction")
         self._planner.insert(
@@ -143,12 +118,13 @@ class InteractionManager:
         )
         return self._planner
 
-    def _set_vars_after_prompted(self):
-        num_of_prompted_today = self._state_database.get("num of prompted today") + 1
-        self._state_database.set("num of prompted today", num_of_prompted_today)
-        self._state_database.set("is prompted by user", False)
-        self._state_database.set("is done prompted today", True)
-        self._set_vars_after_interaction()
+    def _build_reading_evaluation(self):
+        logging.info("Building reading evaluation")
+        self._planner.insert(
+            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+            post_hook=self._set_vars_after_evaluation
+        )
+        return self._planner
 
     def _build_scheduled_interaction(self):
         logging.info("Building scheduled interaction")
@@ -172,26 +148,6 @@ class InteractionManager:
         )
         return self._planner
 
-    def _set_vars_after_scheduled(self):
-        self._state_database.set("is prompted by user", False)
-        self._state_database.set("next checkin datetime", None)
-        self._set_vars_after_interaction()
-
-    def _build_reading_evaluation(self):
-        logging.info("Building reading evaluation")
-        self._planner.insert(
-            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
-            post_hook=self._set_vars_after_evaluation
-        )
-        return self._planner
-
-    def _set_vars_after_evaluation(self):
-        self._state_database.set("is done eval today", True)
-        eval_index = self._state_database.get("reading eval index")
-        self._state_database.set("reading eval index", eval_index + 1)
-        # also need to calculate and save reading speed
-        self._set_vars_after_interaction()
-
     def _build_too_many_prompted(self):
         logging.info("Building checkin limit reminder")
         self._planner.insert(
@@ -200,14 +156,20 @@ class InteractionManager:
         )
         return self._planner
 
-    def _set_vars_after_too_many_prompted(self):
+    def _set_vars_after_ask_for_eval(self):
+        if self._state_database.get("is off checkin") == "Yes":
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.CHECK_READING_ID]
+            )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+                post_hook=self._set_vars_after_evaluation
+            )
+        else:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN]
+            )
         self._set_vars_after_interaction()
-        self._state_database.set("is prompted by user", False)
-
-    def _set_vars_after_interaction(self):
-        self._state_database.set("is prompted by user", False)
-        self._state_database.set("is interaction finished", True)
-        self._state_database.set("last interaction datetime", datetime.datetime.now())
 
     def _set_vars_after_ask_to_do_perseverance(self):
         if self._state_database.get("is start perseverance") == "Yes":
@@ -219,6 +181,22 @@ class InteractionManager:
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN]
             )
+
+    def _set_vars_after_evaluation(self):
+        self._state_database.set("is done eval today", True)
+        eval_index = self._state_database.get("reading eval index")
+        self._state_database.set("reading eval index", eval_index + 1)
+        # also need to calculate and save reading speed
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_interaction(self):
+        self._state_database.set("is prompted by user", False)
+        self._state_database.set("is interaction finished", True)
+        self._state_database.set("last interaction datetime", datetime.datetime.now())
+
+    def _set_vars_after_first_interaction(self):
+        self._state_database.set("first interaction datetime", datetime.datetime.now())
+        self._set_vars_after_interaction()
 
     def _set_vars_after_perseverance(self):
         if self._state_database.get("perseverance counter") >= self._max_num_of_perseverance_readings:
@@ -236,6 +214,25 @@ class InteractionManager:
                 )
         perseverance_counter = self._state_database.get("perseverance counter") + 1
         self._state_database.set("perseverance counter", perseverance_counter)
+
+    def _set_vars_after_prompted(self):
+        num_of_prompted_today = self._state_database.get("num of prompted today") + 1
+        self._state_database.set("num of prompted today", num_of_prompted_today)
+        self._state_database.set("is prompted by user", False)
+        self._state_database.set("is done prompted today", True)
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_scheduled(self):
+        self._state_database.set("is prompted by user", False)
+        self._state_database.set("next checkin datetime", None)
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_scheduling_next_checkin(self):
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_too_many_prompted(self):
+        self._set_vars_after_interaction()
+        self._state_database.set("is prompted by user", False)
 
     def _is_do_mindfulness(self):
         last_5_scores = self._state_database.get("last 5 eval scores")
