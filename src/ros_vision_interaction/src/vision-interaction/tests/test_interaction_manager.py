@@ -1,4 +1,5 @@
 #!/usr/bin/python3.8
+import datetime
 import freezegun
 import pytest
 
@@ -58,3 +59,31 @@ def test_run_prompted_interaction(interaction_manager, statedb):
         assert statedb.get("num of prompted today") == 0
         interaction_manager.run_interaction_once("prompted interaction")
         assert statedb.get("num of prompted today") == 1
+
+
+def test_determine_is_do_goal_setting(interaction_manager, statedb):
+    # less than a week after first interaction
+    first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
+    statedb.set("first interaction datetime", first_interaction_datetime)
+    with freezegun.freeze_time("2021-04-05"):
+        assert not interaction_manager._is_do_goal_setting()
+
+    # correct conditions for goal setting
+    first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
+    statedb.set("first interaction datetime", first_interaction_datetime)
+    statedb.set("feelings index", 2)
+    statedb.set("num of days since last prompt", 3)
+    statedb.set("num of days since last perseverance", 3)
+    statedb.set("num of days since last goal setting", 7)
+    statedb.set("last 5 eval scores", [5, 5, 5, 5, 5])
+    statedb.set("current eval score", 4)
+    with freezegun.freeze_time("2021-04-10"):
+        assert interaction_manager._is_do_goal_setting()
+
+
+def test_determine_is_do_mindfulness(interaction_manager, statedb):
+    # less than a week after first interaction
+    first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
+    statedb.set("first interaction datetime", first_interaction_datetime)
+    with freezegun.freeze_time("2021-04-05"):
+        assert not interaction_manager._is_do_mindfulness()

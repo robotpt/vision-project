@@ -52,6 +52,7 @@ class InteractionManager:
         self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
 
         self._max_num_of_perseverance_readings = max_num_of_perseverance_readings
+        self._num_of_days_to_prompt_goal_setting = 3
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in Interactions.POSSIBLE_INTERACTIONS:
@@ -118,14 +119,6 @@ class InteractionManager:
         )
         return self._planner
 
-    def _build_reading_evaluation(self):
-        logging.info("Building reading evaluation")
-        self._planner.insert(
-            plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
-            post_hook=self._set_vars_after_evaluation
-        )
-        return self._planner
-
     def _build_scheduled_interaction(self):
         logging.info("Building scheduled interaction")
         self._planner.insert(self._interaction_builder.interactions[InteractionBuilder.Graphs.GREETING])
@@ -178,6 +171,16 @@ class InteractionManager:
                 post_hook=self._set_vars_after_perseverance
             )
         else:
+            if self._is_do_mindfulness():
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.MINDFULNESS],
+                    post_hook=self._set_vars_after_mindfulness
+                )
+            if self._is_do_goal_setting():
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.GOAL_SETTING],
+                    post_hook=self._set_vars_after_goal_setting
+                )
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN]
             )
@@ -196,6 +199,14 @@ class InteractionManager:
 
     def _set_vars_after_first_interaction(self):
         self._state_database.set("first interaction datetime", datetime.datetime.now())
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_goal_setting(self):
+        self._state_database.set("num of days since last goal setting", 0)
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_mindfulness(self):
+        self._state_database.set("num of days since last _set_vars_after_mindfulness", 0)
         self._set_vars_after_interaction()
 
     def _set_vars_after_perseverance(self):
@@ -236,19 +247,35 @@ class InteractionManager:
 
     def _is_do_mindfulness(self):
         last_5_scores = self._state_database.get("last 5 eval scores")
-        average_eval_score = sum(last_5_scores)/len(last_5_scores)
-        return self._state_database.get("negative feelings") <= 3 \
+        if len(last_5_scores) > 0:
+            average_eval_score = sum(last_5_scores) / len(last_5_scores)
+        else:
+            average_eval_score = 0
+        return self._days_since_first_interaction() >= 7 \
+            and self._state_database.get("feelings index") <= 3 \
             and self._state_database.get("current eval score") < average_eval_score
 
     def _is_do_goal_setting(self):
         last_5_scores = self._state_database.get("last 5 eval scores")
-        average_eval_score = sum(last_5_scores)/len(last_5_scores)
-        num_of_days_since_additional_reading = self._state_database.get("num of days since last prompt") + \
-                                               self._state_database.get("num of days since last perseverance")
-        return self._state_database.get("negative feelings") \
+        if len(last_5_scores) > 0:
+            average_eval_score = sum(last_5_scores)/len(last_5_scores)
+        else:
+            average_eval_score = 0
+        return self._days_since_first_interaction() >= 7 \
+            and self._state_database.get("feelings index") <= 3 \
             and self._state_database.get("num of days since last goal setting") >= 7 \
-            and num_of_days_since_additional_reading > 3 \
+            and self._state_database.get("num of days since last prompt") >= self._num_of_days_to_prompt_goal_setting \
+            and self._state_database.get("num of days since last perseverance") >= self._num_of_days_to_prompt_goal_setting \
             and self._state_database.get("current eval score") < average_eval_score
+
+    def _days_since_first_interaction(self):
+        first_interaction_datetime = self._state_database.get("first interaction datetime")
+        if first_interaction_datetime is None:
+            num_of_days = 0
+        else:
+            current_date = datetime.datetime.now().date()
+            num_of_days = (current_date - self._state_database.get("first interaction datetime").date()).days
+        return num_of_days
 
     @property
     def current_node_name(self):
