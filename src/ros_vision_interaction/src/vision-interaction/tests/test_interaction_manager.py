@@ -65,19 +65,23 @@ def test_determine_is_do_goal_setting(interaction_manager, statedb):
     # less than a week after first interaction
     first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
     statedb.set("first interaction datetime", first_interaction_datetime)
+    statedb.set("feelings index", 2)
+    statedb.set("num of days since last prompt", 3)
+    statedb.set("num of days since last perseverance", 3)
     with freezegun.freeze_time("2021-04-05"):
         assert not interaction_manager._is_do_goal_setting()
 
-    # correct conditions for goal setting
     first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
     statedb.set("first interaction datetime", first_interaction_datetime)
     statedb.set("feelings index", 2)
     statedb.set("num of days since last prompt", 3)
     statedb.set("num of days since last perseverance", 3)
-    statedb.set("num of days since last goal setting", 7)
+    statedb.set("num of days since last goal setting", 6)
     statedb.set("last 5 eval scores", [5, 5, 5, 5, 5])
     statedb.set("current eval score", 4)
     with freezegun.freeze_time("2021-04-10"):
+        assert not interaction_manager._is_do_goal_setting()
+        statedb.set("num of days since last goal setting", 7)
         assert interaction_manager._is_do_goal_setting()
 
 
@@ -87,3 +91,12 @@ def test_determine_is_do_mindfulness(interaction_manager, statedb):
     statedb.set("first interaction datetime", first_interaction_datetime)
     with freezegun.freeze_time("2021-04-05"):
         assert not interaction_manager._is_do_mindfulness()
+
+    first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
+    statedb.set("first interaction datetime", first_interaction_datetime)
+    statedb.set("feelings index", 2)
+    statedb.set("num of days since last mindfulness", 2)
+    statedb.set("last 5 eval scores", [5, 5, 5, 5, 5])
+    statedb.set("current eval score", 4)
+    with freezegun.freeze_time("2021-04-10"):
+        assert interaction_manager._is_do_mindfulness()
