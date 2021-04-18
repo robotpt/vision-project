@@ -7,6 +7,7 @@ import pymongo
 import rospy
 
 from controllers import InteractionManager
+from controllers.vision_project_delegator import INITIAL_STATE_DB
 from interaction_builder import InteractionBuilder
 from interfaces import CordialInterface
 from vision_project_tools import init_db
@@ -63,8 +64,6 @@ class RosInteractionManager:
             rospy.loginfo("Setting goal as succeeded")
             self._start_interaction_action_server.set_succeeded(result)
 
-        self._state_database.set("last interaction datetime", datetime.datetime.now())
-
     def _preempt_callback(self):
         rospy.loginfo("Preempt requested for interaction server")
         self._start_interaction_action_server.set_preempted()
@@ -84,30 +83,7 @@ if __name__ == "__main__":
         database_name=DATABASE_NAME,
         collection_name="state_db"
     )
-    state_db_key_values = {
-        "average eval score": None,
-        "current eval score": None,
-        "first interaction datetime": None,
-        "good time to talk": False,
-        "is done eval today": False,
-        "is done prompted today": False,
-        "is done perseverance today": False,
-        "is done mindfulness today": False,
-        "is done goal setting today": False,
-        "is interaction finished": False,
-        "is prompted by user": False,
-        "is run prompted content": False,
-        "last eval score": None,
-        "last interaction datetime": None,
-        "last update datetime": None,
-        "next checkin datetime": None,
-        "num of days since last eval": 0,
-        "num of days since last prompt": 0,
-        "num of days since last perseverance": 0,
-        "num of days since last mindfulness": 0,
-        "num of days since last goal setting": 0,
-    }
-    init_db(state_database, state_db_key_values)
+    init_db(state_database, INITIAL_STATE_DB)
 
     # set up resources paths
     cwd = os.path.dirname(os.path.abspath(__file__))
@@ -117,6 +93,8 @@ if __name__ == "__main__":
 
     interaction_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
     grit_dialogue_variations = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
+
+    max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
 
     with open(deployment_interaction_file) as f:
         deployment_interaction_dict = json.load(f)
@@ -135,7 +113,8 @@ if __name__ == "__main__":
     interaction_manager = InteractionManager(
         statedb=state_database,
         interaction_builder=interaction_builder,
-        interface=interface
+        interface=interface,
+        max_num_of_perseverance_readings=max_num_of_perseverance_readings
     )
 
     ros_interaction_manager = RosInteractionManager(

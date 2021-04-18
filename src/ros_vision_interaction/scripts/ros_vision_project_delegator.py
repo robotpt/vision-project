@@ -6,6 +6,7 @@ import rospy
 import schedule
 
 from controllers import VisionProjectDelegator
+from controllers.vision_project_delegator import INITIAL_STATE_DB
 from vision_project_tools import init_db
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
@@ -97,11 +98,9 @@ class RosVisionProjectDelegator:
         else:
             enough_time_passed = False
 
-        if self.is_interaction_finished() and enough_time_passed:
+        if self._state_database.get("is interaction finished") and enough_time_passed:
+            rospy.loginfo("is prompted by user: True")
             self._state_database.set("is prompted by user", True)
-
-    def is_interaction_finished(self):
-        return self._state_database.get("is interaction finished")
 
 
 if __name__ == "__main__":
@@ -116,39 +115,18 @@ if __name__ == "__main__":
         database_name=DATABASE_NAME,
         collection_name="state_db"
     )
-    state_db_key_values = {
-        "average eval score": None,
-        "current eval score": None,
-        "first interaction datetime": None,
-        "good time to talk": False,
-        "is done eval today": False,
-        "is done prompted today": False,
-        "is done perseverance today": False,
-        "is done mindfulness today": False,
-        "is done goal setting today": False,
-        "is interaction finished": False,
-        "is prompted by user": False,
-        "is run prompted content": False,
-        "last eval score": None,
-        "last interaction datetime": None,
-        "last update datetime": None,
-        "next checkin datetime": None,
-        "num of days since last eval": 0,
-        "num of days since last prompt": 0,
-        "num of days since last perseverance": 0,
-        "num of days since last mindfulness": 0,
-        "num of days since last goal setting": 0,
-    }
-    init_db(state_database, state_db_key_values)
+    init_db(state_database, INITIAL_STATE_DB)
 
     update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
     scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
     minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
+    max_num_of_prompted_per_day = rospy.get_param("vision-project/params/max_num_of_prompted_per_day")
 
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
+        max_num_of_prompted_per_day=max_num_of_prompted_per_day
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)

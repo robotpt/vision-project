@@ -2,7 +2,6 @@ import datetime
 
 from interaction_engine.messager.directed_graph import DirectedGraph
 from interaction_engine.messager.node import Node
-from interaction_engine.planner.messanger_planner import MessagerPlanner
 from interaction_engine.text_populator import TextPopulator
 from interaction_engine.text_populator import DatabasePopulator
 from interaction_engine.text_populator import VarietyPopulator
@@ -11,16 +10,22 @@ from interaction_engine.text_populator import VarietyPopulator
 class InteractionBuilder:
     class Graphs:
         ASK_TO_CHAT = "ask to chat"
+        ASK_TO_DO_PERSEVERANCE = "ask to do perseverance"
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
+        CHECK_READING_ID = "check reading id"
         EVALUATION = "evaluation"
         FIRST_CHECKIN = "first checkin"
+        GOAL_SETTING = "goal setting"
         GOODBYE = "goodbye"
         GREETING = "greeting"
+        MINDFULNESS = "mindfulness"
+        PERSEVERANCE = "perseverance"
         PROMPTED_CHECKIN = "prompted checkin"
+        REWARD = "reward"
         SCHEDULED_CHECKIN = "scheduled checkin"
         SCHEDULE_NEXT_CHECKIN = "schedule next checkin"
         TALK_ABOUT_VISION = "talk about vision"
-        TOO_MANY_CHECKINS = "too many checkins"
+        TOO_MANY_PROMPTED = "too many prompted"
 
     def __init__(
             self,
@@ -43,9 +48,19 @@ class InteractionBuilder:
                 InteractionBuilder.Graphs.ASK_TO_CHAT,
                 self._text_populator,
             ),
+            InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE,
+                self._text_populator,
+            ),
             InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.CHECK_READING_ID: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.CHECK_READING_ID,
                 self._text_populator,
             ),
             InteractionBuilder.Graphs.EVALUATION: self.build_graph_from_dict(
@@ -58,6 +73,11 @@ class InteractionBuilder:
                 InteractionBuilder.Graphs.FIRST_CHECKIN,
                 self._text_populator,
             ),
+            InteractionBuilder.Graphs.GOAL_SETTING: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.GOAL_SETTING,
+                self._text_populator,
+            ),
             InteractionBuilder.Graphs.GOODBYE: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.GOODBYE,
@@ -68,9 +88,24 @@ class InteractionBuilder:
                 InteractionBuilder.Graphs.GREETING,
                 self._text_populator,
             ),
+            InteractionBuilder.Graphs.MINDFULNESS: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.MINDFULNESS,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.PERSEVERANCE: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.PERSEVERANCE,
+                self._text_populator,
+            ),
             InteractionBuilder.Graphs.PROMPTED_CHECKIN: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.PROMPTED_CHECKIN,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.REWARD: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.REWARD,
                 self._text_populator,
             ),
             InteractionBuilder.Graphs.SCHEDULED_CHECKIN: self.build_graph_from_dict(
@@ -88,9 +123,9 @@ class InteractionBuilder:
                 InteractionBuilder.Graphs.TALK_ABOUT_VISION,
                 self._text_populator,
             ),
-            InteractionBuilder.Graphs.TOO_MANY_CHECKINS: self.build_graph_from_dict(
+            InteractionBuilder.Graphs.TOO_MANY_PROMPTED: self.build_graph_from_dict(
                 self._interaction_dict,
-                InteractionBuilder.Graphs.TOO_MANY_CHECKINS,
+                InteractionBuilder.Graphs.TOO_MANY_PROMPTED,
                 self._text_populator,
             )
         }
@@ -126,6 +161,7 @@ class InteractionBuilder:
                 "result_convert_from_str_fn": str,
                 "result_db_key": None,
                 "is_append_result": False,
+                "tests": None,
                 "is_confirm": False,
                 "error_message": "Please enter a valid input",
                 "error_options": ("Okay", "Oops")
@@ -136,10 +172,13 @@ class InteractionBuilder:
 
             if speaking_rate is not None:
                 node_info["content"] = "<prosody rate=\"{speaking_rate}\">".format(speaking_rate=speaking_rate) + \
-                          node_info["content"] + "</prosody> "
+                                       node_info["content"] + "</prosody> "
 
             if node_info["result_convert_from_str_fn"] == "next day checkin time":
                 node_info["result_convert_from_str_fn"] = self.next_day_checkin_time_from_str
+
+            if node_info["tests"] == "check reading id":
+                node_info["tests"] = self.check_reading_id
 
             node = Node(
                 name=node_name,
@@ -151,6 +190,7 @@ class InteractionBuilder:
                 result_convert_from_str_fn=node_info["result_convert_from_str_fn"],
                 result_db_key=node_info["result_db_key"],
                 is_append_result=node_info["is_append_result"],
+                tests=node_info["tests"],
                 is_confirm=node_info["is_confirm"],
                 error_message=node_info["error_message"],
                 error_options=node_info["error_options"],
@@ -169,10 +209,19 @@ class InteractionBuilder:
         current_datetime = datetime.datetime.now()
         current_day = current_datetime.day
         return current_datetime.replace(
-            day=current_day+1,
+            day=current_day + 1,
             hour=next_checkin_time.hour,
             minute=next_checkin_time.minute
         )
+
+    def check_reading_id(self, reading_id):
+        eval_index = self._statedb.get("reading eval index")
+        try:
+            expected_id = self._statedb.get("reading eval data")[eval_index]["id"]
+            correct_id = reading_id == expected_id
+        except IndexError:
+            correct_id = True
+        return correct_id
 
     @property
     def interactions(self):
