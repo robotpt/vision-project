@@ -34,7 +34,8 @@ INITIAL_STATE_DB = {
     "num of prompted today": 0,
     "perseverance counter": 0,
     "reading eval index": 0,
-    "reading eval data": []
+    "reading eval data": [],
+    "user name": None
 }
 
 

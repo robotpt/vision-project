@@ -97,12 +97,12 @@ if __name__ == "__main__":
     grit_dialogue_variations = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
 
     max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
+    is_run_demo = rospy.get_param("vision-project/controllers/is_run_demo")
 
     with open(demo_interaction_file) as f:
         demo_interaction_dict = json.load(f)
     with open(deployment_interaction_file) as f:
         deployment_interaction_dict = json.load(f)
-    interactions_dict = {**demo_interaction_dict, **deployment_interaction_dict}
 
     interface = CordialInterface(
         state_database,
@@ -110,9 +110,10 @@ if __name__ == "__main__":
     )
 
     interaction_builder = InteractionBuilder(
-        interaction_dict=interactions_dict,
+        interaction_dict=demo_interaction_dict,
         variations_files=[demo_variations_file, deployment_variations_file],
-        statedb=state_database
+        statedb=state_database,
+        is_run_demo=is_run_demo
     )
 
     interaction_manager = InteractionManager(
