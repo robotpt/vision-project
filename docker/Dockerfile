@@ -7,7 +7,7 @@ FROM osrf/ros:kinetic-desktop-full as vision_project_min
 
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
-ARG vision_project_branch="master"
+ARG vision_project_branch="emilyxzhou/working-demo"
 ARG vision_project_remote="https://github.com/robotpt/vision-project.git"
 ARG INSTALL_SCRIPT="install_deps.sh"
 
@@ -25,7 +25,9 @@ RUN \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
 	&& git clone https://github.com/RobotWebTools/rosbridge_suite.git \
-	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
+	&& git clone https://github.com/audrow/mongodb-statedb.git \
+	&& cd mongodb-statedb; python3.8 -m pip install . \
+	&& cd ../..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
 
 
 # ==============================================================

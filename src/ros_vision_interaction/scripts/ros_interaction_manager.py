@@ -89,15 +89,20 @@ if __name__ == "__main__":
     cwd = os.path.dirname(os.path.abspath(__file__))
     resources_directory = os.path.join(cwd, '..', 'resources')
 
+    demo_interaction_file = os.path.join(resources_directory, 'demo-interaction', 'demo_interaction.json')
     deployment_interaction_file = os.path.join(resources_directory, 'deployment', 'test_interactions.json')
 
-    interaction_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
+    demo_variations_file = os.path.join(resources_directory, 'demo-interaction', 'variations.json')
+    deployment_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
     grit_dialogue_variations = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
 
     max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
 
+    with open(demo_interaction_file) as f:
+        demo_interaction_dict = json.load(f)
     with open(deployment_interaction_file) as f:
         deployment_interaction_dict = json.load(f)
+    interactions_dict = {**demo_interaction_dict, **deployment_interaction_dict}
 
     interface = CordialInterface(
         state_database,
@@ -105,8 +110,8 @@ if __name__ == "__main__":
     )
 
     interaction_builder = InteractionBuilder(
-        interaction_dict=deployment_interaction_dict,
-        variations_files=interaction_variations_file,
+        interaction_dict=interactions_dict,
+        variations_files=[demo_variations_file, deployment_variations_file],
         statedb=state_database
     )
 

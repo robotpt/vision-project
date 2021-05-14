@@ -20,7 +20,10 @@ class RosVisionProjectDelegator:
     def __init__(
             self,
             vision_project_delegator,
+            is_run_demo=False
     ):
+        self._is_run_demo = is_run_demo
+
         self._minutes_between_interactions = datetime.timedelta(
             minutes=rospy.get_param("vision-project/controllers/minutes_between_interactions")
         )
@@ -107,6 +110,12 @@ if __name__ == "__main__":
 
     rospy.init_node("vision_project_delegator")
 
+    update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
+    scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
+    minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
+    max_num_of_prompted_per_day = rospy.get_param("vision-project/params/max_num_of_prompted_per_day")
+    is_run_demo = rospy.get_param("vision-project/controllers/is_run_demo")
+
     DATABASE_NAME = "vision-project"
     host = rospy.get_param("mongodb/host")
     port = rospy.get_param("mongodb/port")
@@ -117,19 +126,18 @@ if __name__ == "__main__":
     )
     init_db(state_database, INITIAL_STATE_DB)
 
-    update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
-    scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
-    minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
-    max_num_of_prompted_per_day = rospy.get_param("vision-project/params/max_num_of_prompted_per_day")
-
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
-        max_num_of_prompted_per_day=max_num_of_prompted_per_day
+        max_num_of_prompted_per_day=max_num_of_prompted_per_day,
+        is_run_demo=is_run_demo
     )
 
-    ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)
+    ros_vision_project_delegator = RosVisionProjectDelegator(
+        vision_project_delegator,
+        is_run_demo=is_run_demo
+    )
 
     while not rospy.is_shutdown():
         ros_vision_project_delegator.run_scheduler_once()

@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.INFO)
 class Interactions:
 
     ASK_TO_DO_EVALUATION = "ask to do evaluation"
+    DEMO = "demo interaction"
     EVALUATION = "evaluation"
     FIRST_INTERACTION = "first interaction"
     PROMPTED_INTERACTION = "prompted interaction"
@@ -21,6 +22,7 @@ class Interactions:
 
     POSSIBLE_INTERACTIONS = [
         ASK_TO_DO_EVALUATION,
+        DEMO,
         EVALUATION,
         FIRST_INTERACTION,
         PROMPTED_INTERACTION,
@@ -74,6 +76,8 @@ class InteractionManager:
         self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
         if interaction_type == Interactions.ASK_TO_DO_EVALUATION:
             self._build_ask_to_do_evaluation()
+        elif interaction_type == Interactions.DEMO:
+            self._build_demo()
         elif interaction_type == Interactions.FIRST_INTERACTION:
             self._build_first_interaction()
         elif interaction_type == Interactions.PROMPTED_INTERACTION:
@@ -95,6 +99,13 @@ class InteractionManager:
             post_hook=self._set_vars_after_ask_for_eval,
         )
         return self._planner
+
+    def _build_demo(self):
+        logging.info("Building ask to do scheduled")
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.DEMO],
+            post_hook=self._set_vars_after_interaction
+        )
 
     def _build_first_interaction(self):
         logging.info("Building first interaction")

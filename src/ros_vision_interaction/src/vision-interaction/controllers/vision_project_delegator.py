@@ -46,7 +46,8 @@ class VisionProjectDelegator:
             update_window_seconds=5,
             scheduled_window_minutes=15,
             minutes_between_interactions=1,
-            max_num_of_prompted_per_day=3
+            max_num_of_prompted_per_day=3,
+            is_run_demo=False
     ):
         self._state_database = statedb
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
@@ -55,6 +56,7 @@ class VisionProjectDelegator:
         self._max_num_of_prompted_per_day = max_num_of_prompted_per_day
 
         self._is_run_interaction = False
+        self._is_run_demo = is_run_demo
 
         # for testing purposes
         self._reset_database()
@@ -98,18 +100,26 @@ class VisionProjectDelegator:
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")
-        if self._is_first_interaction():
-            interaction_type = Interactions.FIRST_INTERACTION
-        elif self._is_time_for_scheduled_interaction():
-            interaction_type = Interactions.SCHEDULED_INTERACTION
-        elif self._is_run_too_many_prompted():
-            interaction_type = Interactions.TOO_MANY_PROMPTED
-        elif self._is_run_prompted_interaction():
-            interaction_type = Interactions.PROMPTED_INTERACTION
-        elif self._is_ask_to_do_evaluation():
-            interaction_type = Interactions.ASK_TO_DO_EVALUATION
+        if self._is_run_demo:
+            if not self._state_database.get("last interaction datetime") or \
+                    datetime.datetime.now() - self._state_database.get("last interaction datetime") > \
+                    datetime.timedelta(seconds=25):
+                interaction_type = Interactions.DEMO
+            else:
+                interaction_type = None
         else:
-            interaction_type = None
+            if self._is_first_interaction():
+                interaction_type = Interactions.FIRST_INTERACTION
+            elif self._is_time_for_scheduled_interaction():
+                interaction_type = Interactions.SCHEDULED_INTERACTION
+            elif self._is_run_too_many_prompted():
+                interaction_type = Interactions.TOO_MANY_PROMPTED
+            elif self._is_run_prompted_interaction():
+                interaction_type = Interactions.PROMPTED_INTERACTION
+            elif self._is_ask_to_do_evaluation():
+                interaction_type = Interactions.ASK_TO_DO_EVALUATION
+            else:
+                interaction_type = None
         return interaction_type
 
     def _is_first_interaction(self):
@@ -146,13 +156,13 @@ class VisionProjectDelegator:
             datetime.datetime.now()
         )
         return self._state_database.get("is prompted by user") and \
-            not self._state_database.get("is done eval today") and \
-            not is_in_scheduled_window
+               not self._state_database.get("is done eval today") and \
+               not is_in_scheduled_window
 
     def _is_run_prompted_interaction(self):
         return self._state_database.get("is prompted by user") and \
-            self._state_database.get("is done eval today") and \
-            self._state_database.get("num of prompted today") < self._max_num_of_prompted_per_day
+               self._state_database.get("is done eval today") and \
+               self._state_database.get("num of prompted today") < self._max_num_of_prompted_per_day
 
     def _is_run_too_many_prompted(self):
         return self._state_database.get("is prompted by user") and \
