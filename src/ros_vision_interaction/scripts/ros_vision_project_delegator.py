@@ -82,13 +82,14 @@ class RosVisionProjectDelegator:
 
         start_interaction_goal = StartInteractionGoal()
         start_interaction_goal.type = interaction_type
+        self._is_record_interaction_publisher.publish(True)
 
         if not self._is_debug:
             # TODO: add a feedback callback
             rospy.loginfo("Sending goal to start interaction")
             self._start_interaction_client.send_goal(start_interaction_goal)
             self._start_interaction_client.wait_for_result()
-        return
+        self._is_record_interaction_publisher.publish(False)
 
     def _screen_tap_listener_callback(self, _):
         last_interaction_time = self._state_database.get("last interaction datetime")
