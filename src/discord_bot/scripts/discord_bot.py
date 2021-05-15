@@ -28,9 +28,11 @@ class RosDiscordCog(commands.Cog):
         self._choices = None
         self._is_new_choices = False
 
-        self._pick_publisher = rospy.Publisher("annotators/pick", String, queue_size=1)
+        pick_topic = rospy.get_param("discord/pick")
+        choices_topic = rospy.get_param("discord/choices")
+        self._pick_publisher = rospy.Publisher(pick_topic, String, queue_size=1)
         self._choices_subscriber = rospy.Subscriber(
-            "annotators/choices",
+            choices_topic,
             String,
             callback=self._choices_subscriber_callback,
             queue_size=1,
