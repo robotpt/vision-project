@@ -73,7 +73,7 @@ class VisionProjectDelegator:
     def update(self):
         if not self._state_database.is_set("last update datetime"):
             self._state_database.set("last update datetime", datetime.datetime.now())
-        if self.is_new_day():
+        if self._is_new_day():
             self._daily_state_update()
             self._update_act_variables()
             self._state_database.set("num of prompted today", 0)
@@ -82,7 +82,7 @@ class VisionProjectDelegator:
             self._state_database.set("is published choices today", False)
         self._state_database.set("last update datetime", datetime.datetime.now())
 
-    def is_new_day(self):
+    def _is_new_day(self):
         return datetime.datetime.now().date() > self._state_database.get("last update datetime").date()
 
     def _daily_state_update(self):
