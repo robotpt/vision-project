@@ -71,6 +71,8 @@ class VisionProjectDelegator:
         self._state_database.set("last update datetime", datetime.datetime.now())
 
     def update(self):
+        if not self._state_database.is_set("last update datetime"):
+            self._state_database.set("last update datetime", datetime.datetime.now())
         if self.is_new_day():
             self._daily_state_update()
             self._update_act_variables()
