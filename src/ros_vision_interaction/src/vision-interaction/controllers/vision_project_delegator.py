@@ -9,6 +9,13 @@ logging.basicConfig(level=logging.INFO)
 INITIAL_STATE_DB = {
     "current eval score": 0,
     "current reading id": None,
+    "feedback videos": {
+        "video 1": "",
+        "video 2": "",
+        "video 3": "",
+        "video 4": "",
+        "no video": ""
+    },
     "first interaction datetime": None,
     "good to chat": None,
     "is continue perseverance": None,
@@ -20,6 +27,7 @@ INITIAL_STATE_DB = {
     "is interaction finished": False,
     "is off checkin": None,
     "is prompted by user": False,
+    "is published choices today": False,
     "is start perseverance": False,
     "last 5 eval scores": [],
     "last interaction datetime": None,
@@ -34,7 +42,8 @@ INITIAL_STATE_DB = {
     "num of prompted today": 0,
     "perseverance counter": 0,
     "reading eval index": 0,
-    "reading eval data": []
+    "reading eval data": [],
+    "video to play": None
 }
 
 
@@ -59,6 +68,8 @@ class VisionProjectDelegator:
         # for testing purposes
         self._reset_database()
 
+        self._state_database.set("last update datetime", datetime.datetime.now())
+
     def update(self):
         if not self._state_database.is_set("last update datetime"):
             self._state_database.set("last update datetime", datetime.datetime.now())
@@ -68,6 +79,7 @@ class VisionProjectDelegator:
             self._state_database.set("num of prompted today", 0)
             self._state_database.set("perseverance counter", 0)
             self._state_database.set("feelings index", None)
+            self._state_database.set("is published choices today", False)
         self._state_database.set("last update datetime", datetime.datetime.now())
 
     def _is_new_day(self):

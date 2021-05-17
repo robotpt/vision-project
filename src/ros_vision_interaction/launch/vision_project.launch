@@ -62,6 +62,9 @@
     </include>
     -->
 
+    <!-- launch Discord bot -->
+    <node pkg="discord_bot" type="discord_bot.py" name="ros_discord_bot" output="screen"/>
+
     <!-- launch controllers -->
     <group if="$(arg is_launch_controllers)">
         <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
