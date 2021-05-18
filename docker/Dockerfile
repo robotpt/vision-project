@@ -25,7 +25,9 @@ RUN \
 	&& git clone https://github.com/robotpt/qt-robot.git \
 	&& git clone https://github.com/robotpt/ros-data-capture.git \
 	&& git clone https://github.com/RobotWebTools/rosbridge_suite.git \
-	&& cd ..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
+	&& git clone https://github.com/audrow/mongodb-statedb.git \
+	&& cd mongodb-statedb; python3.8 -m pip install . \
+	&& cd ../..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
 
 
 # ==============================================================

@@ -26,7 +26,8 @@ sudo apt-get install -y \
 	alsa \
 	gstreamer1.0-alsa \
 	vorbis-tools \
-	awscli
+	awscli \
+	ffmpeg
 
 # Setup Python2 - for Cordial
 sudo apt-get install -y \
@@ -63,7 +64,9 @@ ${PYTHON3_VERSION} -m pip install --user \
 	freezegun==1.0.0 \
 	robotpt_common_utils==0.0.8 \
 	schedule==0.6.0 \
-	pymongo
+	pydub \
+	pymongo \
+	discord
 
 
 # Setup HTTP server
