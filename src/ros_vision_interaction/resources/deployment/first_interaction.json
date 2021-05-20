@@ -1,0 +1,13 @@
+{
+    "introduce QT": {
+        "nodes": {
+            "introduction": {
+                "transitions": [],
+                "content": "",
+                "options": [],
+                "message_type": ""
+            }
+        },
+        "start_node_name": ""
+    }
+}

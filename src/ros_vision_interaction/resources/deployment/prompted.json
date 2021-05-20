@@ -1,0 +1,131 @@
+{
+    "too many prompted": {
+        "nodes": {
+            "reminder": {
+                "transitions": "exit",
+                "content": "I have really enjoyed speaking with you so many times today, but all the talking has made me pretty tired. I’m wiped out and need to recharge by taking a long nap. Let me get some shut eye, so I can be all refreshed and ready to chat with you again tomorrow. Good night!",
+                "options": ["Talk to you tomorrow!", "See you tomorrow!"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "reminder"
+    },
+    "prompted ask to chat": {
+        "nodes": {
+            "ask to chat": {
+                "transitions": ["exit", "plan next checkin"],
+                "content": "Hello {'db': 'user name', 'default value': ''}! It's so {'var': 'great'} when we get a chance to {'var': 'chat'}. Can you confirm is this is a good time?",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "ask to chat"
+            },
+            "plan next checkin": {
+                "transitions": ["how many hours", "talk again later"],
+                "content": "{'var': 'plan next checkin'}",
+                "options": ["Later today", "Usual time tomorrow"],
+                "message_type": "multiple choice one column",
+				"result_convert_from_str_fn": "save_checkin_datetime",
+                "result_db_key": "next checkin time"
+            },
+            "talk again later": {
+                "transitions": "exit",
+                "content": "Great, I can't wait to talk to you again then!",
+                "options": "Bye!",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "ask to chat"
+    },
+    "prompted checkin": {
+        "nodes": {
+            "how do you feel about vision": {
+                "transitions": [
+                    "great to hear",
+                    "great to hear",
+                    "great to hear",
+                    "great to hear",
+                    "great to hear",
+                    "joke 1",
+                    "joke 1",
+                    "joke 1",
+                    "joke 1",
+                    "joke 1"
+                ],
+                "content": "How do you feel about your vision right now?",
+                "options": ["1", "2", "3", "4", "5", "6", "7"],
+                "message_type": "image",
+                "args": ["../img/rating_chart.png"]
+            },
+            "joke 1": {
+                "transitions": "talk about frustrations",
+                "content": "{'var': 'joke'}",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "talk about frustrations": {
+                "transitions": "did you use magnifier",
+                "content": "{'db': 'user name', 'default value': ''}, I know life is more challenging with your vision. Sometimes it helps to vent to someone who’s there to listen. Care to tell me about your frustrations?",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "did you use magnifier": {
+                "transitions": ["how was magnifier use", "keep trying"],
+                "content": "Tell me, did you use your magnifier since the last time we spoke?",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column"
+            },
+            "great to hear": {
+                "transitions": ["how was magnifier use", "keep trying"],
+                "content": "That's {'var': 'great'} to hear. Tell me, did you use your magnifier since the last time we spoke?",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column"
+            },
+            "keep trying": {
+                "transitions": "exit",
+                "content": "Your magnifier can make a huge difference when it’s tough to read something. Keep working with it and you’ll find it helpful.",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "how was magnifier use": {
+                "transitions": [
+                    "excellent",
+                    "good",
+                    "good",
+                    "fair",
+                    "fair",
+                    "poor",
+                    "poor"
+                ],
+                "content": "Please share with me: how did it go with your magnifier?",
+                "options": ["1", "2", "3", "4", "5", "6", "7"],
+                "message_type": "image",
+                "args": ["../img/rating_chart.png"]
+            },
+            "excellent": {
+                "transitions": "exit",
+                "content": "Fantastic! I'm so proud of you for doing so well!",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "good": {
+                "transitions": "exit",
+                "content": "I am glad to hear it's going pretty well. Here's my advice: Let's aim to become great with your magnifier. I know that you can get there! Your future self will thank you.",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "fair": {
+                "transitions": "exit",
+                "content": "Let's see how we can make things better with practice. How about we pick a number of tries and do that many each day. Let's go for 2! It's not important that things go great each time, it's important that you give it a good try. How about that?",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "poor": {
+                "transitions": "exit",
+                "content": "I am so sorry that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying.",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "how do you feel about vision"
+    }
+}
