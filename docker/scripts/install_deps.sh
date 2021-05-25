@@ -64,9 +64,9 @@ ${PYTHON3_VERSION} -m pip install --user \
 	freezegun==1.0.0 \
 	robotpt_common_utils==0.0.8 \
 	schedule==0.6.0 \
-	pydub \
-	pymongo \
-	discord
+	pydub==0.25.1 \
+	pymongo==3.11.4 \
+	discord==1.7.1
 
 
 # Setup HTTP server
