@@ -14,6 +14,7 @@ class Interactions:
 
     ASK_TO_DO_EVALUATION = "ask to do evaluation"
     EVALUATION = "evaluation"
+    FEEDBACK = "feedback"
     FIRST_INTERACTION = "first interaction"
     PROMPTED_INTERACTION = "prompted interaction"
     SCHEDULED_INTERACTION = "scheduled interaction"
@@ -22,6 +23,7 @@ class Interactions:
     POSSIBLE_INTERACTIONS = [
         ASK_TO_DO_EVALUATION,
         EVALUATION,
+        FEEDBACK,
         FIRST_INTERACTION,
         PROMPTED_INTERACTION,
         SCHEDULED_INTERACTION,
@@ -131,6 +133,10 @@ class InteractionManager:
         self._planner.insert(
             plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.CHECK_READING_ID]
         )
+        if self._state_database.get("video to play"):
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK]
+            )
         self._planner.insert(
             plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
             post_hook=self._set_vars_after_evaluation
@@ -151,6 +157,10 @@ class InteractionManager:
 
     def _set_vars_after_ask_for_eval(self):
         if self._state_database.get("is off checkin") == "Yes":
+            if self._state_database.get("video to play"):
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK]
+                )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.CHECK_READING_ID]
             )

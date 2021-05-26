@@ -14,6 +14,7 @@ class InteractionBuilder:
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
         CHECK_READING_ID = "check reading id"
         EVALUATION = "evaluation"
+        FEEDBACK = "feedback video"
         FIRST_CHECKIN = "first checkin"
         GOAL_SETTING = "goal setting"
         GOODBYE = "goodbye"
@@ -66,6 +67,11 @@ class InteractionBuilder:
             InteractionBuilder.Graphs.EVALUATION: self.build_graph_from_dict(
                 self._interaction_dict,
                 InteractionBuilder.Graphs.EVALUATION,
+                self._text_populator,
+            ),
+            InteractionBuilder.Graphs.FEEDBACK: self.build_graph_from_dict(
+                self._interaction_dict,
+                InteractionBuilder.Graphs.FEEDBACK,
                 self._text_populator,
             ),
             InteractionBuilder.Graphs.FIRST_CHECKIN: self.build_graph_from_dict(

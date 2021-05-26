@@ -10,10 +10,10 @@ INITIAL_STATE_DB = {
     "current eval score": 0,
     "current reading id": None,
     "feedback videos": {
-        "video 1": "",
-        "video 2": "",
-        "video 3": "",
-        "video 4": "",
+        "video 1": "https://www.youtube.com/embed/4b33NTAuF5E",
+        "video 2": "https://www.youtube.com/embed/JXeJANDKwDc",
+        "video 3": "https://www.youtube.com/embed/uzkD5SeuwzM",
+        "video 4": "https://www.youtube.com/embed/QqsLTNkzvaY",
         "no video": ""
     },
     "first interaction datetime": None,
@@ -110,18 +110,19 @@ class VisionProjectDelegator:
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")
-        if self._is_first_interaction():
-            interaction_type = Interactions.FIRST_INTERACTION
-        elif self._is_time_for_scheduled_interaction():
-            interaction_type = Interactions.SCHEDULED_INTERACTION
-        elif self._is_run_too_many_prompted():
-            interaction_type = Interactions.TOO_MANY_PROMPTED
-        elif self._is_run_prompted_interaction():
-            interaction_type = Interactions.PROMPTED_INTERACTION
-        elif self._is_ask_to_do_evaluation():
-            interaction_type = Interactions.ASK_TO_DO_EVALUATION
-        else:
-            interaction_type = None
+        # if self._is_first_interaction():
+        #     interaction_type = Interactions.FIRST_INTERACTION
+        # elif self._is_time_for_scheduled_interaction():
+        #     interaction_type = Interactions.SCHEDULED_INTERACTION
+        # elif self._is_run_too_many_prompted():
+        #     interaction_type = Interactions.TOO_MANY_PROMPTED
+        # elif self._is_run_prompted_interaction():
+        #     interaction_type = Interactions.PROMPTED_INTERACTION
+        # elif self._is_ask_to_do_evaluation():
+        #     interaction_type = Interactions.ASK_TO_DO_EVALUATION
+        # else:
+        #     interaction_type = None
+        interaction_type = Interactions.ASK_TO_DO_EVALUATION
         return interaction_type
 
     def _is_first_interaction(self):

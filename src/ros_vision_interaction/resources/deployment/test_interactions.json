@@ -57,18 +57,23 @@
     },
     "evaluation": {
         "nodes": {
-            "feedback video": {
-                "transitions": ["evaluation"],
-                "content": "Press play to watch the video your optometrist asked me to show you.",
-                "options": ["Next"],
-                "message_type": "video",
-                "args": ["{'db': 'video to play', 'default value': ''}"]
-            },
             "evaluation": {
                 "transitions": ["exit"],
                 "content": "[reading evaluation]",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "evaluation"
+    },
+    "feedback video": {
+        "nodes": {
+            "feedback video": {
+                "transitions": ["exit"],
+                "content": "Press play to watch the video your optometrist asked me to show you.",
+                "options": ["Next"],
+                "message_type": "video",
+                "args": ["{'db': 'video to play', 'default value': ''}"]
             }
         },
         "start_node_name": "feedback video"
