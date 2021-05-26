@@ -88,6 +88,9 @@
         <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="interaction_manager" output="screen"/>
     </group>
 
+    <!-- launch Discord bot -->
+    <node pkg="discord_bot" type="discord_bot.py" name="discord_bot" output="screen"/>
+
     <!-- launch mongodb log -->
     <include file="$(find mongodb_store)/launch/mongodb_store.launch">
     	<arg name="db_path" value="$(arg mongodb_path)"/>
