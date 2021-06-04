@@ -2,12 +2,33 @@
     "introduce QT": {
         "nodes": {
             "introduction": {
-                "transitions": [],
-                "content": "",
-                "options": [],
-                "message_type": ""
+                "transitions": "what's your name",
+                "content": "Hi, my name is QT!",
+                "options": ["Nice to meet you!"],
+                "message_type": "multiple choice one column"
+            },
+            "what's your name": {
+                "transitions": "schedule",
+                "content": "What's your name?",
+                "options": ["is my name."],
+                "message_type": "text entry",
+                "result_db_key": "user name"
+            },
+            "schedule": {
+                "transitions": "talk again later",
+                "content": "Let's schedule a time to {'var': 'chat'} tomorrow. When is good for you?",
+                "options": "Next",
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": "exit",
+                "content": "Great, I can't wait to talk to you again then!",
+                "options": "Bye!",
+                "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": ""
+        "start_node_name": "introduction"
     }
 }
