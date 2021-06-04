@@ -7,31 +7,39 @@ from controllers.interaction_manager import Interactions
 logging.basicConfig(level=logging.INFO)
 
 INITIAL_STATE_DB = {
+    "best score": None,
     "current eval score": 0,
+    "current reading color": None,
     "current reading id": None,
+    "difficulty level": 1,
     "feedback videos": {
-        "video 1": "",
-        "video 2": "",
-        "video 3": "",
-        "video 4": "",
+        "video 1": "https://www.youtube.com/embed/4b33NTAuF5E",
+        "video 2": "https://www.youtube.com/embed/JXeJANDKwDc",
+        "video 3": "https://www.youtube.com/embed/uzkD5SeuwzM",
+        "video 4": "https://www.youtube.com/embed/QqsLTNkzvaY",
         "no video": ""
     },
     "first interaction datetime": None,
     "good to chat": None,
+    "grit feedback index": 0,
     "is continue perseverance": None,
+    "is do evaluation": None,
     "is done eval today": False,
     "is done prompted today": False,
     "is done perseverance today": False,
     "is done mindfulness today": False,
     "is done goal setting today": False,
     "is interaction finished": False,
+    "is new difficulty level": False,
     "is off checkin": None,
     "is prompted by user": False,
     "is published choices today": False,
     "is start perseverance": False,
+    "is used magnifier today": False,
     "last 5 eval scores": [],
     "last interaction datetime": None,
     "last update datetime": None,
+    "last score": None,
     "feelings index": None,
     "next checkin datetime": None,
     "num of days since last eval": 0,
@@ -43,6 +51,8 @@ INITIAL_STATE_DB = {
     "perseverance counter": 0,
     "reading eval index": 0,
     "reading eval data": [],
+    "reading eval type": None,
+    "user name": "",
     "video to play": None
 }
 
@@ -118,8 +128,8 @@ class VisionProjectDelegator:
             interaction_type = Interactions.TOO_MANY_PROMPTED
         elif self._is_run_prompted_interaction():
             interaction_type = Interactions.PROMPTED_INTERACTION
-        elif self._is_ask_to_do_evaluation():
-            interaction_type = Interactions.ASK_TO_DO_EVALUATION
+        elif self._is_ask_to_do_scheduled():
+            interaction_type = Interactions.ASK_TO_DO_SCHEDULED
         else:
             interaction_type = None
         return interaction_type
@@ -151,7 +161,7 @@ class VisionProjectDelegator:
 
         return is_time
 
-    def _is_ask_to_do_evaluation(self):  # this graph begins with 'ask to chat'
+    def _is_ask_to_do_scheduled(self):
         is_in_scheduled_window = self._is_in_window(
             self._state_database.get("next checkin datetime"),
             self._scheduled_window_minutes,
