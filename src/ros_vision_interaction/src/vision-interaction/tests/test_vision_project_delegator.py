@@ -90,7 +90,7 @@ def test_determine_interaction_prompted_no_evaluation(vision_project_delegator, 
     ]
     for valid_time in scheduled_window_times:
         with freezegun.freeze_time(valid_time):
-            assert vision_project_delegator.get_interaction_type() == "ask to do evaluation"
+            assert vision_project_delegator.get_interaction_type() == "ask to do scheduled"
 
 
 def test_determine_interaction_prompted_evaluation_done(vision_project_delegator, statedb):
