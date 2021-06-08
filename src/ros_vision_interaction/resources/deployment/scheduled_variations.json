@@ -1,0 +1,56 @@
+{
+    "scheduled ask to chat": [
+        "Hi my friend! Are you able to {'var': 'chat'} with me right now?",
+        "Greetings! Am I catching you at a good time to {'var': 'chat'}?",
+        "Hey there! It's our usual time to {'var': 'chat'}. Does it work for you today?",
+        "Hi {'db': 'user name', 'default value': ''}! Let me know if this is a good time to {'var': 'chat'}?"
+    ],
+    "did you use magnifier": [
+        "Tell me, did you use your magnifier since we last spoke?",
+        "Please update me on whether you tried your magnifier since the last time we talked?",
+        "I'd love to know if you had a chance to use your magnifier since we last chatted?",
+        "Next, I am eager to find out if you had an opportunity to read with your magnifier since the last time we spoke?",
+        "Since the last time that we spoke, were you able to use your magnifier?",
+        "Next, please fill me in on whether you read with your magnifier since we last spoke?"
+    ],
+    "frustrated response": [
+        "{'db': 'user name', 'default value': ''}, I realize that it is more challenging to do things with your vision, but I am here for you.",
+        "{'db': 'user name', 'default value': ''}, I understand that it is not easy to read with your vision, but I am here to help support you while learning to use your magnifier.",
+        "{'db': 'user name', 'default value': ''}, I bet that there are some things that are difficult to see, but stick with your magnifier while working with me, and reading should become easier with practice.",
+        "{'db': 'user name', 'default value': ''}, all people with vision loss get frustrated at times, but together we can overcome it. If you keep working with your magnifier, I bet you'll improve and feel less frustrated.",
+        "{'db': 'user name', 'default value': ''}, it's totally normal to feel frustrated sometimes, and the more you work at using your magnifier, it will get better!"
+    ],
+    "goodbye":[
+        "That was great! Bye-bye for now. And don't forget to use your magnifier!",
+        "That was great! Bye until we can chat again, And be sure to use your magnifier!",
+        "I really enjoyed chatting with you today! Please remember to use your magnifier! Hope the rest of your day is great!",
+        "I loved having this chance to interact with you today! Keep up the good work with your magnifier! Bye!",
+        "It's so great to be able to chat with you each day! Keep using your magnifier for those tough reading tasks! Bye!",
+        "OK, it's time to say bye, but I am looking forward to the next time we can chat. In the meantime, I hope you'll find lots of opportunities to use your magnifier! Bye!"
+    ],
+    "perseverance": [
+        "Are you down to do some more reading?"
+    ],
+    "plan next checkin": [
+        "No worries, that's fine. We can pick another time to {'var': 'chat'}. Let me know your preference.",
+        "That's ok, no problem. We can set another time to {'var': 'chat'}. Let me know what time works for you.",
+        "That's just fine, we can arrange to {'var': 'chat'} again later. When is a time that works well?",
+        "That's quite alright, maybe next time. When are you available to {'var': 'chat'} again?",
+        "That is totally fine, perhaps I can tell you a story when we {'var': 'chat'} again. When should we plan to interact again?"
+    ],
+    "IReST": [
+        "This reading task involves reading a single paragraph aloud while using your magnifier. I would like to see how quickly and accurately you can read today. I'm curious to know what is written there today."
+    ],
+    "MNread": [
+        "This reading task involves reading single sentences, going from large print to very tiny, fine print. You can start without your magnifier for the larger sentences and then remember to use your magnifier when the sentences become more difficult to read as they get smaller. They get so small that no human can read them, so don't get discouraged when you can't read all of them. Try to read them as quickly as possible, without making mistakes. Go ahead and show me how well you can read this today."
+    ],
+    "SKread": [
+        "This reading task involves using your magnifier to read aloud a series of single words that are grouped according to size from large to tiny. Do your best to figure out each word, one by one, and remember that these are not sentences, only individual words. Give it your best shot to read the words as fast as you can, while trying to get them all correct. I can't wait to see how you do today!"
+    ],
+    "spot reading": [
+        "This reading task involves spot reading the numbers on common household items. Please read the numbers aloud to me and then also enter them on the tablet. For each item, I will ask you to find and read something specific that is of interest to me on the item while using your magnifier. Do your best to read the numbers on the items accurately."
+    ],
+    "SSRT": [
+        "This reading task is a short story, like you would read in a book, and I'd like you to try to read aloud three pages of it to me, as quickly as you can without making errors. I can't wait to hear what happens in the story today!"
+    ]
+}

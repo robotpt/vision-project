@@ -1,4 +1,9 @@
 {
+    "grit feedback": [
+        "{'var': 'stable'}",
+        "{'var': 'improved'}",
+        "{'var': 'declined'}"
+    ],
     "improved": [
         "{'var': 'improved-1a'} You worked hard and succeeded with the task! You've done a {'var': 'improved-1b'} job with using your magnifier!",
         "Hard work can be {'var': 'improved-2a'} and I can see your progress. {'var': 'improved-2b'}",
@@ -30,21 +35,21 @@
         "By being incredibly persistent with your practice, you are really working toward mastering the skill of using your vision and the magnifier! {'var': 'stable-4a'}!"
     ],
     "transition": [
-        "I highly encourage you to {'var': 't-1a'} because at first it might seem to be {'var': 't-1b'}, but I know you can tackle it!",
-        "Challenging yourself with more difficult tasks can help you improve your skills better and faster!",
-        "Challenging yourself with more demanding tasks will help you improve and develop your skills.",
-        "Challenging yourself with more demanding tasks will enable you to become better more quickly and faster.",
-        "Difficult activities will allow you to improve and enhance your ability!",
-        "If you keep trying hard even when the tasks are demanding, you will become so much better at mastering the skills needed for magnifier use.",
-        "Continuing to attempt more difficult tasks will help you to improve gradually.",
-        "If you keep at it when the tasks are more challenging, you're going to become a lot better over time with practice.",
-        "When these tasks become more difficult, you should continue to try hard to improve your skills and ability.",
-        "If you try harder when the tasks are tougher, you will gain new skills that will make you so much better.",
-        "I see how well you take on new challenges. And I love it!",
-        "You're not afraid to push yourself. I am impressed!",
-        "You're not afraid of trying new things and that makes me proud of you!",
-        "The greatest barrier to success is the fear of challenges and the unwillingness to keep practicing. You've done a great job in all previous attempts and there's no barrier in your way to success! So keep up your hard work with practicing!",
-        "You are not afraid of challenging yourself with learning new techniques, and that's incredible! I know we will both see the progress over time."
+        "OK, {'var': 'great'}! I highly encourage you to {'var': 't-1a'} because at first it might seem to be {'var': 't-1b'}, but I know you can tackle it!",
+        "OK, {'var': 'great'}! Challenging yourself with more difficult tasks can help you improve your skills better and faster!",
+        "OK, {'var': 'great'}! Challenging yourself with more demanding tasks will help you improve and develop your skills.",
+        "OK, {'var': 'great'}! Challenging yourself with more demanding tasks will enable you to become better more quickly and faster.",
+        "OK, {'var': 'great'}! Difficult activities will allow you to improve and enhance your ability!",
+        "OK, {'var': 'great'}! If you keep trying hard even when the tasks are demanding, you will become so much better at mastering the skills needed for magnifier use.",
+        "OK, {'var': 'great'}! Continuing to attempt more difficult tasks will help you to improve gradually.",
+        "OK, {'var': 'great'}! If you keep at it when the tasks are more challenging, you're going to become a lot better over time with practice.",
+        "OK, {'var': 'great'}! When these tasks become more difficult, you should continue to try hard to improve your skills and ability.",
+        "OK, {'var': 'great'}! If you try harder when the tasks are tougher, you will gain new skills that will make you so much better.",
+        "OK, {'var': 'great'}! I see how well you take on new challenges. And I love it!",
+        "OK, {'var': 'great'}! You're not afraid to push yourself. I am impressed!",
+        "OK, {'var': 'great'}! You're not afraid of trying new things and that makes me proud of you!",
+        "OK, {'var': 'great'}! The greatest barrier to success is the fear of challenges and the unwillingness to keep practicing. You've done a great job in all previous attempts and there's no barrier in your way to success! So keep up your hard work with practicing!",
+        "OK, {'var': 'great'}! You are not afraid of challenging yourself with learning new techniques, and that's incredible! I know we will both see the progress over time."
     ],
     "improved-1a": [
         "Hooray!",

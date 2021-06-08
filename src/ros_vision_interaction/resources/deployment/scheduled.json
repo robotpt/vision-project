@@ -1,0 +1,386 @@
+{
+    "scheduled ask to chat": {
+        "nodes": {
+            "ask to chat": {
+                "transitions": ["exit", "exit"],
+                "content": "{'var': 'scheduled ask to chat'}",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "good to chat"
+            }
+        },
+        "start_node_name": "ask to chat"
+    },
+    "plan tomorrow's checkin": {
+        "nodes": {
+            "set tomorrow's time": {
+                "transitions": "talk again later",
+                "content": "When should we plan to talk again tomorrow?",
+                "options": "Next",
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": "exit",
+                "content": "Great, I can't wait to talk to you again then!",
+                "options": "Bye!",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "set tomorrow's time"
+    },
+    "plan next checkin": {
+        "nodes": {
+            "plan next checkin": {
+                "transitions": ["how many hours", "set tomorrow's time"],
+                "content": "{'var': 'plan next checkin'}",
+                "options": ["Later today", "Set a time for tomorrow"],
+                "message_type": "multiple choice one column"
+            },
+            "how many hours": {
+                "transitions": "talk again later",
+                "content": "Please enter the number of hours as 1 to 9.",
+                "options": "Next",
+                "message_type": "numpad",
+				"result_convert_from_str_fn": "later_today_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "set tomorrow's time": {
+                "transitions": "talk again later",
+                "content": "When is good for you?",
+                "options": "Next",
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": "exit",
+                "content": "Great, I can't wait to talk to you again then!",
+                "options": "Bye!",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "plan next checkin"
+    },
+    "scheduled checkin": {
+        "nodes": {
+            "how do you feel": {
+                "transitions": ["frustrated response", "no concerns response"],
+                "content": "How do you feel about your vision right now?",
+                "options": ["Frustrated", "No concerns"],
+                "message_type": "multiple choice one column"
+            },
+            "frustrated response": {
+                "transitions": "joke 1",
+                "content": "{'var': 'frustrated response'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "no concerns response": {
+                "transitions": "how was magnifier use",
+                "content": "That's {'var': 'great'}. Since you don't have any vision-related concerns at the moment:",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "joke 1": {
+                "transitions": "did you use magnifier",
+                "content": "{'var': 'joke'}",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "did you use magnifier": {
+                "transitions": ["keep trying", "how was magnifier use"],
+                "content": "{'var': 'did you use magnifier'}",
+                "options": ["No", "Yes"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is used magnifier today"
+            },
+            "how was magnifier use": {
+                "transitions": [
+                    "excellent",
+                    "excellent",
+                    "good",
+                    "good",
+                    "good",
+                    "fair",
+                    "fair",
+                    "fair",
+                    "poor",
+                    "poor"
+                ],
+                "content": "Please share with me: how did it go with your magnifier?",
+                "options": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                "message_type": "image",
+                "args": ["../img/rating_chart.png"]
+            },
+            "excellent": {
+                "transitions": "exit",
+                "content": "Fantastic! I'm so proud of you for doing so well!",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "good": {
+                "transitions": "exit",
+                "content": "I am glad to hear it's going pretty well. Here's my advice: Let's aim to become great with your magnifier. I know that you can get there! Your future self will thank you.",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "fair": {
+                "transitions": "exit",
+                "content": "Let's see how we can make things better with practice. How about we pick a number of tries and do that many each day. Let's go for 2! It's not important that things go great each time, it's important that you give it a good try. How about that?",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "poor": {
+                "transitions": "exit",
+                "content": "I am so sorry that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying.",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "keep trying": {
+                "transitions": "exit",
+                "content": "Oh, well don't forget about using it whenever you are struggling to read.",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "how do you feel"
+    },
+    "feedback video": {
+        "nodes": {
+            "feedback video": {
+                "transitions": "exit",
+                "content": "Press play to watch the video your optometrist asked me to show you.",
+                "options": ["Next"],
+                "message_type": "video",
+                "args": ["{'db': 'video to play', 'default value': ''}"]
+            }
+        },
+        "start_node_name": "feedback video"
+    },
+    "ask to do evaluation": {
+        "nodes": {
+            "ask to do evaluation": {
+                "transitions": ["exit", "take minds off reading"],
+                "content": "Next, can you show me how you read something with your magnifier?",
+                "options": ["Yes", "Not now"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is do evaluation"
+            },
+            "take minds off reading": {
+                "transitions": ["tell me a joke", "no problem"],
+                "content": "OK, let's take our minds off reading. I love funny jokes. Can you tell me one?",
+                "options": ["Yes", "Not now"],
+                "message_type": "multiple choice one column"
+            },
+            "no problem": {
+                "transitions": "that was great",
+                "content": "Go for it!",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "tell me a joke": {
+                "transitions": "that was great",
+                "content": "Go for it!",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "that was great": {
+                "transitions": "schedule",
+                "content": "That was {'var': 'great'}!",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "schedule": {
+                "transitions": "talk again later",
+                "content": "Let's schedule a time to {'var': 'chat'} tomorrow. When is good for you?",
+                "options": "Next",
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": "exit",
+                "content": "Great, I can't wait to talk to you again then!",
+                "options": "Bye!",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "ask to do evaluation"
+    },
+    "evaluation": {
+        "nodes": {
+            "check": {
+                "transitions": "introduce evaluation",
+                "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Enter the number in the keypad.",
+                "options": ["Next"],
+                "message_type": "numpad",
+                "tests": "check reading id",
+                "error_message": "Please enter the correct ID.",
+                "error_options": ["Oops"]
+            },
+            "introduce evaluation": {
+                "transitions": "start evaluation",
+                "content": "The last time you did this reading test, your score was {'db': 'last score', 'default value': 'N/A'}, and your best ever was {'db': 'best score', 'default value': 'N/A'}. Let's see if you can beat that today!",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "start evaluation": {
+                "transitions": "evaluation",
+                "content": "Go ahead and open the envelope. Press 'Next', then read the contents aloud while using your magnifier, then press 'Next' again.",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "evaluation": {
+                "transitions": "chart self report",
+                "content": "",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "chart self report": {
+                "transitions": "ask for spoken self report",
+                "content": "Tell me, how did you think you did on that reading task?",
+                "options": ["1", "2", "3", "4", "5", "6", "7"],
+                "message_type": "image",
+                "args": ["../img/rating_chart.png"]
+            },
+            "ask for spoken self report": {
+                "transitions": ["spoken self report","exit"],
+                "content": "Really? Care to tell me more?",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column"
+            },
+            "spoken self report": {
+                "transitions": "grit feedback",
+                "content": "[spoken self-report]",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            },
+            "grit feedback": {
+                "transitions": "exit",
+                "content": "{'var': 'grit feedback', 'index': '{'db': 'grit feedback index'}'}",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "check"
+    },
+    "goal setting": {
+        "nodes": {
+            "goal setting": {
+                "transitions": ["exit"],
+                "content": "[goal setting]",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "goal setting"
+    },
+    "mindfulness": {
+        "nodes": {
+            "mindfulness": {
+                "transitions": ["exit"],
+                "content": "[mindfulness]",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "mindfulness"
+    },
+    "reward": {
+        "nodes": {
+            "reward": {
+                "transitions": ["exit"],
+                "content": "",
+                "options": [""],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "reward"
+    },
+    "no magnifier use": {
+        "nodes": {
+            "ask if given up": {
+                "transitions": ["poor", "exit"],
+                "content": "Have you given up on the magnifier or not needed it?",
+                "options": ["Gave up", "No need"],
+                "message_type": "multiple choice one column"
+            },
+            "poor": {
+                "transitions": "exit",
+                "content": "I am so sorry that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying.",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "ask if given up"
+    },
+    "ask to do perseverance": {
+        "nodes": {
+            "ask to do perseverance": {
+                "transitions": "exit",
+                "content": "{'var': 'perseverance'}",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is start perseverance"
+            }
+        },
+        "start_node_name": "ask to do perseverance"
+    },
+    "perseverance": {
+        "nodes": {
+            "perseverance": {
+                "transitions": "exit",
+                "content": "[perseverance reading]",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "perseverance"
+    },
+    "is continue perseverance": {
+        "nodes": {
+            "is continue perseverance": {
+                "transitions": "exit",
+                "content": "Would you like to continue reading?",
+                "options": ["Continue", "Stop"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is continue perseverance"
+            }
+        },
+        "start_node_name": "is continue perseverance"
+    },
+    "closing": {
+        "nodes": {
+            "goodbye": {
+                "transitions": "exit",
+                "content": "{'var': 'goodbye'}",
+                "options": "Bye!",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "goodbye"
+    },
+    "reminder for prompted": {
+        "nodes": {
+            "reminder": {
+                "transitions": "exit",
+                "content": "I would really love to talk with you more than once a day and hope you can find some time to chat with me in addition to the scheduled time. You can just tap the tablet screen to wake me up at any time that works for you; I’m here for you. During an unscheduled session, you can read any of your own items or reading materials that you would like to share with me, so you won’t need to do any of the reading tests then. I bet you’ll find it enjoyable! I encourage you to give it a try whenever it’s a good time for you.",
+                "options": "Sounds good!",
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "reminder"
+    },
+    "grit transition": {
+        "nodes": {
+            "grit": {
+                "transitions": "exit",
+                "content": "{'var': 'transition'}",
+                "options": "Next",
+                "message_type": "multiple choice one column"
+            }
+        }
+    }
+}

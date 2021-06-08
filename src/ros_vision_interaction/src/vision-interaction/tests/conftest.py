@@ -1,6 +1,8 @@
 #!/usr/bin/python3.8
+import json
 import mock
 import mongomock
+import os
 import pytest
 
 from controllers.vision_project_delegator import INITIAL_STATE_DB
@@ -34,225 +36,30 @@ def statedb(state_mongo_client):
 
 @pytest.fixture
 def interaction_builder(statedb):
-    deployment_interaction_dict = {
-        "ask to chat": {
-            "nodes": {
-                "ask to chat": {
-                    "transitions": ["exit", "that's ok"],
-                    "content": "Is this a good time to chat?",
-                    "options": ["Yes", "No"],
-                    "message_type": "multiple choice one column",
-                    "result_db_key": "good to chat"
-                },
-                "that's ok": {
-                    "transitions": ["exit"],
-                    "content": "That's alright.",
-                    "options": ["Next"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "ask to chat"
-        },
-        "ask to do perseverance": {
-            "nodes": {
-                "ask to do perseverance": {
-                    "transitions": ["exit"],
-                    "content": "Would you like to do some additional reading?",
-                    "options": ["Yes", "No"],
-                    "message_type": "multiple choice one column",
-                    "result_db_key": "is start perseverance"
-                }
-            },
-            "start_node_name": "ask to do perseverance"
-        },
-        "ask to do scheduled": {
-            "nodes": {
-                "ask to do scheduled": {
-                    "transitions": ["exit"],
-                    "content": "Would you like to do the reading evaluation now?",
-                    "options": ["Yes", "No"],
-                    "message_type": "multiple choice one column",
-                    "result_db_key": "is off checkin"
-                }
-            },
-            "start_node_name": "ask to do scheduled"
-        },
-        "check reading id": {
-            "nodes": {
-                "check": {
-                    "transitions": ["exit"],
-                    "content": "Please input the reading material ID",
-                    "options": ["Next"],
-                    "message_type": "numpad",
-                    "result_db_key": "current reading id",
-                    "tests": "check reading id",
-                    "error_message": "Please enter the correct ID.",
-                    "error_options": ["Oops"]
-                }
-            },
-            "start_node_name": "check"
-        },
-        "evaluation": {
-            "nodes": {
-                "evaluation": {
-                    "transitions": ["exit"],
-                    "content": "[reading evaluation]",
-                    "options": ["Next"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "evaluation"
-        },
-        "first checkin": {
-            "nodes": {
-                "first checkin": {
-                    "transitions": ["exit"],
-                    "content": "Nice to meet you, my name is QT!",
-                    "options": ["Next"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "first checkin"
-        },
-        "goal setting": {
-            "nodes": {
-                "goal setting": {
-                    "transitions": ["exit"],
-                    "content": "[goal setting]",
-                    "options": ["Exit"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "goal setting"
-        },
-        "goodbye": {
-            "nodes": {
-                "goodbye": {
-                    "transitions": ["exit"],
-                    "content": "Goodbye!",
-                    "options": ["Bye!"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "goodbye"
-        },
-        "greeting": {
-            "nodes": {
-                "greeting": {
-                    "transitions": ["exit"],
-                    "content": "Hello there!",
-                    "options": ["Next"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "greeting"
-        },
-        "mindfulness": {
-            "nodes": {
-                "mindfulness": {
-                    "transitions": ["exit"],
-                    "content": "[mindfulness]",
-                    "options": ["Exit"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "mindfulness"
-        },
-        "perseverance": {
-            "nodes": {
-                "perseverance": {
-                    "transitions": ["exit"],
-                    "content": "[perseverance reading]",
-                    "options": ["Continue", "Stop"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "perseverance"
-        },
-        "prompted checkin": {
-            "nodes": {
-                "prompted checkin": {
-                    "transitions": ["exit"],
-                    "content": "This is a prompted checkin.",
-                    "options": ["exit"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "prompted checkin"
-        },
-        "reward": {
-            "nodes": {
-                "reward": {
-                    "transitions": ["exit"],
-                    "content": "[reward from QT]",
-                    "options": ["Exit"],
-                    "message_type": "multiple choice one column",
-                    "result_db_key": "is continue perseverance"
-                }
-            },
-            "start_node_name": "reward"
-        },
-        "scheduled checkin": {
-            "nodes": {
-                "scheduled checkin": {
-                    "transitions": ["exit"],
-                    "content": "This is a scheduled checkin.",
-                    "options": ["exit"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "scheduled checkin"
-        },
-        "schedule next checkin": {
-            "nodes": {
-                "schedule": {
-                    "transitions": ["exit"],
-                    "content": "When should we plan to talk tomorrow?",
-                    "options": ["Tomorrow"],
-                    "args": ["15", "12:00"],
-                    "message_type": "time entry",
-                    "result_convert_from_str_fn": "next day checkin time",
-                    "result_db_key": "next checkin datetime"
-                }
-            },
-            "start_node_name": "schedule"
-        },
-        "talk about vision": {
-            "nodes": {
-                "talk about vision": {
-                    "transitions": ["automated response to patient"],
-                    "content": "Please tell me how you're feeling about your vision.",
-                    "options": ["Next"],
-                    "message_type": "multiple choice one column"
-                },
-                "automated response to patient": {
-                    "transitions": ["exit"],
-                    "content": "[automated response]",
-                    "options": ["Next"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "talk about vision"
-        },
-        "too many prompted": {
-            "nodes": {
-                "too many prompted": {
-                    "transitions": ["exit"],
-                    "content": "> 3 checkins, talk more tomorrow!",
-                    "options": ["Oops"],
-                    "message_type": "multiple choice one column"
-                }
-            },
-            "start_node_name": "too many prompted"
-        }
-    }
+    deployment_interaction_dict = {}
+    cwd = os.path.dirname(os.path.abspath(__file__))
+    resources_directory = os.path.join(cwd, '..', '..', '..', 'resources')
 
-    with mock.patch('builtins.open', mock.mock_open(read_data="{}")) as mock_open:
-        handlers = [mock_open.return_value, mock.mock_open(read_data="{}").return_value]
-        mock_open.side_effect = handlers
-        builder = InteractionBuilder(
-            interaction_dict=deployment_interaction_dict,
-            variations_files="interaction_variations.json",
-            statedb=statedb
-        )
+    interaction_files = [
+        os.path.join(resources_directory, 'deployment', 'first_interaction.json'),
+        os.path.join(resources_directory, 'deployment', 'scheduled.json'),
+        os.path.join(resources_directory, 'deployment', 'prompted.json')
+    ]
+    for file in interaction_files:
+        with open(file) as f:
+            deployment_interaction_dict.update(json.load(f))
+
+    interaction_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
+    grit_dialogue_variations_file = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
+    scheduled_variations_file = os.path.join(resources_directory, 'deployment', 'scheduled_variations.json')
+
+    builder = InteractionBuilder(
+        interaction_dict=deployment_interaction_dict,
+        variations_files=[
+            interaction_variations_file,
+            grit_dialogue_variations_file,
+            scheduled_variations_file
+        ],
+        statedb=statedb
+    )
     return builder

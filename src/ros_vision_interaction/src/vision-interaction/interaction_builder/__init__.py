@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 from interaction_engine.messager.directed_graph import DirectedGraph
 from interaction_engine.messager.node import Node
@@ -6,26 +7,59 @@ from interaction_engine.text_populator import TextPopulator
 from interaction_engine.text_populator import DatabasePopulator
 from interaction_engine.text_populator import VarietyPopulator
 
+logging.basicConfig(level=logging.INFO)
+
 
 class InteractionBuilder:
     class Graphs:
-        ASK_TO_CHAT = "ask to chat"
+        ASK_TO_DO_EVALUATION = "ask to do evaluation"
         ASK_TO_DO_PERSEVERANCE = "ask to do perseverance"
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
-        CHECK_READING_ID = "check reading id"
+        CLOSING = "closing"
+        CONTINUE_PERSEVERANCE = "is continue perseverance"
         EVALUATION = "evaluation"
-        FIRST_CHECKIN = "first checkin"
+        FEEDBACK_VIDEO = "feedback video"
         GOAL_SETTING = "goal setting"
-        GOODBYE = "goodbye"
-        GREETING = "greeting"
+        GRIT_TRANSITION = "grit transition"
+        INTRODUCE_QT = "introduce QT"
         MINDFULNESS = "mindfulness"
+        NO_MAGNIFIER_USE = "no magnifier use"
         PERSEVERANCE = "perseverance"
+        PLAN_CHECKIN_TOMORROW = "plan tomorrow's checkin"
+        PLAN_NEXT_CHECKIN = "plan next checkin"
+        PROMPTED_ASK_TO_CHAT = "prompted ask to chat"
         PROMPTED_CHECKIN = "prompted checkin"
+        PROMPTED_PLAN_NEXT_CHECKIN = "prompted plan next checkin"
+        REMINDER_FOR_PROMPTED = "reminder for prompted"
         REWARD = "reward"
+        SCHEDULED_ASK_TO_CHAT = "scheduled ask to chat"
         SCHEDULED_CHECKIN = "scheduled checkin"
-        SCHEDULE_NEXT_CHECKIN = "schedule next checkin"
-        TALK_ABOUT_VISION = "talk about vision"
         TOO_MANY_PROMPTED = "too many prompted"
+
+        POSSIBLE_GRAPHS = [
+            ASK_TO_DO_EVALUATION,
+            ASK_TO_DO_PERSEVERANCE,
+            ASK_TO_DO_SCHEDULED,
+            CLOSING,
+            CONTINUE_PERSEVERANCE,
+            EVALUATION,
+            FEEDBACK_VIDEO,
+            GOAL_SETTING,
+            INTRODUCE_QT,
+            MINDFULNESS,
+            NO_MAGNIFIER_USE,
+            PERSEVERANCE,
+            PLAN_NEXT_CHECKIN,
+            PLAN_CHECKIN_TOMORROW,
+            PROMPTED_ASK_TO_CHAT,
+            PROMPTED_CHECKIN,
+            PROMPTED_PLAN_NEXT_CHECKIN,
+            REMINDER_FOR_PROMPTED,
+            REWARD,
+            SCHEDULED_ASK_TO_CHAT,
+            SCHEDULED_CHECKIN,
+            TOO_MANY_PROMPTED
+        ]
 
     def __init__(
             self,
@@ -42,93 +76,13 @@ class InteractionBuilder:
         self._variety_populator = VarietyPopulator(self._variations_files)
 
         self._text_populator = TextPopulator(self._variety_populator, self._database_populator)
-        self._interactions = {
-            InteractionBuilder.Graphs.ASK_TO_CHAT: self.build_graph_from_dict(
+        self._interactions = {}
+        for graph_name in InteractionBuilder.Graphs.POSSIBLE_GRAPHS:
+            self._interactions[graph_name] = self.build_graph_from_dict(
                 self._interaction_dict,
-                InteractionBuilder.Graphs.ASK_TO_CHAT,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.CHECK_READING_ID: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.CHECK_READING_ID,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.EVALUATION: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.EVALUATION,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.FIRST_CHECKIN: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.FIRST_CHECKIN,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.GOAL_SETTING: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.GOAL_SETTING,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.GOODBYE: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.GOODBYE,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.GREETING: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.GREETING,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.MINDFULNESS: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.MINDFULNESS,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.PERSEVERANCE: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.PERSEVERANCE,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.PROMPTED_CHECKIN: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.PROMPTED_CHECKIN,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.REWARD: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.REWARD,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.SCHEDULED_CHECKIN: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.SCHEDULED_CHECKIN,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.SCHEDULE_NEXT_CHECKIN,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.TALK_ABOUT_VISION: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.TALK_ABOUT_VISION,
-                self._text_populator,
-            ),
-            InteractionBuilder.Graphs.TOO_MANY_PROMPTED: self.build_graph_from_dict(
-                self._interaction_dict,
-                InteractionBuilder.Graphs.TOO_MANY_PROMPTED,
+                graph_name,
                 self._text_populator,
             )
-        }
 
         self._possible_graphs = [graph for graph in self._interactions.values()]
 
@@ -174,8 +128,10 @@ class InteractionBuilder:
                 node_info["content"] = "<prosody rate=\"{speaking_rate}\">".format(speaking_rate=speaking_rate) + \
                                        node_info["content"] + "</prosody> "
 
-            if node_info["result_convert_from_str_fn"] == "next day checkin time":
-                node_info["result_convert_from_str_fn"] = self.next_day_checkin_time_from_str
+            if node_info["result_convert_from_str_fn"] == "save_tomorrow_checkin_datetime":
+                node_info["result_convert_from_str_fn"] = self.next_day_checkin_datetime_from_str
+            if node_info["result_convert_from_str_fn"] == "later_today_checkin_datetime":
+                node_info["result_convert_from_str_fn"] = self.later_today_checkin_datetime
 
             if node_info["tests"] == "check reading id":
                 node_info["tests"] = self.check_reading_id
@@ -204,15 +160,35 @@ class InteractionBuilder:
             start_node=start_node_name
         )
 
-    def next_day_checkin_time_from_str(self, time_string):
+    def next_day_checkin_datetime_from_str(self, time_string):
         next_checkin_time = datetime.datetime.strptime(time_string, '%I:%M %p').time()
         current_datetime = datetime.datetime.now()
         current_day = current_datetime.day
-        return current_datetime.replace(
-            day=current_day + 1,
-            hour=next_checkin_time.hour,
-            minute=next_checkin_time.minute
-        )
+        try:
+            new_datetime = current_datetime.replace(
+                day=current_day + 1,
+                hour=next_checkin_time.hour,
+                minute=next_checkin_time.minute
+            )
+        except ValueError:
+            logging.info("Day out of range for current month, setting to first day of next month")
+            current_month = current_datetime.month
+            new_datetime = current_datetime.replace(
+                month=current_month+1,
+                day=1,
+                hour=next_checkin_time.hour,
+                minute=next_checkin_time.minute
+            )
+        return new_datetime
+
+    def later_today_checkin_datetime(self, hours_as_str):
+        try:
+            hours = int(hours_as_str)
+        except (TypeError, ValueError):
+            logging.info("Could not set checkin for later today, defaulting to the current time tomorrow.")
+            hours = 24
+        current_hour = datetime.datetime.now().hour
+        return datetime.datetime.now().replace(hour=current_hour+hours)
 
     def check_reading_id(self, reading_id):
         eval_index = self._statedb.get("reading eval index")

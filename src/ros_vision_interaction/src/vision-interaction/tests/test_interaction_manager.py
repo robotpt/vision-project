@@ -48,6 +48,8 @@ def test_run_scheduled_interaction(interaction_manager, statedb):
 
 def test_run_reading_evaluation(interaction_manager, statedb):
     current_eval_index = statedb.get("reading eval index")
+    statedb.set("good to chat", "Yes")
+    statedb.set("is do evaluation", "Yes")
     interaction_manager.run_interaction_once("scheduled interaction")
     assert statedb.is_set("is done eval today")
     assert statedb.get("is interaction finished")
@@ -56,6 +58,7 @@ def test_run_reading_evaluation(interaction_manager, statedb):
 
 def test_run_prompted_interaction(interaction_manager, statedb):
     with freezegun.freeze_time("2021-02-10"):
+        statedb.set("good to chat", "Yes")
         assert statedb.get("num of prompted today") == 0
         interaction_manager.run_interaction_once("prompted interaction")
         assert statedb.get("num of prompted today") == 1
