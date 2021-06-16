@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 import datetime
 import logging
+import math
 
 from controllers.interaction_manager import Interactions
 
@@ -65,13 +66,15 @@ class VisionProjectDelegator:
             update_window_seconds=5,
             scheduled_window_minutes=15,
             minutes_between_interactions=1,
-            max_num_of_prompted_per_day=3
+            max_num_of_prompted_per_day=3,
+            score_window=10
     ):
         self._state_database = statedb
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
         self._scheduled_window_minutes = datetime.timedelta(minutes=scheduled_window_minutes)
         self._minutes_between_interactions = datetime.timedelta(minutes=minutes_between_interactions)
         self._max_num_of_prompted_per_day = max_num_of_prompted_per_day
+        self._score_window = score_window
 
         self._is_run_interaction = False
 
@@ -118,20 +121,32 @@ class VisionProjectDelegator:
         last_5_scores.append(self._state_database.get("current eval score"))
         self._state_database.set("last 5 eval scores", last_5_scores)
 
-    def get_interaction_type(self):
-        logging.info("Determining interaction type")
-        if self._is_first_interaction():
-            interaction_type = Interactions.FIRST_INTERACTION
-        elif self._is_time_for_scheduled_interaction():
-            interaction_type = Interactions.SCHEDULED_INTERACTION
-        elif self._is_run_too_many_prompted():
-            interaction_type = Interactions.TOO_MANY_PROMPTED
-        elif self._is_run_prompted_interaction():
-            interaction_type = Interactions.PROMPTED_INTERACTION
-        elif self._is_ask_to_do_scheduled():
-            interaction_type = Interactions.ASK_TO_DO_SCHEDULED
+    def _update_reading_task_data(self):
+        last_5_scores = self._state_database.get("last 5 eval scores")
+        average_score = sum(last_5_scores)/len(last_5_scores)
+        last_score = self._state_database.get("last score")
+        if average_score - self._score_window <= last_score <= average_score + self._score_window:
+            self._state_database.set("grit feedback index", 0)  # STABLE
+        elif last_score < average_score - self._score_window:
+            self._state_database.set("grit feedback index", 1)  # DECLINED
         else:
-            interaction_type = None
+            self._state_database.set("grit feedback index", 2)  # IMPROVED
+
+    def get_interaction_type(self):
+        # logging.info("Determining interaction type")
+        # if self._is_first_interaction():
+        #     interaction_type = Interactions.FIRST_INTERACTION
+        # elif self._is_time_for_scheduled_interaction():
+        #     interaction_type = Interactions.SCHEDULED_INTERACTION
+        # elif self._is_run_too_many_prompted():
+        #     interaction_type = Interactions.TOO_MANY_PROMPTED
+        # elif self._is_run_prompted_interaction():
+        #     interaction_type = Interactions.PROMPTED_INTERACTION
+        # elif self._is_ask_to_do_scheduled():
+        #     interaction_type = Interactions.ASK_TO_DO_SCHEDULED
+        # else:
+        #     interaction_type = None
+        interaction_type = Interactions.SCHEDULED_INTERACTION
         return interaction_type
 
     def _is_first_interaction(self):
