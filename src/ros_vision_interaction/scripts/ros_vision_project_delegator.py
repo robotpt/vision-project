@@ -7,6 +7,7 @@ import schedule
 
 from controllers import VisionProjectDelegator
 from controllers.vision_project_delegator import INITIAL_STATE_DB
+from interaction_builder import InteractionBuilder
 from vision_project_tools import init_db
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
@@ -67,6 +68,10 @@ class RosVisionProjectDelegator:
         self._scheduler = schedule.Scheduler()
         self._scheduler.every(self._seconds_between_updates).seconds.do(self.update)
 
+        self._current_node_name = None
+        self._is_recording_evaluation = False
+        self._is_recording_perseverance = False
+
         self._is_debug = rospy.get_param(
             "vision-project/controllers/is_debug",
             False
@@ -106,7 +111,20 @@ class RosVisionProjectDelegator:
             # TODO: add a feedback callback
             rospy.loginfo("Sending goal to start interaction")
             self._start_interaction_client.send_goal(start_interaction_goal)
+            self._is_record_interaction_publisher.publish(True)
+
             self._start_interaction_client.wait_for_result()
+
+            self._is_record_interaction_publisher.publish(False)
+            if self._is_recording_evaluation:
+                rospy.loginfo(f"Publishing to stop evaluation audio recording at {datetime.datetime.now()}")
+                self._is_record_evaluation_publisher.publish(False)
+                self._is_recording_evaluation = False
+            if self._is_recording_perseverance:
+                rospy.loginfo("Publishing to stop perseverance audio recording")
+                self._is_record_perseverance_publisher.publish(False)
+                self._is_recording_perseverance = False
+
         return
 
     def _screen_tap_listener_callback(self, _):
@@ -129,6 +147,18 @@ class RosVisionProjectDelegator:
         rospy.loginfo(f"Selected feedback video: {choice}")
         video_dictionary = self._state_database.get("feedback videos")
         self._state_database.set("video to play", video_dictionary[choice])
+
+    def _node_name_callback(self, data):
+        node_name = data.data
+        rospy.loginfo(node_name)
+        if node_name == InteractionBuilder.Graphs.EVALUATION:
+            rospy.loginfo(f"Publishing to record evaluation audio at {datetime.datetime.now()}")
+            self._is_record_evaluation_publisher.publish(True)
+            self._is_recording_evaluation = True
+        if node_name == InteractionBuilder.Graphs.PERSEVERANCE:
+            rospy.loginfo("Publishing to record perseverance audio")
+            self._is_record_perseverance_publisher.publish(True)
+            self._is_recording_perseverance = True
 
 
 if __name__ == "__main__":
