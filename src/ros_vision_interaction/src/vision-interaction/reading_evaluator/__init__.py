@@ -21,7 +21,7 @@ class Frame(object):
 
 
 class ReadingEvaluator:
-    """Finds and """
+    """Computes total speaking time in a given audio file."""
 
     def __init__(
             self,
@@ -122,3 +122,11 @@ class ReadingEvaluator:
         # Yield any leftover frames
         if voiced_frames:
             yield b''.join([f.bytes for f in voiced_frames])
+
+
+if __name__ == "__main__":
+    import os
+
+    evaluator = ReadingEvaluator()
+    audio_file_path = os.path.join("/root", "catkin_ws", "src", "test.wav")
+    print(evaluator.get_total_speaking_time(audio_file_path))
