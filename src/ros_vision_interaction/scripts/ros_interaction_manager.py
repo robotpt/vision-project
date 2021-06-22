@@ -112,8 +112,7 @@ if __name__ == "__main__":
     interaction_builder = InteractionBuilder(
         interaction_dict=demo_interaction_dict,
         variations_files=[demo_variations_file, deployment_variations_file],
-        statedb=state_database,
-        is_run_demo=is_run_demo
+        statedb=state_database
     )
 
     interaction_manager = InteractionManager(
