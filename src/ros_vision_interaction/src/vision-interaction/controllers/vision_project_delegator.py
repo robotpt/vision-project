@@ -133,20 +133,19 @@ class VisionProjectDelegator:
             self._state_database.set("grit feedback index", 2)  # IMPROVED
 
     def get_interaction_type(self):
-        # logging.info("Determining interaction type")
-        # if self._is_first_interaction():
-        #     interaction_type = Interactions.FIRST_INTERACTION
-        # elif self._is_time_for_scheduled_interaction():
-        #     interaction_type = Interactions.SCHEDULED_INTERACTION
-        # elif self._is_run_too_many_prompted():
-        #     interaction_type = Interactions.TOO_MANY_PROMPTED
-        # elif self._is_run_prompted_interaction():
-        #     interaction_type = Interactions.PROMPTED_INTERACTION
-        # elif self._is_ask_to_do_scheduled():
-        #     interaction_type = Interactions.ASK_TO_DO_SCHEDULED
-        # else:
-        #     interaction_type = None
-        interaction_type = Interactions.SCHEDULED_INTERACTION
+        logging.info("Determining interaction type")
+        if self._is_first_interaction():
+            interaction_type = Interactions.FIRST_INTERACTION
+        elif self._is_time_for_scheduled_interaction():
+            interaction_type = Interactions.SCHEDULED_INTERACTION
+        elif self._is_run_too_many_prompted():
+            interaction_type = Interactions.TOO_MANY_PROMPTED
+        elif self._is_run_prompted_interaction():
+            interaction_type = Interactions.PROMPTED_INTERACTION
+        elif self._is_ask_to_do_scheduled():
+            interaction_type = Interactions.ASK_TO_DO_SCHEDULED
+        else:
+            interaction_type = None
         return interaction_type
 
     def _is_first_interaction(self):
