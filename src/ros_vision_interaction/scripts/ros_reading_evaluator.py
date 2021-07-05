@@ -9,7 +9,7 @@ import time
 from std_msgs.msg import Bool
 from vision_project_tools import init_db
 from vision_project_tools import EngineStateDb as StateDb
-from controllers.vision_project_delegator import DatabaseKeys, INITIAL_STATE_DB
+from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB
 from reading_evaluator import ReadingEvaluator
 
 sys.path.append('/root/catkin_ws/src/ffmpeg')

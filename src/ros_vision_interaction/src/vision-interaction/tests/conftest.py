@@ -5,8 +5,8 @@ import mongomock
 import os
 import pytest
 
-from controllers.vision_project_delegator import INITIAL_STATE_DB
 from interaction_builder import InteractionBuilder
+from vision_project_tools.constants import INITIAL_STATE_DB
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
 DATABASE_NAME = 'vision_project'

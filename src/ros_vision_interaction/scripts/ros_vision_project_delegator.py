@@ -6,9 +6,9 @@ import rospy
 import schedule
 
 from controllers import VisionProjectDelegator
-from controllers.vision_project_delegator import DatabaseKeys, INITIAL_STATE_DB
 from interaction_builder import InteractionBuilder
 from vision_project_tools import init_db
+from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
 from cordial_msgs.msg import MouseEvent

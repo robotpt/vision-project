@@ -2,32 +2,13 @@
 import datetime
 import logging
 
-from controllers.vision_project_delegator import DatabaseKeys
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
 from interaction_builder import InteractionBuilder
+from vision_project_tools.constants import Interactions, DatabaseKeys
 from vision_project_tools.vision_engine import VisionInteractionEngine as InteractionEngine
 
 logging.basicConfig(level=logging.INFO)
-
-
-class Interactions:
-
-    ASK_TO_DO_SCHEDULED = "ask to do scheduled"
-    EVALUATION = "evaluation"
-    FIRST_INTERACTION = "first interaction"
-    PROMPTED_INTERACTION = "prompted interaction"
-    SCHEDULED_INTERACTION = "scheduled interaction"
-    TOO_MANY_PROMPTED = "too many prompted"
-
-    POSSIBLE_INTERACTIONS = [
-        ASK_TO_DO_SCHEDULED,
-        EVALUATION,
-        FIRST_INTERACTION,
-        PROMPTED_INTERACTION,
-        SCHEDULED_INTERACTION,
-        TOO_MANY_PROMPTED
-    ]
 
 
 class InteractionManager:

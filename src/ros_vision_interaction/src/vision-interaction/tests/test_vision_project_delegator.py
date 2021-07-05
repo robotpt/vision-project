@@ -4,8 +4,7 @@ import freezegun
 import pytest
 
 from controllers import VisionProjectDelegator
-from controllers.interaction_manager import Interactions
-from controllers.vision_project_delegator import DatabaseKeys
+from vision_project_tools.constants import DatabaseKeys,Interactions
 
 
 @pytest.fixture
