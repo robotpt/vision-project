@@ -9,7 +9,7 @@ import time
 from std_msgs.msg import Bool
 from vision_project_tools import init_db
 from vision_project_tools import EngineStateDb as StateDb
-from controllers.vision_project_delegator import INITIAL_STATE_DB
+from controllers.vision_project_delegator import DatabaseKeys, INITIAL_STATE_DB
 from reading_evaluator import ReadingEvaluator
 
 sys.path.append('/root/catkin_ws/src/ffmpeg')
@@ -55,9 +55,9 @@ class RosReadingEvaluator:
             )
             reading_time = self._reading_evaluator.get_total_speaking_time(audio_file)
             rospy.loginfo(f"Reading time: {reading_time}")
-            reading_eval_index = self._state_database.get("reading eval index")
+            reading_eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
             try:
-                num_of_words = self._state_database.get("reading eval data")[reading_eval_index]["word count"]
+                num_of_words = self._state_database.get(DatabaseKeys.READING_EVAL_DATA)[reading_eval_index]["word count"]
             except IndexError or KeyError:
                 rospy.logerr(f"Reading task data not found for index:{reading_eval_index}")
                 num_of_words = 0
@@ -68,7 +68,7 @@ class RosReadingEvaluator:
             else:
                 reading_speed = num_of_words / reading_time
                 rospy.loginfo("Reading speed: {}".format(reading_speed))
-            self._state_database.set("current eval score", reading_speed)
+            self._state_database.set(DatabaseKeys.CURRENT_EVAL_SCORE, reading_speed)
 
     def find_audio_file(
             self,
