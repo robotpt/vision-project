@@ -61,12 +61,13 @@ class RosReadingEvaluator:
             except IndexError or KeyError:
                 rospy.logerr(f"Reading task data not found for index:{reading_eval_index}")
                 num_of_words = 0
-            try:
-                reading_speed = num_of_words / reading_time
-                rospy.loginfo("Reading speed: {}".format(reading_speed))
-            except ZeroDivisionError:
+
+            if reading_time == 0:
                 rospy.logerr("Reading time is 0, setting reading speed to 0")
                 reading_speed = 0
+            else:
+                reading_speed = num_of_words / reading_time
+                rospy.loginfo("Reading speed: {}".format(reading_speed))
             self._state_database.set("current eval score", reading_speed)
 
     def find_audio_file(
