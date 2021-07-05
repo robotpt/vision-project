@@ -106,10 +106,7 @@ if __name__ == "__main__":
 
     source_directory = rospy.get_param("vision-project/data/data_capture")
 
-    reading_evaluator = ReadingEvaluator(
-        silence_threshold=-40,
-        chunk_size=10
-    )
+    reading_evaluator = ReadingEvaluator()
 
     ros_evaluator = RosReadingEvaluator(
         statedb=state_database,

@@ -2,7 +2,6 @@
 import collections
 import contextlib
 import logging
-import speech_recognition
 import wave
 import webrtcvad
 
@@ -23,21 +22,12 @@ class Frame(object):
 class ReadingEvaluator:
     """Computes total speaking time in a given audio file."""
 
-    def __init__(
-            self,
-            silence_threshold=-35,
-            sample_rate=16000,
-            chunk_size=10,
-    ):
-        self._silence_threshold = silence_threshold
-        self._sample_rate = sample_rate
-        self._chunk_size = chunk_size
-
-        self._sr = speech_recognition.Recognizer()
+    def __init__(self,):
         self._vad = webrtcvad.Vad()
         self._vad.set_mode(3)
 
     def get_total_speaking_time(self, audio_file_path):
+        """Reads a .wav file and returns the total length of speaking time (float)."""
         total_speaking_time = 0.0
         audio, sample_rate = self.read_wav(audio_file_path)
         frame_duration_ms = 30
