@@ -7,7 +7,7 @@ import pymongo
 import rospy
 
 from controllers import InteractionManager
-from controllers.vision_project_delegator import INITIAL_STATE_DB
+from controllers.vision_project_delegator import DatabaseKeys, INITIAL_STATE_DB
 from interaction_builder import InteractionBuilder
 from interfaces import CordialInterface
 from vision_project_tools import init_db
@@ -48,7 +48,7 @@ class RosInteractionManager:
 
     # start interaction action callback
     def run_manager_once(self, goal):
-        self._state_database.set("is interaction finished", False)
+        self._state_database.set(DatabaseKeys.IS_INTERACTION_FINISHED, False)
         interaction_type = goal.type
         result = StartInteractionResult()
 
@@ -75,13 +75,14 @@ if __name__ == "__main__":
 
     seconds_until_timeout = rospy.get_param("vision-project/params/seconds_until_interaction_timeout")
 
-    DATABASE_NAME = "vision-project"
     host = rospy.get_param("mongodb/host")
     port = rospy.get_param("mongodb/port")
+    database_name = rospy.get_param("mongodb/database_name")
+    collection_name = rospy.get_param("mongodb/collection_name")
     state_database = StateDb(
         pymongo.MongoClient(host, port),
-        database_name=DATABASE_NAME,
-        collection_name="state_db"
+        database_name=database_name,
+        collection_name=collection_name
     )
     init_db(state_database, INITIAL_STATE_DB)
 
