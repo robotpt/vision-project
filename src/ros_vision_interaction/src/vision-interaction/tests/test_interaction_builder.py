@@ -1,6 +1,4 @@
-import mock
-import pytest
-
+#!/usr/bin/python3.8
 
 def test_build_graph_from_json(interaction_builder):
     test_graph_dict = {
