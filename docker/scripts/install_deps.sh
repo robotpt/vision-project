@@ -66,7 +66,9 @@ ${PYTHON3_VERSION} -m pip install --user \
 	schedule==0.6.0 \
 	pydub==0.25.1 \
 	pymongo==3.11.4 \
-	discord.py==1.7.1
+	discord.py==1.7.1 \
+	speechrecognition \
+	webrtcvad
 
 
 # Setup HTTP server

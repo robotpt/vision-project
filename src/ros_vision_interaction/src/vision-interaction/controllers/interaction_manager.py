@@ -5,28 +5,10 @@ import logging
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
 from interaction_builder import InteractionBuilder
+from vision_project_tools.constants import Interactions, DatabaseKeys
 from vision_project_tools.vision_engine import VisionInteractionEngine as InteractionEngine
 
 logging.basicConfig(level=logging.INFO)
-
-
-class Interactions:
-
-    ASK_TO_DO_SCHEDULED = "ask to do scheduled"
-    EVALUATION = "evaluation"
-    FIRST_INTERACTION = "first interaction"
-    PROMPTED_INTERACTION = "prompted interaction"
-    SCHEDULED_INTERACTION = "scheduled interaction"
-    TOO_MANY_PROMPTED = "too many prompted"
-
-    POSSIBLE_INTERACTIONS = [
-        ASK_TO_DO_SCHEDULED,
-        EVALUATION,
-        FIRST_INTERACTION,
-        PROMPTED_INTERACTION,
-        SCHEDULED_INTERACTION,
-        TOO_MANY_PROMPTED
-    ]
 
 
 class InteractionManager:
@@ -128,9 +110,9 @@ class InteractionManager:
         return self._planner
 
     def _set_vars_after_ask_to_do_scheduled(self):
-        if self._state_database.get("is off checkin") == "Yes":
-            self._state_database.set("is off checkin", None)
-            if self._state_database.get("video to play"):
+        if self._state_database.get(DatabaseKeys.IS_OFF_CHECKIN) == "Yes":
+            self._state_database.set(DatabaseKeys.IS_OFF_CHECKIN, None)
+            if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
                 )
@@ -145,9 +127,9 @@ class InteractionManager:
             )
 
     def _set_vars_after_scheduled_ask_for_eval(self):
-        if self._state_database.get("is do evaluation") == "Yes":
-            self._state_database.set("is do evaluation", None)
-            if self._state_database.get("video to play"):
+        if self._state_database.get(DatabaseKeys.IS_DO_EVALUATION) == "Yes":
+            self._state_database.set(DatabaseKeys.IS_DO_EVALUATION, None)
+            if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
                 )
@@ -161,8 +143,8 @@ class InteractionManager:
             )
 
     def _set_vars_after_prompted_ask_to_chat(self):
-        if self._state_database.get("good to chat") == "Yes":
-            self._state_database.set("good to chat", None)
+        if self._state_database.get(DatabaseKeys.GOOD_TO_CHAT) == "Yes":
+            self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
                 post_hook=self._set_vars_after_prompted
@@ -174,8 +156,8 @@ class InteractionManager:
             )
 
     def _set_vars_after_scheduled_ask_to_chat(self):
-        if self._state_database.get("good to chat") == "Yes":
-            self._state_database.set("good to chat", None)
+        if self._state_database.get(DatabaseKeys.GOOD_TO_CHAT) == "Yes":
+            self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
             )
@@ -184,15 +166,15 @@ class InteractionManager:
                 post_hook=self._set_vars_after_scheduled_ask_for_eval
             )
         else:
-            self._state_database.set("good to chat", None)
+            self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_NEXT_CHECKIN],
                 post_hook=self._set_vars_after_interaction
             )
 
     def _set_vars_after_ask_to_do_perseverance(self):
-        if self._state_database.get("is start perseverance") == "Yes":
-            self._state_database.set("is start perseverance", None)
+        if self._state_database.get(DatabaseKeys.IS_START_PERSEVERANCE) == "Yes":
+            self._state_database.set(DatabaseKeys.IS_START_PERSEVERANCE, None)
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
                 post_hook=self._set_vars_after_perseverance
@@ -214,32 +196,32 @@ class InteractionManager:
             )
 
     def _set_vars_after_evaluation(self):
-        self._state_database.set("is done eval today", True)
-        eval_index = self._state_database.get("reading eval index")
-        self._state_database.set("reading eval index", eval_index + 1)
+        self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
+        eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
+        self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
         # also need to calculate and save reading speed
         self._set_vars_after_interaction()
 
     def _set_vars_after_interaction(self):
-        self._state_database.set("is prompted by user", False)
-        self._state_database.set("is interaction finished", True)
-        self._state_database.set("last interaction datetime", datetime.datetime.now())
+        self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
+        self._state_database.set(DatabaseKeys.IS_INTERACTION_FINISHED, True)
+        self._state_database.set(DatabaseKeys.LAST_INTERACTION_DATETIME, datetime.datetime.now())
 
     def _set_vars_after_first_interaction(self):
-        self._state_database.set("first interaction datetime", datetime.datetime.now())
+        self._state_database.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, datetime.datetime.now())
         self._set_vars_after_interaction()
 
     def _set_vars_after_goal_setting(self):
-        self._state_database.set("num of days since last goal setting", 0)
+        self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING, 0)
         self._set_vars_after_interaction()
 
     def _set_vars_after_mindfulness(self):
-        self._state_database.set("num of days since last _set_vars_after_mindfulness", 0)
+        self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS, 0)
         self._set_vars_after_interaction()
 
     def _set_vars_after_perseverance(self):
-        perseverance_counter = self._state_database.get("perseverance counter") + 1
-        self._state_database.set("perseverance counter", perseverance_counter)
+        perseverance_counter = self._state_database.get(DatabaseKeys.PERSEVERANCE_COUNTER) + 1
+        self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, perseverance_counter)
         if perseverance_counter >= self._max_num_of_perseverance_readings:
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD]
@@ -254,7 +236,7 @@ class InteractionManager:
             )
 
     def _set_vars_after_continue_perseverance(self):
-        if self._state_database.get("is continue perseverance") == "Continue":
+        if self._state_database.get(DatabaseKeys.IS_CONTINUE_PERSEVERANCE) == "Continue":
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
                 post_hook=self._set_vars_after_perseverance
@@ -269,46 +251,46 @@ class InteractionManager:
             )
 
     def _set_vars_after_prompted(self):
-        num_of_prompted_today = self._state_database.get("num of prompted today") + 1
-        self._state_database.set("num of prompted today", num_of_prompted_today)
-        self._state_database.set("is prompted by user", False)
-        self._state_database.set("is done prompted today", True)
+        num_of_prompted_today = self._state_database.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) + 1
+        self._state_database.set(DatabaseKeys.NUM_OF_PROMPTED_TODAY, num_of_prompted_today)
+        self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
+        self._state_database.set(DatabaseKeys.IS_DONE_PROMPTED_TODAY, True)
         self._set_vars_after_interaction()
 
     def _set_vars_after_too_many_prompted(self):
         self._set_vars_after_interaction()
-        self._state_database.set("is prompted by user", False)
+        self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
 
     def _is_do_mindfulness(self):
-        last_5_scores = self._state_database.get("last 5 eval scores")
+        last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
         if len(last_5_scores) > 0:
             average_eval_score = sum(last_5_scores) / len(last_5_scores)
         else:
             average_eval_score = 0
         return self._days_since_first_interaction() >= 7 \
-            and self._state_database.get("feelings index") <= 3 \
-            and self._state_database.get("current eval score") < average_eval_score
+            and self._state_database.get(DatabaseKeys.FEELINGS_INDEX) <= 3 \
+            and self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE) < average_eval_score
 
     def _is_do_goal_setting(self):
-        last_5_scores = self._state_database.get("last 5 eval scores")
+        last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
         if len(last_5_scores) > 0:
             average_eval_score = sum(last_5_scores)/len(last_5_scores)
         else:
             average_eval_score = 0
         return self._days_since_first_interaction() >= 7 \
-            and self._state_database.get("feelings index") <= 3 \
-            and self._state_database.get("num of days since last goal setting") >= 7 \
-            and self._state_database.get("num of days since last prompt") >= self._num_of_days_to_prompt_goal_setting \
-            and self._state_database.get("num of days since last perseverance") >= self._num_of_days_to_prompt_goal_setting \
-            and self._state_database.get("current eval score") < average_eval_score
+            and self._state_database.get(DatabaseKeys.FEELINGS_INDEX) <= 3 \
+            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING) >= 7 \
+            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT) >= self._num_of_days_to_prompt_goal_setting \
+            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE) >= self._num_of_days_to_prompt_goal_setting \
+            and self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE) < average_eval_score
 
     def _days_since_first_interaction(self):
-        first_interaction_datetime = self._state_database.get("first interaction datetime")
+        first_interaction_datetime = self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME)
         if first_interaction_datetime is None:
             num_of_days = 0
         else:
             current_date = datetime.datetime.now().date()
-            num_of_days = (current_date - self._state_database.get("first interaction datetime").date()).days
+            num_of_days = (current_date - self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME).date()).days
         return num_of_days
 
     @property

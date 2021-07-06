@@ -1,5 +1,6 @@
 <launch>
     <arg name="is_launch_controllers" default="true"/>
+    <arg name="is_launch_evaluator" default="true"/>
     <arg name="aws_voice_name" default="Justin"/>
     <arg name="face_port" default="8081"/>
     <arg name="gui_port" default="8082"/>
@@ -86,6 +87,11 @@
     <group if="$(arg is_launch_controllers)">
         <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
         <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="interaction_manager" output="screen"/>
+    </group>
+
+    <!-- launch reading evaluator -->
+    <group if="$(arg is_launch_evaluator)">
+        <node pkg="ros_vision_interaction" type="ros_reading_evaluator.py" name="reading_evaluator" output="screen"/>
     </group>
 
     <!-- launch mongodb log -->
