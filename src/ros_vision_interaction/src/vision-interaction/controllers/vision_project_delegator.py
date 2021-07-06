@@ -74,12 +74,12 @@ class VisionProjectDelegator:
         last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
         average_score = sum(last_5_scores)/len(last_5_scores)
         last_score = self._state_database.get(DatabaseKeys.LAST_SCORE)
-        if average_score - self._score_window <= last_score <= average_score + self._score_window:
-            self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, 0)  # STABLE
-        elif last_score < average_score - self._score_window:
+        if last_score < average_score - self._score_window:
             self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, 1)  # DECLINED
-        else:
+        elif last_score > average_score + self._score_window:
             self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, 2)  # IMPROVED
+        else:
+            self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, 0)  # STABLE
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")
