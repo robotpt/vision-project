@@ -38,6 +38,7 @@ class VisionProjectDelegator:
         if self._is_new_day():
             self._daily_state_update()
             self._update_act_variables()
+            self._update_reading_task_data()
             self._state_database.set(DatabaseKeys.NUM_OF_PROMPTED_TODAY, 0)
             self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
             self._state_database.set(DatabaseKeys.FEELINGS_INDEX, None)
@@ -74,12 +75,13 @@ class VisionProjectDelegator:
         last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
         average_score = sum(last_5_scores)/len(last_5_scores)
         last_score = self._state_database.get(DatabaseKeys.LAST_SCORE)
-        if last_score < average_score - self._score_window:
-            self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, 1)  # DECLINED
-        elif last_score > average_score + self._score_window:
-            self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, 2)  # IMPROVED
-        else:
-            self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, 0)  # STABLE
+        grit_feedback_index = 0  # STABLE, default value for first reading task
+        if last_score is not None:
+            if last_score < average_score - self._score_window:
+                grit_feedback_index = 1  # DECLINED
+            elif last_score > average_score + self._score_window:
+                grit_feedback_index = 2  # IMPROVED
+        self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")
