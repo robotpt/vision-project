@@ -61,6 +61,74 @@ class DatabaseKeys:
     VIDEO_TO_PLAY = "video to play"
 
 
+READING_EVAL_DATA = {
+    "IReST": {
+        "1": {
+
+        }
+    },
+    "MNread": {
+        "1": {
+
+        }
+    },
+    "spot reading": {
+        # difficulty levels
+        "1": {
+            # reading task IDs
+            "sr11": {
+                "word_count": 50,
+                "score": None,
+            },
+            "sr12": {
+                "word_count": 50,
+                "score": None,
+            }
+        },
+        "2": {
+            "sr21": {
+                "word_count": 50,
+                "score": None,
+            },
+            "sr22": {
+                "word_count": 50,
+                "score": None,
+            }
+        },
+        "3": {
+            "sr31": {
+                "word_count": 50,
+                "score": None,
+            }
+        },
+        "4": {
+            "sr41": {
+                "word_count": 50,
+                "score": None,
+            },
+            "sr42": {
+                "word_count": 50,
+                "score": None,
+            },
+            "sr43": {
+                "word_count": 50,
+                "score": None,
+            }
+        }
+    },
+    "SRT": {
+        "1": {
+
+        }
+    },
+    "self selected": {
+        "1": {
+
+        }
+    }
+}
+
+
 INITIAL_STATE_DB = {
     DatabaseKeys.BEST_SCORE: None,
     DatabaseKeys.CURRENT_EVAL_SCORE: 0,
@@ -68,10 +136,12 @@ INITIAL_STATE_DB = {
     DatabaseKeys.CURRENT_READING_ID: None,
     DatabaseKeys.DIFFICULTY_LEVEL: 1,
     DatabaseKeys.FEEDBACK_VIDEOS: {
-        "video 1": "https://www.youtube.com/embed/4b33NTAuF5E",
-        "video 2": "https://www.youtube.com/embed/JXeJANDKwDc",
-        "video 3": "https://www.youtube.com/embed/uzkD5SeuwzM",
-        "video 4": "https://www.youtube.com/embed/QqsLTNkzvaY",
+        "distance 4x": "https://www.youtube.com/embed/tZyaCbmJOtY",
+        "distance 6x": "https://www.youtube.com/embed/IzM6pxzoAKg",
+        "light": "https://www.youtube.com/embed/1xK1m6U2HkE",
+        "parallel": "https://www.youtube.com/embed/1lvG7ovNOH8",
+        "steady": "https://www.youtube.com/embed/SDzg0_73izo",
+        "upside down": "https://www.youtube.com/embed/udSDgQo9Ms8",
         "no video": ""
     },
     DatabaseKeys.FIRST_INTERACTION_DATETIME: None,
@@ -104,7 +174,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT: 0,
     DatabaseKeys.NUM_OF_PROMPTED_TODAY: 0,
     DatabaseKeys.PERSEVERANCE_COUNTER: 0,
-    DatabaseKeys.READING_EVAL_DATA: [],
+    DatabaseKeys.READING_EVAL_DATA: READING_EVAL_DATA,
     DatabaseKeys.READING_EVAL_INDEX: 0,
     DatabaseKeys.READING_EVAL_TYPE: None,
     DatabaseKeys.USER_NAME: "",
