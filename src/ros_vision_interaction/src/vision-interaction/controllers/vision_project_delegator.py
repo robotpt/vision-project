@@ -83,10 +83,6 @@ class VisionProjectDelegator:
                 grit_feedback_index = 2  # IMPROVED
         self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
 
-    def _get_current_reading_task(self):
-        if datetime.datetime.now().weekday() == 0:  # Monday
-            task_type = "spot_reading"
-
     def get_interaction_type(self):
         logging.info("Determining interaction type")
         if self._is_first_interaction():

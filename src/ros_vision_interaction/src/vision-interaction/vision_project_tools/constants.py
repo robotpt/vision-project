@@ -72,6 +72,11 @@ READING_EVAL_DATA = {
 
         }
     },
+    "SKread": {
+        "1": {
+
+        }
+    },
     "spot reading": {
         # difficulty levels
         "1": {
