@@ -15,7 +15,7 @@ class Tasks:
     SRT = "SRT"
 
 
-class ReadingTaskDatabase:
+class ReadingTaskManager:
 
     def __init__(
             self,
@@ -29,5 +29,5 @@ class ReadingTaskDatabase:
     def _check_reading_task_dict(self, task_dict):
         if type(task_dict) is not dict:
             raise TypeError("Reading task data must be a dictionary")
-        if set(task_dict.keys()) != {Tasks.IREST, Tasks.MNREAD, Tasks.SELF_SELECTED, Tasks.SPOT_READING, Tasks.SRT}:
+        if task_dict.keys() != {Tasks.IREST, Tasks.MNREAD, Tasks.SELF_SELECTED, Tasks.SPOT_READING, Tasks.SRT}:
             raise KeyError("")
