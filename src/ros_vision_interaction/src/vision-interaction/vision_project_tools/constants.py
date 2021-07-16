@@ -54,14 +54,14 @@ class DatabaseKeys:
     NUM_OF_DAYS_SINCE_LAST_PROMPT = "num of days since last prompt"
     NUM_OF_PROMPTED_TODAY = "num of prompted today"
     PERSEVERANCE_COUNTER = "perseverance counter"
-    READING_EVAL_DATA = "reading eval data"
+    READING_TASK_DATA = "reading task data"
     READING_EVAL_INDEX = "reading eval index"
     READING_EVAL_TYPE = "reading eval type"
     USER_NAME = "user name"
     VIDEO_TO_PLAY = "video to play"
 
 
-READING_EVAL_DATA = {
+READING_TASK_DATA = {
     "IReST": {
         "1": {
 
@@ -179,7 +179,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT: 0,
     DatabaseKeys.NUM_OF_PROMPTED_TODAY: 0,
     DatabaseKeys.PERSEVERANCE_COUNTER: 0,
-    DatabaseKeys.READING_EVAL_DATA: READING_EVAL_DATA,
+    DatabaseKeys.READING_TASK_DATA: READING_TASK_DATA,
     DatabaseKeys.READING_EVAL_INDEX: 0,
     DatabaseKeys.READING_EVAL_TYPE: None,
     DatabaseKeys.USER_NAME: "",

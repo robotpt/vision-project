@@ -57,7 +57,7 @@ class RosReadingEvaluator:
             rospy.loginfo(f"Reading time: {reading_time}")
             reading_eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
             try:
-                num_of_words = self._state_database.get(DatabaseKeys.READING_EVAL_DATA)[reading_eval_index]["word count"]
+                num_of_words = self._state_database.get(DatabaseKeys.READING_TASK_DATA)[reading_eval_index]["word count"]
             except IndexError or KeyError:
                 rospy.logerr(f"Reading task data not found for index:{reading_eval_index}")
                 num_of_words = 0
