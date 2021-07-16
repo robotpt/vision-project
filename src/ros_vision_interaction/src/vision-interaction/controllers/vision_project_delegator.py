@@ -3,6 +3,7 @@ import datetime
 import logging
 
 from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB, Interactions
+from vision_project_tools.reading_task_manager import ReadingTaskManager
 
 logging.basicConfig(level=logging.INFO)
 
@@ -12,6 +13,7 @@ class VisionProjectDelegator:
     def __init__(
             self,
             statedb,
+            reading_task_manager,
             update_window_seconds=5,
             scheduled_window_minutes=15,
             minutes_between_interactions=1,
@@ -19,6 +21,7 @@ class VisionProjectDelegator:
             score_window=10
     ):
         self._state_database = statedb
+        self._reading_task_manager = reading_task_manager
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
         self._scheduled_window_minutes = datetime.timedelta(minutes=scheduled_window_minutes)
         self._minutes_between_interactions = datetime.timedelta(minutes=minutes_between_interactions)

@@ -8,8 +8,9 @@ import schedule
 from controllers import VisionProjectDelegator
 from interaction_builder import InteractionBuilder
 from vision_project_tools import init_db
-from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB
+from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB, READING_TASK_DATA
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
+from vision_project_tools.reading_task_manager import ReadingTaskManager
 
 from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
@@ -176,6 +177,7 @@ if __name__ == "__main__":
     )
     init_db(state_database, INITIAL_STATE_DB)
 
+    reading_task_manager = ReadingTaskManager(state_database, READING_TASK_DATA)
     update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
     scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
     minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
@@ -183,6 +185,7 @@ if __name__ == "__main__":
 
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,
+        reading_task_manager=reading_task_manager,
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
         max_num_of_prompted_per_day=max_num_of_prompted_per_day
