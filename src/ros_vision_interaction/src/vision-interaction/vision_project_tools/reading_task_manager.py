@@ -70,3 +70,6 @@ class ReadingTaskManager:
             for difficulty_level in task_type:
                 if task_id in difficulty_level.keys():
                     return difficulty_level[task_id]["word_count"]
+
+    def save_to_database(self):
+        self._state_database.set(DatabaseKeys.READING_TASK_DATA, self._reading_task_data)
