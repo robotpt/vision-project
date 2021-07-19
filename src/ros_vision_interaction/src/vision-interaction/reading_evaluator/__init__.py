@@ -2,10 +2,13 @@
 import collections
 import contextlib
 import logging
+import vision_project_tools.reading_task_tools as reading_task_tools
 import wave
 import webrtcvad
 
 from pydub import AudioSegment
+from vision_project_tools.constants import DatabaseKeys
+from vision_project_tools.reading_task_tools import TaskDataKeys
 
 logging.basicConfig(level=logging.INFO)
 
@@ -22,9 +25,30 @@ class Frame(object):
 class ReadingEvaluator:
     """Computes total speaking time in a given audio file."""
 
-    def __init__(self,):
+    def __init__(
+            self,
+            statedb
+    ):
+        self._state_database = statedb
         self._vad = webrtcvad.Vad()
         self._vad.set_mode(3)
+
+    def calculate_and_set_reading_score(self, audio_file_path):
+        total_speaking_time = self.get_total_speaking_time(audio_file_path)
+        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        num_of_words = reading_task_tools.get_reading_task_data_value(
+            self._state_database,
+            task_id,
+            TaskDataKeys.WORD_COUNT
+        )
+        if total_speaking_time == 0:
+            logging.info("Total speaking time was 0, setting reading speed to 0")
+            reading_speed = 0
+        else:
+            reading_speed = num_of_words / total_speaking_time
+            logging.info(f"Reading speed: {reading_speed}")
+
+        reading_task_tools.set_reading_task_score(self._state_database, task_id, reading_speed)
 
     def get_total_speaking_time(self, audio_file_path):
         """Reads a .wav file and returns the total length of speaking time (float)."""
@@ -113,10 +137,3 @@ class ReadingEvaluator:
         if voiced_frames:
             yield b''.join([f.bytes for f in voiced_frames])
 
-
-if __name__ == "__main__":
-    import os
-
-    evaluator = ReadingEvaluator()
-    audio_file_path = os.path.join("/root", "catkin_ws", "src", "test.wav")
-    print(evaluator.get_total_speaking_time(audio_file_path))

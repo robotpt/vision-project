@@ -53,22 +53,7 @@ class RosReadingEvaluator:
                 self._extension,
                 self._file_prefix
             )
-            reading_time = self._reading_evaluator.get_total_speaking_time(audio_file)
-            rospy.loginfo(f"Reading time: {reading_time}")
-            reading_eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
-            try:
-                num_of_words = self._state_database.get(DatabaseKeys.READING_TASK_DATA)[reading_eval_index]["word count"]
-            except IndexError or KeyError:
-                rospy.logerr(f"Reading task data not found for index:{reading_eval_index}")
-                num_of_words = 0
-
-            if reading_time == 0:
-                rospy.logerr("Reading time is 0, setting reading speed to 0")
-                reading_speed = 0
-            else:
-                reading_speed = num_of_words / reading_time
-                rospy.loginfo("Reading speed: {}".format(reading_speed))
-            self._state_database.set(DatabaseKeys.CURRENT_EVAL_SCORE, reading_speed)
+            self._reading_evaluator.calculate_and_set_reading_score(audio_file)
 
     def find_audio_file(
             self,
@@ -107,7 +92,7 @@ if __name__ == "__main__":
 
     source_directory = rospy.get_param("vision-project/data/data_capture")
 
-    reading_evaluator = ReadingEvaluator()
+    reading_evaluator = ReadingEvaluator(state_database)
 
     ros_evaluator = RosReadingEvaluator(
         statedb=state_database,

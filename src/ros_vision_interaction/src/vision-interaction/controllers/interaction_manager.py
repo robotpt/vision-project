@@ -200,9 +200,6 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
         self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
-        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
-        score = self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE)
-        reading_task_tools.set_reading_task_score(self._state_database, task_id, score)
         self._set_vars_after_interaction()
 
     def _set_vars_after_interaction(self):
