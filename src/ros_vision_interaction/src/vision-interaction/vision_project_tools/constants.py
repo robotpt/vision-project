@@ -63,18 +63,35 @@ class DatabaseKeys:
 
 READING_TASK_DATA = {
     "IReST": {
+        # difficulty levels
         "1": {
-
+            # reading task IDs
+            "ir11": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
         }
     },
     "MNread": {
+        # difficulty levels
         "1": {
-
+            # reading task IDs
+            "mn11": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
         }
     },
     "SKread": {
         "1": {
-
+            # reading task IDs
+            "sk11": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
         }
     },
     "spot reading": {
@@ -84,51 +101,71 @@ READING_TASK_DATA = {
             "sr11": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             },
             "sr12": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             }
         },
         "2": {
             "sr21": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             },
             "sr22": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             }
         },
         "3": {
             "sr31": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             }
         },
         "4": {
             "sr41": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             },
             "sr42": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             },
             "sr43": {
                 "word_count": 50,
                 "score": None,
+                "color": "blue"
             }
         }
     },
     "SRT": {
+        # difficulty levels
         "1": {
-
+            # reading task IDs
+            "srt11": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
         }
     },
     "self selected": {
+        # difficulty levels
         "1": {
-
+            # reading task IDs
+            "ss11": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
         }
     }
 }
@@ -139,7 +176,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.CURRENT_EVAL_SCORE: 0,
     DatabaseKeys.CURRENT_READING_COLOR: None,
     DatabaseKeys.CURRENT_READING_ID: None,
-    DatabaseKeys.DIFFICULTY_LEVEL: 1,
+    DatabaseKeys.DIFFICULTY_LEVEL: "1",
     DatabaseKeys.FEEDBACK_VIDEOS: {
         "distance 4x": "https://www.youtube.com/embed/tZyaCbmJOtY",
         "distance 6x": "https://www.youtube.com/embed/IzM6pxzoAKg",
