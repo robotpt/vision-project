@@ -5,7 +5,7 @@ import pytest
 import vision_project_tools.reading_task_tools as reading_task_tools
 
 from vision_project_tools.constants import DatabaseKeys, READING_TASK_DATA
-from vision_project_tools.reading_task_tools import Tasks
+from vision_project_tools.reading_task_tools import Tasks, TaskDataKeys
 
 
 def reset_reading_task_data(statedb):
@@ -64,4 +64,23 @@ def test_get_current_reading_task_id(statedb):
 
 
 def test_set_reading_score(statedb):
-    pass
+    reading_scores = [10, 12, 14, 15, 17, 19, 20, 21]
+    dates = [
+        "2021-07-11 00:00:00",
+        "2021-07-12 00:00:00",
+        "2021-07-13 00:00:00",
+        "2021-07-14 00:00:00",
+        "2021-07-15 00:00:00",
+        "2021-07-16 00:00:00",
+        "2021-07-17 00:00:00",
+        "2021-07-18 00:00:00",
+    ]
+    statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
+
+    for i, date in enumerate(dates):
+        with freezegun.freeze_time(date):
+            task_id = reading_task_tools.set_new_day_reading_task(statedb)
+            reading_score = reading_scores[i]
+            reading_task_tools.set_reading_task_score(statedb, task_id, reading_score)
+            assert reading_task_tools.get_reading_task_data_value(statedb, task_id, TaskDataKeys.SCORE) == reading_score
+            reset_reading_task_data(statedb)

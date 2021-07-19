@@ -52,11 +52,13 @@ def get_current_reading_task_type():
 
 def get_random_reading_task_id(statedb, task_type, difficulty_level):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
-    possible_tasks = reading_task_data[task_type][difficulty_level]
-    for task in possible_tasks.keys():
-        if possible_tasks[task][TaskDataKeys.SCORE] is not None:
-            possible_tasks.pop(task)
-    return random.choice(list(possible_tasks.keys()))
+    tasks = reading_task_data[task_type][difficulty_level]
+    logging.info(f"Possible tasks: {tasks}")
+    possible_tasks = []
+    for task in tasks.keys():
+        if tasks[task][TaskDataKeys.SCORE] is None:
+            possible_tasks.append(task)
+    return random.choice(possible_tasks)
 
 
 def get_reading_task_data_value(statedb, task_id, data_type):
@@ -79,9 +81,9 @@ def set_reading_task_score(statedb, task_id, score):
         for difficulty_level in reading_task_data[task_type]:
             if task_id in reading_task_data[task_type][difficulty_level].keys():
                 reading_task_data[task_type][difficulty_level][task_id][TaskDataKeys.SCORE] = score
-                save_to_database(statedb)
+                logging.info(f"Reading task '{task_id}' score set to {score}")
+    save_to_database(statedb, reading_task_data)
 
 
-def save_to_database(statedb):
-    reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
+def save_to_database(statedb, reading_task_data):
     statedb.set(DatabaseKeys.READING_TASK_DATA, reading_task_data)
