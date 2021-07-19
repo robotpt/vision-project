@@ -1,6 +1,7 @@
 #!/usr/bin/python3.8
 import datetime
 import logging
+import vision_project_tools.reading_task_tools as reading_task_tools
 
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
@@ -199,7 +200,9 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
         self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
-        # also need to calculate and save reading speed
+        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        score = self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE)
+        reading_task_tools.set_reading_task_score(self._state_database, task_id, score)
         self._set_vars_after_interaction()
 
     def _set_vars_after_interaction(self):

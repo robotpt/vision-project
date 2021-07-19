@@ -1,9 +1,10 @@
 #!/usr/bin/env python3.8
 import datetime
 import logging
+import vision_project_tools.reading_task_tools as reading_task_tools
 
 from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB, Interactions
-from vision_project_tools.reading_task_manager import ReadingTaskManager
+from vision_project_tools.reading_task_tools import TaskDataKeys
 
 logging.basicConfig(level=logging.INFO)
 
@@ -13,7 +14,6 @@ class VisionProjectDelegator:
     def __init__(
             self,
             statedb,
-            reading_task_manager,
             update_window_seconds=5,
             scheduled_window_minutes=15,
             minutes_between_interactions=1,
@@ -21,7 +21,6 @@ class VisionProjectDelegator:
             score_window=10
     ):
         self._state_database = statedb
-        self._reading_task_manager = reading_task_manager
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
         self._scheduled_window_minutes = datetime.timedelta(minutes=scheduled_window_minutes)
         self._minutes_between_interactions = datetime.timedelta(minutes=minutes_between_interactions)
@@ -41,7 +40,7 @@ class VisionProjectDelegator:
         if self._is_new_day():
             self._daily_state_update()
             self._update_act_variables()
-            self._update_reading_task_data()
+            self._daily_reading_task_data_update()
             self._state_database.set(DatabaseKeys.NUM_OF_PROMPTED_TODAY, 0)
             self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
             self._state_database.set(DatabaseKeys.FEELINGS_INDEX, None)
@@ -74,17 +73,22 @@ class VisionProjectDelegator:
         last_5_scores.append(self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE))
         self._state_database.set(DatabaseKeys.LAST_5_EVAL_SCORES, last_5_scores)
 
-    def _update_reading_task_data(self):
+    def _daily_reading_task_data_update(self):
         last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
         average_score = sum(last_5_scores)/len(last_5_scores)
-        last_score = self._state_database.get(DatabaseKeys.LAST_SCORE)
+        current_score = self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE)
         grit_feedback_index = 0  # STABLE, default value for first reading task
-        if last_score is not None:
-            if last_score < average_score - self._score_window:
+        if current_score is not None:
+            if current_score < average_score - self._score_window:
                 grit_feedback_index = 1  # DECLINED
-            elif last_score > average_score + self._score_window:
+            elif current_score > average_score + self._score_window:
                 grit_feedback_index = 2  # IMPROVED
         self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
+        # set reading task data for the new day
+        task_id = reading_task_tools.set_new_day_reading_task(self._state_database)
+        self._state_database.set(DatabaseKeys.CURRENT_READING_ID, task_id)
+        task_color = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.COLOR)
+        self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")

@@ -1,0 +1,67 @@
+#!/usr/bin/python3.8
+import datetime
+import freezegun
+import pytest
+import vision_project_tools.reading_task_tools as reading_task_tools
+
+from vision_project_tools.constants import DatabaseKeys, READING_TASK_DATA
+from vision_project_tools.reading_task_tools import Tasks
+
+
+def reset_reading_task_data(statedb):
+    statedb.set(DatabaseKeys.READING_TASK_DATA, READING_TASK_DATA)
+
+
+def test_get_current_reading_task_type(statedb):
+    dates = [
+        "2021-07-11 00:00:00",
+        "2021-07-12 00:00:00",
+        "2021-07-13 00:00:00",
+        "2021-07-14 00:00:00",
+        "2021-07-15 00:00:00",
+        "2021-07-16 00:00:00",
+        "2021-07-17 00:00:00",
+        "2021-07-18 00:00:00",
+    ]
+    expected_task_types = [
+        Tasks.MNREAD,
+        Tasks.SPOT_READING,
+        Tasks.SRT,
+        Tasks.SPOT_READING,
+        Tasks.IREST,
+        Tasks.SPOT_READING,
+        Tasks.SRT,
+        Tasks.MNREAD
+    ]
+    for i, date in enumerate(dates):
+        with freezegun.freeze_time(date):
+            assert reading_task_tools.get_current_reading_task_type() == expected_task_types[i]
+
+
+def test_get_current_reading_task_id(statedb):
+
+    def is_task_completed(reading_task_data, task_id):
+        for task_type in reading_task_data:
+            for difficulty_level in reading_task_data[task_type]:
+                if task_id in reading_task_data[task_type][difficulty_level].keys():
+                    return reading_task_data[task_type][difficulty_level][task_id]["score"] is not None
+
+    dates = [
+        "2021-07-11 00:00:00",
+        "2021-07-12 00:00:00",
+        "2021-07-13 00:00:00",
+        "2021-07-14 00:00:00",
+        "2021-07-15 00:00:00",
+        "2021-07-16 00:00:00",
+        "2021-07-17 00:00:00",
+        "2021-07-18 00:00:00",
+    ]
+    statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
+    for i, date in enumerate(dates):
+        with freezegun.freeze_time(date):
+            task_id = reading_task_tools.set_new_day_reading_task(statedb)
+            assert not is_task_completed(READING_TASK_DATA, task_id)
+
+
+def test_set_reading_score(statedb):
+    pass
