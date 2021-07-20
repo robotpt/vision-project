@@ -74,6 +74,7 @@ if __name__ == "__main__":
     rospy.init_node("interaction_manager")
 
     seconds_until_timeout = rospy.get_param("vision-project/params/seconds_until_interaction_timeout")
+    is_use_terminal_interface = rospy.get_param("vision-project/controllers/is_use_terminal_interface")
 
     host = rospy.get_param("mongodb/host")
     port = rospy.get_param("mongodb/port")
@@ -106,10 +107,13 @@ if __name__ == "__main__":
 
     max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
 
-    interface = CordialInterface(
-        state_database,
-        seconds_until_timeout=seconds_until_timeout
-    )
+    if not is_use_terminal_interface:
+        interface = CordialInterface(
+            state_database,
+            seconds_until_timeout=seconds_until_timeout
+        )
+    else:
+        interface = None
 
     interaction_builder = InteractionBuilder(
         interaction_dict=deployment_interaction_dict,

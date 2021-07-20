@@ -34,34 +34,35 @@ class VisionTerminalInterface(Interface):
         for element in text_list:
             print(element)
 
-        if message.type == Message.Type.MULTIPLE_CHOICE or message.type == "multiple choice one column":
-            self.print_multiple_choice(message)
-        elif message.type == Message.Type.TIME_ENTRY:
-            self.print_time_entry(message)
+        if message.message_type == Message.Type.MULTIPLE_CHOICE or message.message_type == "multiple choice one column":
+            self.print_multiple_choice(message.options)
+        elif message.message_type == Message.Type.DIRECT_INPUT or message.message_type == Message.Type.TIME_ENTRY:
+            self.print_text_entry(message)
         else:
             self.print_gui_entry(message)
+
+    def print_multiple_choice(self, options):
+        self._print_enumerated_list(options)
 
     def _print_enumerated_list(self, options):
         options = lists.make_sure_is_iterable(options)
         for i in range(len(options)):
             print(f" {i}. " + options[i])
 
-    def print_multiple_choice(self, options):
-        self._print_enumerated_list(options)
-
-    def print_time_entry(self, message):
-        print("Note: time must be in the form: 'HH:MM AM/PM'")
+    def print_text_entry(self, message):
+        if message.message_type == Message.Type.TIME_ENTRY:
+            print("Note: time must be in the form: 'HH:MM AM/PM'")
 
     def print_gui_entry(self, message):
-        print(f"Note: message type {message.type} cannot be displayed on command line.")
+        print(f"Note: message type {message.message_type} cannot be displayed on command line.")
 
     def get_input(self, message):
-        if message.type == Message.Type.MULTIPLE_CHOICE or message.type == "multiple choice one column":
-            self.input_multiple_choice(message)
-        elif message.type == Message.Type.DIRECT_INPUT or message.type == Message.Type.TIME_ENTRY:
-            self.input_text_entry(message)
+        if message.message_type == Message.Type.MULTIPLE_CHOICE or message.message_type == "multiple choice one column":
+            return self.input_multiple_choice(message.options)
+        elif message.message_type == Message.Type.DIRECT_INPUT or message.message_type == Message.Type.TIME_ENTRY:
+            return self.input_text_entry(message)
         else:
-            self.input_gui_entry(message)
+            return self.input_gui_entry(message)
 
     def input_multiple_choice(self, options):
         response = None
@@ -76,6 +77,7 @@ class VisionTerminalInterface(Interface):
         response = ""
         while len(response) == 0:
             response = input(">>> ")
+        print(f"Text entry response was: {response}")
         return response
 
     def input_gui_entry(self, _):

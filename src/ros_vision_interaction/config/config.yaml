@@ -6,6 +6,7 @@ mongodb:
 vision-project:
   controllers:
     is_debug: False
+    is_use_terminal_interface: True
     update_window_seconds: 5
     minutes_between_interactions: 1
     scheduled_window_minutes: 15
