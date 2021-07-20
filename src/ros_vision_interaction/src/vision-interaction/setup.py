@@ -18,5 +18,6 @@ setup(
         'pymongo',
         'pytest',
         'pytest-cov',
+        'webrtcvad'
     ],
 )
