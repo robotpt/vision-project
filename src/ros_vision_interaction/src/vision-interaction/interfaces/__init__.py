@@ -1,1 +1,2 @@
 from interfaces.cordial_interface import CordialInterface
+from interfaces.vision_terminal_interface import VisionTerminalInterface

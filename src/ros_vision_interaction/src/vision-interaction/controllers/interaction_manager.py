@@ -1,11 +1,10 @@
 #!/usr/bin/python3.8
 import datetime
 import logging
-import vision_project_tools.reading_task_tools as reading_task_tools
 
-from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
 from interaction_builder import InteractionBuilder
+from interfaces.vision_terminal_interface import VisionTerminalInterface
 from vision_project_tools.constants import Interactions, DatabaseKeys
 from vision_project_tools.vision_engine import VisionInteractionEngine as InteractionEngine
 
@@ -26,7 +25,7 @@ class InteractionManager:
         self._interaction_builder = interaction_builder
 
         if interface is None:
-            interface = TerminalClientAndServerInterface(database=self._state_database)
+            interface = VisionTerminalInterface(self._state_database)
         self._interface = interface
 
         self._current_node_name = None
