@@ -234,7 +234,7 @@
             },
             "evaluation": {
                 "transitions": "chart self report",
-                "content": "",
+                "content": "*question_1*",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
