@@ -59,7 +59,7 @@ class VisionTerminalInterface(Interface):
     def get_input(self, message):
         if message.message_type == Message.Type.MULTIPLE_CHOICE or message.message_type == "multiple choice one column":
             return self.input_multiple_choice(message.options)
-        elif message.message_type == Message.Type.DIRECT_INPUT or message.message_type == Message.Type.TIME_ENTRY:
+        elif message.message_type in [Message.Type.DIRECT_INPUT, Message.Type.TIME_ENTRY, "numpad"]:
             return self.input_text_entry(message)
         else:
             return self.input_gui_entry(message)
@@ -82,7 +82,7 @@ class VisionTerminalInterface(Interface):
 
     def input_gui_entry(self, _):
         options = ["Next"]
-        self.input_multiple_choice(options)
+        return self.input_multiple_choice(options)
 
     @staticmethod
     def _message_fn_from_dict(msg_dict):
