@@ -45,6 +45,7 @@ class RosVisionProjectDelegator:
         is_record_evaluation_topic = rospy.get_param("controllers/is_record/evaluation")
         is_record_perseverance_topic = rospy.get_param("controllers/is_record/perseverance")
         screen_tap_topic = rospy.get_param("cordial/screen_tap")
+        node_name_topic = rospy.get_param('controllers/node_name_topic')
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
         self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)
@@ -54,6 +55,12 @@ class RosVisionProjectDelegator:
             screen_tap_topic,
             MouseEvent,
             callback=self._screen_tap_listener_callback,
+            queue_size=1
+        )
+        self._node_name_subscriber = rospy.Subscriber(
+            node_name_topic,
+            String,
+            callback=self._node_name_callback,
             queue_size=1
         )
         self._pick_subscriber = rospy.Subscriber(

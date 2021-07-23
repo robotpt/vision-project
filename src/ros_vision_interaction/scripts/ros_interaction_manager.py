@@ -14,7 +14,7 @@ from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
 
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionResult
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, String
 
 
 class RosInteractionManager:
@@ -28,7 +28,9 @@ class RosInteractionManager:
         self._state_database = state_database
 
         is_go_to_sleep_topic = rospy.get_param('cordial/sleep_topic')
+        node_name_topic = rospy.get_param('controllers/node_name_topic')
         self._sleep_publisher = rospy.Publisher(is_go_to_sleep_topic, Bool, queue_size=1)
+        self._node_name_publisher = rospy.Publisher(node_name_topic, String, queue_size=1)
 
         # set up action server
         start_interaction_action_name = rospy.get_param("controllers/is_start_interaction")
