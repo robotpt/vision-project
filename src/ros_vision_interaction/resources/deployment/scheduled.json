@@ -235,7 +235,7 @@
                 "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "start evaluation"
+        "start_node_name": "check"
     },
     "evaluation": {
         "nodes": {
