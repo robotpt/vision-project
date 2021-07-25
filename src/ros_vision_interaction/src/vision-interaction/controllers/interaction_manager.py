@@ -208,7 +208,6 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
         self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
-        # also need to calculate and save reading speed
         self._set_vars_after_interaction()
 
     def _set_vars_after_interaction(self):
