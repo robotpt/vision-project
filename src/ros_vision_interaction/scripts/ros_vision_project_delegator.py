@@ -34,18 +34,18 @@ class RosVisionProjectDelegator:
         self._seconds_between_updates = rospy.get_param("vision-project/controllers/update_window_seconds")
 
         # action client to start interaction
-        start_interaction_action_name = rospy.get_param("vision-project/controllers/is_start_interaction")
+        start_interaction_action_name = rospy.get_param("controllers/is_start_interaction")
         self._start_interaction_client = actionlib.SimpleActionClient(
             start_interaction_action_name,
             StartInteractionAction
         )
 
         # ROS publishers and subscribers
-        is_record_interaction_topic = rospy.get_param("vision-project/controllers/is_record/interaction")
-        is_record_evaluation_topic = rospy.get_param("vision-project/controllers/is_record/evaluation")
-        is_record_perseverance_topic = rospy.get_param("vision-project/controllers/is_record/perseverance")
+        is_record_interaction_topic = rospy.get_param("controllers/is_record/interaction")
+        is_record_evaluation_topic = rospy.get_param("controllers/is_record/evaluation")
+        is_record_perseverance_topic = rospy.get_param("controllers/is_record/perseverance")
         screen_tap_topic = rospy.get_param("cordial/screen_tap")
-        node_name_topic = rospy.get_param("vision-project/controllers/node_name_topic")
+        node_name_topic = rospy.get_param("controllers/node_name_topic")
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
         self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)

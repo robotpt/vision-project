@@ -6,14 +6,8 @@ mongodb:
 vision-project:
   controllers:
     is_debug: False
-    is_record:
-      evaluation: "data_capture/is_record_evaluation"
-      interaction: "data_capture/is_record_interaction"
-      perseverance: "data_capture/is_record_perseverance"
-    is_start_interaction: "vision_project/controllers/is_start_interaction"
     update_window_seconds: 5
     minutes_between_interactions: 1
-    node_name_topic: "vision_project/controllers/current_node_name"
     scheduled_window_minutes: 15
   params:
     seconds_until_interaction_timeout: 300
