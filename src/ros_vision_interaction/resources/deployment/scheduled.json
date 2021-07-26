@@ -209,12 +209,14 @@
         },
         "start_node_name": "ask to do evaluation"
     },
-    "evaluation": {
+    "introduce evaluation": {
         "nodes": {
             "check": {
                 "transitions": "introduce evaluation",
                 "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Enter the number in the keypad.",
-                "options": ["Next"],
+                "options": [
+                    "Next"
+                ],
                 "message_type": "numpad",
                 "tests": "check reading id",
                 "error_message": "Please enter the correct ID.",
@@ -227,18 +229,28 @@
                 "message_type": "multiple choice one column"
             },
             "start evaluation": {
-                "transitions": "evaluation",
+                "transitions": "exit",
                 "content": "Go ahead and open the envelope. Press 'Next', then read the contents aloud while using your magnifier, then press 'Next' again.",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
-            },
+            }
+        },
+        "start_node_name": "check"
+    },
+    "evaluation": {
+        "nodes": {
             "evaluation": {
-                "transitions": "chart self report",
-                "content": "",
+                "transitions": "exit",
+                "content": "*question_1*",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
-            },
-            "chart self report": {
+            }
+        },
+        "start_node_name": "evaluation"
+    },
+    "post evaluation": {
+        "nodes": {
+             "chart self report": {
                 "transitions": "ask for spoken self report",
                 "content": "Tell me, how did you think you did on that reading task?",
                 "options": ["1", "2", "3", "4", "5", "6", "7"],
@@ -264,7 +276,7 @@
                 "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "check"
+        "start_node_name": "chart self report"
     },
     "goal setting": {
         "nodes": {
@@ -292,8 +304,8 @@
         "nodes": {
             "reward": {
                 "transitions": ["exit"],
-                "content": "",
-                "options": [""],
+                "content": "[reward for additional reading]",
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             }
         },

@@ -9,19 +9,16 @@ from vision_project_tools.vision_engine import VisionInteractionEngine as Intera
 
 
 def mock_run(_, planner):
-
     while planner.is_active:
-        while planner.is_active:
-            for node_name in mock_run_next_plan(planner):
-                yield node_name
+        for node_name in mock_run_next_plan(planner):
+            yield node_name
 
 
 def mock_run_next_plan(planner):
     message_name, pre_hook, post_hook = planner.pop_plan(is_return_hooks=True)
-    yield message_name
-
     pre_hook()
     post_hook()
+    yield message_name
 
 
 @pytest.fixture
@@ -34,34 +31,31 @@ def interaction_manager(statedb, interaction_builder, monkeypatch):
     return manager
 
 
-def test_run_first_interaction(interaction_manager, statedb):
-    assert not interaction_manager._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME)
-    interaction_manager.run_interaction_once(Interactions.FIRST_INTERACTION)
-    assert interaction_manager._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME)
+def test_run_first_interaction(interaction_manager, deployment_interaction_dict, statedb):
+    assert not statedb.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME)
+    for node_name in interaction_manager.run_interaction_once(Interactions.FIRST_INTERACTION):
+        assert node_name in deployment_interaction_dict
+    assert statedb.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME)
 
 
-def test_run_scheduled_interaction(interaction_manager, statedb):
-    with freezegun.freeze_time("2021-02-10"):
-        assert not statedb.is_set(DatabaseKeys.LAST_INTERACTION_DATETIME)
-        interaction_manager.run_interaction_once(Interactions.SCHEDULED_INTERACTION)
-        assert statedb.is_set(DatabaseKeys.IS_DONE_EVAL_TODAY)
-
-
-def test_run_reading_evaluation(interaction_manager, statedb):
+def test_run_reading_evaluation(interaction_manager, deployment_interaction_dict, statedb):
     current_eval_index = statedb.get(DatabaseKeys.READING_EVAL_INDEX)
     statedb.set(DatabaseKeys.GOOD_TO_CHAT, "Yes")
     statedb.set(DatabaseKeys.IS_DO_EVALUATION, "Yes")
-    interaction_manager.run_interaction_once(Interactions.SCHEDULED_INTERACTION)
-    assert statedb.is_set(DatabaseKeys.IS_DONE_EVAL_TODAY)
+    statedb.set(DatabaseKeys.IS_START_PERSEVERANCE, "No")
+    for node_name in interaction_manager.run_interaction_once(Interactions.SCHEDULED_INTERACTION):
+        assert node_name in deployment_interaction_dict
+    assert statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY)
     assert statedb.get(DatabaseKeys.IS_INTERACTION_FINISHED)
     assert statedb.get(DatabaseKeys.READING_EVAL_INDEX) == current_eval_index + 1
 
 
-def test_run_prompted_interaction(interaction_manager, statedb):
+def test_run_prompted_interaction(interaction_manager, deployment_interaction_dict, statedb):
     with freezegun.freeze_time("2021-02-10"):
         statedb.set(DatabaseKeys.GOOD_TO_CHAT, "Yes")
         assert statedb.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) == 0
-        interaction_manager.run_interaction_once(Interactions.PROMPTED_INTERACTION)
+        for node_name in interaction_manager.run_interaction_once(Interactions.PROMPTED_INTERACTION):
+            assert node_name in deployment_interaction_dict
         assert statedb.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) == 1
 
 
