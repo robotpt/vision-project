@@ -41,7 +41,8 @@ class InteractionManager:
             raise ValueError("Not a valid interaction type")
 
         self.build_interaction(interaction_type)
-        self.run_engine_once()
+        for node_name in self.run_engine_once():
+            yield node_name
 
     def run_engine_once(self):
         engine = InteractionEngine(
@@ -50,7 +51,7 @@ class InteractionManager:
             self._interaction_builder.possible_graphs
         )
         for node_name in engine.modified_run(self._planner):
-            self._current_node_name = node_name
+            yield node_name
 
     def build_interaction(self, interaction_type):
         self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
@@ -134,8 +135,16 @@ class InteractionManager:
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
                 )
             self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+                post_hook=self._set_vars_after_interaction
+            )
+            self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
                 post_hook=self._set_vars_after_evaluation
+            )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+                post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
@@ -199,7 +208,6 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
         self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
-        # also need to calculate and save reading speed
         self._set_vars_after_interaction()
 
     def _set_vars_after_interaction(self):

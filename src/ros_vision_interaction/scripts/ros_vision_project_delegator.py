@@ -34,17 +34,18 @@ class RosVisionProjectDelegator:
         self._seconds_between_updates = rospy.get_param("vision-project/controllers/update_window_seconds")
 
         # action client to start interaction
-        start_interaction_action_name = rospy.get_param("controllers/is_start_interaction")
+        start_interaction_action_name = rospy.get_param("vision-project/controllers/is_start_interaction")
         self._start_interaction_client = actionlib.SimpleActionClient(
             start_interaction_action_name,
             StartInteractionAction
         )
 
         # ROS publishers and subscribers
-        is_record_interaction_topic = rospy.get_param("controllers/is_record/interaction")
-        is_record_evaluation_topic = rospy.get_param("controllers/is_record/evaluation")
-        is_record_perseverance_topic = rospy.get_param("controllers/is_record/perseverance")
+        is_record_interaction_topic = rospy.get_param("vision-project/controllers/is_record/interaction")
+        is_record_evaluation_topic = rospy.get_param("vision-project/controllers/is_record/evaluation")
+        is_record_perseverance_topic = rospy.get_param("vision-project/controllers/is_record/perseverance")
         screen_tap_topic = rospy.get_param("cordial/screen_tap")
+        node_name_topic = rospy.get_param("vision-project/controllers/node_name_topic")
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
         self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)
@@ -54,6 +55,12 @@ class RosVisionProjectDelegator:
             screen_tap_topic,
             MouseEvent,
             callback=self._screen_tap_listener_callback,
+            queue_size=1
+        )
+        self._node_name_subscriber = rospy.Subscriber(
+            node_name_topic,
+            String,
+            callback=self._node_name_callback,
             queue_size=1
         )
         self._pick_subscriber = rospy.Subscriber(
@@ -111,20 +118,10 @@ class RosVisionProjectDelegator:
             # TODO: add a feedback callback
             rospy.loginfo("Sending goal to start interaction")
             self._start_interaction_client.send_goal(start_interaction_goal)
+            rospy.loginfo(f"Publishing to record interaction at {datetime.datetime.now()}")
             self._is_record_interaction_publisher.publish(True)
-
             self._start_interaction_client.wait_for_result()
-
             self._is_record_interaction_publisher.publish(False)
-            if self._is_recording_evaluation:
-                rospy.loginfo(f"Publishing to stop evaluation audio recording at {datetime.datetime.now()}")
-                self._is_record_evaluation_publisher.publish(False)
-                self._is_recording_evaluation = False
-            if self._is_recording_perseverance:
-                rospy.loginfo("Publishing to stop perseverance audio recording")
-                self._is_record_perseverance_publisher.publish(False)
-                self._is_recording_perseverance = False
-
         return
 
     def _screen_tap_listener_callback(self, _):
@@ -150,15 +147,25 @@ class RosVisionProjectDelegator:
 
     def _node_name_callback(self, data):
         node_name = data.data
-        rospy.loginfo(node_name)
+        rospy.loginfo(f"Current graph name: {node_name}")
         if node_name == InteractionBuilder.Graphs.EVALUATION:
             rospy.loginfo(f"Publishing to record evaluation audio at {datetime.datetime.now()}")
             self._is_record_evaluation_publisher.publish(True)
             self._is_recording_evaluation = True
-        if node_name == InteractionBuilder.Graphs.PERSEVERANCE:
-            rospy.loginfo("Publishing to record perseverance audio")
+        if node_name == InteractionBuilder.Graphs.POST_EVALUATION:
+            rospy.loginfo(f"Publishing to stop evaluation audio recording at {datetime.datetime.now()}")
+            self._is_record_evaluation_publisher.publish(False)
+            self._is_recording_evaluation = False
+
+        if node_name == InteractionBuilder.Graphs.PERSEVERANCE and not self._is_recording_perseverance:
+            rospy.loginfo(f"Publishing to record perseverance audio at {datetime.datetime.now()}")
             self._is_record_perseverance_publisher.publish(True)
             self._is_recording_perseverance = True
+        post_perseverance_graphs = [InteractionBuilder.Graphs.REWARD]
+        if node_name in post_perseverance_graphs:
+            rospy.loginfo(f"Publishing to stop perseverance audio recording at {datetime.datetime.now()}")
+            self._is_record_perseverance_publisher.publish(False)
+            self._is_recording_perseverance = False
 
 
 if __name__ == "__main__":
