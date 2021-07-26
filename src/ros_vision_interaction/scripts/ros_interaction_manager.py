@@ -28,12 +28,12 @@ class RosInteractionManager:
         self._state_database = state_database
 
         is_go_to_sleep_topic = rospy.get_param('cordial/sleep_topic')
-        node_name_topic = rospy.get_param('vision-project/controllers/node_name_topic')
+        node_name_topic = rospy.get_param('controllers/node_name_topic')
         self._sleep_publisher = rospy.Publisher(is_go_to_sleep_topic, Bool, queue_size=1)
         self._node_name_publisher = rospy.Publisher(node_name_topic, String, queue_size=1)
 
         # set up action server
-        start_interaction_action_name = rospy.get_param("vision-project/controllers/is_start_interaction")
+        start_interaction_action_name = rospy.get_param("controllers/is_start_interaction")
         self._start_interaction_action_server = actionlib.SimpleActionServer(
             start_interaction_action_name,
             StartInteractionAction,
