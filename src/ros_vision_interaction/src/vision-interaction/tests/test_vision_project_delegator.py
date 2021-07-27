@@ -180,6 +180,7 @@ def test_new_day_update(vision_project_delegator, statedb):
         ]
     ]
     for period in test_periods:
+        index = None
         vision_project_delegator._reset_database()
         # day 1
         with freezegun.freeze_time(period[0]):
