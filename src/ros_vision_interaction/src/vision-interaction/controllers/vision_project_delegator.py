@@ -1,10 +1,11 @@
 #!/usr/bin/env python3.8
 import datetime
 import logging
+import math
 import vision_project_tools.reading_task_tools as reading_task_tools
 
 from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB, Interactions
-from vision_project_tools.reading_task_tools import TaskDataKeys
+from vision_project_tools.reading_task_tools import TaskDataKeys, Tasks
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,6 +27,15 @@ class VisionProjectDelegator:
         self._minutes_between_interactions = datetime.timedelta(minutes=minutes_between_interactions)
         self._max_num_of_prompted_per_day = max_num_of_prompted_per_day
         self._score_window = score_window
+        self._reading_task_schedule = [
+            [Tasks.SPOT_READING],  # Monday
+            [Tasks.SRT],  # Tuesday
+            [Tasks.SPOT_READING],  # Wednesday
+            [Tasks.IREST],  # Thursday
+            [Tasks.SPOT_READING],  # Friday
+            [Tasks.SRT],  # Saturday
+            [Tasks.MNREAD, Tasks.SKREAD]  # Sunday
+        ]
 
         self._is_run_interaction = False
 
@@ -33,6 +43,7 @@ class VisionProjectDelegator:
         self._reset_database()
 
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
+        self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
 
     def update(self):
         if not self._state_database.is_set(DatabaseKeys.LAST_UPDATE_DATETIME):
@@ -51,6 +62,11 @@ class VisionProjectDelegator:
         return datetime.datetime.now().date() > self._state_database.get(DatabaseKeys.LAST_UPDATE_DATETIME).date()
 
     def _daily_state_update(self):
+        # update reading task index if reading task has been done
+        if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+            current_index = self._state_database.get(DatabaseKeys.CURRENT_READING_INDEX)
+            new_index = int(math.fmod(current_index + 1, 6))
+            self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, new_index)
         keys_to_check = {
             DatabaseKeys.IS_DONE_EVAL_TODAY: DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL,
             DatabaseKeys.IS_DONE_PROMPTED_TODAY: DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT,
