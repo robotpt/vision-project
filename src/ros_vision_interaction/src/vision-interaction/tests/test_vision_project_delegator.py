@@ -1,6 +1,7 @@
 #!/usr/bin/python3.8
 import datetime
 import freezegun
+import math
 import pytest
 
 from controllers import VisionProjectDelegator
@@ -149,7 +150,7 @@ def test_too_many_prompts(vision_project_delegator, statedb):
 def test_new_day_update(vision_project_delegator, statedb):
     test_periods = [
         [
-            "2021-03-15 00:00:00",
+            "2021-03-15 00:00:00",  # Monday
             "2021-03-16 00:00:00",
             "2021-03-17 00:00:00",
             "2021-03-18 00:00:00",
@@ -159,7 +160,7 @@ def test_new_day_update(vision_project_delegator, statedb):
         ],
         # month changes during test period
         [
-            "2021-02-25 00:00:00",
+            "2021-02-25 00:00:00",  # Thursday
             "2021-02-26 00:00:00",
             "2021-02-27 00:00:00",
             "2021-02-28 00:00:00",
@@ -169,7 +170,7 @@ def test_new_day_update(vision_project_delegator, statedb):
         ],
         # year changes during test period
         [
-            "2020-12-29 00:00:00",
+            "2020-12-29 00:00:00",  # Tuesday
             "2020-12-30 00:00:00",
             "2020-12-31 00:00:00",
             "2021-01-01 00:00:00",
@@ -179,16 +180,20 @@ def test_new_day_update(vision_project_delegator, statedb):
         ]
     ]
     for period in test_periods:
+        index = None
         vision_project_delegator._reset_database()
         # day 1
         with freezegun.freeze_time(period[0]):
+            index = datetime.datetime.now().weekday()
             vision_project_delegator.update()
             first_interaction_datetime = datetime.datetime(2021, 3, 15, 2, 0, 0, 0)
             statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
             statedb.set(DatabaseKeys.LAST_INTERACTION_DATETIME, first_interaction_datetime)
             statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
+            statedb.set(DatabaseKeys.CURRENT_READING_INDEX, index)
         # day 2
         with freezegun.freeze_time(period[1]):
+            index = int(math.fmod(index + 1, 6))
             vision_project_delegator.update()
             expected_values = {
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL: 0,
@@ -196,6 +201,7 @@ def test_new_day_update(vision_project_delegator, statedb):
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE: 1,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS: 1,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 1,
+                DatabaseKeys.CURRENT_READING_INDEX: index
             }
             check_database_values(statedb, **expected_values)
             statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, False)
@@ -220,6 +226,7 @@ def test_new_day_update(vision_project_delegator, statedb):
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE: 2,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS: 2,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 2,
+                DatabaseKeys.CURRENT_READING_INDEX: index
             }
             check_database_values(statedb, **expected_values)
             statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
@@ -229,6 +236,7 @@ def test_new_day_update(vision_project_delegator, statedb):
             statedb.set(DatabaseKeys.IS_DONE_GOAL_SETTING_TODAY, True)
         # day 4
         with freezegun.freeze_time(period[3]):
+            index = int(math.fmod(index + 1, 6))
             vision_project_delegator.update()
             expected_values = {
                 DatabaseKeys.IS_DONE_EVAL_TODAY: False,
@@ -244,6 +252,7 @@ def test_new_day_update(vision_project_delegator, statedb):
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE: 0,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS: 0,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 0,
+                DatabaseKeys.CURRENT_READING_INDEX: index
             }
             check_database_values(statedb, **expected_values)
             statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
@@ -253,6 +262,7 @@ def test_new_day_update(vision_project_delegator, statedb):
             statedb.set(DatabaseKeys.IS_DONE_GOAL_SETTING_TODAY, True)
         # day 5
         with freezegun.freeze_time(period[4]):
+            index = int(math.fmod(index + 1, 6))
             vision_project_delegator.update()
             expected_values = {
                 DatabaseKeys.IS_DONE_EVAL_TODAY: False,
@@ -268,6 +278,7 @@ def test_new_day_update(vision_project_delegator, statedb):
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE: 0,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS: 0,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 0,
+                DatabaseKeys.CURRENT_READING_INDEX: index
             }
             check_database_values(statedb, **expected_values)
             statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, False)
@@ -292,6 +303,7 @@ def test_new_day_update(vision_project_delegator, statedb):
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE: 1,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS: 0,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 0,
+                DatabaseKeys.CURRENT_READING_INDEX: index
             }
             check_database_values(statedb, **expected_values)
             statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, False)
@@ -316,6 +328,7 @@ def test_new_day_update(vision_project_delegator, statedb):
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE: 2,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS: 1,
                 DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 0,
+                DatabaseKeys.CURRENT_READING_INDEX: index
             }
             check_database_values(statedb, **expected_values)
 

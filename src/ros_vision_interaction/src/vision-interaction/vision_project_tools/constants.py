@@ -22,6 +22,7 @@ class DatabaseKeys:
     CURRENT_EVAL_SCORE = "current eval score"
     CURRENT_READING_COLOR = "current reading color"
     CURRENT_READING_ID = "current reading id"
+    CURRENT_READING_INDEX = "current reading index"
     DIFFICULTY_LEVEL = "difficulty level"
     FEEDBACK_VIDEOS = "feedback videos"
     FIRST_INTERACTION_DATETIME = "first interaction datetime"
@@ -176,6 +177,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.CURRENT_EVAL_SCORE: 0,
     DatabaseKeys.CURRENT_READING_COLOR: None,
     DatabaseKeys.CURRENT_READING_ID: None,
+    DatabaseKeys.CURRENT_READING_INDEX: None,
     DatabaseKeys.DIFFICULTY_LEVEL: "1",
     DatabaseKeys.FEEDBACK_VIDEOS: {
         "distance 4x": "https://www.youtube.com/embed/tZyaCbmJOtY",
