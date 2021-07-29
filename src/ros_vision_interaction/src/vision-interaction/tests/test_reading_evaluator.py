@@ -16,8 +16,8 @@ def reading_evaluator(statedb):
 
 
 def test_set_reading_speed(statedb, reading_evaluator):
-    ids = ["ir11", "mn11", "sk11", "sr11", "sr22", "srt11"]
-    statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
+    ids = ["ir1", "ir2", "ir3", "mn1", "sk1", "sk2", "sr1", "sr2", "sr3", "srt1"]
+    # statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
     with mock.patch("reading_evaluator.ReadingEvaluator.get_total_speaking_time") as mock_get_total_time:
         for task_id in ids:
             current_id = task_id

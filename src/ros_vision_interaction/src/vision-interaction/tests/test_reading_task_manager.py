@@ -42,9 +42,11 @@ def test_get_current_reading_task_id(statedb):
 
     def is_task_completed(reading_task_data, task_id):
         for task_type in reading_task_data:
-            for difficulty_level in reading_task_data[task_type]:
-                if task_id in reading_task_data[task_type][difficulty_level].keys():
-                    return reading_task_data[task_type][difficulty_level][task_id]["score"] is not None
+            # for difficulty_level in reading_task_data[task_type]:
+            #     if task_id in reading_task_data[task_type][difficulty_level].keys():
+            #         return reading_task_data[task_type][difficulty_level][task_id]["score"] is not None
+            if task_id in reading_task_data[task_type].keys():
+                return reading_task_data[task_type][task_id]["score"] is not None
 
     dates = [
         "2021-07-11 00:00:00",
@@ -56,7 +58,7 @@ def test_get_current_reading_task_id(statedb):
         "2021-07-17 00:00:00",
         "2021-07-18 00:00:00",
     ]
-    statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
+    # statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
     for i, date in enumerate(dates):
         with freezegun.freeze_time(date):
             task_id = reading_task_tools.set_new_day_reading_task(statedb)
@@ -75,7 +77,7 @@ def test_set_reading_score(statedb):
         "2021-07-17 00:00:00",
         "2021-07-18 00:00:00",
     ]
-    statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
+    # statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
 
     for i, date in enumerate(dates):
         with freezegun.freeze_time(date):
