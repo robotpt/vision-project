@@ -116,19 +116,19 @@
             },
             "excellent": {
                 "transitions": "exit",
-                "content": "Fantastic! I'm so proud of you for doing so well!",
+                "content": "{'var': 'excellent response'}",
                 "options": "Next",
                 "message_type": "multiple choice one column"
             },
             "good": {
                 "transitions": "exit",
-                "content": "I am glad to hear it's going pretty well. Here's my advice: Let's aim to become great with your magnifier. I know that you can get there! Your future self will thank you.",
+                "content": "{'var': 'good response'}",
                 "options": "Next",
                 "message_type": "multiple choice one column"
             },
             "fair": {
                 "transitions": "exit",
-                "content": "Let's see how we can make things better with practice. How about we pick a number of tries and do that many each day. Let's go for 2! It's not important that things go great each time, it's important that you give it a good try. How about that?",
+                "content": "{'var': 'fair response'}",
                 "options": "Next",
                 "message_type": "multiple choice one column"
             },
@@ -212,15 +212,19 @@
     "introduce evaluation": {
         "nodes": {
             "check": {
-                "transitions": "introduce evaluation",
+                "transitions": "introduce task",
                 "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Enter the number in the keypad.",
-                "options": [
-                    "Next"
-                ],
+                "options": ["Next"],
                 "message_type": "numpad",
                 "tests": "check reading id",
                 "error_message": "Please enter the correct ID.",
                 "error_options": ["Oops"]
+            },
+            "introduce task": {
+                "transitions": "introduce evaluation",
+                "content": "{'var': 'introduce task', 'index': '{'db': 'reading eval index'}'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
             },
             "introduce evaluation": {
                 "transitions": "start evaluation",
@@ -264,7 +268,7 @@
                 "message_type": "multiple choice one column"
             },
             "spoken self report": {
-                "transitions": "grit feedback",
+                "transitions": ["grit feedback"],
                 "content": "[spoken self-report]",
                 "options": "Next",
                 "message_type": "multiple choice one column"
@@ -291,6 +295,12 @@
     },
     "mindfulness": {
         "nodes": {
+            "introduce mindfulness": {
+                "transitions": ["mindfulness"],
+                "content": "{'var': 'mindfulness'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
             "mindfulness": {
                 "transitions": ["exit"],
                 "content": "[mindfulness]",
@@ -298,7 +308,7 @@
                 "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "mindfulness"
+        "start_node_name": "introduce mindfulness"
     },
     "reward": {
         "nodes": {
