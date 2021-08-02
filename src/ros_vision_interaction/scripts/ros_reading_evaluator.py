@@ -34,7 +34,7 @@ class RosReadingEvaluator:
         self._extension = extension
         self._seconds_to_check_for_audio_files = seconds_to_check_for_audio_files
 
-        is_record_evaluation_topic = rospy.get_param("vision-project/controllers/is_record/evaluation")
+        is_record_evaluation_topic = rospy.get_param("controllers/is_record/evaluation")
         self._is_record_subscriber = rospy.Subscriber(
             is_record_evaluation_topic,
             Bool,

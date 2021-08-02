@@ -24,8 +24,8 @@ class TaskDataKeys:
 
 def set_new_day_reading_task(statedb):
     task_type = get_current_reading_task_type()
-    current_difficulty_level = statedb.get(DatabaseKeys.DIFFICULTY_LEVEL)
-    return get_random_reading_task_id(statedb, task_type, current_difficulty_level)
+    # current_difficulty_level = statedb.get(DatabaseKeys.DIFFICULTY_LEVEL)
+    return get_random_reading_task_id(statedb, task_type)
 
 
 def get_current_reading_task_type():
@@ -50,9 +50,10 @@ def get_current_reading_task_type():
     return task_type
 
 
-def get_random_reading_task_id(statedb, task_type, difficulty_level):
+def get_random_reading_task_id(statedb, task_type, difficulty_level=None):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
-    tasks = reading_task_data[task_type][difficulty_level]
+    # tasks = reading_task_data[task_type][difficulty_level]
+    tasks = reading_task_data[task_type]
     logging.info(f"Possible tasks: {tasks}")
     possible_tasks = []
     for task in tasks.keys():
@@ -70,18 +71,22 @@ def get_reading_task_data_value(statedb, task_id, data_type):
     ]:
         raise KeyError(f"'{data_type}' is not a valid reading task data type.")
     for task_type in reading_task_data:
-        for difficulty_level in reading_task_data[task_type]:
-            if task_id in reading_task_data[task_type][difficulty_level].keys():
-                return reading_task_data[task_type][difficulty_level][task_id][data_type]
+        # for difficulty_level in reading_task_data[task_type]:
+        #     if task_id in reading_task_data[task_type][difficulty_level].keys():
+        #         return reading_task_data[task_type][difficulty_level][task_id][data_type]
+        if task_id in reading_task_data[task_type].keys():
+            return reading_task_data[task_type][task_id][data_type]
 
 
 def set_reading_task_score(statedb, task_id, score):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     for task_type in reading_task_data:
-        for difficulty_level in reading_task_data[task_type]:
-            if task_id in reading_task_data[task_type][difficulty_level].keys():
-                reading_task_data[task_type][difficulty_level][task_id][TaskDataKeys.SCORE] = score
-                logging.info(f"Reading task '{task_id}' score set to {score}")
+        # for difficulty_level in reading_task_data[task_type]:
+        #     if task_id in reading_task_data[task_type][difficulty_level].keys():
+        #         reading_task_data[task_type][difficulty_level][task_id][TaskDataKeys.SCORE] = score
+        if task_id in reading_task_data[task_type].keys():
+            reading_task_data[task_type][task_id][TaskDataKeys.SCORE] = score
+            logging.info(f"Reading task '{task_id}' score set to {score}")
     save_to_database(statedb, reading_task_data)
 
 

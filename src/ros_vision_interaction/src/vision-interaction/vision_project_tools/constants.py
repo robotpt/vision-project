@@ -23,7 +23,7 @@ class DatabaseKeys:
     CURRENT_READING_COLOR = "current reading color"
     CURRENT_READING_ID = "current reading id"
     CURRENT_READING_INDEX = "current reading index"
-    DIFFICULTY_LEVEL = "difficulty level"
+    # DIFFICULTY_LEVEL = "difficulty level"
     FEEDBACK_VIDEOS = "feedback videos"
     FIRST_INTERACTION_DATETIME = "first interaction datetime"
     GOOD_TO_CHAT = "good to chat"
@@ -36,7 +36,7 @@ class DatabaseKeys:
     IS_DONE_PERSEVERANCE_TODAY = "is done perseverance today"
     IS_DONE_PROMPTED_TODAY = "is done prompted today"
     IS_INTERACTION_FINISHED = "is interaction finished"
-    IS_NEW_DIFFICULTY_LEVEL = "is new difficulty level"
+    # IS_NEW_DIFFICULTY_LEVEL = "is new difficulty level"
     IS_OFF_CHECKIN = "is off checkin"
     IS_PROMPTED_BY_USER = "is prompted by user"
     IS_PUBLISHED_CHOICES_TODAY = "is published choices today"
@@ -62,147 +62,168 @@ class DatabaseKeys:
     VIDEO_TO_PLAY = "video to play"
 
 
+# READING_TASK_DATA = {
+#     "IReST": {
+#         # difficulty levels
+#         "1": {
+#             # reading task IDs
+#             "ir11": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#         }
+#     },
+#     "MNread": {
+#         # difficulty levels
+#         "1": {
+#             # reading task IDs
+#             "mn11": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#         }
+#     },
+#     "SKread": {
+#         "1": {
+#             # reading task IDs
+#             "sk11": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#         }
+#     },
+#     "spot reading": {
+#         # difficulty levels
+#         "1": {
+#             # reading task IDs
+#             "sr11": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#             "sr12": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             }
+#         },
+#         "2": {
+#             "sr21": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#             "sr22": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             }
+#         },
+#         "3": {
+#             "sr31": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             }
+#         },
+#         "4": {
+#             "sr41": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#             "sr42": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#             "sr43": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             }
+#         }
+#     },
+#     "SRT": {
+#         # difficulty levels
+#         "1": {
+#             # reading task IDs
+#             "srt11": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#         }
+#     },
+#     "self selected": {
+#         # difficulty levels
+#         "1": {
+#             # reading task IDs
+#             "ss11": {
+#                 "word_count": 50,
+#                 "score": None,
+#                 "color": "blue"
+#             },
+#         }
+#     }
+# }
+
 READING_TASK_DATA = {
     "IReST": {
-        # difficulty levels
-        "1": {
-            # reading task IDs
-            "100": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "101": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "102": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "103": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "104": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "105": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-        }
+        "ir1": {"word_count": 50, "score": None, "color": "blue"},
+        "ir2": {"word_count": 50, "score": None, "color": "blue"},
+        "ir3": {"word_count": 50, "score": None, "color": "blue"},
+        "ir4": {"word_count": 50, "score": None, "color": "blue"},
+        "ir5": {"word_count": 50, "score": None, "color": "blue"},
+        "ir6": {"word_count": 50, "score": None, "color": "blue"},
     },
     "MNread": {
-        # difficulty levels
-        "1": {
-            # reading task IDs
-            "200": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "201": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-        }
+        "mn1": {"word_count": 50, "score": None, "color": "blue"},
+        "mn2": {"word_count": 50, "score": None, "color": "blue"},
     },
     "SKread": {
-        "1": {
-            # reading task IDs
-            "300": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "301": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-        }
+        "sk1": {"word_count": 50, "score": None, "color": "blue"},
+        "sk2": {"word_count": 50, "score": None, "color": "blue"},
     },
     "spot reading": {
-        # difficulty levels
-        "1": {
-            # reading task IDs
-            "sr11": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "sr12": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            }
-        },
-        "2": {
-            "sr21": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "sr22": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            }
-        },
-        "3": {
-            "sr31": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            }
-        },
-        "4": {
-            "sr41": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "sr42": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-            "sr43": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            }
-        }
+        "sr1": {"word_count": 50, "score": None, "color": "blue"},
+        "sr2": {"word_count": 50, "score": None, "color": "blue"},
+        "sr3": {"word_count": 50, "score": None, "color": "blue"},
+        "sr4": {"word_count": 50, "score": None, "color": "blue"},
+        "sr5": {"word_count": 50, "score": None, "color": "blue"},
+        "sr6": {"word_count": 50, "score": None, "color": "blue"},
+        "sr7": {"word_count": 50, "score": None, "color": "blue"},
+        "sr8": {"word_count": 50, "score": None, "color": "blue"},
+        "sr9": {"word_count": 50, "score": None, "color": "blue"},
+        "sr10": {"word_count": 50, "score": None, "color": "blue"},
+        "sr11": {"word_count": 50, "score": None, "color": "blue"},
+        "sr12": {"word_count": 50, "score": None, "color": "blue"},
+        "sr13": {"word_count": 50, "score": None, "color": "blue"},
+        "sr14": {"word_count": 50, "score": None, "color": "blue"},
+        "sr15": {"word_count": 50, "score": None, "color": "blue"},
+        "sr16": {"word_count": 50, "score": None, "color": "blue"},
+        "sr17": {"word_count": 50, "score": None, "color": "blue"},
+        "sr18": {"word_count": 50, "score": None, "color": "blue"},
     },
     "SRT": {
-        # difficulty levels
-        "1": {
-            # reading task IDs
-            "srt11": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-        }
+        "srt1": {"word_count": 50, "score": None, "color": "blue"},
+        "srt2": {"word_count": 50, "score": None, "color": "blue"},
+        "srt3": {"word_count": 50, "score": None, "color": "blue"},
+        "srt4": {"word_count": 50, "score": None, "color": "blue"},
+        "srt5": {"word_count": 50, "score": None, "color": "blue"},
+        "srt6": {"word_count": 50, "score": None, "color": "blue"},
+        "srt7": {"word_count": 50, "score": None, "color": "blue"},
+        "srt8": {"word_count": 50, "score": None, "color": "blue"},
+        "srt9": {"word_count": 50, "score": None, "color": "blue"},
+        "srt10": {"word_count": 50, "score": None, "color": "blue"},
+        "srt11": {"word_count": 50, "score": None, "color": "blue"},
+        "srt12": {"word_count": 50, "score": None, "color": "blue"},
     },
     "self selected": {
-        # difficulty levels
-        "1": {
-            # reading task IDs
-            "ss11": {
-                "word_count": 50,
-                "score": None,
-                "color": "blue"
-            },
-        }
+        "ss11": {"word_count": 50, "score": None, "color": "blue"},
     }
 }
 
@@ -213,7 +234,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.CURRENT_READING_COLOR: None,
     DatabaseKeys.CURRENT_READING_ID: None,
     DatabaseKeys.CURRENT_READING_INDEX: None,
-    DatabaseKeys.DIFFICULTY_LEVEL: "1",
+    # DatabaseKeys.DIFFICULTY_LEVEL: "1",
     DatabaseKeys.FEEDBACK_VIDEOS: {
         "distance 4x": "https://www.youtube.com/embed/tZyaCbmJOtY",
         "distance 6x": "https://www.youtube.com/embed/IzM6pxzoAKg",
@@ -234,7 +255,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.IS_DONE_PERSEVERANCE_TODAY: False,
     DatabaseKeys.IS_DONE_PROMPTED_TODAY: False,
     DatabaseKeys.IS_INTERACTION_FINISHED: False,
-    DatabaseKeys.IS_NEW_DIFFICULTY_LEVEL: False,
+    # DatabaseKeys.IS_NEW_DIFFICULTY_LEVEL: False,
     DatabaseKeys.IS_OFF_CHECKIN: None,
     DatabaseKeys.IS_PROMPTED_BY_USER: False,
     DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY: False,
