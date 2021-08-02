@@ -1,34 +1,27 @@
 {
     "introduce QT": {
         "nodes": {
+            "ask to chat": {
+                "content": "{'var': 'ask to chat'}",
+                "message_type": "multiple choice one column",
+                "transitions": ["introduction", "exit"],
+                "options": ["Yes", "No"],
+                "result_db_key": "good to chat"
+            },
             "introduction": {
-                "transitions": "what's your name",
-                "content": "Hi, my name is QT!",
-                "options": ["Nice to meet you!"],
-                "message_type": "multiple choice one column"
+                "content": "Hello there, my name is Q.T. and it's wonderful to meet you! Did you know that my vision is not perfect either? My vision is only as good as my camera. There are times when I may miss seeing something if it is outside of the view of my camera. I understand that it is tough when you don't always see what you need to see, but I always try to do my best to capture as much as I can with the camera that gives me eyesight. I would like for you to try your best to use whatever vision you have, even when it's tough.",
+                "message_type": "multiple choice one column",
+                "transitions": ["what's your name"],
+                "options": ["Next"]
             },
             "what's your name": {
-                "transitions": "schedule",
-                "content": "What's your name?",
-                "options": ["is my name."],
+                "content": "In case you're wondering, my gender pronoun is <prosody rate=\"x-slow\">it</prosody>. I am really looking forward to interacting with you! I can share stories, tell funny jokes, hope to help you with your magnifier, and will ask you questions. I would like to ask you to please touch the black buttons on the tablet screen to let me know your responses as we interact. Next, I would like to get to know more about you. What's your name?",
                 "message_type": "text entry",
+                "transitions": ["exit"],
+                "options": [" is my name."],
                 "result_db_key": "user name"
-            },
-            "schedule": {
-                "transitions": "talk again later",
-                "content": "Let's schedule a time to {'var': 'chat'} tomorrow. When is good for you?",
-                "options": "Next",
-                "message_type": "time entry",
-				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
-                "result_db_key": "next checkin datetime"
-            },
-            "talk again later": {
-                "transitions": "exit",
-                "content": "Great, I can't wait to talk to you again then!",
-                "options": "Bye!",
-                "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "introduction"
+        "start_node_name": "ask to chat"
     }
 }
