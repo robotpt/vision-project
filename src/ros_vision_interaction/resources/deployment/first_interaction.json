@@ -9,7 +9,7 @@
                 "result_db_key": "good to chat"
             },
             "introduction": {
-                "content": "Hello there, my name is Q.T. and it's wonderful to meet you! Did you know that my vision is not perfect either? My vision is only as good as my camera. There are times when I may miss seeing something if it is outside of the view of my camera. I understand that it is tough when you don’t always see what you need to see, but I always try to do my best to capture as much as I can with the camera that gives me eyesight. I would like for you to try your best to use whatever vision you have, even when it’s tough.",
+                "content": "Hello there, my name is Q.T. and it's wonderful to meet you! Did you know that my vision is not perfect either? My vision is only as good as my camera. There are times when I may miss seeing something if it is outside of the view of my camera. I understand that it is tough when you don't always see what you need to see, but I always try to do my best to capture as much as I can with the camera that gives me eyesight. I would like for you to try your best to use whatever vision you have, even when it's tough.",
                 "message_type": "multiple choice one column",
                 "transitions": ["what's your name"],
                 "options": ["Next"]
