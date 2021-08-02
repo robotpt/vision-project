@@ -21,12 +21,14 @@ class InteractionBuilder:
         FEEDBACK_VIDEO = "feedback video"
         GOAL_SETTING = "goal setting"
         GRIT_TRANSITION = "grit transition"
+        INTRODUCE_EVALUATION = "introduce evaluation"
         INTRODUCE_QT = "introduce QT"
         MINDFULNESS = "mindfulness"
         NO_MAGNIFIER_USE = "no magnifier use"
         PERSEVERANCE = "perseverance"
         PLAN_CHECKIN_TOMORROW = "plan tomorrow's checkin"
         PLAN_NEXT_CHECKIN = "plan next checkin"
+        POST_EVALUATION = "post evaluation"
         PROMPTED_ASK_TO_CHAT = "prompted ask to chat"
         PROMPTED_CHECKIN = "prompted checkin"
         PROMPTED_PLAN_NEXT_CHECKIN = "prompted plan next checkin"
@@ -45,12 +47,14 @@ class InteractionBuilder:
             EVALUATION,
             FEEDBACK_VIDEO,
             GOAL_SETTING,
+            INTRODUCE_EVALUATION,
             INTRODUCE_QT,
             MINDFULNESS,
             NO_MAGNIFIER_USE,
             PERSEVERANCE,
             PLAN_NEXT_CHECKIN,
             PLAN_CHECKIN_TOMORROW,
+            POST_EVALUATION,
             PROMPTED_ASK_TO_CHAT,
             PROMPTED_CHECKIN,
             PROMPTED_PLAN_NEXT_CHECKIN,

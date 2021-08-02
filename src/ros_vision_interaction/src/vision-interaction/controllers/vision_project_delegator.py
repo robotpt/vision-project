@@ -89,6 +89,14 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.CURRENT_READING_ID, task_id)
         task_color = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.COLOR)
         self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
+        last_score = self._state_database.get(DatabaseKeys.LAST_SCORE)
+        grit_feedback_index = 0  # STABLE, default value for first reading task
+        if last_score is not None:
+            if last_score < average_score - self._score_window:
+                grit_feedback_index = 1  # DECLINED
+            elif last_score > average_score + self._score_window:
+                grit_feedback_index = 2  # IMPROVED
+        self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")

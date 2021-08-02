@@ -41,7 +41,8 @@ class InteractionManager:
             raise ValueError("Not a valid interaction type")
 
         self.build_interaction(interaction_type)
-        self.run_engine_once()
+        for node_name in self.run_engine_once():
+            yield node_name
 
     def run_engine_once(self):
         engine = InteractionEngine(
@@ -50,7 +51,7 @@ class InteractionManager:
             self._interaction_builder.possible_graphs
         )
         for node_name in engine.modified_run(self._planner):
-            self._current_node_name = node_name
+            yield node_name
 
     def build_interaction(self, interaction_type):
         self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
@@ -134,8 +135,16 @@ class InteractionManager:
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
                 )
             self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+                post_hook=self._set_vars_after_interaction
+            )
+            self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
                 post_hook=self._set_vars_after_evaluation
+            )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+                post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
@@ -207,8 +216,22 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.LAST_INTERACTION_DATETIME, datetime.datetime.now())
 
     def _set_vars_after_first_interaction(self):
+        if self._state_database.get(DatabaseKeys.GOOD_TO_CHAT) == "Yes":
+            self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+            )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                post_hook=self._set_vars_after_scheduled_ask_for_eval
+            )
+        else:
+            self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_NEXT_CHECKIN],
+                post_hook=self._set_vars_after_interaction
+            )
         self._state_database.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, datetime.datetime.now())
-        self._set_vars_after_interaction()
 
     def _set_vars_after_goal_setting(self):
         self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING, 0)

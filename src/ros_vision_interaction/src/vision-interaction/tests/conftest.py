@@ -35,7 +35,7 @@ def statedb(state_mongo_client):
 
 
 @pytest.fixture
-def interaction_builder(statedb):
+def deployment_interaction_dict():
     deployment_interaction_dict = {}
     cwd = os.path.dirname(os.path.abspath(__file__))
     resources_directory = os.path.join(cwd, '..', '..', '..', 'resources')
@@ -48,7 +48,13 @@ def interaction_builder(statedb):
     for file in interaction_files:
         with open(file) as f:
             deployment_interaction_dict.update(json.load(f))
+    return deployment_interaction_dict
 
+
+@pytest.fixture
+def interaction_builder(statedb, deployment_interaction_dict):
+    cwd = os.path.dirname(os.path.abspath(__file__))
+    resources_directory = os.path.join(cwd, '..', '..', '..', 'resources')
     interaction_variations_file = os.path.join(resources_directory, 'deployment', 'interaction_variations.json')
     grit_dialogue_variations_file = os.path.join(resources_directory, 'deployment', 'grit_dialogue.json')
     scheduled_variations_file = os.path.join(resources_directory, 'deployment', 'scheduled_variations.json')

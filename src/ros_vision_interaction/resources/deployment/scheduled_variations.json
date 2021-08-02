@@ -13,12 +13,43 @@
         "Since the last time that we spoke, were you able to use your magnifier?",
         "Next, please fill me in on whether you read with your magnifier since we last spoke?"
     ],
+    "excellent response": [
+        "Fantastic! I'm so proud of you for doing so well! Keep up the excellent work with your magnifier!",
+        "I knew that you had it in you to become really excellent with your magnifier! Congrats! Your hard work has paid off!",
+        "I am really thrilled to learn that you have become a superb magnifier user! That's awesome!",
+        "I'm overjoyed to know that your magnifier use is so successful now! You deserve to be very satisfied with this accomplishment!",
+        "If I could jump, I would jump for joy right now! Your improved magnifier use is quite an achievement!",
+        "It's really great that you have attained such success with your magnifier! It was not an easy undertaking, but you did it!",
+        "You should be very proud of yourself for all you have accomplished with your magnifier! It's so great that you have mastered it!"
+    ],
+    "good response": [
+        "I am glad to hear it's going pretty well. Here's my advice: Let's aim to become great with your magnifier. I know that you can get there! Your future self will thank you.",
+        "Alright, let's aim high to get really great while reading with your magnifier. Keep at it, you're getting there!",
+        "Let's create the intention to achieve even greater success with your magnifier! With some more practice, you will get there!",
+        "I'm impressed that you're already doing pretty good! Just remember that the key to even greater success is to set a goal to persist through any difficulties. I believe in you! You can do it!",
+        "It's good that you're staying pretty positive about your magnifier use. Let's strive to get even better! Success is the result of intention, hard work, and learning when things don't go perfectly. You've got this!"
+    ],
+    "fair response": [
+        "Let's see how we can make things better with practice. How about if we pick a number of tries and do that many tries each day? Let's go for 2! It's not important that things go great each time, it's just important that you give it a good try. How about that plan?",
+        "Well I'm sure you know the old adage, 'practice makes perfect', and I know you can achieve it! Let's plan to go for 2 tries each day. Are you up for the challenge?",
+        "Keep at it, even when it's tough, and your effort will surely pay off in time. Practice is key to getting better at using your magnifier. I can't wait to witness your progress!",
+        "It can be quite a challenge to work with a new magnifier, but it will get better. Even though it might be a tough journey at times, envision yourself accomplishing everything you want with your magnifier. The future you see is the person you will be.",
+        "Success involves the courage to continue when things are tough. Don't wish it were easier, instead, wish you were better and work to make that dream a reality by persevering with your magnifier each and every time."
+    ],
     "frustrated response": [
-        "{'db': 'user name', 'default value': ''}, I realize that it is more challenging to do things with your vision, but I am here for you.",
+        "{'db': 'user name', 'default value': ''}, I realize that it is more challenging to do things with your vision, but I am here for you. {'var': 'backstories'}",
         "{'db': 'user name', 'default value': ''}, I understand that it is not easy to read with your vision, but I am here to help support you while learning to use your magnifier.",
         "{'db': 'user name', 'default value': ''}, I bet that there are some things that are difficult to see, but stick with your magnifier while working with me, and reading should become easier with practice.",
         "{'db': 'user name', 'default value': ''}, all people with vision loss get frustrated at times, but together we can overcome it. If you keep working with your magnifier, I bet you'll improve and feel less frustrated.",
-        "{'db': 'user name', 'default value': ''}, it's totally normal to feel frustrated sometimes, and the more you work at using your magnifier, it will get better!"
+        "{'db': 'user name', 'default value': ''}, it's totally normal to feel frustrated sometimes, and the more you work at using your magnifier, it will get better!",
+        "{'var': 'backstories'}"
+    ],
+    "introduce task": [
+        "This is the short story about the childhood and life of a young woman. Let's see how quickly you can read it aloud today while using your magnifier. There are three pages for you to read; you will be timed. As soon as you are done reading, please tap the screen to let me know you are finished. When you have your magnifier and are ready to start reading, please tap my screen to let me know you're going to begin.",
+        "Please read these short sentences with your magnifier as quickly as you can without making mistakes, starting with the largest ones and keep going until you get to the smallest one that you can read with your magnifier. They get so small that they become impossible for anyone to read, so don't expect to read all of the sentences. Do your best to read quickly and accurately with your magnifier today!",
+        "Please read these words and letters with your magnifier as quickly as you can without making mistakes, starting with the largest ones and keep going until you get to the smallest one that you can read with your magnifier. These are not sentences, but rather just random single words and letters. Try not to skip or miss any words or letters. Give it your best shot!",
+        "This is a short paragraph of text that is similar to newspaper sized print. Please use your magnifier to read it aloud as quickly as possible without going back and making corrections. I will time you. Also, you should try not to miss or misread any of the words since that will impact your score. Let's see how fast and accurately you can read with your magnifier today!",
+        "This reading task involves spot reading the numbers on common household items. Please read the numbers aloud to me and then also enter them on the tablet. For each item, I will ask you to find and read something specific that is of interest to me on the item while using your magnifier. Do your best to read the numbers on the items accurately."
     ],
     "goodbye":[
         "That was great! Bye-bye for now. And don't forget to use your magnifier!",
@@ -29,7 +60,12 @@
         "OK, it's time to say bye, but I am looking forward to the next time we can chat. In the meantime, I hope you'll find lots of opportunities to use your magnifier! Bye!"
     ],
     "perseverance": [
-        "Are you down to do some more reading?"
+        "Practice makes perfect. Are you up for doing a little more reading today, {'db': 'user name', 'default value': ''}?",
+        "The more time one spends practicing an activity, the better they will get. How about if you try another reading task right now?",
+        "I believe that you're going to be more likely to improve with your magnifier if you spend more time practicing with it. Are you willing to spend some more time right now on another reading task?",
+        "The more you do something, the better you will get at it. Are you motivated to complete another reading task right now?",
+        "It's been said that it takes 10,000 hours to become an expert. You won't need to spend thousands of hours reading with your magnifier, but I would like to ask if you are able to try another reading task for just a few minutes right now to get closer to becoming an expert?",
+        "Some people say: 'Don't practice until you get it right, practice until you don't get it wrong.' How about some more magnifier practice time right now with one of the reading tasks?"
     ],
     "plan next checkin": [
         "No worries, that's fine. We can pick another time to {'var': 'chat'}. Let me know your preference.",
@@ -37,6 +73,10 @@
         "That's just fine, we can arrange to {'var': 'chat'} again later. When is a time that works well?",
         "That's quite alright, maybe next time. When are you available to {'var': 'chat'} again?",
         "That is totally fine, perhaps I can tell you a story when we {'var': 'chat'} again. When should we plan to interact again?"
+    ],
+    "mindfulness": [
+        "I think it would be good to take a little time to reset and take your mind off reading. I would like to try to make you feel a bit better. Let's see if we can reduce some of your stress, frustrations, or negativity, by redirecting your thoughts to enhance your performance, gain insight or awareness to set you up for success for the rest of the day.",
+        "I think it would be great if we can take a little break now. Let's redirect our focus and take some time to relax."
     ],
     "IReST": [
         "This reading task involves reading a single paragraph aloud while using your magnifier. I would like to see how quickly and accurately you can read today. I'm curious to know what is written there today."

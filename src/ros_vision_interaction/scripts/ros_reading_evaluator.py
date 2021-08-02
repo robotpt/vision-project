@@ -34,7 +34,7 @@ class RosReadingEvaluator:
         self._extension = extension
         self._seconds_to_check_for_audio_files = seconds_to_check_for_audio_files
 
-        is_record_evaluation_topic = rospy.get_param("controllers/is_record/evaluation")
+        is_record_evaluation_topic = rospy.get_param("vision-project/controllers/is_record/evaluation")
         self._is_record_subscriber = rospy.Subscriber(
             is_record_evaluation_topic,
             Bool,
@@ -65,7 +65,9 @@ class RosReadingEvaluator:
         Returns the first occurrence of a valid file path."""
         list_of_audio_files = []
         for _ in range(self._seconds_to_check_for_audio_files):
+            rospy.loginfo(f"Looking in directory: {directory}")
             list_of_audio_files = glob.glob(os.path.join(directory, "*." + extension))
+            rospy.loginfo(f"Audio files found: {list_of_audio_files}")
             if len(list_of_audio_files) > 0 and \
                     any(file_prefix in string for string in list_of_audio_files):
                 break
