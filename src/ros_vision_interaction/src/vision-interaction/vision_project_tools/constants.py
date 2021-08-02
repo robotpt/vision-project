@@ -67,7 +67,32 @@ READING_TASK_DATA = {
         # difficulty levels
         "1": {
             # reading task IDs
-            "ir11": {
+            "100": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
+            "101": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
+            "102": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
+            "103": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
+            "104": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
+            "105": {
                 "word_count": 50,
                 "score": None,
                 "color": "blue"
@@ -78,7 +103,12 @@ READING_TASK_DATA = {
         # difficulty levels
         "1": {
             # reading task IDs
-            "mn11": {
+            "200": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
+            "201": {
                 "word_count": 50,
                 "score": None,
                 "color": "blue"
@@ -88,7 +118,12 @@ READING_TASK_DATA = {
     "SKread": {
         "1": {
             # reading task IDs
-            "sk11": {
+            "300": {
+                "word_count": 50,
+                "score": None,
+                "color": "blue"
+            },
+            "301": {
                 "word_count": 50,
                 "score": None,
                 "color": "blue"
