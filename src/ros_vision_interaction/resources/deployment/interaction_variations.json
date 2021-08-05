@@ -47,7 +47,7 @@
         "{'var': 'Hi'} there! Is this a good time to {'var': 'chat'} with me?",
         "{'var': 'Hi'} my friend! Are you able to {'var': 'chat'} with me right now?",
         "Greetings! Am I catching you at a good time to {'var': 'chat'}?",
-        "{'var': 'Hi'} {'db': 'user name', 'default value': ''}! Let me know if this is a good time to {'var': 'chat'}?"
+        "{'var': 'Hi'} {'db': 'user name', 'default value': 'my friend'}! Let me know if this is a good time to {'var': 'chat'}?"
     ],
     "joke": [
         "I <prosody rate=\"slow\">love</prosody> funny jokes, like this one. {'var': 'joke category'}",
@@ -55,7 +55,7 @@
         "Life is so much easier when you have a great sense of humor. Let me share a joke with you! {'var': 'joke category'}"
     ],
     "robot joke": [
-        "What is a robot's favorite snack? <break time=\"0.75s\"/>*QT/yawn*<prosody volume=\"loud\" rate=\"slow\"*happy*Computer</prosody> <prosody rate=\"slow\" pitch=\"high\">chips</prosody>. Chomp, chomp!",
+        "What is a robot's favorite snack? <break time=\"0.75s\"/>*QT/yawn*<prosody volume=\"loud\" rate=\"slow\">*happy*Computer</prosody> <prosody rate=\"slow\" pitch=\"high\">chips</prosody>. Chomp, chomp!",
         "What is it called when a robot eats a sandwich in one chomp?*QT/yawn*<break time=\"0.75s\"/> A megabyte.",
         "Why did the robot marry his fiancee? <break time=\"0.75s\"/>*QT/happy*He couldn't resistor!",
         "Why did the robot go to the shoe shop? To get rebooted.",

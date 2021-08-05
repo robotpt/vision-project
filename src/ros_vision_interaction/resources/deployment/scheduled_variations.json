@@ -36,6 +36,15 @@
         "It can be quite a challenge to work with a new magnifier, but it will get better. Even though it might be a tough journey at times, envision yourself accomplishing everything you want with your magnifier. The future you see is the person you will be.",
         "Success involves the courage to continue when things are tough. Don't wish it were easier, instead, wish you were better and work to make that dream a reality by persevering with your magnifier each and every time."
     ],
+    "poor response": [
+        "I'm sorry to hear that. Perhaps I can help a bit.",
+        "We all have rough days sometimes. Maybe I can help you feel a little better, {'db': 'user name', 'default value': ''}.",
+        "Things we deal with can be tough. But together we can get through it {'db': 'user name', 'default value': ''}.",
+        "Some people say 'When life gives you lemons, make lemonade.' I'm sure you can work through it, {'db': 'user name', 'default value': ''}!",
+        "I understand that this is difficult, and I'm here for you {'db': 'user name', 'default value': ''}.",
+        "I know things are challenging {'db': 'user name', 'default value': ''}, but please know that I'll be right by your side to try to see if I can make you feel better.",
+        "Facing challenges is hard, so I am here to face them with you {'db': 'user name', 'default value': ''}. How about if I try to cheer you up a bit?"
+    ],
     "frustrated response": [
         "{'db': 'user name', 'default value': ''}, I realize that it is more challenging to do things with your vision, but I am here for you. {'var': 'backstories'}",
         "{'db': 'user name', 'default value': ''}, I understand that it is not easy to read with your vision, but I am here to help support you while learning to use your magnifier.",

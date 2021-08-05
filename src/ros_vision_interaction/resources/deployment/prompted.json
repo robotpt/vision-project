@@ -26,7 +26,7 @@
         "nodes": {
             "ask to chat": {
                 "transitions": "exit",
-                "content": "Hello {'db': 'user name', 'default value': ''}! It's so {'var': 'great'} when we get a chance to {'var': 'chat'}. Can you confirm is this is a good time?",
+                "content": "Hello {'db': 'user name', 'default value': ''}! It's so {'var': 'great'} when we get a chance to {'var': 'chat'}. Can you confirm if this is a good time?",
                 "options": ["Yes", "No"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "good to chat"

@@ -114,13 +114,9 @@ class InteractionManager:
     def _set_vars_after_ask_to_do_scheduled(self):
         if self._state_database.get(DatabaseKeys.IS_OFF_CHECKIN) == "Yes":
             self._state_database.set(DatabaseKeys.IS_OFF_CHECKIN, None)
-            if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
-                self._planner.insert(
-                    self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
-                )
             self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
-                post_hook=self._set_vars_after_evaluation
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                post_hook=self._set_vars_after_scheduled_ask_for_eval
             )
         else:
             self._planner.insert(
@@ -195,11 +191,20 @@ class InteractionManager:
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.MINDFULNESS],
                     post_hook=self._set_vars_after_mindfulness
                 )
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.ACT_RATING],
+                    post_hook=self._set_vars_after_interaction
+                )
             if self._is_do_goal_setting():
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.GOAL_SETTING],
                     post_hook=self._set_vars_after_goal_setting
                 )
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.ACT_RATING],
+                    post_hook=self._set_vars_after_interaction
+                )
+
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW],
                 post_hook=self._set_vars_after_interaction
