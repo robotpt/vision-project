@@ -43,7 +43,8 @@ def deployment_interaction_dict():
     interaction_files = [
         os.path.join(resources_directory, 'deployment', 'first_interaction.json'),
         os.path.join(resources_directory, 'deployment', 'scheduled.json'),
-        os.path.join(resources_directory, 'deployment', 'prompted.json')
+        os.path.join(resources_directory, 'deployment', 'prompted.json'),
+        os.path.join(resources_directory, 'deployment', 'act_interventions.json')
     ]
     for file in interaction_files:
         with open(file) as f:

@@ -96,7 +96,8 @@ if __name__ == "__main__":
     interaction_files = [
         os.path.join(resources_directory, 'deployment', 'first_interaction.json'),
         os.path.join(resources_directory, 'deployment', 'scheduled.json'),
-        os.path.join(resources_directory, 'deployment', 'prompted.json')
+        os.path.join(resources_directory, 'deployment', 'prompted.json'),
+        os.path.join(resources_directory, 'deployment', 'act_interventions.json')
     ]
     deployment_interaction_dict = {}
     for file in interaction_files:

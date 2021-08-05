@@ -141,12 +141,27 @@ class InteractionManager:
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
-                post_hook=self._set_vars_after_interaction
+                post_hook=self._set_vars_after_post_eval
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
                 post_hook=self._set_vars_after_ask_to_do_perseverance
             )
+
+    def _set_vars_after_post_eval(self):
+        new_rating = self._state_database.get(DatabaseKeys.FEELINGS_INDEX)
+        self_ratings = self._state_database.get(DatabaseKeys.SELF_REPORTS)
+        grit_feedback_index = 0
+
+        if len(self_ratings) > 0:
+            average_self_rating = sum(self_ratings) / len(self_ratings)
+            if new_rating < average_self_rating:
+                grit_feedback_index = 1  # BETTER RATING
+            elif new_rating > average_self_rating:
+                grit_feedback_index = 2  # WORSE RATING
+
+        self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
+        self._state_database.set(DatabaseKeys.SELF_REPORTS, self_ratings.append(new_rating))
 
     def _set_vars_after_prompted_ask_to_chat(self):
         if self._state_database.get(DatabaseKeys.GOOD_TO_CHAT) == "Yes":
@@ -191,18 +206,10 @@ class InteractionManager:
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.MINDFULNESS],
                     post_hook=self._set_vars_after_mindfulness
                 )
-                self._planner.insert(
-                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.ACT_RATING],
-                    post_hook=self._set_vars_after_interaction
-                )
             if self._is_do_goal_setting():
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.GOAL_SETTING],
                     post_hook=self._set_vars_after_goal_setting
-                )
-                self._planner.insert(
-                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.ACT_RATING],
-                    post_hook=self._set_vars_after_interaction
                 )
 
             self._planner.insert(
@@ -241,10 +248,26 @@ class InteractionManager:
 
     def _set_vars_after_goal_setting(self):
         self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING, 0)
+        new_rating = {
+            datetime.datetime.now(): {
+                "type": "goal setting",
+                "rating": self._state_database.get(DatabaseKeys.GOAL_RATING)
+            }
+        }
+        ratings = self._state_database.get(DatabaseKeys.ACT_RATINGS)
+        self._state_database.set(DatabaseKeys.ACT_RATINGS, ratings.update(new_rating))
         self._set_vars_after_interaction()
 
     def _set_vars_after_mindfulness(self):
         self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS, 0)
+        new_rating = {
+            datetime.datetime.now(): {
+                "type": "mindfulness",
+                "rating": self._state_database.get(DatabaseKeys.MINDFULNESS_RATING)
+            }
+        }
+        ratings = self._state_database.get(DatabaseKeys.ACT_RATINGS)
+        self._state_database.set(DatabaseKeys.ACT_RATINGS, ratings.update(new_rating))
         self._set_vars_after_interaction()
 
     def _set_vars_after_perseverance(self):
@@ -290,27 +313,44 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
 
     def _is_do_mindfulness(self):
-        last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
-        if len(last_5_scores) > 0:
-            average_eval_score = sum(last_5_scores) / len(last_5_scores)
-        else:
-            average_eval_score = 0
-        return self._days_since_first_interaction() >= 7 \
-            and self._state_database.get(DatabaseKeys.FEELINGS_INDEX) <= 3 \
-            and self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE) < average_eval_score
+        is_do_mindfulness = False
+        if self._days_since_first_interaction() >= 3:
+            num_of_values = 3
+            average_self_report = sum(self._state_database.get(DatabaseKeys.SELF_REPORTS)[-num_of_values:]) / num_of_values
+            is_do_mindfulness = self._state_database.get(DatabaseKeys.FEELINGS_INDEX) < average_self_report
+        return is_do_mindfulness
+
+    # Long-term deployment version
+    # def _is_do_mindfulness(self):
+    #     last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
+    #     if len(last_5_scores) > 0:
+    #         average_eval_score = sum(last_5_scores) / len(last_5_scores)
+    #     else:
+    #         average_eval_score = 0
+    #     return self._days_since_first_interaction() >= 7 \
+    #         and self._state_database.get(DatabaseKeys.FEELINGS_INDEX) <= 3 \
+    #         and self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE) < average_eval_score
 
     def _is_do_goal_setting(self):
-        last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
-        if len(last_5_scores) > 0:
-            average_eval_score = sum(last_5_scores)/len(last_5_scores)
-        else:
-            average_eval_score = 0
-        return self._days_since_first_interaction() >= 7 \
-            and self._state_database.get(DatabaseKeys.FEELINGS_INDEX) <= 3 \
-            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING) >= 7 \
+        return self._days_since_first_interaction() >= 3 \
+            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL) >= 1 \
+            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING) >= 3 \
             and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT) >= self._num_of_days_to_prompt_goal_setting \
-            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE) >= self._num_of_days_to_prompt_goal_setting \
-            and self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE) < average_eval_score
+            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE) >= self._num_of_days_to_prompt_goal_setting
+
+    # Long-term deployment version
+    # def _is_do_goal_setting(self):
+    #     last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
+    #     if len(last_5_scores) > 0:
+    #         average_eval_score = sum(last_5_scores)/len(last_5_scores)
+    #     else:
+    #         average_eval_score = 0
+    #     return self._days_since_first_interaction() >= 7 \
+    #         and self._state_database.get(DatabaseKeys.FEELINGS_INDEX) <= 3 \
+    #         and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING) >= 7 \
+    #         and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT) >= self._num_of_days_to_prompt_goal_setting \
+    #         and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE) >= self._num_of_days_to_prompt_goal_setting \
+    #         and self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE) < average_eval_score
 
     def _days_since_first_interaction(self):
         first_interaction_datetime = self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME)

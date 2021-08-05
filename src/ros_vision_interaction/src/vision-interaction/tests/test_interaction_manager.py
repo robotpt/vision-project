@@ -72,14 +72,14 @@ def test_determine_is_do_goal_setting(interaction_manager, statedb):
     first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
     statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
     statedb.set(DatabaseKeys.FEELINGS_INDEX, 2)
+    statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL, 2)
     statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT, 3)
     statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE, 3)
     statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING, 6)
     statedb.set(DatabaseKeys.LAST_5_EVAL_SCORES, [5, 5, 5, 5, 5])
     statedb.set(DatabaseKeys.CURRENT_EVAL_SCORE, 4)
+    statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING, 7)
     with freezegun.freeze_time("2021-04-10"):
-        assert not interaction_manager._is_do_goal_setting()
-        statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING, 7)
         assert interaction_manager._is_do_goal_setting()
 
 
@@ -87,14 +87,25 @@ def test_determine_is_do_mindfulness(interaction_manager, statedb):
     # less than a week after first interaction
     first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
     statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
-    with freezegun.freeze_time("2021-04-05"):
+    with freezegun.freeze_time("2021-04-03"):
         assert not interaction_manager._is_do_mindfulness()
 
     first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
     statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
+    statedb.set(DatabaseKeys.SELF_REPORTS, [3, 4, 5, 3, 2, 6, 4, 5, 4, 5])
     statedb.set(DatabaseKeys.FEELINGS_INDEX, 2)
     statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS, 2)
     statedb.set(DatabaseKeys.LAST_5_EVAL_SCORES, [5, 5, 5, 5, 5])
     statedb.set(DatabaseKeys.CURRENT_EVAL_SCORE, 4)
     with freezegun.freeze_time("2021-04-10"):
         assert interaction_manager._is_do_mindfulness()
+
+    first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
+    statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
+    statedb.set(DatabaseKeys.SELF_REPORTS, [3, 4, 5, 3, 2, 6, 4, 5, 4, 5])
+    statedb.set(DatabaseKeys.FEELINGS_INDEX, 6)
+    statedb.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS, 2)
+    statedb.set(DatabaseKeys.LAST_5_EVAL_SCORES, [5, 5, 5, 5, 5])
+    statedb.set(DatabaseKeys.CURRENT_EVAL_SCORE, 4)
+    with freezegun.freeze_time("2021-04-10"):
+        assert not interaction_manager._is_do_mindfulness()

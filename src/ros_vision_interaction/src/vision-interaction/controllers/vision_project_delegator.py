@@ -90,16 +90,16 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.LAST_5_EVAL_SCORES, last_5_scores)
 
     def _daily_reading_task_data_update(self):
-        last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
-        average_score = sum(last_5_scores)/len(last_5_scores)
-        current_score = self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE)
+        # last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
+        # average_score = sum(last_5_scores)/len(last_5_scores)
+        # current_score = self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE)
         grit_feedback_index = 0  # STABLE, default value for first reading task
-        if current_score is not None:
-            if current_score < average_score - self._score_window:
-                grit_feedback_index = 1  # DECLINED
-            elif current_score > average_score + self._score_window:
-                grit_feedback_index = 2  # IMPROVED
-        self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
+        # if current_score is not None:
+        #     if current_score < average_score - self._score_window:
+        #         grit_feedback_index = 1  # DECLINED
+        #     elif current_score > average_score + self._score_window:
+        #         grit_feedback_index = 2  # IMPROVED
+        # self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
         # set reading task data for the new day
         task_id = reading_task_tools.set_new_day_reading_task(self._state_database)
         self._state_database.set(DatabaseKeys.CURRENT_READING_ID, task_id)

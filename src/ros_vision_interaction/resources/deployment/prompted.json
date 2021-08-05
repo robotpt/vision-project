@@ -91,9 +91,10 @@
                     "joke 1"
                 ],
                 "content": "How do you feel about your vision right now?",
-                "options": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                "options": ["0", "2", "4", "6", "8", "10"],
                 "message_type": "image",
-                "args": ["../img/rating_chart.png"]
+                "args": ["../img/rating_chart.png"],
+                "result_db_key": "feelings index"
             },
             "joke 1": {
                 "transitions": "talk about frustrations",
@@ -138,11 +139,10 @@
                     "good",
                     "fair",
                     "fair",
-                    "poor",
                     "poor"
                 ],
                 "content": "Please share with me: how did it go with your magnifier?",
-                "options": ["1", "2", "3", "4", "5", "6", "7"],
+                "options": ["0", "2", "4", "6", "8", "10"],
                 "message_type": "image",
                 "args": ["../img/rating_chart.png"]
             },

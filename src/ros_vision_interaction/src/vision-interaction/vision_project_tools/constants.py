@@ -18,6 +18,7 @@ class Interactions:
 
 
 class DatabaseKeys:
+    ACT_RATINGS = "act ratings"
     BEST_SCORE = "best score"
     CURRENT_EVAL_SCORE = "current eval score"
     CURRENT_READING_COLOR = "current reading color"
@@ -26,6 +27,7 @@ class DatabaseKeys:
     # DIFFICULTY_LEVEL = "difficulty level"
     FEEDBACK_VIDEOS = "feedback videos"
     FIRST_INTERACTION_DATETIME = "first interaction datetime"
+    GOAL_RATING = "goal rating"
     GOOD_TO_CHAT = "good to chat"
     GRIT_FEEDBACK_INDEX = "grit feedback index"
     IS_CONTINUE_PERSEVERANCE = "is continue perseverance"
@@ -47,6 +49,7 @@ class DatabaseKeys:
     LAST_UPDATE_DATETIME = "last update datetime"
     LAST_SCORE = "last score"
     FEELINGS_INDEX = "feelings index"
+    MINDFULNESS_RATING = "mindfulness rating"
     NEXT_CHECKIN_DATETIME = "next checkin datetime"
     NUM_OF_DAYS_SINCE_LAST_EVAL = "num of days since last eval"
     NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING = "num of days since last goal setting"
@@ -58,6 +61,7 @@ class DatabaseKeys:
     READING_TASK_DATA = "reading task data"
     READING_EVAL_INDEX = "reading eval index"
     READING_EVAL_TYPE = "reading eval type"
+    SELF_REPORTS = "self reports"
     USER_NAME = "user name"
     VIDEO_TO_PLAY = "video to play"
 
@@ -229,6 +233,7 @@ READING_TASK_DATA = {
 
 
 INITIAL_STATE_DB = {
+    DatabaseKeys.ACT_RATINGS: {},
     DatabaseKeys.BEST_SCORE: None,
     DatabaseKeys.CURRENT_EVAL_SCORE: 0,
     DatabaseKeys.CURRENT_READING_COLOR: None,
@@ -245,6 +250,7 @@ INITIAL_STATE_DB = {
         "no video": ""
     },
     DatabaseKeys.FIRST_INTERACTION_DATETIME: None,
+    DatabaseKeys.GOAL_RATING: 0,
     DatabaseKeys.GOOD_TO_CHAT: None,
     DatabaseKeys.GRIT_FEEDBACK_INDEX: 0,
     DatabaseKeys.IS_CONTINUE_PERSEVERANCE: None,
@@ -266,6 +272,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.LAST_UPDATE_DATETIME: None,
     DatabaseKeys.LAST_SCORE: None,
     DatabaseKeys.FEELINGS_INDEX: None,
+    DatabaseKeys.MINDFULNESS_RATING: 0,
     DatabaseKeys.NEXT_CHECKIN_DATETIME: None,
     DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL: 0,
     DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 0,
@@ -277,6 +284,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.READING_TASK_DATA: READING_TASK_DATA,
     DatabaseKeys.READING_EVAL_INDEX: 0,
     DatabaseKeys.READING_EVAL_TYPE: None,
+    DatabaseKeys.SELF_REPORTS: [],
     DatabaseKeys.USER_NAME: "",
     DatabaseKeys.VIDEO_TO_PLAY: None
 }

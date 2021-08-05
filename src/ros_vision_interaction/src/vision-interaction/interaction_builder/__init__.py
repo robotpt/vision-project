@@ -12,7 +12,6 @@ logging.basicConfig(level=logging.INFO)
 
 class InteractionBuilder:
     class Graphs:
-        ACT_RATING = "act rating"
         ASK_TO_DO_EVALUATION = "ask to do evaluation"
         ASK_TO_DO_PERSEVERANCE = "ask to do perseverance"
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
@@ -40,7 +39,6 @@ class InteractionBuilder:
         TOO_MANY_PROMPTED = "too many prompted"
 
         POSSIBLE_GRAPHS = [
-            ACT_RATING,
             ASK_TO_DO_EVALUATION,
             ASK_TO_DO_PERSEVERANCE,
             ASK_TO_DO_SCHEDULED,

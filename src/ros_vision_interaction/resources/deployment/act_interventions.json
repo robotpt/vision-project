@@ -1,0 +1,63 @@
+{
+    "goal setting": {
+        "nodes": {
+            "goal setting": {
+                "transitions": ["rating"],
+                "content": "[goal setting]",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+             "rating": {
+                "transitions": "exit",
+                "content": "Tell me, how did you feel about that goal-setting activity?",
+                "options": ["0", "2", "4", "6", "8", "10"],
+                "message_type": "image",
+                "args": ["https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"],
+                 "result_db_key": "mindfulness rating"
+            }
+        },
+        "start_node_name": "goal setting"
+    },
+    "mindfulness": {
+        "nodes": {
+            "introduce mindfulness": {
+                "transitions": [
+                    "mindfulness"
+                ],
+                "content": "{'var': 'mindfulness'}",
+                "options": [
+                    "Next"
+                ],
+                "message_type": "multiple choice one column"
+            },
+            "mindfulness": {
+                "transitions": [
+                    "rating"
+                ],
+                "content": "[mindfulness]",
+                "options": [
+                    "Next"
+                ],
+                "message_type": "multiple choice one column"
+            },
+            "rating": {
+                "transitions": "exit",
+                "content": "Tell me, how did you feel about that mindfulness session?",
+                "options": [
+                    "0",
+                    "2",
+                    "4",
+                    "6",
+                    "8",
+                    "10"
+                ],
+                "message_type": "image",
+                "args": [
+                    "https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"
+                ],
+                "result_db_key": "mindfulness rating"
+            }
+        },
+        "start_node_name": "introduce mindfulness"
+    }
+}

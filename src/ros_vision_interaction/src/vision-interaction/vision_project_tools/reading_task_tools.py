@@ -54,7 +54,7 @@ def get_random_reading_task_id(statedb, task_type, difficulty_level=None):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     # tasks = reading_task_data[task_type][difficulty_level]
     tasks = reading_task_data[task_type]
-    logging.info(f"Possible tasks: {tasks}")
+    # logging.info(f"Possible tasks: {tasks}")
     possible_tasks = []
     for task in tasks.keys():
         if tasks[task][TaskDataKeys.SCORE] is None:
