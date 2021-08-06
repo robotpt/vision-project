@@ -4,15 +4,15 @@
             "ask to chat": {
                 "content": "{'var': 'ask to chat'}",
                 "message_type": "multiple choice one column",
-                "transitions": ["introduction", "exit"],
-                "options": ["Yes", "No"],
+                "transitions": ["introduction", "exit", "ask to chat"],
+                "options": ["Yes", "No", "Replay"],
                 "result_db_key": "good to chat"
             },
             "introduction": {
                 "content": "Hello there, my name is Q.T. and it's wonderful to meet you! Did you know that my vision is not perfect either? My vision is only as good as my camera. There are times when I may miss seeing something if it is outside of the view of my camera. I understand that it is tough when you don't always see what you need to see, but I always try to do my best to capture as much as I can with the camera that gives me eyesight. I would like for you to try your best to use whatever vision you have, even when it's tough.",
                 "message_type": "multiple choice one column",
-                "transitions": ["what's your name"],
-                "options": ["Next"]
+                "transitions": ["what's your name", "introduction"],
+                "options": ["Next", "Replay"]
             },
             "what's your name": {
                 "content": "In case you're wondering, my gender pronoun is <prosody rate=\"x-slow\">it</prosody>. I am really looking forward to interacting with you! I can share stories, tell funny jokes, hope to help you with your magnifier, and will ask you questions. I would like to ask you to please touch the black buttons on the tablet screen to let me know your responses as we interact. Next, I would like to get to know more about you. What's your name?",

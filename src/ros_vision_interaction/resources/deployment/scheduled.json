@@ -2,9 +2,9 @@
     "scheduled ask to chat": {
         "nodes": {
             "ask to chat": {
-                "transitions": ["exit", "exit"],
+                "transitions": ["exit", "exit", "ask to chat"],
                 "content": "{'var': 'scheduled ask to chat'}",
-                "options": ["Yes", "No"],
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "good to chat"
             }
@@ -22,9 +22,9 @@
                 "result_db_key": "next checkin datetime"
             },
             "talk again later": {
-                "transitions": "exit",
+                "transitions": ["exit", "talk again later"],
                 "content": "Great, I can't wait to talk to you again then!",
-                "options": "Bye!",
+                "options": ["Bye!", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -33,9 +33,9 @@
     "plan next checkin": {
         "nodes": {
             "plan next checkin": {
-                "transitions": ["how many hours", "set tomorrow's time"],
+                "transitions": ["how many hours", "set tomorrow's time", "plan next checkin"],
                 "content": "{'var': 'plan next checkin'}",
-                "options": ["Later today", "Set a time for tomorrow"],
+                "options": ["Later today", "Set a time for tomorrow", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "how many hours": {
@@ -55,9 +55,9 @@
                 "result_db_key": "next checkin datetime"
             },
             "talk again later": {
-                "transitions": "exit",
+                "transitions": ["exit", "talk again later"],
                 "content": "Great, I can't wait to talk to you again then!",
-                "options": "Bye!",
+                "options": ["Bye!", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -66,82 +66,79 @@
     "scheduled checkin": {
         "nodes": {
             "how do you feel": {
-                "transitions": ["frustrated response", "no concerns response"],
+                "transitions": ["frustrated response", "no concerns response", "how do you feel"],
                 "content": "How do you feel about your vision right now?",
-                "options": ["Frustrated", "No concerns"],
+                "options": ["Frustrated", "No concerns", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "frustrated response": {
-                "transitions": "joke 1",
+                "transitions": ["joke 1", "frustrated response"],
                 "content": "{'var': 'frustrated response'}",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "no concerns response": {
-                "transitions": "how was magnifier use",
+                "transitions": ["how was magnifier use", "no concerns response"],
                 "content": "That's {'var': 'great'}. Since you don't have any vision-related concerns at the moment:",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "joke 1": {
-                "transitions": "did you use magnifier",
+                "transitions": ["did you use magnifier", "joke 1"],
                 "content": "{'var': 'joke'}",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "did you use magnifier": {
-                "transitions": ["keep trying", "how was magnifier use"],
+                "transitions": ["keep trying", "how was magnifier use", "did you use magnifier"],
                 "content": "{'var': 'did you use magnifier'}",
-                "options": ["No", "Yes"],
+                "options": ["No", "Yes", "Replay"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "is used magnifier today"
             },
             "how was magnifier use": {
                 "transitions": [
                     "excellent",
-                    "excellent",
                     "good",
                     "good",
-                    "good",
-                    "fair",
                     "fair",
                     "fair",
                     "poor",
-                    "poor"
+                    "how was magnifier use"
                 ],
                 "content": "Please share with me: how did it go with your magnifier?",
-                "options": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                "options": ["0", "2", "4", "6", "8", "10", "Replay"],
                 "message_type": "image",
                 "args": ["https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"]
             },
             "excellent": {
-                "transitions": "exit",
+                "transitions": ["exit", "excellent"],
                 "content": "{'var': 'excellent response'}",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "good": {
-                "transitions": "exit",
+                "transitions": ["exit", "good"],
                 "content": "{'var': 'good response'}",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "fair": {
-                "transitions": "exit",
+                "transitions": ["exit", "fair"],
                 "content": "{'var': 'fair response'}",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "poor": {
-                "transitions": "exit",
+                "transitions": ["exit", "poor"],
                 "content": "I am so sorry that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying.",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "keep trying": {
-                "transitions": "exit",
+                "transitions": ["exit", "keep trying"],
                 "content": "Oh, well don't forget about using it whenever you are struggling to read.",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -150,9 +147,9 @@
     "feedback video": {
         "nodes": {
             "feedback video": {
-                "transitions": "exit",
+                "transitions": ["exit", "feedback video"],
                 "content": "Press play to watch the video your optometrist asked me to show you.",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "video",
                 "args": ["{'db': 'video to play', 'default value': ''}"]
             }
@@ -162,34 +159,34 @@
     "ask to do evaluation": {
         "nodes": {
             "ask to do evaluation": {
-                "transitions": ["exit", "take minds off reading"],
+                "transitions": ["exit", "take minds off reading", "ask to do evaluation"],
                 "content": "Next, can you show me how you read something with your magnifier?",
-                "options": ["Yes", "Not now"],
+                "options": ["Yes", "Not now", "Replay"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "is do evaluation"
             },
             "take minds off reading": {
-                "transitions": ["tell me a joke", "no problem"],
+                "transitions": ["tell me a joke", "no problem", "take minds off reading"],
                 "content": "OK, let's take our minds off reading. I love funny jokes. Can you tell me one?",
-                "options": ["Yes", "Not now"],
+                "options": ["Yes", "Not now", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "no problem": {
-                "transitions": "that was great",
+                "transitions": ["that was great", "no problem"],
                 "content": "Go for it!",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "tell me a joke": {
-                "transitions": "that was great",
+                "transitions": ["that was great", "tell me a joke"],
                 "content": "Go for it!",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "that was great": {
-                "transitions": "schedule",
+                "transitions": ["schedule", "that was great"],
                 "content": "That was {'var': 'great'}!",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "schedule": {
@@ -201,9 +198,9 @@
                 "result_db_key": "next checkin datetime"
             },
             "talk again later": {
-                "transitions": "exit",
+                "transitions": ["exit", "talk again later"],
                 "content": "Great, I can't wait to talk to you again then!",
-                "options": "Bye!",
+                "options": ["Bye!", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -212,7 +209,7 @@
     "introduce evaluation": {
         "nodes": {
             "check": {
-                "transitions": "introduce task",
+                "transitions": ["introduce task"],
                 "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Enter the number in the keypad.",
                 "options": ["Next"],
                 "message_type": "numpad",
@@ -221,21 +218,21 @@
                 "error_options": ["Oops"]
             },
             "introduce task": {
-                "transitions": "introduce evaluation",
+                "transitions": ["introduce evaluation", "introduce task"],
                 "content": "{'var': 'introduce task', 'index': '{'db': 'reading eval index'}'}",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "introduce evaluation": {
-                "transitions": "start evaluation",
+                "transitions": ["start evaluation", "introduce evaluation"],
                 "content": "The last time you did this reading test, your score was {'db': 'last score', 'default value': 'N/A'}, and your best ever was {'db': 'best score', 'default value': 'N/A'}. Let's see if you can beat that today!",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "start evaluation": {
-                "transitions": "exit",
+                "transitions": ["exit", "start evaluation"],
                 "content": "Go ahead and open the envelope. Press 'Next', then read the contents aloud while using your magnifier, then press 'Next' again.",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -244,9 +241,9 @@
     "evaluation": {
         "nodes": {
             "evaluation": {
-                "transitions": "exit",
+                "transitions": ["exit", "evaluation"],
                 "content": "*question_1*",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -255,29 +252,29 @@
     "post evaluation": {
         "nodes": {
              "chart self report": {
-                "transitions": "ask for spoken self report",
+                "transitions": ["ask for spoken self report", "chart self report"],
                 "content": "Tell me, how did you think you did on that reading task?",
-                "options": ["0", "2", "4", "6", "8", "10"],
+                "options": ["0", "2", "4", "6", "8", "10", "Replay"],
                 "message_type": "image",
                 "args": ["https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"],
                  "result_db_key": "feelings index"
             },
             "ask for spoken self report": {
-                "transitions": ["spoken self report","exit"],
+                "transitions": ["spoken self report", "exit", "ask for spoken self report"],
                 "content": "Really? Care to tell me more?",
-                "options": ["Yes", "No"],
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "spoken self report": {
-                "transitions": ["grit feedback"],
+                "transitions": ["grit feedback", "spoken self report"],
                 "content": "[spoken self-report]",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "grit feedback": {
-                "transitions": "exit",
+                "transitions": ["exit", "grit feedback"],
                 "content": "{'var': 'grit feedback', 'index': '{'db': 'grit feedback index'}'}",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -286,9 +283,9 @@
     "reward": {
         "nodes": {
             "reward": {
-                "transitions": ["exit"],
+                "transitions": ["exit", "reward"],
                 "content": "{'var': 'riddles'}",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -297,15 +294,15 @@
     "no magnifier use": {
         "nodes": {
             "ask if given up": {
-                "transitions": ["gave up", "exit"],
+                "transitions": ["gave up", "exit", "ask if given up"],
                 "content": "Have you given up on the magnifier or not needed it?",
-                "options": ["Gave up", "No need"],
+                "options": ["Gave up", "No need", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "gave up": {
-                "transitions": "exit",
+                "transitions": ["exit", "gave up"],
                 "content": "{'var': 'poor response'}",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -314,9 +311,9 @@
     "ask to do perseverance": {
         "nodes": {
             "ask to do perseverance": {
-                "transitions": "exit",
+                "transitions": ["exit", "ask to do perseverance"],
                 "content": "{'var': 'perseverance'}",
-                "options": ["Yes", "No"],
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "is start perseverance"
             }
@@ -326,7 +323,7 @@
     "perseverance": {
         "nodes": {
             "perseverance": {
-                "transitions": "exit",
+                "transitions": ["exit"],
                 "content": "[perseverance reading]",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
@@ -337,9 +334,9 @@
     "is continue perseverance": {
         "nodes": {
             "is continue perseverance": {
-                "transitions": "exit",
+                "transitions": ["exit", "is continue perseverance"],
                 "content": "Would you like to continue reading?",
-                "options": ["Continue", "Stop"],
+                "options": ["Continue", "Stop", "Replay"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "is continue perseverance"
             }
@@ -349,9 +346,9 @@
     "closing": {
         "nodes": {
             "goodbye": {
-                "transitions": "exit",
+                "transitions": ["exit"],
                 "content": "{'var': 'goodbye'}",
-                "options": "Bye!",
+                "options": ["Bye!"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -360,9 +357,9 @@
     "reminder for prompted": {
         "nodes": {
             "reminder": {
-                "transitions": "exit",
+                "transitions": ["exit", "reminder"],
                 "content": "I would really love to talk with you more than once a day and hope you can find some time to chat with me in addition to the scheduled time. You can just tap the tablet screen to wake me up at any time that works for you; I’m here for you. During an unscheduled session, you can read any of your own items or reading materials that you would like to share with me, so you won’t need to do any of the reading tests then. I bet you’ll find it enjoyable! I encourage you to give it a try whenever it’s a good time for you.",
-                "options": "Sounds good!",
+                "options": ["Sounds good!", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -371,9 +368,9 @@
     "grit transition": {
         "nodes": {
             "grit": {
-                "transitions": "exit",
+                "transitions": ["exit", "grit"],
                 "content": "{'var': 'transition'}",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         }
