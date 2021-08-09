@@ -1,0 +1,80 @@
+{
+    "goal setting": {
+        "nodes": {
+            "goal_1": {
+                "transitions": ["goal_2"],
+                "content": "<prosody rate=\"85%\">I am curious to learn about what motivates you to try to practice reading with the magnifier. I have heard from other people that once they learn to use the magnifier really well, then they can efficiently accomplish important tasks, such as managing their medications or reading the mail. What about you? </prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_2": {
+                "transitions": ["goal_3"],
+                "content": "<prosody rate=\"85%\">That's great! I am glad you have identified a motivating factor for reading with your magnifier. Next, I would like for you to set a specific short-term goal for future practice with the magnifier, in order to help you make progress toward achieving your ambitions. <break time=\"1s\"/> Examples of great short-term goals would be making sure to interact with me on a daily basis during our scheduled time,<break time=\"0.5s\"/>  or challenging yourself with additional reading tasks that you complete on your own each day. <break time=\"0.5s\"/> For now, I would like for you to come up with a similar specific short-term goal for yourself, and can you let me know what it is? </prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_3": {
+                "transitions": ["goal_6", "goal_4"],
+                "content": "<prosody rate=\"85%\">Thanks for sharing your goal! Do you think your goal is aligned with the motivating factor that you shared with me earlier?</prosody>",
+                "options": ["Yes!", "No"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_4": {
+                "transitions": ["goal_5", "goal_6"],
+                "content": "<prosody rate=\"85%\">That's totally fine! Do you want to change your goal so that it supports your motivation for using the magnifier? </prosody>",
+                "options": ["Yes, I want to reset my goal", "No, I will keep my current goal"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_5": {
+                "transitions": ["goal_3"],
+                "content": "<prosody rate=\"85%\">Let's set a new goal together then, can you tell me what your new goal would be?</prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_6": {
+                "transitions": ["goal_7", "goal_8"],
+                "content": "<prosody rate=\"85%\">Do you think you can achieve this goal with the resources you have? If you think the goal is reasonably realistic, please press yes, if you think it's too challenging, please press no. </prosody>",
+                "options": ["Yes", "No"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_7": {
+                "transitions": ["goal_9"],
+                "content": "<prosody rate=\"85%\">Wow, that's terrific! Now we have set a specific and realistic goal for you to work on! Next, let's create a specific time frame for accomplishing this goal. Over what time period do you expect to be able to complete your goal? </prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_8": {
+                "transitions": ["goal_5"],
+                "content": "<prosody rate=\"85%\">Aha, if the goal is not realistic, I would recommend you to reset your goal! Please think about how you can make it more realistic and then restate your goal.</prosody>",
+                "options": ["Yes, I want to reset my goal"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_9": {
+                "transitions": ["goal_10"],
+                "content": "<prosody rate=\"85%\">Sounds great! Alright, now let's talk about the the most positive outcomes of achieving your goal! What you have in mind?</prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_10": {
+                "transitions": ["goal_11"],
+                "content": "<prosody rate=\"85%\">That's awesone! I am happy that you will gain something positive after learning how to improve your reading with the magnifier and interacting with me!   I know it can be difficult to get started. <break time=\"0.5s\"/> Can you think of any potential difficulties or obstacles that might stand in the way of you achieving your goals? <break time=\"0.5s\"/>   A challenge for some people is they don't have enough time to practice so their progress may be slow. I would love to hear about some of your perceived challenges.</prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_11": {
+                "transitions": ["goal_12"],
+                "content": "<prosody rate=\"85%\">Yeah, that sounds like it could be potentially challenging. But I think that as long as you try, you will be able to overcome the obstacles! What are your plans if you encounter the challenges that you identified?<break time=\"0.5s\"/> Can you share it with me? </prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+            "goal_12": {
+                "transitions": "exit",
+                "content": "<prosody rate=\"85%\">Wonderful! You've set a goal and thought about the potential obstacles that may arise as you work toward achieving your goal. And you have come up with a solution to address those potential difficulties, which sets you up for success! I look forward to working with you on a daily basis to achieve your goal.  </prosody>",
+                "options": ["I have finished my answer"],
+                "message_type": "multiple choice one column"
+            },
+
+        },
+        "start_node_name": "goal_1"
+    },
+}
