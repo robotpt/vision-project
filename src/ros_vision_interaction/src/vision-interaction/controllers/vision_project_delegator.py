@@ -27,15 +27,6 @@ class VisionProjectDelegator:
         self._minutes_between_interactions = datetime.timedelta(minutes=minutes_between_interactions)
         self._max_num_of_prompted_per_day = max_num_of_prompted_per_day
         self._score_window = score_window
-        self._reading_task_schedule = [
-            [Tasks.SPOT_READING],  # Monday
-            [Tasks.SRT],  # Tuesday
-            [Tasks.SPOT_READING],  # Wednesday
-            [Tasks.IREST],  # Thursday
-            [Tasks.SPOT_READING],  # Friday
-            [Tasks.SRT],  # Saturday
-            [Tasks.MNREAD, Tasks.SKREAD]  # Sunday
-        ]
 
         self._is_run_interaction = False
 
@@ -45,21 +36,26 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
 
+        self.new_day_update()
+
     def update(self):
         if not self._state_database.is_set(DatabaseKeys.LAST_UPDATE_DATETIME):
             self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         if self._is_new_day():
-            self._daily_state_update()
-            self._update_act_variables()
-            self._daily_reading_task_data_update()
-            self._state_database.set(DatabaseKeys.NUM_OF_PROMPTED_TODAY, 0)
-            self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
-            self._state_database.set(DatabaseKeys.FEELINGS_INDEX, None)
-            self._state_database.set(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY, False)
+            self.new_day_update()
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
 
     def _is_new_day(self):
         return datetime.datetime.now().date() > self._state_database.get(DatabaseKeys.LAST_UPDATE_DATETIME).date()
+
+    def new_day_update(self):
+        self._daily_state_update()
+        self._update_act_variables()
+        self._daily_reading_task_data_update()
+        self._state_database.set(DatabaseKeys.NUM_OF_PROMPTED_TODAY, 0)
+        self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
+        self._state_database.set(DatabaseKeys.FEELINGS_INDEX, None)
+        self._state_database.set(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY, False)
 
     def _daily_state_update(self):
         # update reading task index if reading task has been done
@@ -101,9 +97,11 @@ class VisionProjectDelegator:
         #         grit_feedback_index = 2  # IMPROVED
         # self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
         # set reading task data for the new day
-        task_id = reading_task_tools.set_new_day_reading_task(self._state_database)
+        task_id = reading_task_tools.get_new_day_reading_task(self._state_database)
         self._state_database.set(DatabaseKeys.CURRENT_READING_ID, task_id)
         task_color = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.COLOR)
+        logging.info(f"Task ID: {task_id}")
+        logging.info(f"Task color: {task_color}")
         self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
 
     def get_interaction_type(self):
@@ -144,7 +142,8 @@ class VisionProjectDelegator:
             )
 
             is_time = is_in_update_window or \
-                      (is_prompted_in_scheduled_window and not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and
+                      (is_prompted_in_scheduled_window and not self._state_database.get(
+                          DatabaseKeys.IS_DONE_EVAL_TODAY) and
                        self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER))
 
         return is_time
@@ -156,13 +155,13 @@ class VisionProjectDelegator:
             datetime.datetime.now()
         )
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
-            not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
-            not is_in_scheduled_window
+               not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
+               not is_in_scheduled_window
 
     def _is_run_prompted_interaction(self):
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
-            self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
-            self._state_database.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) < self._max_num_of_prompted_per_day
+               self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
+               self._state_database.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) < self._max_num_of_prompted_per_day
 
     def _is_run_too_many_prompted(self):
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \

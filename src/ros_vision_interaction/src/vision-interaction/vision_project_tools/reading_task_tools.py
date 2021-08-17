@@ -17,12 +17,14 @@ class Tasks:
 
 
 class TaskDataKeys:
+    ANSWER = "answer"
     COLOR = "color"
+    CORRECT = "correct"
     SCORE = "score"
     WORD_COUNT = "word_count"
 
 
-def set_new_day_reading_task(statedb):
+def get_new_day_reading_task(statedb):
     task_type = get_current_reading_task_type()
     # current_difficulty_level = statedb.get(DatabaseKeys.DIFFICULTY_LEVEL)
     return get_random_reading_task_id(statedb, task_type)
@@ -65,7 +67,9 @@ def get_random_reading_task_id(statedb, task_type, difficulty_level=None):
 def get_reading_task_data_value(statedb, task_id, data_type):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     if data_type not in [
+        TaskDataKeys.ANSWER,
         TaskDataKeys.COLOR,
+        TaskDataKeys.CORRECT,
         TaskDataKeys.SCORE,
         TaskDataKeys.WORD_COUNT
     ]:

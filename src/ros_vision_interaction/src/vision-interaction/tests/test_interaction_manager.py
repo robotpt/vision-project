@@ -43,6 +43,7 @@ def test_run_reading_evaluation(interaction_manager, deployment_interaction_dict
     statedb.set(DatabaseKeys.GOOD_TO_CHAT, "Yes")
     statedb.set(DatabaseKeys.IS_DO_EVALUATION, "Yes")
     statedb.set(DatabaseKeys.IS_START_PERSEVERANCE, "No")
+    statedb.set(DatabaseKeys.CURRENT_READING_ID, "302")
     for node_name in interaction_manager.run_interaction_once(Interactions.SCHEDULED_INTERACTION):
         assert node_name in deployment_interaction_dict
     assert statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY)

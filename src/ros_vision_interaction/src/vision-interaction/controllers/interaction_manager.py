@@ -7,6 +7,7 @@ from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
 from interaction_builder import InteractionBuilder
 from vision_project_tools.constants import Interactions, DatabaseKeys
+from vision_project_tools.reading_task_tools import TaskDataKeys
 from vision_project_tools.vision_engine import VisionInteractionEngine as InteractionEngine
 
 logging.basicConfig(level=logging.INFO)
@@ -135,10 +136,22 @@ class InteractionManager:
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
                 post_hook=self._set_vars_after_interaction
             )
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
-                post_hook=self._set_vars_after_evaluation
-            )
+            task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+            if task_id[0] == "3":  # SPOT READING
+                for _ in range(len(reading_task_tools.get_reading_task_data_value(
+                    self._state_database,
+                    task_id,
+                    TaskDataKeys.ANSWER
+                ))):
+                    self._planner.insert(
+                        self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                        post_hook=self._set_vars_after_evaluation
+                    )
+            else:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+                    post_hook=self._set_vars_after_evaluation
+                )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
                 post_hook=self._set_vars_after_post_eval
@@ -162,6 +175,7 @@ class InteractionManager:
 
         self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
         self._state_database.set(DatabaseKeys.SELF_REPORTS, self_ratings.append(new_rating))
+        self._set_vars_after_interaction()
 
     def _set_vars_after_prompted_ask_to_chat(self):
         if self._state_database.get(DatabaseKeys.GOOD_TO_CHAT) == "Yes":

@@ -19,6 +19,7 @@ class Interactions:
 
 class DatabaseKeys:
     ACT_RATINGS = "act ratings"
+    ASK_IF_GIVEN_UP = "ask if given up"
     BEST_SCORE = "best score"
     CURRENT_EVAL_SCORE = "current eval score"
     CURRENT_READING_COLOR = "current reading color"
@@ -66,174 +67,64 @@ class DatabaseKeys:
     VIDEO_TO_PLAY = "video to play"
 
 
-# READING_TASK_DATA = {
-#     "IReST": {
-#         # difficulty levels
-#         "1": {
-#             # reading task IDs
-#             "ir11": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#         }
-#     },
-#     "MNread": {
-#         # difficulty levels
-#         "1": {
-#             # reading task IDs
-#             "mn11": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#         }
-#     },
-#     "SKread": {
-#         "1": {
-#             # reading task IDs
-#             "sk11": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#         }
-#     },
-#     "spot reading": {
-#         # difficulty levels
-#         "1": {
-#             # reading task IDs
-#             "sr11": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#             "sr12": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             }
-#         },
-#         "2": {
-#             "sr21": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#             "sr22": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             }
-#         },
-#         "3": {
-#             "sr31": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             }
-#         },
-#         "4": {
-#             "sr41": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#             "sr42": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#             "sr43": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             }
-#         }
-#     },
-#     "SRT": {
-#         # difficulty levels
-#         "1": {
-#             # reading task IDs
-#             "srt11": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#         }
-#     },
-#     "self selected": {
-#         # difficulty levels
-#         "1": {
-#             # reading task IDs
-#             "ss11": {
-#                 "word_count": 50,
-#                 "score": None,
-#                 "color": "blue"
-#             },
-#         }
-#     }
-# }
-
 READING_TASK_DATA = {
     "IReST": {
-        "ir1": {"word_count": 50, "score": None, "color": "blue"},
-        "ir2": {"word_count": 50, "score": None, "color": "blue"},
-        "ir3": {"word_count": 50, "score": None, "color": "blue"},
-        "ir4": {"word_count": 50, "score": None, "color": "blue"},
-        "ir5": {"word_count": 50, "score": None, "color": "blue"},
-        "ir6": {"word_count": 50, "score": None, "color": "blue"},
+        "501": {"word_count": 156, "score": None, "color": "blue"},
+        "502": {"word_count": 161, "score": None, "color": "blue"},
+        "503": {"word_count": 156, "score": None, "color": "blue"},
+        "504": {"word_count": 155, "score": None, "color": "blue"},
+        "505": {"word_count": 136, "score": None, "color": "blue"},
+        "506": {"word_count": 158, "score": None, "color": "blue"},
     },
     "MNread": {
-        "mn1": {"word_count": 50, "score": None, "color": "blue"},
-        "mn2": {"word_count": 50, "score": None, "color": "blue"},
+        "100": {"word_count": 50, "score": None, "color": "yellow"},
+        "101": {"word_count": 50, "score": None, "color": "yellow"},
     },
     "SKread": {
-        "sk1": {"word_count": 50, "score": None, "color": "blue"},
-        "sk2": {"word_count": 50, "score": None, "color": "blue"},
+        "200": {"word_count": 50, "score": None, "color": "red"},
+        "201": {"word_count": 50, "score": None, "color": "red"},
     },
     "spot reading": {
-        "sr1": {"word_count": 50, "score": None, "color": "blue"},
-        "sr2": {"word_count": 50, "score": None, "color": "blue"},
-        "sr3": {"word_count": 50, "score": None, "color": "blue"},
-        "sr4": {"word_count": 50, "score": None, "color": "blue"},
-        "sr5": {"word_count": 50, "score": None, "color": "blue"},
-        "sr6": {"word_count": 50, "score": None, "color": "blue"},
-        "sr7": {"word_count": 50, "score": None, "color": "blue"},
-        "sr8": {"word_count": 50, "score": None, "color": "blue"},
-        "sr9": {"word_count": 50, "score": None, "color": "blue"},
-        "sr10": {"word_count": 50, "score": None, "color": "blue"},
-        "sr11": {"word_count": 50, "score": None, "color": "blue"},
-        "sr12": {"word_count": 50, "score": None, "color": "blue"},
-        "sr13": {"word_count": 50, "score": None, "color": "blue"},
-        "sr14": {"word_count": 50, "score": None, "color": "blue"},
-        "sr15": {"word_count": 50, "score": None, "color": "blue"},
-        "sr16": {"word_count": 50, "score": None, "color": "blue"},
-        "sr17": {"word_count": 50, "score": None, "color": "blue"},
-        "sr18": {"word_count": 50, "score": None, "color": "blue"},
+        "300": {"answer": ["345582553529950"], "score": None, "color": "blue", "correct": None},
+        "301": {"answer": ["06/19"], "score": None, "color": "blue", "correct": None},
+        "302": {"answer": ["18007721213"], "score": None, "color": "blue", "correct": None},
+        "309": {"answer": ["6", "2", "15", "415", "45", "350"], "score": None, "color": "blue", "correct": None},
+        "310": {"answer": ["3", "37", "27"], "score": None, "color": "blue", "correct": None},
+        "311": {"answer": ["3.84"], "score": None, "color": "blue", "correct": None},
+        "303": {"answer": ["349772827724463"], "score": None, "color": "blue", "correct": None},
+        "304": {"answer": ["1078.70", "0"], "score": None, "color": "blue", "correct": None},
+        "305": {"answer": ["400", "40"], "score": None, "color": "blue", "correct": None},
+        "312": {"answer": ["5", "5", "0", "0"], "score": None, "color": "blue", "correct": None},
+        "313": {"answer": ["48", "9"], "score": None, "color": "blue", "correct": None},
+        "314": {"answer": ["15", "8", "380"], "score": None, "color": "blue", "correct": None},
+        "306": {"answer": ["1335335854743211", "09/23"], "score": None, "color": "blue", "correct": None},
+        "307": {"answer": ["2018", "7", "21"], "score": None, "color": "blue", "correct": None},
+        "308": {"answer": ["4", "11", "10", "15"], "score": None, "color": "blue", "correct": None},
+        "315": {"answer": ["60", "312.223.0197", "0", "06.27.19"], "score": None, "color": "blue", "correct": None},
+        "316": {"answer": ["3.91", "4/15/2013"], "score": None, "color": "blue", "correct": None},
+        "317": {"answer": ["5", "3", "12"], "score": None, "color": "blue", "correct": None},
     },
     "SRT": {
-        "srt1": {"word_count": 50, "score": None, "color": "blue"},
-        "srt2": {"word_count": 50, "score": None, "color": "blue"},
-        "srt3": {"word_count": 50, "score": None, "color": "blue"},
-        "srt4": {"word_count": 50, "score": None, "color": "blue"},
-        "srt5": {"word_count": 50, "score": None, "color": "blue"},
-        "srt6": {"word_count": 50, "score": None, "color": "blue"},
-        "srt7": {"word_count": 50, "score": None, "color": "blue"},
-        "srt8": {"word_count": 50, "score": None, "color": "blue"},
-        "srt9": {"word_count": 50, "score": None, "color": "blue"},
-        "srt10": {"word_count": 50, "score": None, "color": "blue"},
-        "srt11": {"word_count": 50, "score": None, "color": "blue"},
-        "srt12": {"word_count": 50, "score": None, "color": "blue"},
-    },
-    "self selected": {
-        "ss11": {"word_count": 50, "score": None, "color": "blue"},
+        "400": {"word_count": 200, "score": None, "color": "gray"},
+        "401": {"word_count": 200, "score": None, "color": "gray"},
+        "402": {"word_count": 200, "score": None, "color": "gray"},
+        "403": {"word_count": 200, "score": None, "color": "gray"},
+        "404": {"word_count": 200, "score": None, "color": "gray"},
+        "405": {"word_count": 200, "score": None, "color": "gray"},
+        "406": {"word_count": 200, "score": None, "color": "gray"},
+        "407": {"word_count": 200, "score": None, "color": "gray"},
+        "408": {"word_count": 200, "score": None, "color": "gray"},
+        "409": {"word_count": 200, "score": None, "color": "gray"},
+        "410": {"word_count": 200, "score": None, "color": "gray"},
+        "411": {"word_count": 200, "score": None, "color": "gray"},
+        "412": {"word_count": 100, "score": None, "color": "gray"},
     }
 }
 
 
 INITIAL_STATE_DB = {
     DatabaseKeys.ACT_RATINGS: {},
+    DatabaseKeys.ASK_IF_GIVEN_UP: False,
     DatabaseKeys.BEST_SCORE: None,
     DatabaseKeys.CURRENT_EVAL_SCORE: 0,
     DatabaseKeys.CURRENT_READING_COLOR: None,

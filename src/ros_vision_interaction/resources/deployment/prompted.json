@@ -25,7 +25,7 @@
     "prompted ask to chat": {
         "nodes": {
             "ask to chat": {
-                "transitions": ["exit", "ask to chat"],
+                "transitions": ["exit", "exit", "ask to chat"],
                 "content": "Hello {'db': 'user name', 'default value': ''}! It's so {'var': 'great'} when we get a chance to {'var': 'chat'}. Can you confirm if this is a good time?",
                 "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
@@ -172,5 +172,16 @@
             }
         },
         "start_node_name": "how do you feel about vision"
+    },
+    "ask if given up": {
+        "nodes": {
+            "ask if given up": {
+                "transitions": ["exit"],
+                "content": "Are you thinking of giving up on the magnifier or have you not needed it?",
+                "options": ["No need", "Gave up", "Replay"],
+                "message_type": "multiple choice one column",
+                "result_db_key": ""
+            }
+        }
     }
 }

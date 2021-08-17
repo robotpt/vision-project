@@ -61,7 +61,7 @@ def test_get_current_reading_task_id(statedb):
     # statedb.set(DatabaseKeys.DIFFICULTY_LEVEL, "1")
     for i, date in enumerate(dates):
         with freezegun.freeze_time(date):
-            task_id = reading_task_tools.set_new_day_reading_task(statedb)
+            task_id = reading_task_tools.get_new_day_reading_task(statedb)
             assert not is_task_completed(READING_TASK_DATA, task_id)
 
 
@@ -81,7 +81,7 @@ def test_set_reading_score(statedb):
 
     for i, date in enumerate(dates):
         with freezegun.freeze_time(date):
-            task_id = reading_task_tools.set_new_day_reading_task(statedb)
+            task_id = reading_task_tools.get_new_day_reading_task(statedb)
             reading_score = reading_scores[i]
             reading_task_tools.set_reading_task_score(statedb, task_id, reading_score)
             assert reading_task_tools.get_reading_task_data_value(statedb, task_id, TaskDataKeys.SCORE) == reading_score

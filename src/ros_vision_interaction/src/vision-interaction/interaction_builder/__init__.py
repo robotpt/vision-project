@@ -1,11 +1,15 @@
 import datetime
 import logging
+import vision_project_tools.reading_task_tools as reading_task_tools
 
 from interaction_engine.messager.directed_graph import DirectedGraph
 from interaction_engine.messager.node import Node
 from interaction_engine.text_populator import TextPopulator
 from interaction_engine.text_populator import DatabasePopulator
 from interaction_engine.text_populator import VarietyPopulator
+
+from vision_project_tools.constants import DatabaseKeys
+from vision_project_tools.reading_task_tools import TaskDataKeys
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,6 +40,7 @@ class InteractionBuilder:
         REWARD = "reward"
         SCHEDULED_ASK_TO_CHAT = "scheduled ask to chat"
         SCHEDULED_CHECKIN = "scheduled checkin"
+        SPOT_READING_EVAL = "spot reading evaluation"
         TOO_MANY_PROMPTED = "too many prompted"
 
         POSSIBLE_GRAPHS = [
@@ -62,6 +67,7 @@ class InteractionBuilder:
             REWARD,
             SCHEDULED_ASK_TO_CHAT,
             SCHEDULED_CHECKIN,
+            SPOT_READING_EVAL,
             TOO_MANY_PROMPTED
         ]
 
@@ -139,6 +145,8 @@ class InteractionBuilder:
 
             if node_info["tests"] == "check reading id":
                 node_info["tests"] = self.check_reading_id
+            if node_info["tests"] == "check spot reading":
+                node_info["tests"] = self.check_spot_reading_value
 
             node = Node(
                 name=node_name,
@@ -195,13 +203,18 @@ class InteractionBuilder:
         return datetime.datetime.now().replace(hour=current_hour+hours)
 
     def check_reading_id(self, reading_id):
-        eval_index = self._statedb.get("reading eval index")
-        try:
-            expected_id = self._statedb.get("reading eval data")[eval_index]["id"]
-            correct_id = reading_id == expected_id
-        except IndexError:
-            correct_id = True
-        return correct_id
+        expected_id = self._statedb.get(DatabaseKeys.CURRENT_READING_ID)
+        is_correct_id = reading_id == expected_id
+        return is_correct_id
+
+    def check_spot_reading_value(self, value):
+        task_id = self._statedb.get(DatabaseKeys.CURRENT_READING_ID)
+        correct_answer = reading_task_tools.get_reading_task_data_value(
+            self._statedb,
+            task_id,
+            TaskDataKeys.ANSWER
+        )
+        return value == correct_answer
 
     @property
     def interactions(self):
