@@ -1,0 +1,31 @@
+{
+    "mindfulness drinking": {
+        "nodes": {
+            "drinking_1": {
+                "transitions": ["drinking_2"],
+                "content": "<prosody rate=\"85%\">So I now invite you to sit up straight, and please do this exercise in silence. You will be able to talk about it later. Before we begin, I would like to ask you to please get a cup or glass filled with a beverage from your kitchen, and press the button on the tablet to confirm that you are ready for the mindfulness drinking exercise.</prosody>",
+                "options": ["I am ready for the mindfulness drinking exercise!"],
+                "message_type": "multiple choice one column"
+            },
+            "drinking_2": {
+                "transitions": ["drinking_3"],
+                "content": "<prosody rate=\"85%\">Now take hold of the cup (or glass), and observe it as if you are a curious person who has never seen an object like this before.<break time=\"3s\"/>Notice the shape and the color of this cup or glass. <break time=\"3s\"/>Notice how the light shines through it or bounces off it<break time=\"3s\"/>Notice the texture of the surface; run your fingers over it, and notice what it feels like.<break time=\"3s\"/>Notice the weight of it in your hand. <break time=\"3s\"/>. Look at the liquid inside it, notice the way the light reflects off the surface. <break time=\"3s\"/> Gently move the cup so as to make the liquid inside swirl around.  <break time=\"3s\"/> Notice the patterns on the surface of the liquid, as it swirls <break time=\"3s\"/> Now raise it to your nose and smell it <break time=\"3s\"/> If your liquid is tea or coffee or something else with a distinctive smell, then inhale it deeply through your nose, and really notice the aroma  <break time=\"3s\"/> And now raise the cup or glass to your mouth, and rest it against your lips, and pause for a moment before drinking. <break time=\"3s\"/> And notice what is happening inside your mouth  <break time=\"3s\"/> You may notice saliva forming ... or your mouth getting warmer ... or an urge to drink <break time=\"3s\"/>  And in a moment—do not do it yet—I am going to ask you to take one small sip ... as slowly as you can ... and then close your mouth again, but let the liquid stay inside your mouth, without swallowing it.<break time=\"3s\"/> And so now, in ultra slow motion, take a small sip ... then close your mouth, and let the liquid stay there, inside your mouth. <break time=\"3s\"/> And ever so slowly, ever so gently, swill the liquid around inside your mouth. <break time=\"3s\"/> Feel it against your tongue, and inside your cheeks.  <break time=\"3s\"/> And if this liquid has a taste, really notice it. <break time=\"3s\"/> And notice where you can taste it on your tongue. <break time=\"3s\"/> And I invite you to close your eyes now, to enhance the experience. <break time=\"3s\"/> And just notice any urges arising. <break time=\"3s\"/> And then, in ultra slow motion, swallow it, and notice the sound of swallowing, and the movement of your throat <break time=\"3s\"/> And whenever you notice that your attention has wandered, acknowledge it, and then refocus on this exercise <break time=\"3s\"/>  If you want to do the same thing again, please press the continue button, and this time I am going to say very little.</prosody>",
+                "options": ["Continue"],
+                "message_type": "multiple choice one column"
+            },
+            "drinking_3": {
+                "transitions": ["exit"],
+                "content": "<prosody rate=\"85%\"> Finally, let’s do this one more time. So once again, with great curiosity, notice the cup. <break time=\"3s\"/>And the liquid inside. <break time=\"3s\"/>And sip slowly. <break time=\"3s\"/>And hold it in your mouth. <break time=\"3s\"/> And notice what happens. <break time=\"3s\"/> And really notice it when you swallow. <break time=\"3s\"/> And now coming to the end of the exercise. <break time=\"3s\"/> So let’s finish up with grounding ourselves. <break time=\"3s\"/> Slowly push your feet into the floor, and straighten your back, and stretch your arms. <break time=\"3s\"/> And really notice the feelings of your arms stretching, or your feet pressing, or your back straightening. <break time=\"3s\"/> Now open your eyes and ears as fully as you can, and notice with curiosity where you are. <break time=\"3s\"/> Look around you. What are five things you can see? <break time=\"3s\"/> Listen carefully. What are three or four things you can hear? <break time=\"3s\"/>As you breathe in the air, what can you smell? <break time=\"3s\"/> Notice where you are and what you are doing. <break time=\"3s\"/> Open your hands and gently run your fingers over the chair beneath you. <break time=\"3s\"/> Notice what this surface feels like under your fingers. <break time=\"3s\"/> So notice: there is a part of you that is able to notice everything that you see, hear, touch, taste, smell, think, feel and do. Great job! Now you've finished the mindfulness drinking exercise, and please press the button on your tablet to proceed forward. </prosody>",
+                "options": ["I have finished the mindfulness drinking exercise"],
+                "message_type": "multiple choice one column"
+            },
+         
+
+        },
+        "start_node_name": "drinking_1"
+    },
+}
+
+
+
+
