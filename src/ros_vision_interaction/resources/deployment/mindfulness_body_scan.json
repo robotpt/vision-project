@@ -1,6 +1,12 @@
 {
     "mindfulness body": {
         "nodes": {
+            "introduce mindfulness": {
+                "transitions": ["body_1"],
+                "content": "{'var': 'mindfulness'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
             "body_1": {
                 "transitions": ["body_2"],
                 "content": "<prosody rate=\"85%\"> Begin by making yourself comfortable. <break time=\"3s\"/> Sit in a chair and allow your back to be straight, but not stiff, with your feet on the ground. <break time=\"3s\"/> You could also do this practice standing or if you prefer, you can lie down and have your head supported.  <break time=\"3s\"/> Your hands could be resting gently in your lap or at your side. Allow your eyes to close, or to remain open with a soft gaze. <break time=\"3s\"/> Take several long, slow, deep breaths. <break time=\"3s\"/> breathe in <break time=\"3s\"/> breathe out <break time=\"3s\"/> breathe in <break time=\"5s\"/>  breathe out <break time=\"5s\"/> Breathing in fully and exhaling slowly. Breathe in through your nose and out through your nose or mouth. Feel your stomach expand on an inhale and relax and let go as you exhale. <break time=\"3s\"/> Begin to let go of noises around you. Begin to shift your attention from outside to inside yourself. <break time=\"3s\"/> If you are distracted by sounds in the room, simply notice this and bring your focus back to your breathing. <break time=\"3s\"/> Now slowly bring your attention down to your feet. Begin observing sensations in your feet.  <break time=\"3s\"/> You might want to wiggle your toes a little, feeling your toes against your socks or shoes. Just notice, without judgment. <break time=\"3s\"/> You might imagine sending your breath down to your feet, as if the breath is traveling through the nose to the lungs and through the abdomen all the way down to your feet. And then back up again out through your nose and lungs <break time=\"3s\"/>  Perhaps you don't feel anything at all. That is fine, too. Just allow yourself to feel the sensation of not feeling anything. <break time=\"3s\"/> When you are ready, allow your feet to dissolve in your mind’s eye and move your attention up to your ankles, calves, knees and thighs. Observe the sensations you are experiencing throughout your legs. <break time=\"3s\"/> Breathe into and breathe out of the legs. If your mind begins to wander during this exercise, gently notice this without judgment and bring your mind back to noticing the sensations in your legs.  <break time=\"3s\"/> If you notice any discomfort, pain or stiffness, don't judge this. Just simply notice it. Observe how all sensations rise and fall, shift and change moment to moment. <break time=\"3s\"/> Notice how no sensation is permanent. Just observe and allow the sensations to be in the moment, just as they are. Breathe into and out from the legs. <break time=\"3s\"/> Then on the next breath, allow the legs to dissolve in your mind. And move to the sensations in your lower back and pelvis. Softening and releasing as you breathe in and out. Slowly move your attention up to your mid back and upper back.  <break time=\"3s\"/> Become curious about the sensations here. You may become aware of sensations in the muscle, temperature or points of contact with furniture or the bed. With each out breath, you may let go of tension you are carrying. <break time=\"3s\"/> And then very gently shift your focus to your stomach and all the internal organs here. Perhaps you notice the feeling of clothing, the process of digestion or the belly rising or falling with each breath. If you notice opinions arising about these areas, gently let these go and return to noticing sensations. <break time=\"3s\"/> Please press the continue button to continue with the mindfulness body scan exercise. </prosody>",
@@ -8,14 +14,22 @@
                 "message_type": "multiple choice one column"
             },
             "body_2": {
-                "transitions": ["exit"],
+                "transitions": ["rating"],
                 "content": "<prosody rate=\"85%\"> As you continue to breathe, bring your awareness to the chest and heart region and just notice your heartbeat. <break time=\"3s\"/> Observe how the chest rises during the inhale and how the chest falls during the exhale. Let go of any judgments that may arise. On the next outbreath, shift the focus to your hands and fingertips. <break time=\"3s\"/> See if you can channel your breathing into and out of this area as if you are breathing into and out from your hands. If your mind wanders, gently bring it back to the sensations in your hands.<break time=\"3s\"/> And then, on the next outbreath, shift the focus and bring your awareness up into your arms. Observe the sensations or lack of sensations that may be occurring there. <break time=\"3s\"/> You might notice some difference between the left arm and the right arm – no need to judge this. As you exhale, you may experience the arm soften and release tensions. Continue to breathe and shift focus to the neck, shoulder and throat region. This is an area where we often have tension.  <break time=\"3s\"/> Be with the sensations here. It could be tightness, rigidity or holding. You may notice the shoulders moving along with the breath. Let go of any thoughts or stories you are telling about this area. As you breathe, you may feel tension rolling off your shoulders. <break time=\"3s\"/> On the next outbreath, shift your focus and direct your attention to the scalp, head and face.  <break time=\"3s\"/> Observe all of the sensations occurring there. Notice the movement of the air as you breathe into or out of the nostrils or mouth. As you exhale, you might notice the softening of any tension you may be holding. <break time=\"3s\"/> And now, let your attention expand out to include the entire body as a whole. Bring into your awareness the top of your head down to the bottom of your toes. Feel the gentle rhythm of the breath as it moves through the body. <break time=\"3s\"/> As you come to the end of this practice, take a full, deep breath, taking in all the energy of this practice.  <break time=\"3s\"/> Exhale fully. And when you are ready, open your eyes and return your attention to the present moment.  <break time=\"3s\"/> Great Job! Please press the button on the tablet to proceed forward with the interaction. </prosody>",
-                "options": ["I have finished the mindfulness body scan exercise!"],
+                "options": ["I have finished the exercise!"],
                 "message_type": "multiple choice one column"
             },
-         
-
+            "rating": {
+                "transitions": ["exit", "exit", "exit", "exit", "exit", "exit", "rating"],
+                "content": "Tell me, how did you feel about that mindfulness session?",
+                "options": ["0", "2", "4", "6", "8", "10", "Replay"],
+                "message_type": "image",
+                "args": [
+                    "https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"
+                ],
+                "result_db_key": "mindfulness rating"
+            }
         },
-        "start_node_name": "body_1"
-    },
+        "start_node_name": "introduce mindfulness"
+    }
 }

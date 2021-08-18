@@ -1,6 +1,12 @@
 {
     "mindfulness drinking": {
         "nodes": {
+            "introduce mindfulness": {
+                "transitions": ["drinking_1"],
+                "content": "{'var': 'mindfulness'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
             "drinking_1": {
                 "transitions": ["drinking_2"],
                 "content": "<prosody rate=\"85%\">So I now invite you to sit up straight, and please do this exercise in silence. You will be able to talk about it later. Before we begin, I would like to ask you to please get a cup or glass filled with a beverage from your kitchen, and press the button on the tablet to confirm that you are ready for the mindfulness drinking exercise.</prosody>",
@@ -14,16 +20,24 @@
                 "message_type": "multiple choice one column"
             },
             "drinking_3": {
-                "transitions": ["exit"],
+                "transitions": ["rating"],
                 "content": "<prosody rate=\"85%\"> Finally, let’s do this one more time. So once again, with great curiosity, notice the cup. <break time=\"3s\"/>And the liquid inside. <break time=\"3s\"/>And sip slowly. <break time=\"3s\"/>And hold it in your mouth. <break time=\"3s\"/> And notice what happens. <break time=\"3s\"/> And really notice it when you swallow. <break time=\"3s\"/> And now coming to the end of the exercise. <break time=\"3s\"/> So let’s finish up with grounding ourselves. <break time=\"3s\"/> Slowly push your feet into the floor, and straighten your back, and stretch your arms. <break time=\"3s\"/> And really notice the feelings of your arms stretching, or your feet pressing, or your back straightening. <break time=\"3s\"/> Now open your eyes and ears as fully as you can, and notice with curiosity where you are. <break time=\"3s\"/> Look around you. What are five things you can see? <break time=\"3s\"/> Listen carefully. What are three or four things you can hear? <break time=\"3s\"/>As you breathe in the air, what can you smell? <break time=\"3s\"/> Notice where you are and what you are doing. <break time=\"3s\"/> Open your hands and gently run your fingers over the chair beneath you. <break time=\"3s\"/> Notice what this surface feels like under your fingers. <break time=\"3s\"/> So notice: there is a part of you that is able to notice everything that you see, hear, touch, taste, smell, think, feel and do. Great job! Now you've finished the mindfulness drinking exercise, and please press the button on your tablet to proceed forward. </prosody>",
-                "options": ["I have finished the mindfulness drinking exercise"],
+                "options": ["I have finished the exercise"],
                 "message_type": "multiple choice one column"
             },
-         
-
+            "rating": {
+                "transitions": ["exit", "exit", "exit", "exit", "exit", "exit", "rating"],
+                "content": "Tell me, how did you feel about that mindfulness session?",
+                "options": ["0", "2", "4", "6", "8", "10", "Replay"],
+                "message_type": "image",
+                "args": [
+                    "https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"
+                ],
+                "result_db_key": "mindfulness rating"
+            }
         },
-        "start_node_name": "drinking_1"
-    },
+        "start_node_name": "introduce mindfulness"
+    }
 }
 
 

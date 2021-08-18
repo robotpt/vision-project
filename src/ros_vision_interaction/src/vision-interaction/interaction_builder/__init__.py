@@ -27,7 +27,9 @@ class InteractionBuilder:
         GRIT_TRANSITION = "grit transition"
         INTRODUCE_EVALUATION = "introduce evaluation"
         INTRODUCE_QT = "introduce QT"
-        MINDFULNESS = "mindfulness"
+        MINDFULNESS_BODY_SCAN = "mindfulness body scan"
+        MINDFULNESS_BREATHING = "mindfulness breathing"
+        MINDFULNESS_DRINKING = "mindfulness drinking"
         NO_MAGNIFIER_USE = "no magnifier use"
         PERSEVERANCE = "perseverance"
         PLAN_CHECKIN_TOMORROW = "plan tomorrow's checkin"
@@ -54,7 +56,9 @@ class InteractionBuilder:
             GOAL_SETTING,
             INTRODUCE_EVALUATION,
             INTRODUCE_QT,
-            MINDFULNESS,
+            MINDFULNESS_BODY_SCAN,
+            MINDFULNESS_BREATHING,
+            MINDFULNESS_DRINKING,
             NO_MAGNIFIER_USE,
             PERSEVERANCE,
             PLAN_NEXT_CHECKIN,
