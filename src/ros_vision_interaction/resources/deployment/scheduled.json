@@ -280,7 +280,9 @@
                 "content": "*question_1*",
                 "options": ["Next"],
                 "message_type": "numpad",
-                "tests": "check spot reading"
+                "tests": "check spot reading",
+                "error_message": "That's not the correct answer, please try again.",
+                "error_options": ["Oops"]
             }
         },
         "start_node_name": "evaluation"

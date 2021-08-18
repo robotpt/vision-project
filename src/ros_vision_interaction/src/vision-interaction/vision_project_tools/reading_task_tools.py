@@ -82,6 +82,17 @@ def get_reading_task_data_value(statedb, task_id, data_type):
             return reading_task_data[task_type][task_id][data_type]
 
 
+def get_all_scores(statedb):
+    reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
+    all_scores = []
+    for task_type in reading_task_data.keys():
+        for task_id in reading_task_data[task_type]:
+            score = get_reading_task_data_value(statedb, task_id, TaskDataKeys.SCORE)
+            if score is not None:
+                all_scores.append(score)
+    return all_scores
+
+
 def set_reading_task_score(statedb, task_id, score):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     for task_type in reading_task_data:

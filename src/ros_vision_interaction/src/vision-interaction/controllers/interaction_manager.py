@@ -67,9 +67,42 @@ class InteractionManager:
             self._build_scheduled_interaction()
         elif interaction_type == Interactions.TOO_MANY_PROMPTED:
             self._build_too_many_prompted()
+        elif interaction_type == Interactions.EVALUATION:
+            self._build_evaluation()
         else:
             raise ValueError("Not a valid interaction type")
 
+        return self._planner
+
+    def _build_evaluation(self):
+        if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
+            )
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+            post_hook=self._set_vars_after_interaction
+        )
+        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        if task_id[0] == "3":  # SPOT READING
+            for _ in range(len(reading_task_tools.get_reading_task_data_value(
+                    self._state_database,
+                    task_id,
+                    TaskDataKeys.ANSWER
+            ))):
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                    post_hook=self._set_vars_after_evaluation
+                )
+        else:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+                post_hook=self._set_vars_after_evaluation
+            )
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+            post_hook=self._set_vars_after_post_eval
+        )
         return self._planner
 
     def _build_ask_to_do_scheduled(self):
@@ -235,7 +268,18 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
         self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
+        self._set_reading_scores()
         self._set_vars_after_interaction()
+
+    def _set_reading_scores(self):
+        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        score = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.SCORE)
+
+        self._state_database.set(DatabaseKeys.LAST_SCORE, score)
+
+        all_scores = reading_task_tools.get_all_scores(self._state_database)
+        if len(all_scores) == 0 or score > max(all_scores):
+            self._state_database.set(DatabaseKeys.BEST_SCORE, score)
 
     def _set_vars_after_interaction(self):
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
