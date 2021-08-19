@@ -27,7 +27,7 @@ class InteractionBuilder:
         GRIT_TRANSITION = "grit transition"
         INTRODUCE_EVALUATION = "introduce evaluation"
         INTRODUCE_QT = "introduce QT"
-        MINDFULNESS_BODY_SCAN = "mindfulness body scan"
+        MINDFULNESS_BODY_SCAN = "mindfulness body"
         MINDFULNESS_BREATHING = "mindfulness breathing"
         MINDFULNESS_DRINKING = "mindfulness drinking"
         NO_MAGNIFIER_USE = "no magnifier use"

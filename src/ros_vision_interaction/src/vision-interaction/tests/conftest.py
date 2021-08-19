@@ -44,7 +44,10 @@ def deployment_interaction_dict():
         os.path.join(resources_directory, 'deployment', 'first_interaction.json'),
         os.path.join(resources_directory, 'deployment', 'scheduled.json'),
         os.path.join(resources_directory, 'deployment', 'prompted.json'),
-        os.path.join(resources_directory, 'deployment', 'act_interventions.json')
+        os.path.join(resources_directory, 'deployment', 'goal_setting.json'),
+        os.path.join(resources_directory, 'deployment', 'mindfulness_body_scan.json'),
+        os.path.join(resources_directory, 'deployment', 'mindfulness_breathing.json'),
+        os.path.join(resources_directory, 'deployment', 'mindfulness_drinking.json')
     ]
     for file in interaction_files:
         with open(file) as f:
