@@ -80,11 +80,13 @@
         "{'var': 'backstories'}"
     ],
     "introduce task": [
+        "This reading task involves spot reading the numbers on common household items. Please read the numbers aloud to me and then also enter them on the tablet. For each item, I will ask you to find and read something specific that is of interest to me on the item while using your magnifier. Do your best to read the numbers on the items accurately.",
         "This is the short story about the childhood and life of a young woman. Let's see how quickly you can read it aloud today while using your magnifier. There are three pages for you to read; you will be timed. As soon as you are done reading, please tap the screen to let me know you are finished. When you have your magnifier and are ready to start reading, please tap my screen to let me know you're going to begin.",
-        "Please read these short sentences with your magnifier as quickly as you can without making mistakes, starting with the largest ones and keep going until you get to the smallest one that you can read with your magnifier. They get so small that they become impossible for anyone to read, so don't expect to read all of the sentences. Do your best to read quickly and accurately with your magnifier today!",
-        "Please read these words and letters with your magnifier as quickly as you can without making mistakes, starting with the largest ones and keep going until you get to the smallest one that you can read with your magnifier. These are not sentences, but rather just random single words and letters. Try not to skip or miss any words or letters. Give it your best shot!",
+        "This reading task involves spot reading the numbers on common household items. Please read the numbers aloud to me and then also enter them on the tablet. For each item, I will ask you to find and read something specific that is of interest to me on the item while using your magnifier. Do your best to read the numbers on the items accurately.",
         "This is a short paragraph of text that is similar to newspaper sized print. Please use your magnifier to read it aloud as quickly as possible without going back and making corrections. I will time you. Also, you should try not to miss or misread any of the words since that will impact your score. Let's see how fast and accurately you can read with your magnifier today!",
-        "This reading task involves spot reading the numbers on common household items. Please read the numbers aloud to me and then also enter them on the tablet. For each item, I will ask you to find and read something specific that is of interest to me on the item while using your magnifier. Do your best to read the numbers on the items accurately."
+        "This reading task involves spot reading the numbers on common household items. Please read the numbers aloud to me and then also enter them on the tablet. For each item, I will ask you to find and read something specific that is of interest to me on the item while using your magnifier. Do your best to read the numbers on the items accurately.",
+        "This is the short story about the childhood and life of a young woman. Let's see how quickly you can read it aloud today while using your magnifier. There are three pages for you to read; you will be timed. As soon as you are done reading, please tap the screen to let me know you are finished. When you have your magnifier and are ready to start reading, please tap my screen to let me know you're going to begin.",
+        "Please read these short sentences with your magnifier as quickly as you can without making mistakes, starting with the largest ones and keep going until you get to the smallest one that you can read with your magnifier. They get so small that they become impossible for anyone to read, so don't expect to read all of the sentences. Do your best to read quickly and accurately with your magnifier today!"
     ],
     "goodbye":[
         "That was great! Bye-bye for now. And don't forget to use your magnifier!",
@@ -128,5 +130,66 @@
     ],
     "SSRT": [
         "This reading task is a short story, like you would read in a book, and I'd like you to try to read aloud three pages of it to me, as quickly as you can without making errors. I can't wait to hear what happens in the story today!"
+    ],
+    "post IReST": [
+        "Those pesky little mice!  What do you think about mice?  Have you ever had any encounters with mice?",
+        "Well, that was quite fascinating to learn about beavers! Did you learn something new about them?",
+        "Did you know that there are robots now that can plant and nurture young trees?  Have you ever planted a tree?",
+        "I'm certainly glad that I am not a spider's prey! Do spiders make you nervous too?",
+        "That reminds me of the Brood X cicadas on the East Coast that spend 17 years underground, sucking sap from tree roots for energy, until they hatch and emerge above ground. Have you ever seen cicadas when they emerge?",
+        "This reminds me of a Venus flytrap, the most famous carnivorous plant!  Have you ever seen one?",
+        "Speaking of islands, did you know that the volcanic island of Tristan Da Cunha in the South Atlantic Ocean has the honor of being the most remote point on Earth that is inhabited by humans. It is 1,750 miles from South Africa and occupies only 38 square miles.",
+        "Wow, how interesting, I did not know that spiders were so clever to make their nets that way. Did you know that?",
+        "I don't mind the cold at all, so you don't have to worry about me going South for the winter! In the winter, do you daydream about warm weather?",
+        "This reminds me of a praying mantis, which is named for its prominent front legs that are used to capture prey. Did you know that mantises have only one ear and they can turn their heads a full 180 degrees, which is something that no other insect can do?"
+    ],
+    "post SSRT": [
+        "It's such a nice story that Nancy got to learn fun things at Summer camp with her cousin each year.",
+        "I can completely understand how Nancy wanted to go to the beach with her friend during spring planting season. But it was good to hear how she appreciated the time on the farm with her family.",
+        "I am glad to hear they were able to get all of Nancy's friend's hair out when it was stuck in the old fashioned photocopier.",
+        "I liked hearing about how the art teacher was the best part of high school for Nancy.",
+        "I have never heard of someone signing an old contract they found to get a job before they were even interviewed or hired. What a strange story!",
+        "I have never met anyone like Adam in the story who identified people by the car they drove. That sounds like a very special experience that Nancy had to get to know such unique children.",
+        "It must have been a lot of fun for Nancy to go to concerts in DC with her school friends!",
+        "How nice was it that Nancy got to spend summers in California and studied abroad in Europe!",
+        "I cannot believe that Nancy was most worried about the food in the Peace Corps - of all things!",
+        "As a young girl, Nancy recalled seeing the ocean in the Inner Harbor in Baltimore, but the harbor there is actually formed by the tidal portion of a river that flows into the Chesapeake Bay, which is the largest estuary in the United States. ",
+        "Wow, Nancy sure had a fun childhood while living in Texas when her father built them a balance beam in the living room.",
+        "Running out of gas in your car can be a really stressful situation. I'm so glad it worked out for Nancy and her family to finally get home safely.",
+        "Can you believe that in this story it was safer to hitch-hike than ride the buses!",
+        "It was unusual to hear that Nancy was more comfortable wearing winter clothes in the summer even when it got very hot outside.",
+        "I loved hearing about Nancy and James' “magical un-date” when they first started to fall in love!",
+        "How nice it was to hear how Nancy and James were able to help Kay-few-eee and enable him to see the world in a different way."
+    ],
+    "no video": [
+        "You deserve congratulations on how well you have been reading with the magnifier!  Your optometrist and I are very proud of you!",
+        "You are doing a really excellent job when you read with your magnifier. Some days are better than others, so hang in there when it seems tough to use it.",
+        "Your optometrist is impressed with how well you've been reading with it. Keep up the good work!",
+        "Your optometrist has noted that you have become really successful at using your magnifier.  It's not easy but you're demonstrating that you've got what it takes to master it.",
+        "Your optometrist can tell that you are getting really skilled at reading with your magnifier.  You have made some incredible achievements over time and your hard work is paying off.",
+        "Your optometrist would like you to know that you've done a fabulous job of reading with it. Now you've become a real pro!"
+    ],
+    "introduce video": [
+        "{'var': 'no video'}",
+        "There may be times when you are not using the eyeglasses that would be best to use with your magnifier. {'var': 'glasses joke'} Let me show you a picture of the eyeglasses on the tablet screen to remind you of the ones that you should wear the next time you do some reading with your magnifier.",
+        "When you recently used the magnifier, it looked like it was upside down while you were reading with it. {'var': 'upside down} So let me show you a quick video on the tablet screen about how to hold the magnifier when you're reading.",
+        "It's great that you have been using the magnifier for some reading tasks. It takes practice to hold the magnifier the optimal distance from your reading material. Let me show you a video on the tablet screen to help remind you about how you should hold the magnifier to be able to read really well with it.",
+        "Your optometrist has observed that you've been working hard at using your magnifier. Holding your magnifier at a consistent and steady distance from the reading material is very important. Let me show you an example of how that is done in this video on my tablet screen.",
+        "Don't forget to turn on the light on your magnifier when you are using it to read. {'var': 'lights'} Take a look at the video on the tablet about how to turn on the light. Don't forget!"
+    ],
+    "glasses joke": [
+        "You know what I said to the last person who stole my eyeglasses? I will find you, I have contacts! But I doubt that someone stole your eyeglasses.",
+        "Do you know what is the best name for a pair of eyeglasses? Seymour! I would like to see more of your reading with glasses on.",
+        "Did you know that to save money, I made myself a pair of glasses out of 2 old ketchup bottles made of glass. In Heinz-sight I should have just bought a proper pair! I know you have a proper pair of eyeglasses."
+    ],
+    "upside down": [
+        "Did you know that if your boat turns upside down in the river, you can wear it on your head. Because it is cap-sized. But you cannot accomplish much with an upside-down magnifier.",
+        "Did you know that we were built upside down? Because our feet smell and our noses run. But magnifiers were not built to work upside down.",
+        "Do you know what kind of bats swing upside down? Acro-bats! But magnifiers are not meant to do gymnastics or be upside down."
+    ],
+    "lights": [
+        "Did you know that when my light is out, I call an electrician. Because I am unable to deal with the current situation. Now let's get back to our current situation.",
+        "Did you know why someone put a light bulb by the kitchen clock? Because they could not find the thyme in the kitchen. But now is not the time to joke around. Now is a good time to review how to use the light on your magnifier.",
+        "What do you call an imaginary light bulb? A filament of your imagination! I am imagining an ideal world in which you always turn on the light when you use your magnifier."
     ]
 }

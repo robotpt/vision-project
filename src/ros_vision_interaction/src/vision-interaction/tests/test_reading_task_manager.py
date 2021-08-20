@@ -83,6 +83,6 @@ def test_set_reading_score(statedb):
         with freezegun.freeze_time(date):
             task_id = reading_task_tools.get_new_day_reading_task(statedb)
             reading_score = reading_scores[i]
-            reading_task_tools.set_reading_task_score(statedb, task_id, reading_score)
+            reading_task_tools.set_reading_task_value(statedb, task_id, TaskDataKeys.SCORE, reading_score)
             assert reading_task_tools.get_reading_task_data_value(statedb, task_id, TaskDataKeys.SCORE) == reading_score
             reset_reading_task_data(statedb)

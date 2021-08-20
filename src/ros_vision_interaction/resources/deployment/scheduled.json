@@ -170,6 +170,12 @@
     },
     "feedback video": {
         "nodes": {
+            "introduce video": {
+                "transitions": ["feedback video", "introduce video"],
+                "content": "{'var': 'introduce task', 'index': '{'db': 'video intro index'}'}",
+                "options": ["Next", "Replay"],
+                "message_type": "video"
+            },
             "feedback video": {
                 "transitions": ["exit", "feedback video"],
                 "content": "Press play to watch the video your optometrist asked me to show you.",
@@ -243,7 +249,7 @@
             },
             "introduce task": {
                 "transitions": ["introduce evaluation", "introduce task"],
-                "content": "{'var': 'introduce task', 'index': '{'db': 'reading eval index'}'}",
+                "content": "{'var': 'introduce task', 'index': '{'db': 'current reading index'}'}",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
@@ -267,8 +273,9 @@
             "evaluation": {
                 "transitions": ["exit"],
                 "content": "*question_1*",
-                "options": ["Next"],
-                "message_type": "multiple choice one column"
+                "options": ["Done", "Unable to read"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "unable to read"
             }
         },
         "start_node_name": "evaluation"
@@ -280,12 +287,28 @@
                 "content": "*question_1*",
                 "options": ["Next"],
                 "message_type": "numpad",
-                "tests": "check spot reading",
-                "error_message": "That's not the correct answer, please try again.",
-                "error_options": ["Oops"]
+                "result_db_key": "spot reading answer"
             }
         },
         "start_node_name": "evaluation"
+    },
+    "retry spot reading": {
+        "nodes": {
+            "retry": {
+                "transitions": ["evaluation"],
+                "content": "Can you read that again and try another answer?",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "evaluation": {
+                "transitions": ["exit"],
+                "content": "*question_1*",
+                "options": ["Next"],
+                "message_type": "numpad",
+                "result_db_key": "spot reading answer"
+            }
+        },
+        "start_node_name": "retry"
     },
     "post evaluation": {
         "nodes": {

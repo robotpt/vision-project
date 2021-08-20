@@ -162,6 +162,7 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.IS_DO_EVALUATION) == "Yes":
             self._state_database.set(DatabaseKeys.IS_DO_EVALUATION, None)
             if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
+                # need to fix this bc we need an intro for no video as well
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
                 )
@@ -249,8 +250,15 @@ class InteractionManager:
             )
         else:
             if self._is_do_mindfulness():
+                index = self._state_database.get(DatabaseKeys.MINDFULNESS_INDEX)
+                if index == 0:
+                    mindfulness = InteractionBuilder.Graphs.MINDFULNESS_BODY_SCAN
+                elif index == 1:
+                    mindfulness = InteractionBuilder.Graphs.MINDFULNESS_BREATHING
+                else:
+                    mindfulness = InteractionBuilder.Graphs.MINDFULNESS_BODY_SCAN
                 self._planner.insert(
-                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.MINDFULNESS],
+                    plan=self._interaction_builder.interactions[mindfulness],
                     post_hook=self._set_vars_after_mindfulness
                 )
             if self._is_do_goal_setting():
@@ -265,6 +273,19 @@ class InteractionManager:
             )
 
     def _set_vars_after_evaluation(self):
+        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        if task_id[0] == "3":  # SPOT READING
+            answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
+            correct_answer = reading_task_tools.get_reading_task_data_value(
+                self._state_database,
+                task_id,
+                TaskDataKeys.ANSWER
+            )
+            if answer != correct_answer:
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.RETRY_SPOT_READING],
+                    post_hook=self._set_vars_after_interaction
+                )
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
         self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
@@ -317,6 +338,8 @@ class InteractionManager:
         self._set_vars_after_interaction()
 
     def _set_vars_after_mindfulness(self):
+        index = self._state_database.get(DatabaseKeys.MINDFULNESS_INDEX)
+        self._state_database.set(DatabaseKeys.MINDFULNESS_INDEX, (index + 1) % 3)
         self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS, 0)
         new_rating = {
             datetime.datetime.now(): {

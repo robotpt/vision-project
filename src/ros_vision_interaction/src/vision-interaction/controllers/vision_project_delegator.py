@@ -39,11 +39,9 @@ class VisionProjectDelegator:
         self.new_day_update()
 
     def update(self):
-        if not self._state_database.is_set(DatabaseKeys.LAST_UPDATE_DATETIME):
-            self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
+        self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         if self._is_new_day():
             self.new_day_update()
-        self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
 
     def _is_new_day(self):
         return datetime.datetime.now().date() > self._state_database.get(DatabaseKeys.LAST_UPDATE_DATETIME).date()
@@ -61,7 +59,7 @@ class VisionProjectDelegator:
         # update reading task index if reading task has been done
         if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
             current_index = self._state_database.get(DatabaseKeys.CURRENT_READING_INDEX)
-            new_index = int(math.fmod(current_index + 1, 6))
+            new_index = (current_index + 1) % 6
             self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, new_index)
         keys_to_check = {
             DatabaseKeys.IS_DONE_EVAL_TODAY: DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL,
@@ -105,20 +103,21 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
 
     def get_interaction_type(self):
-        logging.info("Determining interaction type")
-        if self._is_first_interaction():
-            interaction_type = Interactions.FIRST_INTERACTION
-        elif self._is_time_for_scheduled_interaction():
-            interaction_type = Interactions.SCHEDULED_INTERACTION
-        elif self._is_run_too_many_prompted():
-            interaction_type = Interactions.TOO_MANY_PROMPTED
-        elif self._is_run_prompted_interaction():
-            interaction_type = Interactions.PROMPTED_INTERACTION
-        elif self._is_ask_to_do_scheduled():
-            interaction_type = Interactions.ASK_TO_DO_SCHEDULED
-        else:
-            interaction_type = None
-        return interaction_type
+        # logging.info("Determining interaction type")
+        # if self._is_first_interaction():
+        #     interaction_type = Interactions.FIRST_INTERACTION
+        # elif self._is_time_for_scheduled_interaction():
+        #     interaction_type = Interactions.SCHEDULED_INTERACTION
+        # elif self._is_run_too_many_prompted():
+        #     interaction_type = Interactions.TOO_MANY_PROMPTED
+        # elif self._is_run_prompted_interaction():
+        #     interaction_type = Interactions.PROMPTED_INTERACTION
+        # elif self._is_ask_to_do_scheduled():
+        #     interaction_type = Interactions.ASK_TO_DO_SCHEDULED
+        # else:
+        #     interaction_type = None
+        # return interaction_type
+        return Interactions.EVALUATION
 
     def _is_first_interaction(self):
         return not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME)

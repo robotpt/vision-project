@@ -39,6 +39,7 @@ class InteractionBuilder:
         PROMPTED_CHECKIN = "prompted checkin"
         PROMPTED_PLAN_NEXT_CHECKIN = "prompted plan next checkin"
         REMINDER_FOR_PROMPTED = "reminder for prompted"
+        RETRY_SPOT_READING = "retry spot reading"
         REWARD = "reward"
         SCHEDULED_ASK_TO_CHAT = "scheduled ask to chat"
         SCHEDULED_CHECKIN = "scheduled checkin"
@@ -68,6 +69,7 @@ class InteractionBuilder:
             PROMPTED_CHECKIN,
             PROMPTED_PLAN_NEXT_CHECKIN,
             REMINDER_FOR_PROMPTED,
+            RETRY_SPOT_READING,
             REWARD,
             SCHEDULED_ASK_TO_CHAT,
             SCHEDULED_CHECKIN,
@@ -149,8 +151,6 @@ class InteractionBuilder:
 
             if node_info["tests"] == "check reading id":
                 node_info["tests"] = self.check_reading_id
-            if node_info["tests"] == "check spot reading":
-                node_info["tests"] = self.check_spot_reading_value
 
             node = Node(
                 name=node_name,
@@ -210,15 +210,6 @@ class InteractionBuilder:
         expected_id = self._statedb.get(DatabaseKeys.CURRENT_READING_ID)
         is_correct_id = reading_id == expected_id
         return is_correct_id
-
-    def check_spot_reading_value(self, value):
-        task_id = self._statedb.get(DatabaseKeys.CURRENT_READING_ID)
-        correct_answer = reading_task_tools.get_reading_task_data_value(
-            self._statedb,
-            task_id,
-            TaskDataKeys.ANSWER
-        )
-        return value == correct_answer
 
     @property
     def interactions(self):

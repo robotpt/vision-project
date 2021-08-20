@@ -36,22 +36,25 @@ class ReadingEvaluator:
     def calculate_and_set_reading_score(self, audio_file_path):
         total_speaking_time = self.get_total_speaking_time(audio_file_path)
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
-        if task_id[0] == "3":  # SPOT READING
-            reading_speed = total_speaking_time
-        else:
-            num_of_words = reading_task_tools.get_reading_task_data_value(
-                self._state_database,
-                task_id,
-                TaskDataKeys.WORD_COUNT
-            )
-            if total_speaking_time == 0:
-                logging.info("Total speaking time was 0, setting reading speed to 0")
-                reading_speed = 0
-            else:
-                reading_speed = num_of_words / total_speaking_time
-                logging.info(f"Reading speed: {reading_speed}")
 
-        reading_task_tools.set_reading_task_score(self._state_database, task_id, reading_speed)
+        if self._state_database.get(DatabaseKeys.UNABLE_TO_READ):
+            reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.UNABLE_TO_READ, True)
+        else:
+            if task_id[0] == "3":  # SPOT READING
+                reading_speed = total_speaking_time
+            else:
+                num_of_words = reading_task_tools.get_reading_task_data_value(
+                    self._state_database,
+                    task_id,
+                    TaskDataKeys.WORD_COUNT
+                )
+                if total_speaking_time == 0:
+                    logging.info("Total speaking time was 0, setting reading speed to 0")
+                    reading_speed = 0
+                else:
+                    reading_speed = num_of_words / total_speaking_time
+                    logging.info(f"Reading speed: {reading_speed}")
+            reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.SCORE, reading_speed)
 
     def get_total_speaking_time(self, audio_file_path):
         """Reads a .wav file and returns the total length of speaking time (float)."""

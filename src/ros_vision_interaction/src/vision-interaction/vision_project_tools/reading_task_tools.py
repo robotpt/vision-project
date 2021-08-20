@@ -21,6 +21,7 @@ class TaskDataKeys:
     COLOR = "color"
     CORRECT = "correct"
     SCORE = "score"
+    UNABLE_TO_READ = "unable to read"
     WORD_COUNT = "word_count"
 
 
@@ -39,7 +40,8 @@ def get_current_reading_task_type():
     elif current_weekday == 2:  # Wednesday
         task_type = Tasks.SPOT_READING
     elif current_weekday == 3:  # Thursday
-        task_type = Tasks.IREST
+        # task_type = Tasks.IREST
+        task_type = Tasks.SPOT_READING
     elif current_weekday == 4:  # Friday
         task_type = Tasks.SPOT_READING
     elif current_weekday == 5:  # Saturday
@@ -71,6 +73,7 @@ def get_reading_task_data_value(statedb, task_id, data_type):
         TaskDataKeys.COLOR,
         TaskDataKeys.CORRECT,
         TaskDataKeys.SCORE,
+        TaskDataKeys.UNABLE_TO_READ,
         TaskDataKeys.WORD_COUNT
     ]:
         raise KeyError(f"'{data_type}' is not a valid reading task data type.")
@@ -93,15 +96,15 @@ def get_all_scores(statedb):
     return all_scores
 
 
-def set_reading_task_score(statedb, task_id, score):
+def set_reading_task_value(statedb, task_id, data_type, value):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     for task_type in reading_task_data:
         # for difficulty_level in reading_task_data[task_type]:
         #     if task_id in reading_task_data[task_type][difficulty_level].keys():
         #         reading_task_data[task_type][difficulty_level][task_id][TaskDataKeys.SCORE] = score
         if task_id in reading_task_data[task_type].keys():
-            reading_task_data[task_type][task_id][TaskDataKeys.SCORE] = score
-            logging.info(f"Reading task '{task_id}' score set to {score}")
+            reading_task_data[task_type][task_id][data_type] = value
+            logging.info(f"Reading task '{task_id}' score set to {value}")
     save_to_database(statedb, reading_task_data)
 
 
