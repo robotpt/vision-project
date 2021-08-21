@@ -132,12 +132,12 @@
         "This reading task is a short story, like you would read in a book, and I'd like you to try to read aloud three pages of it to me, as quickly as you can without making errors. I can't wait to hear what happens in the story today!"
     ],
     "post IReST": [
-        "Those pesky little mice!  What do you think about mice?  Have you ever had any encounters with mice?",
+        "Those pesky little mice! What do you think about mice? Have you ever had any encounters with mice?",
         "Well, that was quite fascinating to learn about beavers! Did you learn something new about them?",
-        "Did you know that there are robots now that can plant and nurture young trees?  Have you ever planted a tree?",
+        "Did you know that there are robots now that can plant and nurture young trees? Have you ever planted a tree?",
         "I'm certainly glad that I am not a spider's prey! Do spiders make you nervous too?",
         "That reminds me of the Brood X cicadas on the East Coast that spend 17 years underground, sucking sap from tree roots for energy, until they hatch and emerge above ground. Have you ever seen cicadas when they emerge?",
-        "This reminds me of a Venus flytrap, the most famous carnivorous plant!  Have you ever seen one?",
+        "This reminds me of a Venus flytrap, the most famous carnivorous plant! Have you ever seen one?",
         "Speaking of islands, did you know that the volcanic island of Tristan Da Cunha in the South Atlantic Ocean has the honor of being the most remote point on Earth that is inhabited by humans. It is 1,750 miles from South Africa and occupies only 38 square miles.",
         "Wow, how interesting, I did not know that spiders were so clever to make their nets that way. Did you know that?",
         "I don't mind the cold at all, so you don't have to worry about me going South for the winter! In the winter, do you daydream about warm weather?",
@@ -158,7 +158,7 @@
         "Running out of gas in your car can be a really stressful situation. I'm so glad it worked out for Nancy and her family to finally get home safely.",
         "Can you believe that in this story it was safer to hitch-hike than ride the buses!",
         "It was unusual to hear that Nancy was more comfortable wearing winter clothes in the summer even when it got very hot outside.",
-        "I loved hearing about Nancy and James' “magical un-date” when they first started to fall in love!",
+        "I loved hearing about Nancy and James' 'magical un-date' when they first started to fall in love!",
         "How nice it was to hear how Nancy and James were able to help Kay-few-eee and enable him to see the world in a different way."
     ],
     "no video": [
@@ -172,7 +172,7 @@
     "introduce video": [
         "{'var': 'no video'}",
         "There may be times when you are not using the eyeglasses that would be best to use with your magnifier. {'var': 'glasses joke'} Let me show you a picture of the eyeglasses on the tablet screen to remind you of the ones that you should wear the next time you do some reading with your magnifier.",
-        "When you recently used the magnifier, it looked like it was upside down while you were reading with it. {'var': 'upside down} So let me show you a quick video on the tablet screen about how to hold the magnifier when you're reading.",
+        "When you recently used the magnifier, it looked like it was upside down while you were reading with it. {'var': 'upside down'} So let me show you a quick video on the tablet screen about how to hold the magnifier when you're reading.",
         "It's great that you have been using the magnifier for some reading tasks. It takes practice to hold the magnifier the optimal distance from your reading material. Let me show you a video on the tablet screen to help remind you about how you should hold the magnifier to be able to read really well with it.",
         "Your optometrist has observed that you've been working hard at using your magnifier. Holding your magnifier at a consistent and steady distance from the reading material is very important. Let me show you an example of how that is done in this video on my tablet screen.",
         "Don't forget to turn on the light on your magnifier when you are using it to read. {'var': 'lights'} Take a look at the video on the tablet about how to turn on the light. Don't forget!"
