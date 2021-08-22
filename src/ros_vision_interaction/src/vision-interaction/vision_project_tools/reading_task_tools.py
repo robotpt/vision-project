@@ -28,7 +28,7 @@ class TaskDataKeys:
 def get_new_day_reading_task(statedb):
     task_type = get_current_reading_task_type()
     # current_difficulty_level = statedb.get(DatabaseKeys.DIFFICULTY_LEVEL)
-    return get_random_reading_task_id(statedb, task_type)
+    return get_reading_task_id(statedb, task_type)
 
 
 def get_current_reading_task_type():
@@ -40,8 +40,7 @@ def get_current_reading_task_type():
     elif current_weekday == 2:  # Wednesday
         task_type = Tasks.SPOT_READING
     elif current_weekday == 3:  # Thursday
-        # task_type = Tasks.IREST
-        task_type = Tasks.SPOT_READING
+        task_type = Tasks.IREST
     elif current_weekday == 4:  # Friday
         task_type = Tasks.SPOT_READING
     elif current_weekday == 5:  # Saturday
@@ -54,16 +53,21 @@ def get_current_reading_task_type():
     return task_type
 
 
-def get_random_reading_task_id(statedb, task_type, difficulty_level=None):
+def get_reading_task_id(statedb, task_type, difficulty_level=None):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     # tasks = reading_task_data[task_type][difficulty_level]
     tasks = reading_task_data[task_type]
     # logging.info(f"Possible tasks: {tasks}")
     possible_tasks = []
-    for task in tasks.keys():
-        if tasks[task][TaskDataKeys.SCORE] is None:
-            possible_tasks.append(task)
-    return random.choice(possible_tasks)
+    if task_type == Tasks.SRT:
+        index = statedb.get(DatabaseKeys.SRT_READING_INDEX)
+        result = list(tasks.keys())[index]
+    else:
+        for task in tasks.keys():
+            if tasks[task][TaskDataKeys.SCORE] is None:
+                possible_tasks.append(task)
+        result = random.choice(possible_tasks)
+    return result
 
 
 def get_reading_task_data_value(statedb, task_id, data_type):

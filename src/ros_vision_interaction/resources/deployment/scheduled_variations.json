@@ -88,6 +88,9 @@
         "This is the short story about the childhood and life of a young woman. Let's see how quickly you can read it aloud today while using your magnifier. There are three pages for you to read; you will be timed. As soon as you are done reading, please tap the screen to let me know you are finished. When you have your magnifier and are ready to start reading, please tap my screen to let me know you're going to begin.",
         "Please read these short sentences with your magnifier as quickly as you can without making mistakes, starting with the largest ones and keep going until you get to the smallest one that you can read with your magnifier. They get so small that they become impossible for anyone to read, so don't expect to read all of the sentences. Do your best to read quickly and accurately with your magnifier today!"
     ],
+    "SKread": [
+        "Please read these words and letters with your magnifier as quickly as you can without making mistakes, starting with the largest ones and keep going until you get to the smallest one that you can read with your magnifier. These are not sentences, but rather just random single words and letters. Try not to skip or miss any words or letters. Give it your best shot!"
+    ],
     "goodbye":[
         "That was great! Bye-bye for now. And don't forget to use your magnifier!",
         "That was great! Bye until we can chat again, And be sure to use your magnifier!",
@@ -115,21 +118,6 @@
     "mindfulness": [
         "I think it would be good to take a little time to reset and take your mind off reading. I would like to try to make you feel a bit better. Let's see if we can reduce some of your stress, frustrations, or negativity, by redirecting your thoughts to enhance your performance, gain insight or awareness to set you up for success for the rest of the day.",
         "I think it would be great if we can take a little break now. Let's redirect our focus and take some time to relax."
-    ],
-    "IReST": [
-        "This reading task involves reading a single paragraph aloud while using your magnifier. I would like to see how quickly and accurately you can read today. I'm curious to know what is written there today."
-    ],
-    "MNread": [
-        "This reading task involves reading single sentences, going from large print to very tiny, fine print. You can start without your magnifier for the larger sentences and then remember to use your magnifier when the sentences become more difficult to read as they get smaller. They get so small that no human can read them, so don't get discouraged when you can't read all of them. Try to read them as quickly as possible, without making mistakes. Go ahead and show me how well you can read this today."
-    ],
-    "SKread": [
-        "This reading task involves using your magnifier to read aloud a series of single words that are grouped according to size from large to tiny. Do your best to figure out each word, one by one, and remember that these are not sentences, only individual words. Give it your best shot to read the words as fast as you can, while trying to get them all correct. I can't wait to see how you do today!"
-    ],
-    "spot reading": [
-        "This reading task involves spot reading the numbers on common household items. Please read the numbers aloud to me and then also enter them on the tablet. For each item, I will ask you to find and read something specific that is of interest to me on the item while using your magnifier. Do your best to read the numbers on the items accurately."
-    ],
-    "SSRT": [
-        "This reading task is a short story, like you would read in a book, and I'd like you to try to read aloud three pages of it to me, as quickly as you can without making errors. I can't wait to hear what happens in the story today!"
     ],
     "post IReST": [
         "Those pesky little mice! What do you think about mice? Have you ever had any encounters with mice?",

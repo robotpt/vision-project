@@ -75,7 +75,11 @@ class InteractionManager:
         return self._planner
 
     def _build_evaluation(self):
-        if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
+        if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY) and \
+                self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME):
+            video_type = self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY)
+            video_index = self._get_video_index(video_type)
+            self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
             )
@@ -84,7 +88,8 @@ class InteractionManager:
             post_hook=self._set_vars_after_interaction
         )
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
-        if task_id[0] == "3":  # SPOT READING
+        task_type = reading_task_tools.get_current_reading_task_type()
+        if task_type == reading_task_tools.Tasks.SPOT_READING:
             for _ in range(len(reading_task_tools.get_reading_task_data_value(
                     self._state_database,
                     task_id,
@@ -104,6 +109,18 @@ class InteractionManager:
             post_hook=self._set_vars_after_post_eval
         )
         return self._planner
+
+    def _get_video_index(self, video_name):
+        videos = [
+            "no video",
+            "distance 4x",
+            "distance 6x",
+            "light",
+            "parallel",
+            "steady",
+            "upside down"
+        ]
+        return videos.index(video_name)
 
     def _build_ask_to_do_scheduled(self):
         logging.info("Building ask to do scheduled")
@@ -274,7 +291,8 @@ class InteractionManager:
 
     def _set_vars_after_evaluation(self):
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
-        if task_id[0] == "3":  # SPOT READING
+        task_type = reading_task_tools.get_current_reading_task_type()
+        if task_type == reading_task_tools.Tasks.SPOT_READING:
             answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
             correct_answer = reading_task_tools.get_reading_task_data_value(
                 self._state_database,
@@ -286,6 +304,26 @@ class InteractionManager:
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.RETRY_SPOT_READING],
                     post_hook=self._set_vars_after_interaction
                 )
+        if task_type == reading_task_tools.Tasks.SRT:
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
+                post_hook=self._set_vars_after_interaction
+            )
+            current_index = self._state_database.get(DatabaseKeys.SRT_READING_INDEX)
+            self._state_database.set(
+                DatabaseKeys.SRT_READING_INDEX,
+                current_index + 1
+            )
+        if task_type == reading_task_tools.Tasks.IREST:
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
+                post_hook=self._set_vars_after_interaction
+            )
+            current_index = self._state_database.get(DatabaseKeys.IREST_READING_INDEX)
+            self._state_database.set(
+                DatabaseKeys.IREST_READING_INDEX,
+                current_index + 1
+            )
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
         self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)

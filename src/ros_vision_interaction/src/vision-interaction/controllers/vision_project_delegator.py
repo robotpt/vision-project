@@ -39,9 +39,9 @@ class VisionProjectDelegator:
         self.new_day_update()
 
     def update(self):
-        self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         if self._is_new_day():
             self.new_day_update()
+        self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
 
     def _is_new_day(self):
         return datetime.datetime.now().date() > self._state_database.get(DatabaseKeys.LAST_UPDATE_DATETIME).date()

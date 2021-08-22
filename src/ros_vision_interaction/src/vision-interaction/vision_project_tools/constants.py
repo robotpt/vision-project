@@ -31,6 +31,7 @@ class DatabaseKeys:
     GOAL_RATING = "goal rating"
     GOOD_TO_CHAT = "good to chat"
     GRIT_FEEDBACK_INDEX = "grit feedback index"
+    IREST_READING_INDEX = "IReST reading index"
     IS_CONTINUE_PERSEVERANCE = "is continue perseverance"
     IS_DO_EVALUATION = "is do evaluation"
     IS_DONE_EVAL_TODAY = "is done eval today"
@@ -65,6 +66,7 @@ class DatabaseKeys:
     READING_EVAL_TYPE = "reading eval type"
     SELF_REPORTS = "self reports"
     SPOT_READING_ANSWER = "spot reading answer"
+    SRT_READING_INDEX = "SRT reading index"
     UNABLE_TO_READ = "unable to read"
     USER_NAME = "user name"
     VIDEO_INTRO_INDEX = "video intro index"
@@ -202,6 +204,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.GOAL_RATING: 0,
     DatabaseKeys.GOOD_TO_CHAT: None,
     DatabaseKeys.GRIT_FEEDBACK_INDEX: 0,
+    DatabaseKeys.IREST_READING_INDEX: 0,
     DatabaseKeys.IS_CONTINUE_PERSEVERANCE: None,
     DatabaseKeys.IS_DO_EVALUATION: None,
     DatabaseKeys.IS_DONE_EVAL_TODAY: False,
@@ -232,10 +235,11 @@ INITIAL_STATE_DB = {
     DatabaseKeys.NUM_OF_PROMPTED_TODAY: 0,
     DatabaseKeys.PERSEVERANCE_COUNTER: 0,
     DatabaseKeys.READING_TASK_DATA: READING_TASK_DATA,
-    DatabaseKeys.READING_EVAL_INDEX: 0,
+    DatabaseKeys.READING_EVAL_INDEX: 1,
     DatabaseKeys.READING_EVAL_TYPE: None,
     DatabaseKeys.SELF_REPORTS: [],
     DatabaseKeys.SPOT_READING_ANSWER: None,
+    DatabaseKeys.SRT_READING_INDEX: 0,
     DatabaseKeys.USER_NAME: "",
     DatabaseKeys.UNABLE_TO_READ: False,
     DatabaseKeys.VIDEO_INTRO_INDEX: 0,

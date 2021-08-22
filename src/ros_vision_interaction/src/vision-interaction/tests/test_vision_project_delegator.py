@@ -184,12 +184,17 @@ def test_new_day_update(vision_project_delegator, statedb):
         vision_project_delegator._reset_database()
         # day 1
         with freezegun.freeze_time(period[0]):
-            index = datetime.datetime.now().weekday()
+            statedb.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
+            index = (datetime.datetime.now().weekday()) % 6
             vision_project_delegator.update()
             first_interaction_datetime = datetime.datetime(2021, 3, 15, 2, 0, 0, 0)
             statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
             statedb.set(DatabaseKeys.LAST_INTERACTION_DATETIME, first_interaction_datetime)
             statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
+            statedb.set(DatabaseKeys.IS_DONE_PROMPTED_TODAY, False)
+            statedb.set(DatabaseKeys.IS_DONE_PERSEVERANCE_TODAY, False)
+            statedb.set(DatabaseKeys.IS_DONE_MINDFULNESS_TODAY, False)
+            statedb.set(DatabaseKeys.IS_DONE_GOAL_SETTING_TODAY, False)
             statedb.set(DatabaseKeys.CURRENT_READING_INDEX, index)
         # day 2
         with freezegun.freeze_time(period[1]):
@@ -375,6 +380,7 @@ def test_reading_evaluator(vision_project_delegator, statedb):
         vision_project_delegator._reset_database()
         # day 1
         with freezegun.freeze_time(period[0]):
+            statedb.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
             index = datetime.datetime.now().weekday()
             vision_project_delegator.update()
             first_interaction_datetime = datetime.datetime(2021, 3, 15, 2, 0, 0, 0)

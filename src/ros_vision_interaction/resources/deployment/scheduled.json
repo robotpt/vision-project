@@ -172,7 +172,7 @@
         "nodes": {
             "introduce video": {
                 "transitions": ["feedback video", "introduce video"],
-                "content": "{'var': 'introduce task', 'index': '{'db': 'video intro index'}'}",
+                "content": "{'var': 'introduce video', 'index': '{'db': 'video intro index'}'}",
                 "options": ["Next", "Replay"],
                 "message_type": "video"
             },
@@ -309,6 +309,28 @@
             }
         },
         "start_node_name": "retry"
+    },
+    "post SSRT": {
+        "nodes": {
+            "post SSRT": {
+                "transitions": ["exit", "post SSRT"],
+                "content": "{'var': 'post SSRT', 'index': '{'db': 'SRT reading index'}'}",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "post SSRT"
+    },
+    "post IReST": {
+        "nodes": {
+            "post IReST": {
+                "transitions": ["exit", "post IReST"],
+                "content": "{'var': 'post IReST', 'index': '{'db': 'IReST reading index'}'}",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "post IReST"
     },
     "post evaluation": {
         "nodes": {
