@@ -30,6 +30,7 @@ class InteractionBuilder:
         MINDFULNESS_BODY_SCAN = "mindfulness body"
         MINDFULNESS_BREATHING = "mindfulness breathing"
         MINDFULNESS_DRINKING = "mindfulness drinking"
+        NO_FEEDBACK_VIDEO = "no feedback video"
         NO_MAGNIFIER_USE = "no magnifier use"
         PERSEVERANCE = "perseverance"
         PLAN_CHECKIN_TOMORROW = "plan tomorrow's checkin"
@@ -62,6 +63,7 @@ class InteractionBuilder:
             MINDFULNESS_BODY_SCAN,
             MINDFULNESS_BREATHING,
             MINDFULNESS_DRINKING,
+            NO_FEEDBACK_VIDEO,
             NO_MAGNIFIER_USE,
             PERSEVERANCE,
             PLAN_NEXT_CHECKIN,

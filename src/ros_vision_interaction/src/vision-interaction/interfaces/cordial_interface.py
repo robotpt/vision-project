@@ -1,8 +1,6 @@
 #!/usr/bin/env python3.8
 
 import actionlib
-import os
-import pymongo
 import rospy
 from cordial_msgs.msg import AskOnGuiAction, AskOnGuiGoal
 
@@ -18,6 +16,7 @@ class CordialInterface(Interface):
             action_name="cordial/say_and_ask_on_gui",
             seconds_until_timeout=None,
             is_create_db_key_if_not_exist=True,
+            default_response_index=0
     ):
         self._state_database = state_database
         super().__init__(
@@ -36,6 +35,7 @@ class CordialInterface(Interface):
             if seconds_until_timeout <= 0:
                 raise ValueError("Timeout must be greater than 0")
         self._seconds_until_timeout = seconds_until_timeout
+        self._default_response_index = default_response_index
 
         rospy.on_shutdown(self.cancel_goal)
 
@@ -55,7 +55,11 @@ class CordialInterface(Interface):
 
         self._cordial_action_client.send_goal(goal, feedback_cb=self._cordial_feedback_cb)
         self._cordial_action_client.wait_for_result()
-        response = self._cordial_action_client.get_result()
+
+        # if self._cordial_action_client.get_state() == actionlib.GoalStatus.PREEMPTED:
+        #     response = message.options[self._default_response_index]
+        # else:
+        #     response = self._cordial_action_client.get_result().data
 
         return response.data
 

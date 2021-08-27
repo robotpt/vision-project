@@ -112,6 +112,7 @@ if __name__ == "__main__":
     scheduled_variations_file = os.path.join(resources_directory, 'deployment', 'scheduled_variations.json')
 
     max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
+    max_num_of_spot_reading_attempts = rospy.get_param("vision-project/params/max_num_of_spot_reading_attempts")
 
     interface = CordialInterface(
         state_database,
@@ -132,7 +133,8 @@ if __name__ == "__main__":
         statedb=state_database,
         interaction_builder=interaction_builder,
         interface=interface,
-        max_num_of_perseverance_readings=max_num_of_perseverance_readings
+        max_num_of_perseverance_readings=max_num_of_perseverance_readings,
+        max_num_of_spot_reading_attempts=max_num_of_spot_reading_attempts
     )
 
     ros_interaction_manager = RosInteractionManager(

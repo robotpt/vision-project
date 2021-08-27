@@ -20,7 +20,8 @@ class InteractionManager:
             statedb,
             interaction_builder,
             interface=None,
-            max_num_of_perseverance_readings=5
+            max_num_of_perseverance_readings=5,
+            max_num_of_spot_reading_attempts=1
     ):
         self._state_database = statedb
 
@@ -36,7 +37,10 @@ class InteractionManager:
         self._planner = MessagerPlanner(self._interaction_builder.possible_graphs)
 
         self._max_num_of_perseverance_readings = max_num_of_perseverance_readings
+        self._max_num_of_spot_reading_attempts = max_num_of_spot_reading_attempts
         self._num_of_days_to_prompt_goal_setting = 3
+        self._spot_reading_attempts = 0
+        self._spot_reading_index = 0
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in Interactions.POSSIBLE_INTERACTIONS:
@@ -75,52 +79,50 @@ class InteractionManager:
         return self._planner
 
     def _build_evaluation(self):
-        if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY) and \
-                self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME):
-            video_type = self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY)
-            video_index = self._get_video_index(video_type)
-            self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
-            )
+        # if self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME):
+        #     if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
+        #         video_type = self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY)
+        #         video_index = self._get_video_index(video_type)
+        #         self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
+        #         self._planner.insert(
+        #             self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
+        #         )
+        #     else:
+        #         self._planner.insert(
+        #             self._interaction_builder.interactions[InteractionBuilder.Graphs.NO_FEEDBACK_VIDEO],
+        #         )
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
             post_hook=self._set_vars_after_interaction
         )
-        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+
         task_type = reading_task_tools.get_current_reading_task_type()
         if task_type == reading_task_tools.Tasks.SPOT_READING:
-            for _ in range(len(reading_task_tools.get_reading_task_data_value(
-                    self._state_database,
-                    task_id,
-                    TaskDataKeys.ANSWER
-            ))):
-                self._planner.insert(
-                    self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
-                    post_hook=self._set_vars_after_evaluation
-                )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                post_hook=self._set_vars_after_spot_reading_eval
+            )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
                 post_hook=self._set_vars_after_evaluation
             )
-        self._planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
-            post_hook=self._set_vars_after_post_eval
-        )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+                post_hook=self._set_vars_after_post_eval
+            )
         return self._planner
 
     def _get_video_index(self, video_name):
-        videos = [
-            "no video",
-            "distance 4x",
-            "distance 6x",
-            "light",
-            "parallel",
-            "steady",
-            "upside down"
-        ]
-        return videos.index(video_name)
+        videos = {
+            "distance 4x": 3,
+            "distance 6x": 3,
+            "light": 4,
+            "parallel": 3,
+            "steady": 3,
+            "upside down": 1
+        }
+        return videos[video_name]
 
     def _build_ask_to_do_scheduled(self):
         logging.info("Building ask to do scheduled")
@@ -178,11 +180,6 @@ class InteractionManager:
     def _set_vars_after_scheduled_ask_for_eval(self):
         if self._state_database.get(DatabaseKeys.IS_DO_EVALUATION) == "Yes":
             self._state_database.set(DatabaseKeys.IS_DO_EVALUATION, None)
-            if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
-                # need to fix this bc we need an intro for no video as well
-                self._planner.insert(
-                    self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
-                )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
                 post_hook=self._set_vars_after_interaction
@@ -190,9 +187,9 @@ class InteractionManager:
             task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
             if task_id[0] == "3":  # SPOT READING
                 for _ in range(len(reading_task_tools.get_reading_task_data_value(
-                    self._state_database,
-                    task_id,
-                    TaskDataKeys.ANSWER
+                        self._state_database,
+                        task_id,
+                        TaskDataKeys.ANSWER
                 ))):
                     self._planner.insert(
                         self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
@@ -212,7 +209,39 @@ class InteractionManager:
                 post_hook=self._set_vars_after_ask_to_do_perseverance
             )
 
+    def _set_vars_after_spot_reading_eval(self):
+        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        answers = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.ANSWER)
+        num_of_spot_reading = len(answers)
+        is_finished = self._spot_reading_index >= num_of_spot_reading
+
+        if is_finished:
+            self._spot_reading_index = 0
+            self._spot_reading_attempts = 0
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+                post_hook=self._set_vars_after_post_eval
+            )
+        else:
+            is_correct = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER) == answers[self._spot_reading_index]
+            retry = self._spot_reading_attempts < self._max_num_of_spot_reading_attempts and \
+                not is_correct
+            if retry:
+                self._spot_reading_attempts += 1
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.RETRY_SPOT_READING],
+                    post_hook=self._set_vars_after_spot_reading_eval
+                )
+            else:
+                self._spot_reading_index += 1
+                self._spot_reading_attempts = 0
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                post_hook=self._set_vars_after_spot_reading_eval
+            )
+
     def _set_vars_after_post_eval(self):
+        self._spot_reading_index = 0
         new_rating = self._state_database.get(DatabaseKeys.FEELINGS_INDEX)
         self_ratings = self._state_database.get(DatabaseKeys.SELF_REPORTS)
         grit_feedback_index = 0
@@ -435,7 +464,8 @@ class InteractionManager:
         is_do_mindfulness = False
         if self._days_since_first_interaction() >= 3:
             num_of_values = 3
-            average_self_report = sum(self._state_database.get(DatabaseKeys.SELF_REPORTS)[-num_of_values:]) / num_of_values
+            average_self_report = sum(
+                self._state_database.get(DatabaseKeys.SELF_REPORTS)[-num_of_values:]) / num_of_values
             is_do_mindfulness = self._state_database.get(DatabaseKeys.FEELINGS_INDEX) < average_self_report
         return is_do_mindfulness
 
@@ -452,10 +482,12 @@ class InteractionManager:
 
     def _is_do_goal_setting(self):
         return self._days_since_first_interaction() >= 3 \
-            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL) >= 1 \
-            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING) >= 3 \
-            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT) >= self._num_of_days_to_prompt_goal_setting \
-            and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE) >= self._num_of_days_to_prompt_goal_setting
+               and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL) >= 1 \
+               and self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING) >= 3 \
+               and self._state_database.get(
+            DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT) >= self._num_of_days_to_prompt_goal_setting \
+               and self._state_database.get(
+            DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PERSEVERANCE) >= self._num_of_days_to_prompt_goal_setting
 
     # Long-term deployment version
     # def _is_do_goal_setting(self):

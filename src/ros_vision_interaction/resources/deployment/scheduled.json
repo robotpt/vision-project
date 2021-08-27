@@ -174,7 +174,7 @@
                 "transitions": ["feedback video", "introduce video"],
                 "content": "{'var': 'introduce video', 'index': '{'db': 'video intro index'}'}",
                 "options": ["Next", "Replay"],
-                "message_type": "video"
+                "message_type": "multiple choice one column"
             },
             "feedback video": {
                 "transitions": ["exit", "feedback video"],
@@ -185,6 +185,17 @@
             }
         },
         "start_node_name": "feedback video"
+    },
+    "no feedback video": {
+        "nodes": {
+            "no video": {
+                "transitions": ["exit"],
+                "content": "{'var': 'no video'}",
+                "options": ["Next",  "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "no video"
     },
     "ask to do evaluation": {
         "nodes": {
@@ -239,31 +250,13 @@
     "introduce evaluation": {
         "nodes": {
             "check": {
-                "transitions": ["introduce task"],
+                "transitions": ["exit"],
                 "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Enter the number in the keypad.",
                 "options": ["Next"],
                 "message_type": "numpad",
                 "tests": "check reading id",
                 "error_message": "Please enter the correct ID.",
                 "error_options": ["Oops"]
-            },
-            "introduce task": {
-                "transitions": ["introduce evaluation", "introduce task"],
-                "content": "{'var': 'introduce task', 'index': '{'db': 'current reading index'}'}",
-                "options": ["Next", "Replay"],
-                "message_type": "multiple choice one column"
-            },
-            "introduce evaluation": {
-                "transitions": ["start evaluation", "introduce evaluation"],
-                "content": "The last time you did this reading test, your score was {'db': 'last score', 'default value': 'N/A'}, and your best ever was {'db': 'best score', 'default value': 'N/A'}. Let's see if you can beat that today!",
-                "options": ["Next", "Replay"],
-                "message_type": "multiple choice one column"
-            },
-            "start evaluation": {
-                "transitions": ["exit", "start evaluation"],
-                "content": "Go ahead and open the envelope. Press 'Next', then read the contents aloud while using your magnifier, then press 'Next' again.",
-                "options": ["Next", "Replay"],
-                "message_type": "multiple choice one column"
             }
         },
         "start_node_name": "check"
@@ -285,7 +278,7 @@
             "evaluation": {
                 "transitions": ["exit"],
                 "content": "*question_1*",
-                "options": ["Next"],
+                "options": ["Done", "Unable to read"],
                 "message_type": "numpad",
                 "result_db_key": "spot reading answer"
             }

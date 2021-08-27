@@ -60,6 +60,20 @@ def test_run_prompted_interaction(interaction_manager, deployment_interaction_di
         assert statedb.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) == 1
 
 
+# def test_run_spot_reading(interaction_manager, deployment_interaction_dict, statedb):
+#     first_interaction_datetime = datetime.datetime(2021, 8, 24, 12, 0, 0)
+#     statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
+#     statedb.set(DatabaseKeys.GOOD_TO_CHAT, "Yes")
+#     statedb.set(DatabaseKeys.IS_DO_EVALUATION, "Yes")
+#     statedb.set(DatabaseKeys.IS_START_PERSEVERANCE, "No")
+#     statedb.set(DatabaseKeys.CURRENT_READING_ID, "314")  # answer: ["15", "8", "380"]
+#
+#     assert interaction_manager._spot_reading_index == 0
+#     assert interaction_manager._spot_reading_attempts == 0
+#     for node_name in interaction_manager.run_interaction_once(Interactions.SCHEDULED_INTERACTION):
+#         assert node_name in deployment_interaction_dict
+
+
 def test_determine_is_do_goal_setting(interaction_manager, statedb):
     # less than a week after first interaction
     first_interaction_datetime = datetime.datetime(2021, 4, 1, 12, 0, 0)
