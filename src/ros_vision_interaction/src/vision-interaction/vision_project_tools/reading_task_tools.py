@@ -20,18 +20,19 @@ class TaskDataKeys:
     ANSWER = "answer"
     COLOR = "color"
     CORRECT = "correct"
+    IS_SCHEDULED = "is scheduled"
     SCORE = "score"
     UNABLE_TO_READ = "unable to read"
-    WORD_COUNT = "word_count"
+    WORD_COUNT = "word count"
 
 
 def get_new_day_reading_task(statedb):
-    task_type = get_current_reading_task_type()
+    task_type = get_current_reading_task_type(statedb)
     # current_difficulty_level = statedb.get(DatabaseKeys.DIFFICULTY_LEVEL)
     return get_reading_task_id(statedb, task_type)
 
 
-def get_current_reading_task_type():
+def get_current_reading_task_type(statedb):
     current_weekday = datetime.datetime.now().weekday()
     if current_weekday == 0:  # Monday
         task_type = Tasks.SPOT_READING
@@ -46,7 +47,14 @@ def get_current_reading_task_type():
     elif current_weekday == 5:  # Saturday
         task_type = Tasks.SRT
     elif current_weekday == 6:  # Sunday
-        task_type = Tasks.MNREAD
+        sunday_tasks = [Tasks.MNREAD, Tasks.SKREAD]
+        scheduled_task = statedb.get(DatabaseKeys.SUNDAY_SCHEDULED_TASK)
+        if scheduled_task is not None:
+            sunday_tasks.remove(scheduled_task)
+            task_type = sunday_tasks[0]
+        else:
+            task_type = random.choice(sunday_tasks)
+            statedb.set(DatabaseKeys.SUNDAY_SCHEDULED_TASK, task_type)
     else:
         logging.info(f"No tasks for weekday index {current_weekday}, setting task type to 'spot reading'.")
         task_type = Tasks.SPOT_READING

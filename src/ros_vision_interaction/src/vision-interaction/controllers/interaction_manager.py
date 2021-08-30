@@ -96,7 +96,7 @@ class InteractionManager:
             post_hook=self._set_vars_after_interaction
         )
 
-        task_type = reading_task_tools.get_current_reading_task_type()
+        task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         if task_type == reading_task_tools.Tasks.SPOT_READING:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
@@ -211,6 +211,7 @@ class InteractionManager:
 
     def _set_vars_after_spot_reading_eval(self):
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.IS_SCHEDULED, True)
         answers = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.ANSWER)
         num_of_spot_reading = len(answers)
         is_finished = self._spot_reading_index >= num_of_spot_reading
@@ -320,7 +321,7 @@ class InteractionManager:
 
     def _set_vars_after_evaluation(self):
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
-        task_type = reading_task_tools.get_current_reading_task_type()
+        task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         if task_type == reading_task_tools.Tasks.SPOT_READING:
             answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
             correct_answer = reading_task_tools.get_reading_task_data_value(

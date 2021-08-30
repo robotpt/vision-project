@@ -24,18 +24,18 @@ def test_get_current_reading_task_type(statedb):
         "2021-07-18 00:00:00",
     ]
     expected_task_types = [
-        Tasks.MNREAD,
-        Tasks.SPOT_READING,
-        Tasks.SRT,
-        Tasks.SPOT_READING,
-        Tasks.IREST,
-        Tasks.SPOT_READING,
-        Tasks.SRT,
-        Tasks.MNREAD
+        [Tasks.MNREAD, Tasks.SKREAD],
+        [Tasks.SPOT_READING],
+        [Tasks.SRT],
+        [Tasks.SPOT_READING],
+        [Tasks.IREST],
+        [Tasks.SPOT_READING],
+        [Tasks.SRT],
+        [Tasks.MNREAD, Tasks.SKREAD]
     ]
     for i, date in enumerate(dates):
         with freezegun.freeze_time(date):
-            assert reading_task_tools.get_current_reading_task_type() == expected_task_types[i]
+            assert reading_task_tools.get_current_reading_task_type(statedb) in expected_task_types[i]
 
 
 def test_get_current_reading_task_id(statedb):
