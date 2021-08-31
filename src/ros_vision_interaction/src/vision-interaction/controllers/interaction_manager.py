@@ -292,9 +292,22 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.IS_START_PERSEVERANCE) == "Yes":
             self._state_database.set(DatabaseKeys.IS_START_PERSEVERANCE, None)
             self._planner.insert(
-                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
-                post_hook=self._set_vars_after_perseverance
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+                post_hook=self._set_vars_after_interaction
             )
+
+            task_type = self._get_and_set_new_task_info()
+
+            if task_type == reading_task_tools.Tasks.SPOT_READING:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                    post_hook=self._set_vars_after_spot_reading_eval
+                )
+            else:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
+                    post_hook=self._set_vars_after_perseverance
+                )
         else:
             if self._is_do_mindfulness():
                 index = self._state_database.get(DatabaseKeys.MINDFULNESS_INDEX)
@@ -438,9 +451,21 @@ class InteractionManager:
     def _set_vars_after_continue_perseverance(self):
         if self._state_database.get(DatabaseKeys.IS_CONTINUE_PERSEVERANCE) == "Continue":
             self._planner.insert(
-                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
-                post_hook=self._set_vars_after_perseverance
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+                post_hook=self._set_vars_after_interaction
             )
+
+            task_type = self._get_and_set_new_task_info()
+            if task_type == reading_task_tools.Tasks.SPOT_READING:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                    post_hook=self._set_vars_after_spot_reading_eval
+                )
+            else:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
+                    post_hook=self._set_vars_after_perseverance
+                )
         else:
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD]
@@ -449,6 +474,16 @@ class InteractionManager:
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW],
                 post_hook=self._set_vars_after_interaction
             )
+
+    def _get_and_set_new_task_info(self):
+        task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
+        task_id = reading_task_tools.get_new_day_reading_task(self._state_database)
+        self._state_database.set(DatabaseKeys.CURRENT_READING_ID, task_id)
+        task_color = reading_task_tools.get_reading_task_data_value(
+            self._state_database, task_id, TaskDataKeys.COLOR
+        )
+        self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
+        return task_type
 
     def _set_vars_after_prompted(self):
         num_of_prompted_today = self._state_database.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) + 1

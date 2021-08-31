@@ -12,7 +12,7 @@ vision-project:
   params:
     seconds_until_interaction_timeout: 300
     max_num_of_prompted_per_day: 2
-    max_num_of_perseverance_readings: 5
+    max_num_of_perseverance_readings: 2
     max_num_of_spot_reading_attempts: 1
   data:
     evaluation: '/root/evaluation'

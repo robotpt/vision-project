@@ -408,9 +408,10 @@
         "nodes": {
             "perseverance": {
                 "transitions": ["exit"],
-                "content": "[perseverance reading]",
-                "options": ["Next"],
-                "message_type": "multiple choice one column"
+                "content": "*question_1*",
+                "options": ["Done", "Unable to read"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "unable to read"
             }
         },
         "start_node_name": "perseverance"

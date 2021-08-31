@@ -99,8 +99,6 @@ class VisionProjectDelegator:
         task_id = reading_task_tools.get_new_day_reading_task(self._state_database)
         self._state_database.set(DatabaseKeys.CURRENT_READING_ID, task_id)
         task_color = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.COLOR)
-        logging.info(f"Task ID: {task_id}")
-        logging.info(f"Task color: {task_color}")
         self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
 
     def get_interaction_type(self):
