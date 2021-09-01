@@ -3,6 +3,7 @@ class Interactions:
     ASK_TO_DO_SCHEDULED = "ask to do scheduled"
     EVALUATION = "evaluation"
     FIRST_INTERACTION = "first interaction"
+    PERSEVERANCE = "perseverance"
     PROMPTED_INTERACTION = "prompted interaction"
     SCHEDULED_INTERACTION = "scheduled interaction"
     TOO_MANY_PROMPTED = "too many prompted"
@@ -11,6 +12,7 @@ class Interactions:
         ASK_TO_DO_SCHEDULED,
         EVALUATION,
         FIRST_INTERACTION,
+        PERSEVERANCE,
         PROMPTED_INTERACTION,
         SCHEDULED_INTERACTION,
         TOO_MANY_PROMPTED

@@ -296,7 +296,7 @@
             "evaluation": {
                 "transitions": ["exit"],
                 "content": "*question_1*",
-                "options": ["Next"],
+                "options": ["Next", "Unable to read"],
                 "message_type": "numpad",
                 "result_db_key": "spot reading answer"
             }
@@ -419,7 +419,7 @@
     "is continue perseverance": {
         "nodes": {
             "is continue perseverance": {
-                "transitions": ["is continue perseverance","exit"],
+                "transitions": ["exit","exit"],
                 "content": "Would you like to continue reading?",
                 "options": ["Continue", "Stop"],
                 "message_type": "multiple choice one column",

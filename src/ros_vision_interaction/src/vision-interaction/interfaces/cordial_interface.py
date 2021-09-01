@@ -56,6 +56,8 @@ class CordialInterface(Interface):
         self._cordial_action_client.send_goal(goal, feedback_cb=self._cordial_feedback_cb)
         self._cordial_action_client.wait_for_result()
 
+        response = self._cordial_action_client.get_result()
+
         # if self._cordial_action_client.get_state() == actionlib.GoalStatus.PREEMPTED:
         #     response = message.options[self._default_response_index]
         # else:
