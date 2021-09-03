@@ -303,6 +303,18 @@
         },
         "start_node_name": "retry"
     },
+    "ssrt evaluation": {
+        "nodes": {
+            "evaluation": {
+                "transitions": ["exit"],
+                "content": "*question_1*",
+                "options": ["Done", "Unable to read"],
+                "message_type": "numpad",
+                "result_db_key": "spot reading answer"
+            }
+        },
+        "start_node_name": "evaluation"
+    },
     "post SSRT": {
         "nodes": {
             "post SSRT": {

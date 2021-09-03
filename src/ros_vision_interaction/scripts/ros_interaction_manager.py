@@ -113,6 +113,7 @@ if __name__ == "__main__":
 
     max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
     max_num_of_spot_reading_attempts = rospy.get_param("vision-project/params/max_num_of_spot_reading_attempts")
+    num_of_ssrt = rospy.get_param("vision-project/params/num_of_ssrt")
 
     interface = CordialInterface(
         state_database,
@@ -134,7 +135,8 @@ if __name__ == "__main__":
         interaction_builder=interaction_builder,
         interface=interface,
         max_num_of_perseverance_readings=max_num_of_perseverance_readings,
-        max_num_of_spot_reading_attempts=max_num_of_spot_reading_attempts
+        max_num_of_spot_reading_attempts=max_num_of_spot_reading_attempts,
+        num_of_ssrt=num_of_ssrt
     )
 
     ros_interaction_manager = RosInteractionManager(

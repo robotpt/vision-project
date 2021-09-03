@@ -21,7 +21,8 @@ class InteractionManager:
             interaction_builder,
             interface=None,
             max_num_of_perseverance_readings=5,
-            max_num_of_spot_reading_attempts=1
+            max_num_of_spot_reading_attempts=1,
+            num_of_ssrt=3
     ):
         self._state_database = statedb
 
@@ -41,6 +42,7 @@ class InteractionManager:
         self._num_of_days_to_prompt_goal_setting = 3
         self._spot_reading_attempts = 0
         self._spot_reading_index = 0
+        self._num_of_ssrt = num_of_ssrt
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in Interactions.POSSIBLE_INTERACTIONS:
@@ -216,6 +218,12 @@ class InteractionManager:
                 ))):
                     self._planner.insert(
                         self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                        post_hook=self._set_vars_after_evaluation
+                    )
+            elif task_id[0] == "4":  # SSRT
+                for i in range(self._num_of_ssrt):
+                    self._planner.insert(
+                        self._interaction_builder.interactions[InteractionBuilder.Graphs.SSRT_EVAL],
                         post_hook=self._set_vars_after_evaluation
                     )
             else:
