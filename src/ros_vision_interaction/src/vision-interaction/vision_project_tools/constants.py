@@ -69,6 +69,7 @@ class DatabaseKeys:
     SELF_REPORTS = "self reports"
     SPOT_READING_ANSWER = "spot reading answer"
     SRT_READING_INDEX = "SRT reading index"
+    POST_SRT_INDEX = "post SRT index"
     SUNDAY_SCHEDULED_TASK = "sunday scheduled task"
     UNABLE_TO_READ = "unable to read"
     USER_NAME = "user name"
@@ -243,6 +244,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.SELF_REPORTS: [],
     DatabaseKeys.SPOT_READING_ANSWER: None,
     DatabaseKeys.SRT_READING_INDEX: 0,
+    DatabaseKeys.POST_SRT_INDEX: 0,
     DatabaseKeys.SUNDAY_SCHEDULED_TASK: None,
     DatabaseKeys.USER_NAME: "",
     DatabaseKeys.UNABLE_TO_READ: False,

@@ -130,7 +130,7 @@
                     "poor",
                     "how was magnifier use"
                 ],
-                "content": "{'db': 'user name', 'default value': ''}, how did it go with your magnifier?",
+                "content": "{'db': 'user name', 'default value': ''}, how is it going with your magnifier?",
                 "options": ["0", "2", "4", "6", "8", "10", "Replay"],
                 "message_type": "image",
                 "args": ["https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"]
@@ -309,7 +309,7 @@
                 "transitions": ["exit"],
                 "content": "*question_1*",
                 "options": ["Done", "Unable to read"],
-                "message_type": "numpad",
+                "message_type": "multiple choice one column",
                 "result_db_key": "spot reading answer"
             }
         },
@@ -319,7 +319,7 @@
         "nodes": {
             "post SSRT": {
                 "transitions": ["exit", "post SSRT"],
-                "content": "{'var': 'post SSRT', 'index': '{'db': 'SRT reading index'}'}",
+                "content": "{'var': 'post SSRT', 'index': '{'db': 'post SRT index'}'}",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
@@ -363,7 +363,7 @@
             },
             "spoken self report": {
                 "transitions": ["grit feedback", "spoken self report"],
-                "content": "[spoken self-report]",
+                "content": "I'm listening!",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
