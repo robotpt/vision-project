@@ -244,33 +244,32 @@ class InteractionManager:
             TaskDataKeys.ANSWER
         )
         num_of_spot_reading = len(answers)
-        is_finished = self._spot_reading_index > 0 and self._spot_reading_index == num_of_spot_reading - 1
-        if is_finished:
-            print("----- SPOT READING FINISHED -----")
-            self._spot_reading_index = 0
-            self._spot_reading_attempts = 0
-            if is_doing_perseverance:
-                self._set_vars_after_perseverance()
-            else:
-                self._planner.insert(
-                    self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
-                    post_hook=self._set_vars_after_post_eval
-                )
+
+        answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
+        is_correct = answer == answers[self._spot_reading_index]
+        retry = self._spot_reading_attempts < self._max_num_of_spot_reading_attempts and \
+            not is_correct and answer != "Unable to read"
+        if retry:
+            self._spot_reading_attempts += 1
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.RETRY_SPOT_READING],
+                post_hook=self._set_vars_after_spot_reading_eval
+            )
+
         else:
-            answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
-            is_correct = answer == answers[self._spot_reading_index]
-            retry = self._spot_reading_attempts < self._max_num_of_spot_reading_attempts and \
-                not is_correct and answer != "Unable to read"
-            if retry:
-                self._spot_reading_attempts += 1
-                print(f"----- RETRYING SPOT READING, ATTEMPT: {self._spot_reading_attempts} -----")
-                self._planner.insert(
-                    self._interaction_builder.interactions[InteractionBuilder.Graphs.RETRY_SPOT_READING],
-                    post_hook=self._set_vars_after_spot_reading_eval
-                )
+            is_finished = self._spot_reading_index == num_of_spot_reading - 1
+            if is_finished:
+                self._spot_reading_index = 0
+                self._spot_reading_attempts = 0
+                if is_doing_perseverance:
+                    self._set_vars_after_perseverance()
+                else:
+                    self._planner.insert(
+                        self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+                        post_hook=self._set_vars_after_post_eval
+                    )
             else:
                 self._spot_reading_index += 1
-                print(F"----- SPOT READING CORRECT, INDEX: {self._spot_reading_index} -----")
                 self._spot_reading_attempts = 0
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
