@@ -3,7 +3,7 @@
         "Hi my friend! Are you able to {'var': 'chat'} with me right now?",
         "Greetings! Am I catching you at a good time to {'var': 'chat'}?",
         "Hey there! It's our usual time to {'var': 'chat'}. Does it work for you today?",
-        "Hi {'db': 'user name', 'default value': ''}! Let me know if this is a good time to {'var': 'chat'}?"
+        "Hi {'db': 'user name', 'default value': 'my friend'}! Let me know if this is a good time to {'var': 'chat'}?"
     ],
     "glad to hear": [
         "I'm so glad to hear that things are OK with you, {'db': 'user name', 'default value': ''}!",
