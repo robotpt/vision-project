@@ -40,6 +40,7 @@ def test_run_first_interaction(interaction_manager, deployment_interaction_dict,
 
 def test_run_reading_evaluation(interaction_manager, deployment_interaction_dict, statedb):
     current_eval_index = statedb.get(DatabaseKeys.READING_EVAL_INDEX)
+    statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, datetime.datetime.now())
     statedb.set(DatabaseKeys.GOOD_TO_CHAT, "Yes")
     statedb.set(DatabaseKeys.IS_DO_EVALUATION, "Yes")
     statedb.set(DatabaseKeys.IS_START_PERSEVERANCE, "No")

@@ -282,7 +282,9 @@ class InteractionManager:
 
     def _set_vars_after_ssrt(self):
         self._ssrt_index += 1
-        increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
+        # we want to do SRTs in groups of 3 so the post-SRT dialogue corresponds to the content
+        while self._state_database.get(DatabaseKeys.SRT_READING_INDEX) % 3 != 1:
+            increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
         self._get_and_set_new_task_info()
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
         is_doing_perseverance = self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY)
@@ -311,6 +313,7 @@ class InteractionManager:
 
     def _set_vars_after_post_eval(self):
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
+        increment_db_value(self._state_database, DatabaseKeys.READING_EVAL_INDEX)
         self._spot_reading_index = 0
         new_rating = self._state_database.get(DatabaseKeys.FEELINGS_INDEX)
         self_ratings = self._state_database.get(DatabaseKeys.SELF_REPORTS)
@@ -400,7 +403,6 @@ class InteractionManager:
                 post_hook=self._set_vars_after_interaction
             )
             increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
-        increment_db_value(self._state_database, DatabaseKeys.READING_EVAL_INDEX)
         self._set_reading_scores()
         self._set_vars_after_interaction()
 
