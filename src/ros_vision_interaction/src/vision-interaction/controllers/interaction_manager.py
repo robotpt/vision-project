@@ -88,18 +88,18 @@ class InteractionManager:
         return self._planner
 
     def _build_evaluation(self):
-        # if self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME):
-        #     if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
-        #         video_type = self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY)
-        #         video_index = self._get_video_index(video_type)
-        #         self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
-        #         self._planner.insert(
-        #             self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
-        #         )
-        #     else:
-        #         self._planner.insert(
-        #             self._interaction_builder.interactions[InteractionBuilder.Graphs.NO_FEEDBACK_VIDEO],
-        #         )
+        if self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME):
+            if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
+                video_type = self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY)
+                video_index = self._get_video_index(video_type)
+                self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
+                )
+            else:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.NO_FEEDBACK_VIDEO],
+                )
 
         task_type = self._get_and_set_new_task_info()
 
