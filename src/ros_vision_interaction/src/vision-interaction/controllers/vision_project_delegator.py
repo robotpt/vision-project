@@ -4,6 +4,7 @@ import logging
 import math
 import vision_project_tools.reading_task_tools as reading_task_tools
 
+from vision_project_tools import increment_db_value
 from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB, Interactions
 from vision_project_tools.reading_task_tools import TaskDataKeys, Tasks
 
@@ -71,8 +72,7 @@ class VisionProjectDelegator:
         }
         for key in keys_to_check:
             if not self._state_database.get(key):
-                old_value = self._state_database.get(keys_to_check[key])
-                self._state_database.set(keys_to_check[key], old_value + 1)
+                increment_db_value(self._state_database, keys_to_check[key])
             else:
                 self._state_database.set(keys_to_check[key], 0)
             self._state_database.set(key, False)
@@ -102,21 +102,20 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
 
     def get_interaction_type(self):
-        # logging.info("Determining interaction type")
-        # if self._is_first_interaction():
-        #     interaction_type = Interactions.FIRST_INTERACTION
-        # elif self._is_time_for_scheduled_interaction():
-        #     interaction_type = Interactions.SCHEDULED_INTERACTION
-        # elif self._is_run_too_many_prompted():
-        #     interaction_type = Interactions.TOO_MANY_PROMPTED
-        # elif self._is_run_prompted_interaction():
-        #     interaction_type = Interactions.PROMPTED_INTERACTION
-        # elif self._is_ask_to_do_scheduled():
-        #     interaction_type = Interactions.ASK_TO_DO_SCHEDULED
-        # else:
-        #     interaction_type = None
-        # return interaction_type
-        return Interactions.EVALUATION
+        logging.info("Determining interaction type")
+        if self._is_first_interaction():
+            interaction_type = Interactions.FIRST_INTERACTION
+        elif self._is_time_for_scheduled_interaction():
+            interaction_type = Interactions.SCHEDULED_INTERACTION
+        elif self._is_run_too_many_prompted():
+            interaction_type = Interactions.TOO_MANY_PROMPTED
+        elif self._is_run_prompted_interaction():
+            interaction_type = Interactions.PROMPTED_INTERACTION
+        elif self._is_ask_to_do_scheduled():
+            interaction_type = Interactions.ASK_TO_DO_SCHEDULED
+        else:
+            interaction_type = None
+        return interaction_type
 
     def _is_first_interaction(self):
         return not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME)

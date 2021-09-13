@@ -13,3 +13,8 @@ def init_db(db, key_values):
             db.create(key, key_values[key])
         except KeyError:
             logging.info("{} already exists".format(key))
+
+
+def increment_db_value(db, key):
+    value = db.get(key)
+    db.set(key, value + 1)

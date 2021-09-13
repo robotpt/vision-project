@@ -6,8 +6,9 @@ import vision_project_tools.reading_task_tools as reading_task_tools
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
 from interaction_builder import InteractionBuilder
+from vision_project_tools import increment_db_value
 from vision_project_tools.constants import Interactions, DatabaseKeys
-from vision_project_tools.reading_task_tools import TaskDataKeys
+from vision_project_tools.reading_task_tools import TaskDataKeys, Tasks
 from vision_project_tools.vision_engine import VisionInteractionEngine as InteractionEngine
 
 logging.basicConfig(level=logging.INFO)
@@ -43,6 +44,8 @@ class InteractionManager:
         self._spot_reading_attempts = 0
         self._spot_reading_index = 0
         self._num_of_ssrt = num_of_ssrt
+        self._ssrt_index = 0
+        self._spot_reading_perseverance_index = 0
 
     def run_interaction_once(self, interaction_type):
         if interaction_type not in Interactions.POSSIBLE_INTERACTIONS:
@@ -99,8 +102,6 @@ class InteractionManager:
         #         )
 
         task_type = self._get_and_set_new_task_info()
-
-        self._state_database.set(DatabaseKeys.CURRENT_READING_ID, "300")
 
         if task_type == reading_task_tools.Tasks.SPOT_READING:
             self._planner.insert(
@@ -262,6 +263,7 @@ class InteractionManager:
                 self._spot_reading_index = 0
                 self._spot_reading_attempts = 0
                 if is_doing_perseverance:
+                    self._spot_reading_perseverance_index += 1
                     self._set_vars_after_perseverance()
                 else:
                     self._planner.insert(
@@ -277,10 +279,9 @@ class InteractionManager:
                 )
 
     def _set_vars_after_ssrt(self):
-        self._state_database.set(
-            DatabaseKeys.SRT_READING_INDEX,
-            self._state_database.get(DatabaseKeys.SRT_READING_INDEX) + 1
-        )
+        self._ssrt_index += 1
+        increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
+        self._get_and_set_new_task_info()
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
         is_doing_perseverance = self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY)
         reading_task_tools.set_reading_task_value(
@@ -292,16 +293,22 @@ class InteractionManager:
         if is_doing_perseverance:
             self._set_vars_after_perseverance()
         else:
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
-                post_hook=self._set_vars_after_interaction
-            )
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
-                post_hook=self._set_vars_after_post_eval
-            )
+            if self._ssrt_index == self._num_of_ssrt - 1:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
+                    post_hook=self._set_vars_after_post_ssrt
+                )
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+                    post_hook=self._set_vars_after_post_eval
+                )
+
+    def _set_vars_after_post_ssrt(self):
+        self._num_of_ssrt = 0
+        increment_db_value(self._state_database, DatabaseKeys.POST_SRT_INDEX)
 
     def _set_vars_after_post_eval(self):
+        self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         self._spot_reading_index = 0
         new_rating = self._state_database.get(DatabaseKeys.FEELINGS_INDEX)
         self_ratings = self._state_database.get(DatabaseKeys.SELF_REPORTS)
@@ -383,6 +390,7 @@ class InteractionManager:
             )
 
     def _set_vars_after_evaluation(self):
+        self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         if task_type == reading_task_tools.Tasks.IREST:
             self._planner.insert(
@@ -394,9 +402,7 @@ class InteractionManager:
                 DatabaseKeys.IREST_READING_INDEX,
                 current_index + 1
             )
-        self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
-        eval_index = self._state_database.get(DatabaseKeys.READING_EVAL_INDEX)
-        self._state_database.set(DatabaseKeys.READING_EVAL_INDEX, eval_index + 1)
+        increment_db_value(self._state_database, DatabaseKeys.READING_EVAL_INDEX)
         self._set_reading_scores()
         self._set_vars_after_interaction()
 
@@ -460,15 +466,21 @@ class InteractionManager:
         self._set_vars_after_interaction()
 
     def _set_vars_after_perseverance(self):
-        perseverance_counter = self._state_database.get(DatabaseKeys.PERSEVERANCE_COUNTER) + 1
-        self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, perseverance_counter)
+        increment_db_value(self._state_database, DatabaseKeys.PERSEVERANCE_COUNTER)
+        perseverance_counter = self._state_database.get(DatabaseKeys.PERSEVERANCE_COUNTER)
         if perseverance_counter >= self._max_num_of_perseverance_readings:
+            self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
             task_type = self._get_and_set_new_task_info()
-            if task_type == reading_task_tools.Tasks.SRT:
+            if task_type == Tasks.SRT:
+                self._ssrt_index = 0
                 self._planner.insert(
-                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
-                    post_hook=self._set_vars_after_interaction
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
+                    post_hook=self._set_vars_after_post_ssrt
                 )
+            if task_type == Tasks.SPOT_READING:
+                self._spot_reading_attempts = 0
+                self._spot_reading_perseverance_index = 0
+
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD],
                 post_hook=self._set_vars_after_interaction
@@ -483,13 +495,13 @@ class InteractionManager:
             )
 
     def _set_vars_after_continue_perseverance(self):
+        task_type = self._get_and_set_new_task_info()
         if self._state_database.get(DatabaseKeys.IS_CONTINUE_PERSEVERANCE) == "Continue":
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
                 post_hook=self._set_vars_after_interaction
             )
 
-            task_type = self._get_and_set_new_task_info()
             if task_type == reading_task_tools.Tasks.SPOT_READING:
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
@@ -506,6 +518,9 @@ class InteractionManager:
                     post_hook=self._set_vars_after_perseverance
                 )
         else:
+            self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
+            if task_type == Tasks.SRT:
+                self._ssrt_index = 0
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD]
             )
@@ -525,8 +540,7 @@ class InteractionManager:
         return task_type
 
     def _set_vars_after_prompted(self):
-        num_of_prompted_today = self._state_database.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) + 1
-        self._state_database.set(DatabaseKeys.NUM_OF_PROMPTED_TODAY, num_of_prompted_today)
+        increment_db_value(self._state_database, DatabaseKeys.NUM_OF_PROMPTED_TODAY)
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
         self._state_database.set(DatabaseKeys.IS_DONE_PROMPTED_TODAY, True)
         self._set_vars_after_interaction()
