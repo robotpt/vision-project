@@ -142,8 +142,7 @@ class RosVisionProjectDelegator:
     def _discord_pick_callback(self, data):
         choice = data.data
         rospy.loginfo(f"Selected feedback video: {choice}")
-        video_dictionary = self._state_database.get(DatabaseKeys.FEEDBACK_VIDEOS)
-        self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, video_dictionary[choice])
+        self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, choice)
 
     def _node_name_callback(self, data):
         node_name = data.data

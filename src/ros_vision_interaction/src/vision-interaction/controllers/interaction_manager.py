@@ -88,10 +88,12 @@ class InteractionManager:
         return self._planner
 
     def _build_evaluation(self):
-        if self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME):
+        if self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME).date() < datetime.datetime.now().date():
             if self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY):
                 video_type = self._state_database.get(DatabaseKeys.VIDEO_TO_PLAY)
+                video_dictionary = self._state_database.get(DatabaseKeys.FEEDBACK_VIDEOS)
                 video_index = self._get_video_index(video_type)
+                self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, video_dictionary[video_type])
                 self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
@@ -397,11 +399,7 @@ class InteractionManager:
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
                 post_hook=self._set_vars_after_interaction
             )
-            current_index = self._state_database.get(DatabaseKeys.IREST_READING_INDEX)
-            self._state_database.set(
-                DatabaseKeys.IREST_READING_INDEX,
-                current_index + 1
-            )
+            increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
         increment_db_value(self._state_database, DatabaseKeys.READING_EVAL_INDEX)
         self._set_reading_scores()
         self._set_vars_after_interaction()
@@ -480,6 +478,8 @@ class InteractionManager:
             if task_type == Tasks.SPOT_READING:
                 self._spot_reading_attempts = 0
                 self._spot_reading_perseverance_index = 0
+            if task_type == Tasks.IREST:
+                increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
 
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD],

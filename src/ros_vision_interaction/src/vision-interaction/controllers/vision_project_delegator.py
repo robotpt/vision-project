@@ -36,8 +36,6 @@ class VisionProjectDelegator:
 
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
-
-        # self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, "light")
         self.new_day_update()
 
     def update(self):

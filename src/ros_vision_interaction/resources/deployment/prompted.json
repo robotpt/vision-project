@@ -92,7 +92,7 @@
                 "content": "How do you feel about your vision right now?",
                 "options": ["0", "2", "4", "6", "8", "10", "Replay"],
                 "message_type": "image",
-                "args": ["../img/rating_chart.png"],
+                "args": ["https://drive.google.com/uc?export=view&id=1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m"],
                 "result_db_key": "feelings index"
             },
             "joke 1": {
@@ -144,7 +144,7 @@
                 "content": "Please share with me: how did it go with your magnifier?",
                 "options": ["0", "2", "4", "6", "8", "10", "Replay"],
                 "message_type": "image",
-                "args": ["../img/rating_chart.png"]
+                "args": ["https://drive.google.com/uc?export=view&id=1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m"]
             },
             "excellent": {
                 "transitions": ["exit", "excellent"],

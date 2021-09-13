@@ -1,6 +1,7 @@
 <launch>
     <arg name="is_launch_controllers" default="true"/>
     <arg name="is_launch_evaluator" default="true"/>
+    <arg name="is_launch_discord" default="true"/>
     <arg name="aws_voice_name" default="Justin"/>
     <arg name="face_port" default="8081"/>
     <arg name="gui_port" default="8082"/>
@@ -92,6 +93,11 @@
     <!-- launch reading evaluator -->
     <group if="$(arg is_launch_evaluator)">
         <node pkg="ros_vision_interaction" type="ros_reading_evaluator.py" name="reading_evaluator" output="screen"/>
+    </group>
+
+    <!-- launch discord bot -->
+    <group if="$(arg is_launch_discord)">
+        <node pkg="discord_bot" type="discord_bot.py" name="discord_bot" output="screen"/>
     </group>
 
     <!-- launch mongodb log -->
