@@ -30,6 +30,7 @@ class RosDiscordCog(commands.Cog):
 
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
+        score_topic = rospy.get_param("discord/score")
         self._pick_publisher = rospy.Publisher(pick_topic, String, queue_size=1)
         self._choices_subscriber = rospy.Subscriber(
             choices_topic,
@@ -37,6 +38,7 @@ class RosDiscordCog(commands.Cog):
             callback=self._choices_subscriber_callback,
             queue_size=1,
         )
+        self._score_publisher = rospy.Publisher(score_topic, String, queue_size=1)
         self._background_task = self._bot.loop.create_task(
             self._send_message_on_new_choices()
         )
@@ -109,6 +111,41 @@ class RosDiscordCog(commands.Cog):
         if not rospy.is_shutdown():
             self._pick_publisher.publish(choice)
             rospy.loginfo(f'"Picked choice at {rospy.get_time()}: {choice}.')
+
+    @commands.command(
+        name="score", help="Pick from a set of choices when they're available"
+    )
+    async def send_score(self, message):
+
+        if self._choices is None:
+            await message.channel.send("Oops, nothing for you to pick.")
+            return
+
+        await message.channel.send(
+            "Please enter the reading task ID and score separated by a comma and no spaces (EX: 200,35)."
+        )
+
+        def is_correct(m):
+            return (
+                    m.author == message.author
+                    and not (" " in m)
+            )
+
+        try:
+            score: discord.Message = await self._bot.wait_for(
+                "message", check=is_correct, timeout=20.0
+            )
+        except asyncio.TimeoutError:
+            return await message.channel.send(
+                "Sorry, you took too long. Please re-enter the command."
+            )
+        self._send_score(score.content)
+        await message.channel.send("Great, thank you.")
+
+    def _send_score(self, score: str):
+        if not rospy.is_shutdown():
+            self._score_publisher.publish(score)
+            rospy.loginfo(f'"Score sent at {rospy.get_time()}: {score}.')
 
     @staticmethod
     def _get_options_str(options: typing.List[str]) -> str:
