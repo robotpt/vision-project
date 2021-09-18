@@ -10,6 +10,7 @@ from interaction_builder import InteractionBuilder
 from vision_project_tools import init_db
 from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
+import vision_project_tools.reading_task_tools as reading_task_tools
 
 from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
@@ -48,6 +49,7 @@ class RosVisionProjectDelegator:
         node_name_topic = rospy.get_param("controllers/node_name_topic")
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
+        score_topic = rospy.get_param("discord/score")
         self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)
         self._is_record_evaluation_publisher = rospy.Publisher(is_record_evaluation_topic, Bool, queue_size=1)
         self._is_record_perseverance_publisher = rospy.Publisher(is_record_perseverance_topic, Bool, queue_size=1)
@@ -70,6 +72,12 @@ class RosVisionProjectDelegator:
             queue_size=1
         )
         self._choices_publisher = rospy.Publisher(choices_topic, String, queue_size=1)
+        self._score_subscriber = rospy.Subscriber(
+            score_topic,
+            String,
+            callback=self._discord_score_callback,
+            queue_size=1
+        )
 
         # update scheduler
         self._scheduler = schedule.Scheduler()
@@ -143,6 +151,17 @@ class RosVisionProjectDelegator:
         choice = data.data
         rospy.loginfo(f"Selected feedback video: {choice}")
         self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, choice)
+
+    def _discord_score_callback(self, data):
+        feedback = data.data
+        task_id, score = feedback.split(",")
+        rospy.loginfo(f"Annotator score: {score}")
+        reading_task_tools.set_reading_task_value(
+            self._state_database,
+            task_id,
+            reading_task_tools.TaskDataKeys.ANNOTATOR_SCORE,
+            score
+        )
 
     def _node_name_callback(self, data):
         node_name = data.data
