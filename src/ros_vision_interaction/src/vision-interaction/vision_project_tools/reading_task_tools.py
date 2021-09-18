@@ -17,6 +17,7 @@ class Tasks:
 
 
 class TaskDataKeys:
+    ANNOTATOR_SCORE = "annotator_score"
     ANSWER = "answer"
     COLOR = "color"
     CORRECT = "correct"
@@ -81,6 +82,7 @@ def get_reading_task_id(statedb, task_type, difficulty_level=None):
 def get_reading_task_data_value(statedb, task_id, data_type):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     if data_type not in [
+        TaskDataKeys.ANNOTATOR_SCORE,
         TaskDataKeys.ANSWER,
         TaskDataKeys.COLOR,
         TaskDataKeys.CORRECT,

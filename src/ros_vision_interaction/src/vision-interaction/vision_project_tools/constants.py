@@ -1,3 +1,7 @@
+import json
+import os
+
+
 class Interactions:
 
     ASK_TO_DO_SCHEDULED = "ask to do scheduled"
@@ -27,6 +31,8 @@ class DatabaseKeys:
     CURRENT_READING_COLOR = "current reading color"
     CURRENT_READING_ID = "current reading id"
     CURRENT_READING_INDEX = "current reading index"
+    DAYS_WITHOUT_MAGNIFIER = "days without magnifier"
+    DID_USE_MAGNIFIER = "did use magnifier"
     # DIFFICULTY_LEVEL = "difficulty level"
     FEEDBACK_VIDEOS = "feedback videos"
     FIRST_INTERACTION_DATETIME = "first interaction datetime"
@@ -36,12 +42,15 @@ class DatabaseKeys:
     IREST_READING_INDEX = "IReST reading index"
     IS_CONTINUE_PERSEVERANCE = "is continue perseverance"
     IS_DO_EVALUATION = "is do evaluation"
+    IS_DO_EVAL_DURING_PROMPTED = "is do eval during prompted"
+    IS_DO_MINDFULNESS = "is do mindfulness"
     IS_DONE_EVAL_TODAY = "is done eval today"
     IS_DONE_GOAL_SETTING_TODAY = "is done goal setting today"
     IS_DONE_MINDFULNESS_TODAY = "is done mindfulness today"
     IS_DONE_PERSEVERANCE_TODAY = "is done perseverance today"
     IS_DONE_PROMPTED_TODAY = "is done prompted today"
     IS_INTERACTION_FINISHED = "is interaction finished"
+    IS_GIVEN_UP = "is given up"
     # IS_NEW_DIFFICULTY_LEVEL = "is new difficulty level"
     IS_OFF_CHECKIN = "is off checkin"
     IS_PROMPTED_BY_USER = "is prompted by user"
@@ -77,113 +86,12 @@ class DatabaseKeys:
     VIDEO_TO_PLAY = "video to play"
 
 
-READING_TASK_DATA = {
-    "IReST": {
-        "501": {"word count": 156, "score": None, "color": "blue", "unable to read": False, "is scheduled": None},
-        "502": {"word count": 161, "score": None, "color": "blue", "unable to read": False, "is scheduled": None},
-        "503": {"word count": 156, "score": None, "color": "blue", "unable to read": False, "is scheduled": None},
-        "504": {"word count": 155, "score": None, "color": "blue", "unable to read": False, "is scheduled": None},
-        "505": {"word count": 136, "score": None, "color": "blue", "unable to read": False, "is scheduled": None},
-        "506": {"word count": 158, "score": None, "color": "blue", "unable to read": False, "is scheduled": None},
-    },
-    "MNread": {
-        "100": {"word count": 50, "score": None, "color": "yellow", "unable to read": False, "is scheduled": None},
-        "101": {"word count": 50, "score": None, "color": "yellow", "unable to read": False, "is scheduled": None},
-    },
-    "SKread": {
-        "200": {"word count": 50, "score": None, "color": "red", "unable to read": False, "is scheduled": None},
-        "201": {"word count": 50, "score": None, "color": "red", "unable to read": False, "is scheduled": None},
-    },
-    "spot reading": {
-        "300": {
-            "answer": ["345582553529950"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "301": {
-            "answer": ["06/19"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "302": {
-            "answer": ["18007721213"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "309": {
-            "answer": ["6", "2", "15", "415", "45", "350"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "310": {
-            "answer": ["3", "37", "27"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "311": {
-            "answer": ["3.84"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "303": {
-            "answer": ["349772827724463"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "304": {
-            "answer": ["1078.70", "0"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "305": {
-            "answer": ["400", "40"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "312": {
-            "answer": ["5", "5", "0", "0"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "313": {
-            "answer": ["48", "9"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "314": {
-            "answer": ["15", "8", "380"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "306": {
-            "answer": ["1335335854743211", "09/23"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "307": {
-            "answer": ["2018", "7", "21"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "308": {
-            "answer": ["4", "11", "10", "15"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "315": {
-            "answer": ["60", "312.223.0197", "0", "06.27.19"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "316": {
-            "answer": ["3.91", "4/15/2013"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-        "317": {
-            "answer": ["5", "3", "12"], "score": None,
-            "color": "blue", "correct": None, "unable to read": False, "is scheduled": None
-        },
-    },
-    "SRT": {
-        "400": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "401": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "402": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "403": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "404": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "405": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "406": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "407": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "408": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "409": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "410": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "411": {"word count": 200, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-        "412": {"word count": 100, "score": None, "color": "gray", "unable to read": False, "is scheduled": None},
-    }
-}
+# set up resources paths
+cwd = os.path.dirname(os.path.abspath(__file__))
+resources_directory = os.path.join(cwd, "..", "..", "..", "resources")
+reading_task_data_path = os.path.join(resources_directory, "deployment", "reading_task_data.json")
+with open(reading_task_data_path) as f:
+    READING_TASK_DATA = json.load(f)
 
 
 INITIAL_STATE_DB = {
@@ -194,6 +102,8 @@ INITIAL_STATE_DB = {
     DatabaseKeys.CURRENT_READING_COLOR: None,
     DatabaseKeys.CURRENT_READING_ID: None,
     DatabaseKeys.CURRENT_READING_INDEX: None,
+    DatabaseKeys.DAYS_WITHOUT_MAGNIFIER: 0,
+    DatabaseKeys.DID_USE_MAGNIFIER: True,
     # DatabaseKeys.DIFFICULTY_LEVEL: "1",
     DatabaseKeys.FEEDBACK_VIDEOS: {
         "distance 4x": "https://www.youtube.com/embed/tZyaCbmJOtY",
@@ -211,12 +121,15 @@ INITIAL_STATE_DB = {
     DatabaseKeys.IREST_READING_INDEX: 0,
     DatabaseKeys.IS_CONTINUE_PERSEVERANCE: None,
     DatabaseKeys.IS_DO_EVALUATION: None,
+    DatabaseKeys.IS_DO_EVAL_DURING_PROMPTED: False,
+    DatabaseKeys.IS_DO_MINDFULNESS: False,
     DatabaseKeys.IS_DONE_EVAL_TODAY: False,
     DatabaseKeys.IS_DONE_GOAL_SETTING_TODAY: False,
     DatabaseKeys.IS_DONE_MINDFULNESS_TODAY: False,
     DatabaseKeys.IS_DONE_PERSEVERANCE_TODAY: False,
     DatabaseKeys.IS_DONE_PROMPTED_TODAY: False,
     DatabaseKeys.IS_INTERACTION_FINISHED: False,
+    DatabaseKeys.IS_GIVEN_UP: [],
     # DatabaseKeys.IS_NEW_DIFFICULTY_LEVEL: False,
     DatabaseKeys.IS_OFF_CHECKIN: None,
     DatabaseKeys.IS_PROMPTED_BY_USER: False,
