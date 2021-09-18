@@ -217,13 +217,25 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.IS_OFF_CHECKIN) == "Yes":
             self._state_database.set(DatabaseKeys.IS_OFF_CHECKIN, None)
             self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
-                post_hook=self._set_vars_after_scheduled_ask_for_eval
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                post_hook=self._set_vars_after_interaction
             )
         else:
             self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_ASK_TO_CHAT],
-                post_hook=self._set_vars_after_prompted_ask_to_chat
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+                post_hook=self._set_vars_after_prompted
+            )
+
+    def _set_vars_after_ask_for_eval_during_scheduled(self):
+        if self._state_database.get(DatabaseKeys.IS_DO_EVAL_DURING_PROMPTED) == "Yes":
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+                post_hook=self._set_vars_after_prompted
+            )
+        else:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                post_hook=self._set_vars_after_interaction
             )
 
     def _set_vars_after_scheduled_ask_for_eval(self):
@@ -339,10 +351,16 @@ class InteractionManager:
     def _set_vars_after_prompted_ask_to_chat(self):
         if self._state_database.get(DatabaseKeys.GOOD_TO_CHAT) == "Yes":
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
-                post_hook=self._set_vars_after_prompted
-            )
+            if not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_FOR_EVAL_DURING_PROMPTED],
+                    post_hook=self._set_vars_after_ask_for_eval_during_scheduled
+                )
+            else:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+                    post_hook=self._set_vars_after_prompted
+                )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN],
@@ -354,6 +372,7 @@ class InteractionManager:
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
@@ -426,6 +445,7 @@ class InteractionManager:
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
@@ -543,8 +563,30 @@ class InteractionManager:
 
     def _set_vars_after_prompted(self):
         increment_db_value(self._state_database, DatabaseKeys.NUM_OF_PROMPTED_TODAY)
+        if self._state_database.get(DatabaseKeys.DID_USE_MAGNIFIER) == "No":
+            increment_db_value(self._state_database, DatabaseKeys.DAYS_WITHOUT_MAGNIFIER)
+        if self._state_database.get(DatabaseKeys.DID_USE_MAGNIFIER) == "Yes":
+            self._state_database.set(DatabaseKeys.DAYS_WITHOUT_MAGNIFIER, 0)
+
+        if self._state_database.get(DatabaseKeys.DAYS_WITHOUT_MAGNIFIER) > 3:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_IF_GIVEN_UP],
+                post_hook=self._set_vars_after_ask_if_given_up
+            )
+
+        self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.STORIES_AND_JOKES],
+                post_hook=self._set_vars_after_interaction
+        )
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
         self._state_database.set(DatabaseKeys.IS_DONE_PROMPTED_TODAY, True)
+        self._set_vars_after_interaction()
+
+    def _set_vars_after_ask_if_given_up(self):
+        if self._state_database.get(DatabaseKeys.ASK_IF_GIVEN_UP) == "Yes":
+            is_given_up = self._state_database.get(DatabaseKeys.IS_GIVEN_UP)
+            is_given_up.append(datetime.datetime.now())
+            self._state_database.set(DatabaseKeys.IS_GIVEN_UP, is_given_up)
         self._set_vars_after_interaction()
 
     def _set_vars_after_too_many_prompted(self):

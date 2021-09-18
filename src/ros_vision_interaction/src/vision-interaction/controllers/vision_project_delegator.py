@@ -150,8 +150,8 @@ class VisionProjectDelegator:
             datetime.datetime.now()
         )
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
-               not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
-               not is_in_scheduled_window
+            not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
+            not is_in_scheduled_window
 
     def _is_run_prompted_interaction(self):
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \

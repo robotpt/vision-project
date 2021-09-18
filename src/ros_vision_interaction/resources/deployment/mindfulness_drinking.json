@@ -31,7 +31,7 @@
                 "options": ["0", "2", "4", "6", "8", "10", "Replay"],
                 "message_type": "image",
                 "args": [
-                    "https://drive.google.com/file/d/1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m/view?usp=sharing"
+                    "https://drive.google.com/uc?export=view&id=1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m"
                 ],
                 "result_db_key": "mindfulness rating"
             }

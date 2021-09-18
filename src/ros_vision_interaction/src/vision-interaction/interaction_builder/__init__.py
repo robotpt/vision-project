@@ -16,6 +16,8 @@ logging.basicConfig(level=logging.INFO)
 
 class InteractionBuilder:
     class Graphs:
+        ASK_FOR_EVAL_DURING_PROMPTED = "ask for eval during prompted"
+        ASK_IF_GIVEN_UP = "ask if given up"
         ASK_TO_DO_EVALUATION = "ask to do evaluation"
         ASK_TO_DO_PERSEVERANCE = "ask to do perseverance"
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
@@ -26,6 +28,7 @@ class InteractionBuilder:
         GOAL_SETTING = "goal setting"
         GRIT_TRANSITION = "grit transition"
         INTRODUCE_EVALUATION = "introduce evaluation"
+        INTRODUCE_MINDFULNESS = "introduce mindfulness"
         INTRODUCE_QT = "introduce QT"
         MINDFULNESS_BODY_SCAN = "mindfulness body"
         MINDFULNESS_BREATHING = "mindfulness breathing"
@@ -43,14 +46,18 @@ class InteractionBuilder:
         PROMPTED_PLAN_NEXT_CHECKIN = "prompted plan next checkin"
         REMINDER_FOR_PROMPTED = "reminder for prompted"
         RETRY_SPOT_READING = "retry spot reading"
+        REVISIT_MINDFULNESS = "revisit mindfulness"
         REWARD = "reward"
         SCHEDULED_ASK_TO_CHAT = "scheduled ask to chat"
         SCHEDULED_CHECKIN = "scheduled checkin"
         SPOT_READING_EVAL = "spot reading evaluation"
         SSRT_EVAL = "ssrt evaluation"
+        STORIES_AND_JOKES = "stories and jokes"
         TOO_MANY_PROMPTED = "too many prompted"
 
         POSSIBLE_GRAPHS = [
+            ASK_FOR_EVAL_DURING_PROMPTED,
+            ASK_IF_GIVEN_UP,
             ASK_TO_DO_EVALUATION,
             ASK_TO_DO_PERSEVERANCE,
             ASK_TO_DO_SCHEDULED,
@@ -59,7 +66,9 @@ class InteractionBuilder:
             EVALUATION,
             FEEDBACK_VIDEO,
             GOAL_SETTING,
+            GRIT_TRANSITION,
             INTRODUCE_EVALUATION,
+            INTRODUCE_MINDFULNESS,
             INTRODUCE_QT,
             MINDFULNESS_BODY_SCAN,
             MINDFULNESS_BREATHING,
@@ -77,11 +86,13 @@ class InteractionBuilder:
             PROMPTED_PLAN_NEXT_CHECKIN,
             REMINDER_FOR_PROMPTED,
             RETRY_SPOT_READING,
+            REVISIT_MINDFULNESS,
             REWARD,
             SCHEDULED_ASK_TO_CHAT,
             SCHEDULED_CHECKIN,
             SPOT_READING_EVAL,
             SSRT_EVAL,
+            STORIES_AND_JOKES,
             TOO_MANY_PROMPTED
         ]
 

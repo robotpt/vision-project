@@ -11,11 +11,23 @@
         },
         "start_node_name": "ask to do scheduled"
     },
+    "ask for eval during prompted": {
+        "nodes": {
+            "ask for eval": {
+                "transitions": ["exit", "ask for eval"],
+                "content": "Will you be available to chat during our scheduled time later?",
+                "options": ["Yes", "No", "Replay"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is do eval during prompted"
+            }
+        },
+        "start_node_name": "ask for eval"
+    },
     "too many prompted": {
         "nodes": {
             "reminder": {
                 "transitions": ["exit", "reminder"],
-                "content": "I have really enjoyed speaking with you so many times today, but all the talking has made me pretty tired. I'm wiped out and need to recharge by taking a long nap. Let me get some shut eye, so I can be all refreshed and ready to chat with you again tomorrow. Good night!",
+                "content": "I have really enjoyed speaking with you so many times today, but all the talking has made me pretty tired. I'm wiped out and need to recharge by taking a long nap. Let me get some shut eye, so I can be all refreshed and ready to chat with you again tomorrow. Good bye, {'db': 'user name', 'default value': ''}!",
                 "options": ["Talk to you tomorrow!", "See you tomorrow!", "Replay"],
                 "message_type": "multiple choice one column"
             }
@@ -117,7 +129,8 @@
                 "transitions": ["how was magnifier use", "keep trying", "did you use magnifier"],
                 "content": "Tell me, did you use your magnifier since the last time we spoke?",
                 "options": ["Yes", "No", "Replay"],
-                "message_type": "multiple choice one column"
+                "message_type": "multiple choice one column",
+                "result_db_key": "did use magnifier"
             },
             "great to hear": {
                 "transitions": ["how was magnifier use", "keep trying", "great to hear"],
@@ -176,12 +189,36 @@
     "ask if given up": {
         "nodes": {
             "ask if given up": {
-                "transitions": ["exit"],
+                "transitions": ["exit", "exit", "ask if given up"],
                 "content": "Are you thinking of giving up on the magnifier or have you not needed it?",
                 "options": ["No need", "Gave up", "Replay"],
                 "message_type": "multiple choice one column",
-                "result_db_key": ""
+                "result_db_key": "ask if given up"
             }
-        }
+        },
+        "start_node_name": "ask if given up"
+    },
+    "stories and jokes": {
+        "nodes": {
+            "ask for story": {
+                "transitions": ["read to QT", "exit", "ask for story"],
+                "content": "I love stories and jokes! Will you read me a story or tell me a joke? Or show me something that has been hard to read?",
+                "options": ["Yes", "Not right now", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "read to QT": {
+                "transitions": ["that was great"],
+                "content": "I'm listening! Press 'Next' when you're done.",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "that was great": {
+                "transitions": ["exit"],
+                "content": "That was {'var': 'great'}! Bye-bye for now, and don't forget to use your magnifier!",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "ask for story"
     }
 }
