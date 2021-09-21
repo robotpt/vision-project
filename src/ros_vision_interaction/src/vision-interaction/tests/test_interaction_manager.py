@@ -55,6 +55,8 @@ def test_run_reading_evaluation(interaction_manager, deployment_interaction_dict
 def test_run_prompted_interaction(interaction_manager, deployment_interaction_dict, statedb):
     with freezegun.freeze_time("2021-02-10"):
         statedb.set(DatabaseKeys.GOOD_TO_CHAT, "Yes")
+        statedb.set(DatabaseKeys.IS_OFF_CHECKIN, "Yes")
+        statedb.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         assert statedb.get(DatabaseKeys.NUM_OF_PROMPTED_TODAY) == 0
         for node_name in interaction_manager.run_interaction_once(Interactions.PROMPTED_INTERACTION):
             assert node_name in deployment_interaction_dict
