@@ -34,6 +34,7 @@ class ReadingEvaluator:
         self._vad.set_mode(3)
 
     def calculate_and_set_reading_score(self, audio_file_path):
+        print(f"Calculating reading score from: {audio_file_path}")
         total_speaking_time = self.get_total_speaking_time(audio_file_path)
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
 
@@ -50,46 +51,57 @@ class ReadingEvaluator:
                 )
                 if total_speaking_time == 0:
                     logging.info("Total speaking time was 0, setting reading speed to 0")
+                    print("Total speaking time was 0, setting reading speed to 0")
                     reading_speed = 0
                 else:
                     reading_speed = num_of_words / total_speaking_time
                     logging.info(f"Reading speed: {reading_speed}")
+                    print(f"Reading speed: {reading_speed}")
             reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.SCORE, reading_speed)
 
     def get_total_speaking_time(self, audio_file_path):
         """Reads a .wav file and returns the total length of speaking time (float)."""
         total_speaking_time = 0.0
         audio, sample_rate = self.read_wav(audio_file_path)
-        frame_duration_ms = 30
-        padding_duration_ms = 300
-        frames = list(self.generate_frames(frame_duration_ms, audio, sample_rate))
-        voiced_segments = self.get_voiced_audio_from_frames(
-            sample_rate,
-            frame_duration_ms,
-            padding_duration_ms,
-            frames
-        )
-        for segment in voiced_segments:
-            audio_segment = AudioSegment(segment, sample_width=2, frame_rate=sample_rate, channels=1)
-            total_speaking_time += audio_segment.duration_seconds
+        if not audio:
+            logging.info("No audio data, returning 0 for total speaking time")
+        else:
+            frame_duration_ms = 30
+            padding_duration_ms = 300
+            frames = list(self.generate_frames(frame_duration_ms, audio, sample_rate))
+            voiced_segments = self.get_voiced_audio_from_frames(
+                sample_rate,
+                frame_duration_ms,
+                padding_duration_ms,
+                frames
+            )
+            for segment in voiced_segments:
+                audio_segment = AudioSegment(segment, sample_width=2, frame_rate=sample_rate, channels=1)
+                total_speaking_time += audio_segment.duration_seconds
         return total_speaking_time
 
     def read_wav(self, path):
         """Reads a .wav file.
         Takes the path, and returns (PCM audio data, sample rate).
         """
-        with contextlib.closing(wave.open(path, 'rb')) as wf:
-            num_channels = wf.getnchannels()
-            if num_channels != 1:
-                raise ValueError("Invalid number of channels")
-            sample_width = wf.getsampwidth()
-            if sample_width != 2:
-                raise ValueError("Invalid sample width")
-            sample_rate = wf.getframerate()
-            if sample_rate not in (8000, 16000, 32000, 48000):
-                raise ValueError("Invalid sample rate")
-            pcm_data = wf.readframes(wf.getnframes())
-            return pcm_data, sample_rate
+        try:
+            with contextlib.closing(wave.open(path, 'rb')) as wf:
+                num_channels = wf.getnchannels()
+                if num_channels != 1:
+                    raise ValueError("Invalid number of channels")
+                sample_width = wf.getsampwidth()
+                if sample_width != 2:
+                    raise ValueError("Invalid sample width")
+                sample_rate = wf.getframerate()
+                if sample_rate not in (8000, 16000, 32000, 48000):
+                    raise ValueError("Invalid sample rate")
+                pcm_data = wf.readframes(wf.getnframes())
+        except Exception as e:
+            logging.info(e)
+            logging.info(f"Could not read wav file: {path}. Setting PCM data to None and sample rate to 16000.")
+            pcm_data = None
+            sample_rate = 16000
+        return pcm_data, sample_rate
 
     def generate_frames(self, frame_duration_ms, audio, sample_rate):
         """Generates audio frames from PCM audio data.

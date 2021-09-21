@@ -135,8 +135,7 @@ if __name__ == "__main__":
         interaction_builder=interaction_builder,
         interface=interface,
         max_num_of_perseverance_readings=max_num_of_perseverance_readings,
-        max_num_of_spot_reading_attempts=max_num_of_spot_reading_attempts,
-        num_of_ssrt=num_of_ssrt
+        max_num_of_spot_reading_attempts=max_num_of_spot_reading_attempts
     )
 
     ros_interaction_manager = RosInteractionManager(

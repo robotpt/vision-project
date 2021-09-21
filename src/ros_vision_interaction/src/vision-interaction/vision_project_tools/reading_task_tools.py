@@ -71,9 +71,12 @@ def get_reading_task_id(statedb, task_type, difficulty_level=None):
     if task_type == Tasks.SRT:
         index = statedb.get(DatabaseKeys.SRT_READING_INDEX)
         result = list(tasks.keys())[index]
+    elif task_type == Tasks.IREST:
+        index = statedb.get(DatabaseKeys.IREST_READING_INDEX)
+        result = list(tasks.keys())[index]
     else:
-        for task in tasks.keys():
-            if tasks[task][TaskDataKeys.SCORE] is None:
+        for task in list(tasks.keys()):
+            if not tasks[task][TaskDataKeys.SCORE]:
                 possible_tasks.append(task)
         result = random.choice(possible_tasks)
     return result

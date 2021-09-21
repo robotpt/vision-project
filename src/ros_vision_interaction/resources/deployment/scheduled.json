@@ -303,18 +303,6 @@
         },
         "start_node_name": "retry"
     },
-    "ssrt evaluation": {
-        "nodes": {
-            "evaluation": {
-                "transitions": ["exit"],
-                "content": "*question_1*",
-                "options": ["Done", "Unable to read"],
-                "message_type": "multiple choice one column",
-                "result_db_key": "spot reading answer"
-            }
-        },
-        "start_node_name": "evaluation"
-    },
     "post SSRT": {
         "nodes": {
             "post SSRT": {
@@ -329,9 +317,9 @@
     "post IReST": {
         "nodes": {
             "post IReST": {
-                "transitions": ["exit", "post IReST"],
+                "transitions": ["exit", "exit","post IReST"],
                 "content": "{'var': 'post IReST', 'index': '{'db': 'IReST reading index'}'}",
-                "options": ["Next", "Replay"],
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -455,7 +443,7 @@
         "nodes": {
             "reminder": {
                 "transitions": ["exit", "reminder"],
-                "content": "I would really love to talk with you more than once a day and hope you can find some time to chat with me in addition to the scheduled time. You can just tap the tablet screen to wake me up at any time that works for you; I’m here for you. During an unscheduled session, you can read any of your own items or reading materials that you would like to share with me, so you won’t need to do any of the reading tests then. I bet you’ll find it enjoyable! I encourage you to give it a try whenever it’s a good time for you.",
+                "content": "I would really love to talk with you more than once a day and hope you can find some time to chat with me in addition to the scheduled time. You can just tap the tablet screen to wake me up at any time that works for you; I'm here for you. During an unscheduled session, you can read any of your own items or reading materials that you would like to share with me, so you won't need to do any of the reading tests then. I bet you'll find it enjoyable! I encourage you to give it a try whenever it's a good time for you.",
                 "options": ["Sounds good!", "Replay"],
                 "message_type": "multiple choice one column"
             }

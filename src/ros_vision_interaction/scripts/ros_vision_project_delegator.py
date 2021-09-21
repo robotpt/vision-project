@@ -166,7 +166,10 @@ class RosVisionProjectDelegator:
     def _node_name_callback(self, data):
         node_name = data.data
         rospy.loginfo(f"Current graph name: {node_name}")
-        if node_name == InteractionBuilder.Graphs.EVALUATION:
+        if node_name in [
+            InteractionBuilder.Graphs.EVALUATION,
+            InteractionBuilder.Graphs.SPOT_READING_EVAL
+        ]:
             rospy.loginfo(f"Publishing to record evaluation audio at {datetime.datetime.now()}")
             self._is_record_evaluation_publisher.publish(True)
             self._is_recording_evaluation = True
