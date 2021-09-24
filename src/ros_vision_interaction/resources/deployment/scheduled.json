@@ -368,7 +368,7 @@
         "nodes": {
             "reward": {
                 "transitions": ["exit", "reward"],
-                "content": "{'var': 'riddles'}",
+                "content": "Next, I have a riddle for you! {'var': 'riddles'}",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
