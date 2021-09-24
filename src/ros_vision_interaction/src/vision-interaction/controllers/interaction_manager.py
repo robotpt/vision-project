@@ -107,6 +107,10 @@ class InteractionManager:
 
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
 
+        if task_type == Tasks.IREST:
+            increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
+            self._set_new_task_info()
+
         if task_type == reading_task_tools.Tasks.SPOT_READING:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
@@ -125,7 +129,8 @@ class InteractionManager:
             "light": 4,
             "parallel": 3,
             "steady": 3,
-            "upside down": 1
+            "upside down": 1,
+            "no video": 5
         }
         return videos[video_name]
 
@@ -152,6 +157,10 @@ class InteractionManager:
         )
 
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
+
+        if task_type == Tasks.IREST:
+            increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
+            self._set_new_task_info()
 
         if task_type == reading_task_tools.Tasks.SPOT_READING:
             self._planner.insert(
@@ -272,14 +281,19 @@ class InteractionManager:
         increment_db_value(self._state_database, DatabaseKeys.READING_EVAL_INDEX)
         self._spot_reading_index = 0
         new_rating = self._state_database.get(DatabaseKeys.FEELINGS_INDEX)
-        self_ratings = self._state_database.get(DatabaseKeys.SELF_REPORTS)
         grit_feedback_index = 0
 
+        try:
+            # self_reports sometimes = None, even though it's set as []
+            len(self._state_database.get(DatabaseKeys.SELF_REPORTS))
+        except TypeError:
+            self._state_database.set(DatabaseKeys.SELF_REPORTS, [])
+        self_ratings = self._state_database.get(DatabaseKeys.SELF_REPORTS)
         if len(self_ratings) > 0:
             average_self_rating = sum(self_ratings) / len(self_ratings)
             if new_rating < average_self_rating:
                 grit_feedback_index = 1  # BETTER RATING
-            elif new_rating > average_self_rating:
+            if new_rating > average_self_rating:
                 grit_feedback_index = 2  # WORSE RATING
 
         self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
@@ -370,7 +384,6 @@ class InteractionManager:
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
                 post_hook=self._set_vars_after_interaction
             )
-            increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
         if task_type == reading_task_tools.Tasks.SRT:
             if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
                 self._planner.insert(
@@ -395,6 +408,10 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.LAST_SCORE, score)
 
         all_scores = reading_task_tools.get_all_scores(self._state_database)
+        try:
+            len(all_scores)
+        except TypeError:
+            all_scores = []
         if len(all_scores) == 0 or score > max(all_scores):
             self._state_database.set(DatabaseKeys.BEST_SCORE, score)
 
@@ -464,6 +481,7 @@ class InteractionManager:
                         post_hook=self._set_vars_after_interaction
                     )
                     increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
+                increment_db_value(self._state_database, DatabaseKeys.POST_SRT_INDEX)
 
             if task_type == Tasks.SPOT_READING:
                 self._spot_reading_attempts = 0
@@ -474,7 +492,6 @@ class InteractionManager:
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
                     post_hook=self._set_vars_after_interaction
                 )
-                increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
 
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD],
@@ -491,7 +508,6 @@ class InteractionManager:
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
                     post_hook=self._set_vars_after_interaction
                 )
-                increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
             self._set_new_task_info()
 
             self._planner.insert(
@@ -503,6 +519,7 @@ class InteractionManager:
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         if task_type == Tasks.SRT:
             if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
+                print(f"Post-IReST index: {self._state_database.get(DatabaseKeys.POST_SRT_INDEX)}")
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
                     post_hook=self._set_vars_after_interaction
@@ -512,7 +529,9 @@ class InteractionManager:
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
                 post_hook=self._set_vars_after_interaction
             )
-
+            if task_type == Tasks.IREST:
+                increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
+                self._set_new_task_info()
             if task_type == reading_task_tools.Tasks.SPOT_READING:
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
