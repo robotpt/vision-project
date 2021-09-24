@@ -504,7 +504,6 @@ class InteractionManager:
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         if task_type == Tasks.SRT:
             if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
-                print(f"Post-IReST index: {self._state_database.get(DatabaseKeys.POST_SRT_INDEX)}")
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
                     post_hook=self._set_vars_after_interaction

@@ -34,12 +34,12 @@ class ReadingEvaluator:
         self._vad.set_mode(3)
 
     def calculate_and_set_reading_score(self, audio_file_path):
-        print(f"Calculating reading score from: {audio_file_path}")
+        logging.info(f"Calculating reading score from: {audio_file_path}")
         total_speaking_time = self.get_total_speaking_time(audio_file_path)
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
 
         if self._state_database.get(DatabaseKeys.UNABLE_TO_READ) == "Unable to read":
-            print("Unable to read")
+            logging.info("Unable to read")
             reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.UNABLE_TO_READ, True)
             self._state_database.set(DatabaseKeys.UNABLE_TO_READ, False)
         else:
@@ -53,12 +53,12 @@ class ReadingEvaluator:
                 )
                 if total_speaking_time == 0:
                     logging.info("Total speaking time was 0, setting reading speed to 0")
-                    print("Total speaking time was 0, setting reading speed to 0")
+                    logging.info("Total speaking time was 0, setting reading speed to 0")
                     reading_speed = 0
                 else:
                     reading_speed = num_of_words / total_speaking_time
                     logging.info(f"Reading speed: {reading_speed}")
-                    print(f"Reading speed: {reading_speed}")
+                    logging.info(f"Reading speed: {reading_speed}")
             reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.SCORE, reading_speed)
         self._set_reading_scores()
 
@@ -67,7 +67,7 @@ class ReadingEvaluator:
         total_speaking_time = 0.0
         audio, sample_rate = self.read_wav(audio_file_path)
         if not audio:
-            print("No audio data, returning 0 for total speaking time")
+            logging.info("No audio data, returning 0 for total speaking time")
         else:
             frame_duration_ms = 30
             padding_duration_ms = 300
@@ -81,6 +81,7 @@ class ReadingEvaluator:
             for segment in voiced_segments:
                 audio_segment = AudioSegment(segment, sample_width=2, frame_rate=sample_rate, channels=1)
                 total_speaking_time += audio_segment.duration_seconds
+                logging.info(f"Adding speaking time: {audio_segment.duration_seconds}")
         return total_speaking_time
 
     def read_wav(self, path):
