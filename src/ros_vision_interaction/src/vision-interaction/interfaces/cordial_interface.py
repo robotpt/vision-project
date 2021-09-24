@@ -8,6 +8,9 @@ from interaction_engine.interfaces import Interface
 from interaction_engine.messager import Message
 
 
+ERROR_RESPONSE = "ERROR"
+
+
 class CordialInterface(Interface):
 
     def __init__(
@@ -58,10 +61,8 @@ class CordialInterface(Interface):
 
         response = self._cordial_action_client.get_result()
 
-        # if self._cordial_action_client.get_state() == actionlib.GoalStatus.PREEMPTED:
-        #     response = message.options[self._default_response_index]
-        # else:
-        #     response = self._cordial_action_client.get_result().data
+        if self._cordial_action_client.get_state() == actionlib.GoalStatus.PREEMPTED:
+            response = ERROR_RESPONSE
 
         return response.data
 
