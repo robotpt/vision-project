@@ -36,12 +36,27 @@ class VisionProjectDelegator:
 
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
+
         self.new_day_update()
 
     def update(self):
         if self._is_new_day():
             self.new_day_update()
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
+
+    def increment_system_date(self):
+        date_times = [
+            DatabaseKeys.FIRST_INTERACTION_DATETIME,
+            DatabaseKeys.LAST_INTERACTION_DATETIME,
+            DatabaseKeys.NEXT_CHECKIN_DATETIME
+        ]
+        for key in date_times:
+            previous_datetime = self._state_database.get(key)
+            self._state_database.set(key, self._decrement_date(previous_datetime))
+        self.new_day_update()
+
+    def _decrement_date(self, date_time):
+        return date_time - datetime.timedelta(days=1)
 
     def _is_new_day(self):
         return datetime.datetime.now().date() > self._state_database.get(DatabaseKeys.LAST_UPDATE_DATETIME).date()
@@ -74,6 +89,13 @@ class VisionProjectDelegator:
             else:
                 self._state_database.set(keys_to_check[key], 0)
             self._state_database.set(key, False)
+        # make sure there is a scheduled session
+        next_checkin_datetime = self._state_database.get(DatabaseKeys.NEXT_CHECKIN_DATETIME)
+        if next_checkin_datetime is not None and next_checkin_datetime.date() < datetime.datetime.now().date():
+            self._state_database.set(
+                DatabaseKeys.NEXT_CHECKIN_DATETIME,
+                next_checkin_datetime.replace(day=next_checkin_datetime.day + 1)
+            )
 
     def _update_act_variables(self):
         last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
@@ -150,8 +172,8 @@ class VisionProjectDelegator:
             datetime.datetime.now()
         )
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
-            not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
-            not is_in_scheduled_window
+               not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
+               not is_in_scheduled_window
 
     def _is_run_prompted_interaction(self):
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
