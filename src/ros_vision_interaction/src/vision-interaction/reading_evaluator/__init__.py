@@ -60,13 +60,14 @@ class ReadingEvaluator:
                     logging.info(f"Reading speed: {reading_speed}")
                     print(f"Reading speed: {reading_speed}")
             reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.SCORE, reading_speed)
+        self._set_reading_scores()
 
     def get_total_speaking_time(self, audio_file_path):
         """Reads a .wav file and returns the total length of speaking time (float)."""
         total_speaking_time = 0.0
         audio, sample_rate = self.read_wav(audio_file_path)
         if not audio:
-            logging.info("No audio data, returning 0 for total speaking time")
+            print("No audio data, returning 0 for total speaking time")
         else:
             frame_duration_ms = 30
             padding_duration_ms = 300
@@ -156,4 +157,18 @@ class ReadingEvaluator:
         # Yield any leftover frames
         if voiced_frames:
             yield b''.join([f.bytes for f in voiced_frames])
+
+    def _set_reading_scores(self):
+        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        score = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.SCORE)
+
+        self._state_database.set(DatabaseKeys.LAST_SCORE, score)
+
+        all_scores = reading_task_tools.get_all_scores(self._state_database)
+        try:
+            len(all_scores)
+        except TypeError:
+            all_scores = []
+        if len(all_scores) == 0 or score > max(all_scores):
+            self._state_database.set(DatabaseKeys.BEST_SCORE, score)
 

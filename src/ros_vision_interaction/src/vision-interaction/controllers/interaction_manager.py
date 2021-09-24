@@ -394,26 +394,11 @@ class InteractionManager:
             increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
 
         self._set_new_task_info()
-        self._set_reading_scores()
 
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
             post_hook=self._set_vars_after_post_eval
         )
-
-    def _set_reading_scores(self):
-        task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
-        score = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.SCORE)
-
-        self._state_database.set(DatabaseKeys.LAST_SCORE, score)
-
-        all_scores = reading_task_tools.get_all_scores(self._state_database)
-        try:
-            len(all_scores)
-        except TypeError:
-            all_scores = []
-        if len(all_scores) == 0 or score > max(all_scores):
-            self._state_database.set(DatabaseKeys.BEST_SCORE, score)
 
     def _set_vars_after_interaction(self):
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
