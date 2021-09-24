@@ -38,8 +38,10 @@ class ReadingEvaluator:
         total_speaking_time = self.get_total_speaking_time(audio_file_path)
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
 
-        if self._state_database.get(DatabaseKeys.UNABLE_TO_READ):
+        if self._state_database.get(DatabaseKeys.UNABLE_TO_READ) == "Unable to read":
+            print("Unable to read")
             reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.UNABLE_TO_READ, True)
+            self._state_database.set(DatabaseKeys.UNABLE_TO_READ, False)
         else:
             if task_id[0] == "3":  # SPOT READING
                 reading_speed = total_speaking_time

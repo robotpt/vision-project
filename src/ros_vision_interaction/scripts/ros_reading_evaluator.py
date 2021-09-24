@@ -53,7 +53,8 @@ class RosReadingEvaluator:
                 self._extension,
                 self._file_prefix
             )
-            self._reading_evaluator.calculate_and_set_reading_score(audio_file)
+            if audio_file:
+                self._reading_evaluator.calculate_and_set_reading_score(audio_file)
 
     def find_audio_file(
             self,
