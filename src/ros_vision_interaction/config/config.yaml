@@ -5,6 +5,7 @@ mongodb:
   collection_name: "state_db"
 vision-project:
   controllers:
+    is_beta_testing: True
     is_debug: False
     update_window_seconds: 5
     minutes_between_interactions: 5

@@ -7,7 +7,7 @@ import os
 import rospy
 import typing
 
-from std_msgs.msg import String
+from std_msgs.msg import Bool, String
 
 
 TOKEN = os.environ["DISCORD_TOKEN"]
@@ -31,6 +31,7 @@ class RosDiscordCog(commands.Cog):
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
         score_topic = rospy.get_param("discord/score")
+        new_day_topic = rospy.get_param("discord/new_day")
         self._pick_publisher = rospy.Publisher(pick_topic, String, queue_size=1)
         self._choices_subscriber = rospy.Subscriber(
             choices_topic,
@@ -39,6 +40,7 @@ class RosDiscordCog(commands.Cog):
             queue_size=1,
         )
         self._score_publisher = rospy.Publisher(score_topic, String, queue_size=1)
+        self._new_day_publisher = rospy.Publisher(new_day_topic, Bool, queue_size=1)
         self._background_task = self._bot.loop.create_task(
             self._send_message_on_new_choices()
         )
@@ -117,10 +119,6 @@ class RosDiscordCog(commands.Cog):
     )
     async def send_score(self, message):
 
-        if self._choices is None:
-            await message.channel.send("Oops, nothing for you to pick.")
-            return
-
         await message.channel.send(
             "Please enter the reading task ID and score separated by a comma and no spaces (EX: 200,35)."
         )
@@ -128,7 +126,7 @@ class RosDiscordCog(commands.Cog):
         def is_correct(m):
             return (
                     m.author == message.author
-                    and not (" " in m)
+                    and not (" " in m.content)
             )
 
         try:
@@ -140,6 +138,13 @@ class RosDiscordCog(commands.Cog):
                 "Sorry, you took too long. Please re-enter the command."
             )
         self._send_score(score.content)
+        await message.channel.send("Great, thank you.")
+
+    @commands.command(
+        name="new_day", help="Pick from a set of choices when they're available"
+    )
+    async def set_new_day(self, message):
+        self._new_day_publisher.publish(True)
         await message.channel.send("Great, thank you.")
 
     def _send_score(self, score: str):

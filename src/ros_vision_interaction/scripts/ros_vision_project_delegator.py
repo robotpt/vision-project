@@ -50,6 +50,7 @@ class RosVisionProjectDelegator:
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
         score_topic = rospy.get_param("discord/score")
+        new_day_topic = rospy.get_param("discord/new_day")
         self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)
         self._is_record_evaluation_publisher = rospy.Publisher(is_record_evaluation_topic, Bool, queue_size=1)
         self._is_record_perseverance_publisher = rospy.Publisher(is_record_perseverance_topic, Bool, queue_size=1)
@@ -78,6 +79,12 @@ class RosVisionProjectDelegator:
             callback=self._discord_score_callback,
             queue_size=1
         )
+        self._new_day_subscriber = rospy.Subscriber(
+            new_day_topic,
+            Bool,
+            callback=self._discord_new_day_callback,
+            queue_size=1
+        )
 
         # update scheduler
         self._scheduler = schedule.Scheduler()
@@ -91,6 +98,13 @@ class RosVisionProjectDelegator:
             "vision-project/controllers/is_debug",
             False
         )
+
+        self._is_beta_testing = rospy.get_param(
+            "vision-project/controllers/is_beta_testing",
+            False
+        )
+        if self._is_beta_testing:
+            rospy.loginfo("Running in beta testing mode")
 
     def run_scheduler_once(self):
         self._scheduler.run_pending()
@@ -163,6 +177,11 @@ class RosVisionProjectDelegator:
             score
         )
 
+    def _discord_new_day_callback(self, _):
+        if self._is_beta_testing:
+            rospy.loginfo("Incrementing system date")
+            self._delegator.increment_system_date()
+
     def _node_name_callback(self, data):
         node_name = data.data
         rospy.loginfo(f"Current graph name: {node_name}")
@@ -173,7 +192,11 @@ class RosVisionProjectDelegator:
             rospy.loginfo(f"Publishing to record evaluation audio at {datetime.datetime.now()}")
             self._is_record_evaluation_publisher.publish(True)
             self._is_recording_evaluation = True
-        if node_name == InteractionBuilder.Graphs.POST_EVALUATION:
+        if node_name in [
+            InteractionBuilder.Graphs.POST_EVALUATION,
+            InteractionBuilder.Graphs.POST_IREST,
+            InteractionBuilder.Graphs.POST_SSRT,
+        ]:
             rospy.loginfo(f"Publishing to stop evaluation audio recording at {datetime.datetime.now()}")
             self._is_record_evaluation_publisher.publish(False)
             self._is_recording_evaluation = False
