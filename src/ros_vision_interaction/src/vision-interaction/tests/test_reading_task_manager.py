@@ -35,7 +35,9 @@ def test_get_current_reading_task_type(statedb):
     ]
     for i, date in enumerate(dates):
         with freezegun.freeze_time(date):
-            assert reading_task_tools.get_current_reading_task_type(statedb) in expected_task_types[i]
+            statedb.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
+            task_type = reading_task_tools.get_current_reading_task_type(statedb)
+            assert task_type in expected_task_types[i]
 
 
 def test_get_current_reading_task_id(statedb):
