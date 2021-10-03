@@ -113,7 +113,7 @@ class RosVisionProjectDelegator:
         if not self._state_database.get(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY):
             self._format_and_publish_choices()
             self._state_database.set(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY, True)
-        rospy.loginfo("Running update")
+        # rospy.loginfo("Running update")
         self._delegator.update()
         interaction_type = self._delegator.get_interaction_type()
         if interaction_type is not None:

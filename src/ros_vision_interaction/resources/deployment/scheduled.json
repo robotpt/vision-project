@@ -2,9 +2,9 @@
     "scheduled ask to chat": {
         "nodes": {
             "ask to chat": {
-                "transitions": ["exit", "exit", "ask to chat"],
+                "transitions": ["exit", "exit"],
                 "content": "{'var': 'scheduled ask to chat'}",
-                "options": ["Yes", "No", "Replay"],
+                "options": ["Yes", "No"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "good to chat"
             }
@@ -33,9 +33,9 @@
     "plan next checkin": {
         "nodes": {
             "plan next checkin": {
-                "transitions": ["how many hours", "set tomorrow's time", "plan next checkin"],
+                "transitions": ["how many hours", "set tomorrow's time"],
                 "content": "{'var': 'plan next checkin'}",
-                "options": ["Later today", "Set a time for tomorrow", "Replay"],
+                "options": ["Later today", "Set a time for tomorrow"],
                 "message_type": "multiple choice one column"
             },
             "how many hours": {
@@ -84,15 +84,15 @@
                 "message_type": "multiple choice one column"
             },
             "joke 1": {
-                "transitions": ["did you use magnifier", "joke 1"],
+                "transitions": ["did you use magnifier"],
                 "content": "{'var': 'joke'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "how do you feel about vision": {
-                "transitions": ["frustrated response", "no concerns response", "how do you feel about vision"],
+                "transitions": ["frustrated response", "no concerns response"],
                 "content": "How do you feel about your vision right now?",
-                "options": ["Frustrated", "No concerns", "Replay"],
+                "options": ["Frustrated", "No concerns"],
                 "message_type": "multiple choice one column"
             },
             "frustrated response": {
@@ -102,21 +102,21 @@
                 "message_type": "multiple choice one column"
             },
             "no concerns response": {
-                "transitions": ["how was magnifier use", "no concerns response"],
+                "transitions": ["how was magnifier use"],
                 "content": "{'var': 'no concerns response'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "joke 2": {
-                "transitions": ["did you use magnifier", "joke 2"],
+                "transitions": ["did you use magnifier"],
                 "content": "{'var': 'joke'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "did you use magnifier": {
-                "transitions": ["keep trying", "how was magnifier use", "did you use magnifier"],
+                "transitions": ["keep trying", "how was magnifier use"],
                 "content": "{'var': 'did you use magnifier'}",
-                "options": ["No", "Yes", "Replay"],
+                "options": ["No", "Yes"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "is used magnifier today"
             },
@@ -131,26 +131,26 @@
                     "how was magnifier use"
                 ],
                 "content": "{'db': 'user name', 'default value': ''}, how is it going with your magnifier?",
-                "options": ["0", "2", "4", "6", "8", "10", "Replay"],
+                "options": ["10", "8", "6", "4", "2", "0", "Replay"],
                 "message_type": "image",
-                "args": ["https://drive.google.com/uc?export=view&id=1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m"]
+                "args": ["https://drive.google.com/uc?export=view&id=1p9IkFzCCIqsdgdhAvVefK2E1d0lPObcO"]
             },
             "excellent": {
-                "transitions": ["exit", "excellent"],
+                "transitions": ["exit"],
                 "content": "{'var': 'excellent response'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "good": {
-                "transitions": ["exit", "good"],
+                "transitions": ["exit"],
                 "content": "{'var': 'good response'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "fair": {
-                "transitions": ["exit", "fair"],
+                "transitions": ["exit"],
                 "content": "{'var': 'fair response'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "poor": {
@@ -225,15 +225,15 @@
                 "message_type": "multiple choice one column"
             },
             "that was great": {
-                "transitions": ["schedule", "that was great"],
+                "transitions": ["schedule"],
                 "content": "That was {'var': 'great'}!",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "schedule": {
-                "transitions": "talk again later",
+                "transitions": ["talk again later", "schedule"],
                 "content": "Let's schedule a time to {'var': 'chat'} tomorrow. When is good for you?",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "time entry",
 				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
                 "result_db_key": "next checkin datetime"
@@ -250,9 +250,9 @@
     "introduce evaluation": {
         "nodes": {
             "check": {
-                "transitions": ["exit"],
-                "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Enter the number in the keypad.",
-                "options": ["Next"],
+                "transitions": ["exit", "introduce evaluation"],
+                "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Please confirm the envelope number that I just said by typing it on the screen. Then you may open the envelope, and hit the next button when you are ready to start reading with your magnifier.",
+                "options": ["Next", "Replay"],
                 "message_type": "numpad",
                 "tests": "check reading id",
                 "error_message": "Please enter the correct ID.",
@@ -265,7 +265,7 @@
         "nodes": {
             "evaluation": {
                 "transitions": ["exit"],
-                "content": "*question_1*",
+                "content": "Go ahead and open the envelope, read the content aloud while using your magnifier, then tap 'Next'.",
                 "options": ["Done", "Unable to read"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "unable to read"
@@ -277,7 +277,7 @@
         "nodes": {
             "evaluation": {
                 "transitions": ["exit"],
-                "content": "*question_1*",
+                "content": "Please follow the instructions on the paper.",
                 "options": ["Done", "Unable to read"],
                 "message_type": "numpad",
                 "result_db_key": "spot reading answer"
@@ -288,14 +288,14 @@
     "retry spot reading": {
         "nodes": {
             "retry": {
-                "transitions": ["evaluation"],
+                "transitions": ["evaluation", "retry"],
                 "content": "Can you read that again and try another answer?",
-                "options": ["Next"],
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "evaluation": {
                 "transitions": ["exit"],
-                "content": "*question_1*",
+                "content": "Please follow the instructions on the paper.",
                 "options": ["Next", "Unable to read"],
                 "message_type": "numpad",
                 "result_db_key": "spot reading answer"
@@ -307,7 +307,7 @@
         "nodes": {
             "post SSRT": {
                 "transitions": ["exit", "post SSRT"],
-                "content": "{'var': 'post SSRT', 'index': '{'db': 'post SRT index'}'}",
+                "content": "Related to the story you just read...{'var': 'post SSRT', 'index': '{'db': 'post SRT index'}'}",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
@@ -317,7 +317,7 @@
     "post IReST": {
         "nodes": {
             "post IReST": {
-                "transitions": ["exit", "exit","post IReST"],
+                "transitions": ["exit", "exit", "post IReST"],
                 "content": "{'var': 'post IReST', 'index': '{'db': 'IReST reading index'}'}",
                 "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column"
@@ -337,14 +337,14 @@
                     "ask for spoken self report",
                     "chart self report"
                 ],
-                "content": "Tell me, how did you think you did on that reading task?",
-                "options": ["0", "2", "4", "6", "8", "10", "Replay"],
+                "content": "Tell me, how do you think you did on that reading task?",
+                "options": ["10", "8", "6", "4", "2", "0", "Replay"],
                 "message_type": "image",
-                "args": ["https://drive.google.com/uc?export=view&id=1u3mzYC9FMJqnoEWPCxNbUvHUjHjj9o6m"],
+                "args": ["https://drive.google.com/uc?export=view&id=1p9IkFzCCIqsdgdhAvVefK2E1d0lPObcO"],
                  "result_db_key": "feelings index"
             },
             "ask for spoken self report": {
-                "transitions": ["spoken self report", "exit", "ask for spoken self report"],
+                "transitions": ["spoken self report", "grit feedback", "ask for spoken self report"],
                 "content": "Really? Care to tell me more?",
                 "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column"
@@ -356,9 +356,9 @@
                 "message_type": "multiple choice one column"
             },
             "grit feedback": {
-                "transitions": ["exit", "grit feedback"],
+                "transitions": ["exit"],
                 "content": "{'var': 'grit feedback', 'index': '{'db': 'grit feedback index'}'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -367,9 +367,9 @@
     "reward": {
         "nodes": {
             "reward": {
-                "transitions": ["exit", "reward"],
+                "transitions": ["exit"],
                 "content": "Next, I have a riddle for you! {'var': 'riddles'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -384,9 +384,9 @@
                 "message_type": "multiple choice one column"
             },
             "gave up": {
-                "transitions": ["exit", "gave up"],
+                "transitions": ["exit"],
                 "content": "{'var': 'poor response'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -395,7 +395,7 @@
     "ask to do perseverance": {
         "nodes": {
             "ask to do perseverance": {
-                "transitions": ["exit", "exit","ask to do perseverance"],
+                "transitions": ["exit", "exit", "ask to do perseverance"],
                 "content": "{'var': 'perseverance'}",
                 "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
@@ -419,7 +419,7 @@
     "is continue perseverance": {
         "nodes": {
             "is continue perseverance": {
-                "transitions": ["exit","exit"],
+                "transitions": ["exit", "exit"],
                 "content": "Would you like to continue reading?",
                 "options": ["Continue", "Stop"],
                 "message_type": "multiple choice one column",
