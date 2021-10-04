@@ -94,10 +94,18 @@ class InteractionManager:
                 self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
+                    post_hook=self._set_vars_after_interaction
                 )
             else:
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.NO_FEEDBACK_VIDEO],
+                    post_hook=self._set_vars_after_interaction
+                )
+            if self._state_database.get(DatabaseKeys.LAST_SCORE) is not None and \
+                    self._state_database.get(DatabaseKeys.BEST_SCORE) is not None:
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.LAST_EVALUATION],
+                    post_hook=self._set_vars_after_interaction
                 )
 
         self._planner.insert(

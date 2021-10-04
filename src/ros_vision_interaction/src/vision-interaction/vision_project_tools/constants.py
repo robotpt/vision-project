@@ -30,10 +30,12 @@ class DatabaseKeys:
     ACT_RATINGS = "act ratings"
     ASK_IF_GIVEN_UP = "ask if given up"
     BEST_SCORE = "best score"
+    BEST_SCORES = "best scores"
     CURRENT_EVAL_SCORE = "current eval score"
     CURRENT_READING_COLOR = "current reading color"
     CURRENT_READING_ID = "current reading id"
     CURRENT_READING_INDEX = "current reading index"
+    CURRENT_READING_TYPE = "current reading type"
     DAYS_WITHOUT_MAGNIFIER = "days without magnifier"
     DID_USE_MAGNIFIER = "did use magnifier"
     # DIFFICULTY_LEVEL = "difficulty level"
@@ -64,6 +66,7 @@ class DatabaseKeys:
     LAST_INTERACTION_DATETIME = "last interaction datetime"
     LAST_UPDATE_DATETIME = "last update datetime"
     LAST_SCORE = "last score"
+    LAST_SCORES = "last scores"
     FEELINGS_INDEX = "feelings index"
     MINDFULNESS_INDEX = "mindfulness index"
     MINDFULNESS_RATING = "mindfulness rating"
@@ -101,10 +104,18 @@ INITIAL_STATE_DB = {
     DatabaseKeys.ACT_RATINGS: {},
     DatabaseKeys.ASK_IF_GIVEN_UP: False,
     DatabaseKeys.BEST_SCORE: None,
+    DatabaseKeys.BEST_SCORES: {
+        "IReST": None,
+        "MNread": None,
+        "SKread": None,
+        "spot reading": None,
+        "SRT": None
+    },
     DatabaseKeys.CURRENT_EVAL_SCORE: 0,
     DatabaseKeys.CURRENT_READING_COLOR: None,
     DatabaseKeys.CURRENT_READING_ID: None,
     DatabaseKeys.CURRENT_READING_INDEX: 0,
+    DatabaseKeys.CURRENT_READING_TYPE: None,
     DatabaseKeys.DAYS_WITHOUT_MAGNIFIER: 0,
     DatabaseKeys.DID_USE_MAGNIFIER: True,
     # DatabaseKeys.DIFFICULTY_LEVEL: "1",
@@ -143,6 +154,13 @@ INITIAL_STATE_DB = {
     DatabaseKeys.LAST_INTERACTION_DATETIME: None,
     DatabaseKeys.LAST_UPDATE_DATETIME: None,
     DatabaseKeys.LAST_SCORE: None,
+    DatabaseKeys.LAST_SCORES: {
+        "IReST": None,
+        "MNread": None,
+        "SKread": None,
+        "spot reading": None,
+        "SRT": None
+    },
     DatabaseKeys.FEELINGS_INDEX: None,
     DatabaseKeys.MINDFULNESS_INDEX: 0,
     DatabaseKeys.MINDFULNESS_RATING: 0,

@@ -30,6 +30,7 @@ class InteractionBuilder:
         INTRODUCE_EVALUATION = "introduce evaluation"
         INTRODUCE_MINDFULNESS = "introduce mindfulness"
         INTRODUCE_QT = "introduce QT"
+        LAST_EVALUATION = "last evaluation"
         MINDFULNESS_BODY_SCAN = "mindfulness body"
         MINDFULNESS_BREATHING = "mindfulness breathing"
         MINDFULNESS_DRINKING = "mindfulness drinking"
@@ -69,6 +70,7 @@ class InteractionBuilder:
             INTRODUCE_EVALUATION,
             INTRODUCE_MINDFULNESS,
             INTRODUCE_QT,
+            LAST_EVALUATION,
             MINDFULNESS_BODY_SCAN,
             MINDFULNESS_BREATHING,
             MINDFULNESS_DRINKING,

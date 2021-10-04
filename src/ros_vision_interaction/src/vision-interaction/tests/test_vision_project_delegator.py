@@ -6,6 +6,7 @@ import pytest
 
 from controllers import VisionProjectDelegator
 from vision_project_tools.constants import DatabaseKeys, Interactions
+from vision_project_tools import reading_task_tools
 
 
 @pytest.fixture
@@ -180,12 +181,13 @@ def test_new_day_update(vision_project_delegator, statedb):
         ]
     ]
     for period in test_periods:
-        index = None
         vision_project_delegator._reset_database()
+        task_type = reading_task_tools.get_current_reading_task_type(statedb)
+        statedb.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
         # day 1
         with freezegun.freeze_time(period[0]):
             statedb.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
-            index = (datetime.datetime.now().weekday()) % 6
+            index = 0
             vision_project_delegator.update()
             first_interaction_datetime = datetime.datetime(2021, 3, 15, 2, 0, 0, 0)
             statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)
@@ -378,10 +380,12 @@ def test_reading_evaluator(vision_project_delegator, statedb):
     ]
     for period in test_periods:
         vision_project_delegator._reset_database()
+        task_type = reading_task_tools.get_current_reading_task_type(statedb)
+        statedb.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
         # day 1
         with freezegun.freeze_time(period[0]):
             statedb.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
-            index = datetime.datetime.now().weekday()
+            index = 0
             vision_project_delegator.update()
             first_interaction_datetime = datetime.datetime(2021, 3, 15, 2, 0, 0, 0)
             statedb.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, first_interaction_datetime)

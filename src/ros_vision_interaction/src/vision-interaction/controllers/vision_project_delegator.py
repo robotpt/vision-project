@@ -36,6 +36,8 @@ class VisionProjectDelegator:
 
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
+        task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
+        self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
 
         self.new_day_update()
 
@@ -62,20 +64,15 @@ class VisionProjectDelegator:
         return datetime.datetime.now().date() > self._state_database.get(DatabaseKeys.LAST_UPDATE_DATETIME).date()
 
     def new_day_update(self):
+        self._daily_reading_task_data_update()
         self._daily_state_update()
         self._update_act_variables()
-        self._daily_reading_task_data_update()
         self._state_database.set(DatabaseKeys.NUM_OF_PROMPTED_TODAY, 0)
         self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
         self._state_database.set(DatabaseKeys.FEELINGS_INDEX, None)
         self._state_database.set(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY, False)
 
     def _daily_state_update(self):
-        # update reading task index if reading task has been done
-        if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
-            current_index = self._state_database.get(DatabaseKeys.CURRENT_READING_INDEX)
-            new_index = (current_index + 1) % 6
-            self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, new_index)
         keys_to_check = {
             DatabaseKeys.IS_DONE_EVAL_TODAY: DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL,
             DatabaseKeys.IS_DONE_PROMPTED_TODAY: DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT,
@@ -105,21 +102,49 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.LAST_5_EVAL_SCORES, last_5_scores)
 
     def _daily_reading_task_data_update(self):
-        # last_5_scores = self._state_database.get(DatabaseKeys.LAST_5_EVAL_SCORES)
-        # average_score = sum(last_5_scores)/len(last_5_scores)
-        # current_score = self._state_database.get(DatabaseKeys.CURRENT_EVAL_SCORE)
-        grit_feedback_index = 0  # STABLE, default value for first reading task
-        # if current_score is not None:
-        #     if current_score < average_score - self._score_window:
-        #         grit_feedback_index = 1  # DECLINED
-        #     elif current_score > average_score + self._score_window:
-        #         grit_feedback_index = 2  # IMPROVED
-        # self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
         # set reading task data for the new day
-        task_id = reading_task_tools.get_new_day_reading_task(self._state_database)
-        self._state_database.set(DatabaseKeys.CURRENT_READING_ID, task_id)
-        task_color = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.COLOR)
+        current_type = self._state_database.get(DatabaseKeys.CURRENT_READING_TYPE)
+        current_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
+        current_score = reading_task_tools.get_reading_task_data_value(
+            self._state_database,
+            current_id,
+            reading_task_tools.TaskDataKeys.ANNOTATOR_SCORE
+        )
+        if current_score is None:
+            current_score = reading_task_tools.get_reading_task_data_value(
+                self._state_database,
+                current_id,
+                reading_task_tools.TaskDataKeys.SCORE
+            )
+        best_scores = self._state_database.get(DatabaseKeys.BEST_SCORES)
+        last_scores = self._state_database.get(DatabaseKeys.LAST_SCORES)
+
+        try:
+            if current_score > best_scores[current_type]:
+                best_scores[current_type] = current_score
+                self._state_database.set(DatabaseKeys.BEST_SCORES, best_scores)
+            last_scores[current_type] = current_score
+            self._state_database.set(DatabaseKeys.LAST_SCORES, last_scores)
+        except TypeError:
+            logging.info("Last and best scores are not set, skipping update")
+
+        # update reading task index if reading task has been done
+        if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+            current_index = self._state_database.get(DatabaseKeys.CURRENT_READING_INDEX)
+            new_index = (current_index + 1) % 6
+            self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, new_index)
+
+        new_id = reading_task_tools.get_new_day_reading_task(self._state_database)
+        self._state_database.set(DatabaseKeys.CURRENT_READING_ID, new_id)
+        task_color = reading_task_tools.get_reading_task_data_value(self._state_database, new_id, TaskDataKeys.COLOR)
         self._state_database.set(DatabaseKeys.CURRENT_READING_COLOR, task_color)
+
+        # set values needed for QT evaluation feedback
+        new_type = reading_task_tools.get_current_reading_task_type(self._state_database)
+        last_score = self._state_database.get(DatabaseKeys.LAST_SCORES)[new_type]
+        best_score = self._state_database.get(DatabaseKeys.BEST_SCORES)[new_type]
+        self._state_database.set(DatabaseKeys.LAST_SCORE, last_score)
+        self._state_database.set(DatabaseKeys.BEST_SCORE, best_score)
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")

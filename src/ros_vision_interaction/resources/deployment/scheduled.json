@@ -261,6 +261,17 @@
         },
         "start_node_name": "check"
     },
+    "last evaluation": {
+        "nodes": {
+            "last evaluation": {
+                "transitions": ["exit", "last evaluation"],
+                "content": "The last time you did this reading test, your score was {'db': 'last score', 'default value': 'N/A'} and your best score ever was {'db': 'best score', 'default value': 'N/A'}. Let's see if you can beat that today!",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "last evaluation"
+    },
     "evaluation": {
         "nodes": {
             "evaluation": {
