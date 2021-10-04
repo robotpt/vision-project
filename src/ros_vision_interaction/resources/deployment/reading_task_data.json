@@ -1,128 +1,128 @@
 {
     "IReST": {
-        "501": {"word count": 173, "score": 0, "annotator_score": null,
+        "501": {"word count": 173, "score": null, "annotator_score": null,
                 "color": "blue", "unable to read": "False", "is scheduled": null},
-        "502": {"word count": 178, "score": 0, "annotator_score": null,
+        "502": {"word count": 178, "score": null, "annotator_score": null,
                 "color": "blue", "unable to read": "False", "is scheduled": null},
-        "503": {"word count": 173, "score": 0, "annotator_score": null,
+        "503": {"word count": 173, "score": null, "annotator_score": null,
                 "color": "blue", "unable to read": "False", "is scheduled": null},
-        "504": {"word count": 172, "score": 0, "annotator_score": null,
+        "504": {"word count": 172, "score": null, "annotator_score": null,
                 "color": "blue", "unable to read": "False", "is scheduled": null},
-        "505": {"word count": 153, "score": 0, "annotator_score": null,
+        "505": {"word count": 153, "score": null, "annotator_score": null,
                 "color": "blue", "unable to read": "False", "is scheduled": null},
-        "506": {"word count": 175, "score": 0, "annotator_score": null,
+        "506": {"word count": 175, "score": null, "annotator_score": null,
                 "color": "blue", "unable to read": "False", "is scheduled": null}
     },
     "MNread": {
-        "100": {"word count": 67, "score": 0, "annotator_score": null,
+        "100": {"word count": 67, "score": null, "annotator_score": null,
                 "color": "yellow", "unable to read": "False", "is scheduled": null},
-        "101": {"word count": 67, "score": 0, "annotator_score": null,
+        "101": {"word count": 67, "score": null, "annotator_score": null,
                 "color": "yellow", "unable to read": "False", "is scheduled": null}
     },
     "SKread": {
-        "200": {"word count": 67, "score": 0, "color": "red", "unable to read": "False", "is scheduled": null},
-        "201": {"word count": 67, "score": 0, "color": "red", "unable to read": "False", "is scheduled": null}
+        "200": {"word count": 67, "score": null, "color": "red", "unable to read": "False", "is scheduled": null},
+        "201": {"word count": 67, "score": null, "color": "red", "unable to read": "False", "is scheduled": null}
     },
     "spot reading": {
         "300": {
-            "answer": ["345582553529950"], "score": 0, "annotator_score": null,
+            "answer": ["345582553529950"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "301": {
-            "answer": ["06/19"], "score": 0, "annotator_score": null,
+            "answer": ["06/19"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "302": {
-            "answer": ["18007721213"], "score": 0, "annotator_score": null,
+            "answer": ["18007721213"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "309": {
-            "answer": ["6", "2", "15", "415", "45", "350"], "score": 0, "annotator_score": null,
+            "answer": ["6", "2", "15", "415", "45", "350"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "310": {
-            "answer": ["3", "37", "27"], "score": 0, "annotator_score": null,
+            "answer": ["3", "37", "27"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "311": {
-            "answer": ["3.84"], "score": 0, "annotator_score": null,
+            "answer": ["3.84"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "303": {
-            "answer": ["349772827724463"], "score": 0, "annotator_score": null,
+            "answer": ["349772827724463"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "304": {
-            "answer": ["1078.70", "0"], "score": 0, "annotator_score": null,
+            "answer": ["1078.70", "0"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "305": {
-            "answer": ["400", "40"], "score": 0, "annotator_score": null,
+            "answer": ["400", "40"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "312": {
-            "answer": ["5", "5", "0", "0"], "score": 0, "annotator_score": null,
+            "answer": ["5", "5", "0", "0"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "313": {
-            "answer": ["48", "9"], "score": 0, "annotator_score": null,
+            "answer": ["48", "9"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "314": {
-            "answer": ["15", "8", "380"], "score": 0, "annotator_score": null,
+            "answer": ["15", "8", "380"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "306": {
-            "answer": ["1335335854743211", "09/23"], "score": 0, "annotator_score": null,
+            "answer": ["1335335854743211", "09/23"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "307": {
-            "answer": ["2018", "7", "21"], "score": 0, "annotator_score": null,
+            "answer": ["2018", "7", "21"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "308": {
-            "answer": ["4", "11", "10", "15"], "score": 0, "annotator_score": null,
+            "answer": ["4", "11", "10", "15"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "315": {
-            "answer": ["60", "312.223.0197", "0", "06.27.19"], "score": 0, "annotator_score": null,
+            "answer": ["60", "312.223.0197", "0", "06.27.19"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "316": {
-            "answer": ["3.91", "4/15/2013"], "score": 0, "annotator_score": null,
+            "answer": ["3.91", "4/15/2013"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "317": {
-            "answer": ["5", "3", "12"], "score": 0, "annotator_score": null,
+            "answer": ["5", "3", "12"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         }
     },
     "SRT": {
-        "400": {"word count": 217, "score": 0, "annotator_score": null,
+        "400": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "401": {"word count": 217, "score": 0, "annotator_score": null,
+        "401": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "402": {"word count": 217, "score": 0, "annotator_score": null,
+        "402": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "403": {"word count": 217, "score": 0, "annotator_score": null,
+        "403": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "404": {"word count": 217, "score": 0, "annotator_score": null,
+        "404": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "405": {"word count": 217, "score": 0, "annotator_score": null,
+        "405": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "406": {"word count": 217, "score": 0, "annotator_score": null,
+        "406": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "407": {"word count": 217, "score": 0, "annotator_score": null,
+        "407": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "408": {"word count": 217, "score": 0, "annotator_score": null,
+        "408": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "409": {"word count": 217, "score": 0, "annotator_score": null,
+        "409": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "410": {"word count": 217, "score": 0, "annotator_score": null,
+        "410": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "411": {"word count": 217, "score": 0, "annotator_score": null,
+        "411": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null},
-        "412": {"word count": 100, "score": 0, "annotator_score": null,
+        "412": {"word count": 217, "score": null, "annotator_score": null,
                 "color": "gray", "unable to read": "False", "is scheduled": null}
     }
 }
