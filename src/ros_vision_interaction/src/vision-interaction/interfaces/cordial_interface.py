@@ -6,9 +6,7 @@ from cordial_msgs.msg import AskOnGuiAction, AskOnGuiGoal
 
 from interaction_engine.interfaces import Interface
 from interaction_engine.messager import Message
-
-
-ERROR_RESPONSE = "ERROR"
+from vision_project_tools.constants import ERROR_RESPONSE
 
 
 class CordialInterface(Interface):

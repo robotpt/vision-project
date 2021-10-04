@@ -2,6 +2,9 @@ import json
 import os
 
 
+ERROR_RESPONSE = "ERROR"
+
+
 class Interactions:
 
     ASK_TO_DO_SCHEDULED = "ask to do scheduled"
