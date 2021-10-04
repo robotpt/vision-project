@@ -49,6 +49,7 @@ def test_get_current_reading_task_id(statedb):
             #         return reading_task_data[task_type][difficulty_level][task_id]["score"] is not None
             if task_id in reading_task_data[task_type].keys():
                 return reading_task_data[task_type][task_id]["score"] is not None
+        return False
 
     dates = [
         "2021-07-11 00:00:00",
