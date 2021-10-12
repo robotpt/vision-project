@@ -2,7 +2,7 @@
     <arg name="is_launch_controllers" default="true"/>
     <arg name="is_launch_evaluator" default="true"/>
     <arg name="is_launch_discord" default="true"/>
-    <arg name="aws_voice_name" default="Justin"/>
+    <arg name="aws_voice_name" default="Joanna"/>
     <arg name="face_port" default="8081"/>
     <arg name="gui_port" default="8082"/>
     <arg name="is_launch_sound_listener" default="false"/>

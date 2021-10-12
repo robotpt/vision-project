@@ -60,6 +60,7 @@ class ReadingEvaluator:
                     logging.info(f"Reading speed: {reading_speed}")
                     logging.info(f"Reading speed: {reading_speed}")
             reading_task_tools.set_reading_task_value(self._state_database, task_id, TaskDataKeys.SCORE, reading_speed)
+            print(f"----- Reading score: {reading_speed} -----")
         self._set_reading_scores()
 
     def get_total_speaking_time(self, audio_file_path):

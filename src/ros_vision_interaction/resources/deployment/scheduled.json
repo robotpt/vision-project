@@ -250,9 +250,9 @@
     "introduce evaluation": {
         "nodes": {
             "check": {
-                "transitions": ["exit", "check"],
+                "transitions": ["exit"],
                 "content": "Please get your magnifier and the next reading task labeled {'db': 'current reading id', 'default value': 'N/A'} in the {'db': 'current reading color', 'default value': 'N/A'} envelope. Please confirm the envelope number that I just said by typing it on the screen. Then you may open the envelope, and hit the next button when you are ready to start reading with your magnifier.",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "numpad",
                 "tests": "check reading id",
                 "error_message": "Please enter the correct ID.",

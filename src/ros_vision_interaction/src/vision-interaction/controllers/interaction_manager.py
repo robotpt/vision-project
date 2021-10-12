@@ -78,6 +78,7 @@ class InteractionManager:
         elif interaction_type == Interactions.TOO_MANY_PROMPTED:
             self._build_too_many_prompted()
         elif interaction_type == Interactions.EVALUATION:
+            self._state_database.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, datetime.datetime.now())
             self._build_evaluation()
         else:
             raise ValueError("Not a valid interaction type")
@@ -171,6 +172,7 @@ class InteractionManager:
             self._set_new_task_info()
 
         if task_type == reading_task_tools.Tasks.SPOT_READING:
+            self._set_new_task_info()
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
                 post_hook=self._set_vars_after_spot_reading_eval
@@ -255,7 +257,7 @@ class InteractionManager:
         answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
         is_correct = answer == answers[self._spot_reading_index]
         retry = self._spot_reading_attempts < self._max_num_of_spot_reading_attempts and \
-            not is_correct and answer != "Unable to read"
+            not is_correct and answer != ""
         if retry:
             self._spot_reading_attempts += 1
             self._planner.insert(

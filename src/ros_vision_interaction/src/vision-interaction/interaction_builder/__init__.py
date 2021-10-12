@@ -100,7 +100,8 @@ class InteractionBuilder:
             self,
             interaction_dict,
             variations_files,
-            statedb
+            statedb,
+            speaking_rate="slow"
     ):
         self._interaction_dict = interaction_dict
         self._variations_files = variations_files
@@ -117,6 +118,7 @@ class InteractionBuilder:
                 self._interaction_dict,
                 graph_name,
                 self._text_populator,
+                speaking_rate=speaking_rate
             )
 
         self._possible_graphs = [graph for graph in self._interactions.values()]
@@ -126,7 +128,7 @@ class InteractionBuilder:
             interactions_dict,
             graph_name,
             text_populator=None,
-            speaking_rate=None
+            speaking_rate="slow"
     ):
         graph_dict = interactions_dict[graph_name]
         start_node_name = graph_dict["start_node_name"]
