@@ -2,7 +2,7 @@
     "ask to do scheduled": {
         "nodes": {
             "ask to do scheduled": {
-                "transitions": ["exit", "ask to do scheduled"],
+                "transitions": ["exit", "exit","ask to do scheduled"],
                 "content": "Would you like to do the reading evaluation now, instead of at our scheduled time?",
                 "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
@@ -14,7 +14,7 @@
     "ask for eval during prompted": {
         "nodes": {
             "ask for eval": {
-                "transitions": ["exit", "ask for eval"],
+                "transitions": ["exit", "exit", "ask for eval"],
                 "content": "Will you be available to chat during our scheduled time later?",
                 "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
@@ -26,7 +26,7 @@
     "too many prompted": {
         "nodes": {
             "reminder": {
-                "transitions": ["exit", "reminder"],
+                "transitions": ["exit", "exit", "reminder"],
                 "content": "I have really enjoyed speaking with you so many times today, but all the talking has made me pretty tired. I'm wiped out and need to recharge by taking a long nap. Let me get some shut eye, so I can be all refreshed and ready to chat with you again tomorrow. Good bye, {'db': 'user name', 'default value': ''}!",
                 "options": ["Talk to you tomorrow!", "See you tomorrow!", "Replay"],
                 "message_type": "multiple choice one column"
@@ -73,9 +73,9 @@
                 "result_db_key": "next checkin datetime"
             },
             "set tomorrow's time": {
-                "transitions": "talk again later",
+                "transitions": ["talk again later", "set tomorrow's time"],
                 "content": "When is good for you?",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "time entry",
 				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
                 "result_db_key": "next checkin datetime"

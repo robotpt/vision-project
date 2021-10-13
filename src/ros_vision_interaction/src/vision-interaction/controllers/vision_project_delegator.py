@@ -184,9 +184,10 @@ class VisionProjectDelegator:
             )
 
             is_time = is_in_update_window or \
-                      (is_prompted_in_scheduled_window and not self._state_database.get(
-                          DatabaseKeys.IS_DONE_EVAL_TODAY) and
-                       self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER))
+                (is_prompted_in_scheduled_window and not
+                    self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and
+                    self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER)
+                 )
 
         return is_time
 

@@ -213,8 +213,8 @@
                 "message_type": "multiple choice one column"
             },
             "no problem": {
-                "transitions": ["that was great", "no problem"],
-                "content": "Go for it!",
+                "transitions": ["schedule", "no problem"],
+                "content": "No problem!",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
@@ -231,9 +231,9 @@
                 "message_type": "multiple choice one column"
             },
             "schedule": {
-                "transitions": ["talk again later", "schedule"],
+                "transitions": ["talk again later"],
                 "content": "Let's schedule a time to {'var': 'chat'} tomorrow. When is good for you?",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "time entry",
 				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
                 "result_db_key": "next checkin datetime"

@@ -214,6 +214,10 @@ class InteractionManager:
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
                 post_hook=self._set_vars_after_interaction
             )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                post_hook=self._set_vars_after_scheduled_ask_for_eval
+            )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
@@ -230,6 +234,10 @@ class InteractionManager:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
                 post_hook=self._set_vars_after_interaction
+            )
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                post_hook=self._set_vars_after_scheduled_ask_for_eval
             )
 
     def _set_vars_after_scheduled_ask_for_eval(self):
