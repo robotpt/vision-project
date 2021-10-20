@@ -427,7 +427,7 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.GOOD_TO_CHAT) == "Yes":
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.FIRST_SCHEDULED_CHECKIN],
                 post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(

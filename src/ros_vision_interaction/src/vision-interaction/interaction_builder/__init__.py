@@ -25,6 +25,7 @@ class InteractionBuilder:
         CONTINUE_PERSEVERANCE = "is continue perseverance"
         EVALUATION = "evaluation"
         FEEDBACK_VIDEO = "feedback video"
+        FIRST_SCHEDULED_CHECKIN = "first scheduled checkin"
         GOAL_SETTING = "goal setting"
         GRIT_TRANSITION = "grit transition"
         INTRODUCE_EVALUATION = "introduce evaluation"
@@ -65,6 +66,7 @@ class InteractionBuilder:
             CONTINUE_PERSEVERANCE,
             EVALUATION,
             FEEDBACK_VIDEO,
+            FIRST_SCHEDULED_CHECKIN,
             GOAL_SETTING,
             GRIT_TRANSITION,
             INTRODUCE_EVALUATION,
