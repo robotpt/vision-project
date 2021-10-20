@@ -25,75 +25,75 @@
     },
     "spot reading": {
         "300": {
-            "answer": ["345582553529950"], "score": null, "annotator_score": null,
+            "answer": [["345582553529950"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "301": {
-            "answer": ["06/19"], "score": null, "annotator_score": null,
+            "answer": [["06/19", "06.19"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "302": {
-            "answer": ["18007721213"], "score": null, "annotator_score": null,
+            "answer": [["18007721213"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "309": {
-            "answer": ["6", "2", "15", "415", "45", "350"], "score": null, "annotator_score": null,
+            "answer": [["6"], ["2"], ["15"], ["415"], ["45"], ["350"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "310": {
-            "answer": ["3", "37", "27"], "score": null, "annotator_score": null,
+            "answer": [["3"], ["37"], ["27"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "311": {
-            "answer": ["3.84"], "score": null, "annotator_score": null,
+            "answer": [["3.84"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "303": {
-            "answer": ["349772827724463"], "score": null, "annotator_score": null,
+            "answer": [["349772827724463"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "304": {
-            "answer": ["1078.70", "0"], "score": null, "annotator_score": null,
+            "answer": [["1078.70", "1.078.70"], ["0"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "305": {
-            "answer": ["400", "40"], "score": null, "annotator_score": null,
+            "answer": [["400"], ["40"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "312": {
-            "answer": ["5", "5", "0", "0"], "score": null, "annotator_score": null,
+            "answer": [["5"], ["5"], ["0"], ["0"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "313": {
-            "answer": ["48", "9"], "score": null, "annotator_score": null,
+            "answer": [["48"], ["9"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "314": {
-            "answer": ["15", "8", "380"], "score": null, "annotator_score": null,
+            "answer": [["15"], ["8"], ["380"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "306": {
-            "answer": ["1335335854743211", "09/23"], "score": null, "annotator_score": null,
+            "answer": [["1335335854743211"], ["09/23", "09.23"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "307": {
-            "answer": ["2018", "7", "21"], "score": null, "annotator_score": null,
+            "answer": [["2018"], ["7"], ["21"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "308": {
-            "answer": ["4", "11", "10", "15"], "score": null, "annotator_score": null,
+            "answer": [["4"], ["11"], ["10"], ["15"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "315": {
-            "answer": ["60", "312.223.0197", "0", "06.27.19"], "score": null, "annotator_score": null,
+            "answer": [["60"], ["312.223.0197", "312/223/0197"], ["0"], ["06.27.19", "06/27/19"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "316": {
-            "answer": ["3.91", "4/15/2013"], "score": null, "annotator_score": null,
+            "answer": [["3.91"], ["4/15/2013", "4.15.2013"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "317": {
-            "answer": ["5", "3", "12"], "score": null, "annotator_score": null,
+            "answer": [["5"], ["3"], ["12"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         }
     },

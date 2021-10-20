@@ -83,6 +83,8 @@ class DatabaseKeys:
     READING_EVAL_TYPE = "reading eval type"
     SELF_REPORTS = "self reports"
     SPOT_READING_ANSWER = "spot reading answer"
+    SPOT_READING_INDEX = "spot reading index"
+    SPOT_READING_FEEDBACK = "spot reading feedback"
     SRT_READING_INDEX = "SRT reading index"
     POST_SRT_INDEX = "post SRT index"
     SUNDAY_SCHEDULED_TASK = "sunday scheduled task"
@@ -178,6 +180,8 @@ INITIAL_STATE_DB = {
     DatabaseKeys.READING_EVAL_TYPE: None,
     DatabaseKeys.SELF_REPORTS: [],
     DatabaseKeys.SPOT_READING_ANSWER: None,
+    DatabaseKeys.SPOT_READING_INDEX: "first",
+    DatabaseKeys.SPOT_READING_FEEDBACK: "correct",
     DatabaseKeys.SRT_READING_INDEX: 0,
     DatabaseKeys.SUNDAY_SCHEDULED_TASK: None,
     DatabaseKeys.USER_NAME: "",

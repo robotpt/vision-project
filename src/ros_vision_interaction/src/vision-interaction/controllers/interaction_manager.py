@@ -121,6 +121,7 @@ class InteractionManager:
             self._set_new_task_info()
 
         if task_type == reading_task_tools.Tasks.SPOT_READING:
+            self._set_spot_reading_index()
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
                 post_hook=self._set_vars_after_spot_reading_eval
@@ -173,6 +174,7 @@ class InteractionManager:
 
         if task_type == reading_task_tools.Tasks.SPOT_READING:
             self._set_new_task_info()
+            self._set_spot_reading_index()
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
                 post_hook=self._set_vars_after_spot_reading_eval
@@ -263,11 +265,19 @@ class InteractionManager:
         num_of_spot_reading = len(answers)
 
         answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
-        is_correct = answer == answers[self._spot_reading_index]
+        is_correct = answer in answers[self._spot_reading_index]
+        if is_correct:
+            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "correct")
+        else:
+            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "incorrect")
         retry = self._spot_reading_attempts < self._max_num_of_spot_reading_attempts and \
             not is_correct and answer != ""
         if retry:
             self._spot_reading_attempts += 1
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                post_hook=self._set_vars_after_interaction
+            )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.RETRY_SPOT_READING],
                 post_hook=self._set_vars_after_spot_reading_eval
@@ -283,12 +293,21 @@ class InteractionManager:
                     self._set_vars_after_perseverance()
                 else:
                     self._planner.insert(
+                        self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                        post_hook=self._set_vars_after_interaction
+                    )
+                    self._planner.insert(
                         self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
                         post_hook=self._set_vars_after_post_eval
                     )
             else:
                 self._spot_reading_index += 1
                 self._spot_reading_attempts = 0
+                self._set_spot_reading_index()
+                self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                    post_hook=self._set_vars_after_interaction
+                )
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
                     post_hook=self._set_vars_after_spot_reading_eval
@@ -536,6 +555,10 @@ class InteractionManager:
                 self._set_new_task_info()
             if task_type == reading_task_tools.Tasks.SPOT_READING:
                 self._planner.insert(
+                    self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                    post_hook=self._set_vars_after_interaction
+                )
+                self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
                     post_hook=self._set_vars_after_spot_reading_eval
                 )
@@ -646,6 +669,15 @@ class InteractionManager:
             current_date = datetime.datetime.now().date()
             num_of_days = (current_date - self._state_database.get(DatabaseKeys.FIRST_INTERACTION_DATETIME).date()).days
         return num_of_days
+
+    def _set_spot_reading_index(self):
+        index_dict = {
+            0: "first",
+            1: "second",
+            2: "third",
+            3: "fourth"
+        }
+        self._state_database.set(DatabaseKeys.SPOT_READING_INDEX, index_dict[self._spot_reading_index])
 
     @property
     def current_node_name(self):

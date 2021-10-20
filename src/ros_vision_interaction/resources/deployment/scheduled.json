@@ -288,7 +288,7 @@
         "nodes": {
             "evaluation": {
                 "transitions": ["exit"],
-                "content": "Please follow the instructions on the paper.",
+                "content": "Please follow the instructions on the paper and enter the {'db': 'spot reading index'} number into the keypad.",
                 "options": ["Done", "Unable to read"],
                 "message_type": "numpad",
                 "result_db_key": "spot reading answer"
@@ -313,6 +313,17 @@
             }
         },
         "start_node_name": "retry"
+    },
+    "spot reading feedback": {
+        "nodes": {
+            "feedback": {
+                "transitions": ["exit", "feedback"],
+                "content": "That answer was {'db': 'spot reading feedback'}. Let's keep going!",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "feedback"
     },
     "post SSRT": {
         "nodes": {

@@ -53,6 +53,7 @@ class InteractionBuilder:
         SCHEDULED_ASK_TO_CHAT = "scheduled ask to chat"
         SCHEDULED_CHECKIN = "scheduled checkin"
         SPOT_READING_EVAL = "spot reading evaluation"
+        SPOT_READING_FEEDBACK = "spot reading feedback"
         STORIES_AND_JOKES = "stories and jokes"
         TOO_MANY_PROMPTED = "too many prompted"
 
@@ -94,6 +95,7 @@ class InteractionBuilder:
             SCHEDULED_ASK_TO_CHAT,
             SCHEDULED_CHECKIN,
             SPOT_READING_EVAL,
+            SPOT_READING_FEEDBACK,
             STORIES_AND_JOKES,
             TOO_MANY_PROMPTED
         ]
