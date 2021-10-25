@@ -161,6 +161,7 @@ class InteractionManager:
         return self._planner
 
     def _build_perseverance(self):
+        self._set_new_task_info()
         self._planner.insert(
             plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
             post_hook=self._set_vars_after_interaction
@@ -266,12 +267,14 @@ class InteractionManager:
 
         answer = self._state_database.get(DatabaseKeys.SPOT_READING_ANSWER)
         is_correct = answer in answers[self._spot_reading_index]
-        if is_correct:
-            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "correct")
+        if answer in answers[self._spot_reading_index]:
+            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "That answer was correct. Let's keep going!")
+        elif answer == "":  # Unable to read
+            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "That's alright, let's keep going.")
         else:
-            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "incorrect")
+            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "That answer was incorrect.")
         retry = self._spot_reading_attempts < self._max_num_of_spot_reading_attempts and \
-            not is_correct and answer != ""
+                not is_correct and answer != ""
         if retry:
             self._spot_reading_attempts += 1
             self._planner.insert(
@@ -506,6 +509,10 @@ class InteractionManager:
                 increment_db_value(self._state_database, DatabaseKeys.POST_SRT_INDEX)
 
             if task_type == Tasks.SPOT_READING:
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                    post_hook=self._set_vars_after_interaction
+                )
                 self._spot_reading_attempts = 0
                 self._spot_reading_perseverance_index = 0
 
@@ -523,6 +530,11 @@ class InteractionManager:
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW]
             )
         else:
+            if task_type == Tasks.SPOT_READING:
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                    post_hook=self._set_vars_after_interaction
+                )
             if task_type == Tasks.SRT:
                 increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
             if task_type == Tasks.IREST:
@@ -554,10 +566,6 @@ class InteractionManager:
                 increment_db_value(self._state_database, DatabaseKeys.IREST_READING_INDEX)
                 self._set_new_task_info()
             if task_type == reading_task_tools.Tasks.SPOT_READING:
-                self._planner.insert(
-                    self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
-                    post_hook=self._set_vars_after_interaction
-                )
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
                     post_hook=self._set_vars_after_spot_reading_eval
@@ -600,8 +608,8 @@ class InteractionManager:
             )
 
         self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.STORIES_AND_JOKES],
-                post_hook=self._set_vars_after_interaction
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.STORIES_AND_JOKES],
+            post_hook=self._set_vars_after_interaction
         )
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
         self._state_database.set(DatabaseKeys.IS_DONE_PROMPTED_TODAY, True)

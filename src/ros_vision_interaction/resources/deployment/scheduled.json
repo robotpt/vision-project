@@ -318,7 +318,7 @@
         "nodes": {
             "feedback": {
                 "transitions": ["exit", "feedback"],
-                "content": "That answer was {'db': 'spot reading feedback'}. Let's keep going!",
+                "content": "{'db': 'spot reading feedback'}",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
