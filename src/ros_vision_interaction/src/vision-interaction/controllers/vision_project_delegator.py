@@ -54,7 +54,10 @@ class VisionProjectDelegator:
         ]
         for key in date_times:
             previous_datetime = self._state_database.get(key)
-            self._state_database.set(key, self._decrement_date(previous_datetime))
+            try:
+                self._state_database.set(key, self._decrement_date(previous_datetime))
+            except TypeError:
+                logging.info(f"{key} was not able to be changed.")
         self.new_day_update()
 
     def _decrement_date(self, date_time):
@@ -71,6 +74,7 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
         self._state_database.set(DatabaseKeys.FEELINGS_INDEX, None)
         self._state_database.set(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY, False)
+        self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, None)
 
     def _daily_state_update(self):
         keys_to_check = {

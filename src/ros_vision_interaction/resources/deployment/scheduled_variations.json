@@ -165,6 +165,11 @@
         "Don't forget to turn on the light on your magnifier when you are using it to read. {'var': 'lights'} Take a look at the video on the tablet about how to turn on the light. Don't forget!",
         "{'var': 'no video'}"
     ],
+    "retry spot reading": [
+        "That answer was incorrect, but it's good that you gave it a try. How about giving it another shot?",
+        "That answer was incorrect, but I bet you'll get it right if you keep trying!",
+        "Good effort. Let's not give up yet, and try reading that again!"
+    ],
     "glasses joke": [
         "You know what I said to the last person who stole my eyeglasses? I will find you, I have contacts! But I doubt that someone stole your eyeglasses.",
         "Do you know what is the best name for a pair of eyeglasses? Seymour! I would like to see more of your reading with glasses on.",

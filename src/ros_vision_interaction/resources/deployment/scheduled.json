@@ -90,9 +90,9 @@
                 "message_type": "multiple choice one column"
             },
             "how do you feel about vision": {
-                "transitions": ["frustrated response", "no concerns response"],
+                "transitions": ["frustrated response", "no concerns response", "how do you feel about vision"],
                 "content": "How do you feel about your vision right now?",
-                "options": ["Frustrated", "No concerns"],
+                "options": ["Frustrated", "No concerns", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "frustrated response": {
@@ -178,7 +178,7 @@
             },
             "feedback video": {
                 "transitions": ["exit", "feedback video"],
-                "content": "First, press play to watch the video your optometrist asked me to show you.",
+                "content": "First, press the middle of the screen with the triangle button in the center to watch the video your optometrist asked me to show you.",
                 "options": ["Next", "Replay"],
                 "message_type": "video",
                 "args": ["{'db': 'video to play', 'default value': ''}"]
@@ -226,7 +226,7 @@
             },
             "that was great": {
                 "transitions": ["schedule"],
-                "content": "That was {'var': 'great'}!",
+                "content": "*QT/happy*That was {'var': 'great'}!",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
@@ -277,7 +277,7 @@
             "evaluation": {
                 "transitions": ["exit"],
                 "content": "Go ahead and open the envelope, read the content aloud while using your magnifier, then tap 'Next'.",
-                "options": ["Done", "Unable to read"],
+                "options": ["Next", "Unable to read"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "unable to read"
             }
@@ -300,7 +300,7 @@
         "nodes": {
             "retry": {
                 "transitions": ["evaluation", "retry"],
-                "content": "Can you read that again and try another answer?",
+                "content": "{'var': 'retry spot reading'}",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },

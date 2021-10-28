@@ -164,7 +164,7 @@ class ReadingEvaluator:
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
         score = reading_task_tools.get_reading_task_data_value(self._state_database, task_id, TaskDataKeys.SCORE)
 
-        self._state_database.set(DatabaseKeys.LAST_SCORES, score)
+        self._state_database.set(DatabaseKeys.LAST_SCORE, score)
 
         all_scores = reading_task_tools.get_all_scores(self._state_database)
         try:

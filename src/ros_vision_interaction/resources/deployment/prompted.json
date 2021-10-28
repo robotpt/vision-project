@@ -28,7 +28,7 @@
             "reminder": {
                 "transitions": ["exit", "exit", "reminder"],
                 "content": "I have really enjoyed speaking with you so many times today, but all the talking has made me pretty tired. I'm wiped out and need to recharge by taking a long nap. Let me get some shut eye, so I can be all refreshed and ready to chat with you again tomorrow. Good bye, {'db': 'user name', 'default value': ''}!",
-                "options": ["Talk to you tomorrow!", "See you tomorrow!", "Replay"],
+                "options": ["Talk to you tomorrow!", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -46,7 +46,7 @@
         },
         "start_node_name": "ask to chat"
     },
-    "prompted plan next checkin": {
+    "prompted talk again later": {
         "nodes": {
             "plan next checkin": {
                 "transitions": [
@@ -66,16 +66,16 @@
             },
             "how many hours": {
                 "transitions": "talk again later",
-                "content": "Please enter the number of hours as 1 to 9.",
+                "content": "Please enter the number of hours from now as 1 to 9.",
                 "options": "Next",
                 "message_type": "numpad",
 				"result_convert_from_str_fn": "later_today_checkin_datetime",
                 "result_db_key": "next checkin datetime"
             },
             "set tomorrow's time": {
-                "transitions": ["talk again later", "set tomorrow's time"],
+                "transitions": ["talk again later"],
                 "content": "When is good for you?",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "time entry",
 				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
                 "result_db_key": "next checkin datetime"
@@ -83,6 +83,80 @@
             "talk again later": {
                 "transitions": ["exit", "talk again later"],
                 "content": "Great, I can't wait to talk to you again then!",
+                "options": ["Bye!", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "plan next checkin"
+    },
+    "prompted plan next checkin": {
+        "nodes": {
+            "plan next checkin": {
+                "transitions": [
+                    "talk again later",
+                    "how many hours",
+                    "set tomorrow's time",
+                    "plan next checkin"
+                ],
+                "content": "When should we plan to talk again?",
+                "options": [
+                    "Scheduled time today",
+                    "Later today",
+                    "Set a time for tomorrow",
+                    "Replay"
+                ],
+                "message_type": "multiple choice one column"
+            },
+            "how many hours": {
+                "transitions": "talk again later",
+                "content": "Please enter the number of hours as 1 to 9.",
+                "options": "Next",
+                "message_type": "numpad",
+				"result_convert_from_str_fn": "later_today_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "set tomorrow's time": {
+                "transitions": ["talk again later"],
+                "content": "When is good for you?",
+                "options": ["Next"],
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": ["exit", "talk again later"],
+                "content": "Great, I can't wait to talk to you again then! Bye-bye for now, and don't forget to use your magnifier!",
+                "options": ["Bye!", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "plan next checkin"
+    },
+    "prompted plan next checkin after eval": {
+        "nodes": {
+            "plan next checkin": {
+                "transitions": [
+                    "set tomorrow's time",
+                    "plan next checkin"
+                ],
+                "content": "When should we plan to talk again?",
+                "options": [
+                    "Set a time for tomorrow",
+                    "Replay"
+                ],
+                "message_type": "multiple choice one column"
+            },
+            "set tomorrow's time": {
+                "transitions": ["talk again later"],
+                "content": "When is good for you?",
+                "options": ["Next"],
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": ["exit", "talk again later"],
+                "content": "Great, I can't wait to talk to you again then! Bye-bye for now, and don't forget to use your magnifier!",
                 "options": ["Bye!", "Replay"],
                 "message_type": "multiple choice one column"
             }
@@ -208,13 +282,13 @@
             },
             "read to QT": {
                 "transitions": ["that was great"],
-                "content": "I'm listening! Press 'Next' when you're done.",
+                "content": "I'm listening! Press 'Next' to let me know when you're done.",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "that was great": {
                 "transitions": ["exit"],
-                "content": "That was {'var': 'great'}! Bye-bye for now, and don't forget to use your magnifier!",
+                "content": "That was {'var': 'great'}! Thank you for sharing!",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
             }

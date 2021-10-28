@@ -1,13 +1,14 @@
 #!/usr/bin/python3.8
 import datetime
 import logging
+import random
 import vision_project_tools.reading_task_tools as reading_task_tools
 
 from interaction_engine.interfaces import TerminalClientAndServerInterface
 from interaction_engine.planner import MessagerPlanner
 from interaction_builder import InteractionBuilder
 from vision_project_tools import increment_db_value
-from vision_project_tools.constants import Interactions, DatabaseKeys
+from vision_project_tools.constants import Interactions, DatabaseKeys, SPOT_READING_FEEDBACK_NO_RETRY
 from vision_project_tools.reading_task_tools import TaskDataKeys, Tasks
 from vision_project_tools.vision_engine import VisionInteractionEngine as InteractionEngine
 
@@ -272,15 +273,15 @@ class InteractionManager:
         elif answer == "":  # Unable to read
             self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "That's alright, let's keep going.")
         else:
-            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, "That answer was incorrect.")
+            self._state_database.set(DatabaseKeys.SPOT_READING_FEEDBACK, random.choice(SPOT_READING_FEEDBACK_NO_RETRY))
         retry = self._spot_reading_attempts < self._max_num_of_spot_reading_attempts and \
                 not is_correct and answer != ""
         if retry:
             self._spot_reading_attempts += 1
-            self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
-                post_hook=self._set_vars_after_interaction
-            )
+            # self._planner.insert(
+            #     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+            #     post_hook=self._set_vars_after_interaction
+            # )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.RETRY_SPOT_READING],
                 post_hook=self._set_vars_after_spot_reading_eval
@@ -361,7 +362,7 @@ class InteractionManager:
                 )
         else:
             self._planner.insert(
-                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN],
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_TALK_AGAIN_LATER],
                 post_hook=self._set_vars_after_interaction
             )
 
@@ -611,6 +612,10 @@ class InteractionManager:
             self._interaction_builder.interactions[InteractionBuilder.Graphs.STORIES_AND_JOKES],
             post_hook=self._set_vars_after_interaction
         )
+        self._planner.insert(
+            self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN],
+            post_hook=self._set_vars_after_interaction
+        )
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
         self._state_database.set(DatabaseKeys.IS_DONE_PROMPTED_TODAY, True)
         self._set_vars_after_interaction()
@@ -683,7 +688,9 @@ class InteractionManager:
             0: "first",
             1: "second",
             2: "third",
-            3: "fourth"
+            3: "fourth",
+            4: "fifth",
+            5: "sixth"
         }
         self._state_database.set(DatabaseKeys.SPOT_READING_INDEX, index_dict[self._spot_reading_index])
 

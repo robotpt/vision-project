@@ -46,6 +46,8 @@ class InteractionBuilder:
         PROMPTED_ASK_TO_CHAT = "prompted ask to chat"
         PROMPTED_CHECKIN = "prompted checkin"
         PROMPTED_PLAN_NEXT_CHECKIN = "prompted plan next checkin"
+        PROMPTED_PLAN_NEXT_CHECKIN_AFTER_EVAL = "prompted plan next checkin after eval"
+        PROMPTED_TALK_AGAIN_LATER = "prompted talk again later"
         REMINDER_FOR_PROMPTED = "reminder for prompted"
         RETRY_SPOT_READING = "retry spot reading"
         REVISIT_MINDFULNESS = "revisit mindfulness"
@@ -88,6 +90,7 @@ class InteractionBuilder:
             PROMPTED_ASK_TO_CHAT,
             PROMPTED_CHECKIN,
             PROMPTED_PLAN_NEXT_CHECKIN,
+            PROMPTED_PLAN_NEXT_CHECKIN_AFTER_EVAL,
             REMINDER_FOR_PROMPTED,
             RETRY_SPOT_READING,
             REVISIT_MINDFULNESS,

@@ -3,6 +3,11 @@ import os
 
 
 ERROR_RESPONSE = "ERROR"
+SPOT_READING_FEEDBACK_NO_RETRY = [
+    "Although you did not quite get it that time, we'll keep going to the next part!"
+    "You did not get it that time, but there's always next time.",
+    "Good effort. Let's not give up yet, and move on to the next part!"
+]
 
 
 class Interactions:

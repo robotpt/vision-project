@@ -141,7 +141,7 @@ class RosDiscordCog(commands.Cog):
         await message.channel.send("Great, thank you.")
 
     @commands.command(
-        name="new_day", help="Pick from a set of choices when they're available"
+        name="new_day", help="Set the system to a new day"
     )
     async def set_new_day(self, message):
         self._new_day_publisher.publish(True)
