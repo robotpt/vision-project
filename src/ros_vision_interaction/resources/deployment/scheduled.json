@@ -288,7 +288,7 @@
         "nodes": {
             "evaluation": {
                 "transitions": ["exit"],
-                "content": "Please follow the instructions on the paper and enter the {'db': 'spot reading index'} number into the keypad.",
+                "content": "Please follow the instructions on the paper and enter the {'db': 'spot reading counter'} number into the keypad.",
                 "options": ["Done", "Unable to read"],
                 "message_type": "numpad",
                 "result_db_key": "spot reading answer"

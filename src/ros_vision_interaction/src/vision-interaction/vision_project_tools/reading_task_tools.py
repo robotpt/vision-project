@@ -74,6 +74,9 @@ def get_reading_task_id(statedb, task_type, difficulty_level=None):
     elif task_type == Tasks.IREST:
         index = statedb.get(DatabaseKeys.IREST_READING_INDEX)
         result = list(tasks.keys())[index]
+    elif task_type == Tasks.SPOT_READING:
+        index = statedb.get(DatabaseKeys.SPOT_READING_INDEX)
+        result = list(tasks.keys())[index]
     else:
         for task in list(tasks.keys()):
             if not tasks[task][TaskDataKeys.SCORE]:
