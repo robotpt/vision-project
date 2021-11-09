@@ -134,21 +134,12 @@
     },
     "prompted plan next checkin after eval": {
         "nodes": {
-            "plan next checkin": {
-                "transitions": [
-                    "set tomorrow's time",
-                    "plan next checkin"
-                ],
-                "content": "When should we plan to talk again?",
-                "options": [
-                    "Set a time for tomorrow",
-                    "Replay"
-                ],
-                "message_type": "multiple choice one column"
-            },
             "set tomorrow's time": {
-                "transitions": ["talk again later"],
-                "content": "When is good for you?",
+                "transitions": [
+                    "talk again later",
+                    "set tomorrow's time"
+                ],
+                "content": "When should we plan to talk again tomorrow?",
                 "options": ["Next"],
                 "message_type": "time entry",
 				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
@@ -161,7 +152,7 @@
                 "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "plan next checkin"
+        "start_node_name": "set tomorrow's time"
     },
     "prompted checkin": {
         "nodes": {
@@ -182,9 +173,9 @@
                 "result_db_key": "feelings index"
             },
             "joke 1": {
-                "transitions": ["talk about frustrations", "joke 1"],
+                "transitions": ["talk about frustrations"],
                 "content": "{'var': 'joke'}",
-                "options": ["Next", "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
             "talk about frustrations": {

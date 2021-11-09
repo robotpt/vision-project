@@ -363,7 +363,7 @@
                 "options": ["10", "8", "6", "4", "2", "0", "Replay"],
                 "message_type": "image",
                 "args": ["https://drive.google.com/uc?export=view&id=1p9IkFzCCIqsdgdhAvVefK2E1d0lPObcO"],
-                 "result_db_key": "feelings index"
+                "result_db_key": "feelings index"
             },
             "ask for spoken self report": {
                 "transitions": ["spoken self report", "grit feedback", "ask for spoken self report"],
