@@ -171,6 +171,7 @@ class ReadingEvaluator:
             len(all_scores)
         except TypeError:
             all_scores = []
-        if len(all_scores) == 0 or score > max(all_scores):
+        if len(all_scores) == 0 and \
+                score is not None and score > max(all_scores):
             self._state_database.set(DatabaseKeys.BEST_SCORES, score)
 

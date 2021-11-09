@@ -83,7 +83,6 @@ class InteractionManager:
             self._build_evaluation()
         else:
             raise ValueError("Not a valid interaction type")
-
         return self._planner
 
     def _build_evaluation(self):
@@ -322,24 +321,24 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.IS_DONE_EVAL_TODAY, True)
         increment_db_value(self._state_database, DatabaseKeys.READING_EVAL_INDEX)
         self._spot_reading_counter = 0
-        new_rating = self._state_database.get(DatabaseKeys.FEELINGS_INDEX)
+        new_rating = int(self._state_database.get(DatabaseKeys.FEELINGS_INDEX))
+        print(f"----- self-rating: {new_rating} -----")
         grit_feedback_index = 0
 
-        try:
-            # self_reports sometimes = None, even though it's set as []
-            len(self._state_database.get(DatabaseKeys.SELF_REPORTS))
-        except TypeError:
+        if self._state_database.get(DatabaseKeys.SELF_REPORTS) is None:
             self._state_database.set(DatabaseKeys.SELF_REPORTS, [])
-        self_ratings = self._state_database.get(DatabaseKeys.SELF_REPORTS)
-        if len(self_ratings) > 0:
-            average_self_rating = sum(self_ratings) / len(self_ratings)
-            if new_rating < average_self_rating:
-                grit_feedback_index = 1  # BETTER RATING
+        self_reports = self._state_database.get(DatabaseKeys.SELF_REPORTS)
+        if len(self_reports) > 0:
+            average_self_rating = sum(self_reports) / len(self_reports)
             if new_rating > average_self_rating:
+                grit_feedback_index = 1  # BETTER RATING
+            if new_rating < average_self_rating:
                 grit_feedback_index = 2  # WORSE RATING
-
+        self_reports.append(new_rating)
         self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
-        self._state_database.set(DatabaseKeys.SELF_REPORTS, self_ratings.append(new_rating))
+        self._state_database.set(DatabaseKeys.SELF_REPORTS, self_reports)
+        print(f"----- all self-reports: {self_reports} -----")
+        print(f"----- saved self-reports: {self._state_database.get(DatabaseKeys.SELF_REPORTS)} -----")
 
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
@@ -398,6 +397,10 @@ class InteractionManager:
                     mindfulness = InteractionBuilder.Graphs.MINDFULNESS_BREATHING
                 else:
                     mindfulness = InteractionBuilder.Graphs.MINDFULNESS_BODY_SCAN
+                self._planner.insert(
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_MINDFULNESS],
+                    post_hook=self._set_vars_after_mindfulness
+                )
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[mindfulness],
                     post_hook=self._set_vars_after_mindfulness
@@ -483,13 +486,17 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.MINDFULNESS_INDEX, (index + 1) % 3)
         self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_MINDFULNESS, 0)
         new_rating = {
-            datetime.datetime.now(): {
+            datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"): {
                 "type": "mindfulness",
                 "rating": self._state_database.get(DatabaseKeys.MINDFULNESS_RATING)
             }
         }
         ratings = self._state_database.get(DatabaseKeys.ACT_RATINGS)
-        self._state_database.set(DatabaseKeys.ACT_RATINGS, ratings.update(new_rating))
+        if ratings is None:
+            self._state_database.set(DatabaseKeys.ACT_RATINGS, new_rating)
+        else:
+            self._state_database.set(DatabaseKeys.ACT_RATINGS, ratings.update(new_rating))
+        print(f"----- ACT ratings: {self._state_database.get(DatabaseKeys.ACT_RATINGS)} -----")
         self._set_vars_after_interaction()
 
     def _set_vars_after_perseverance(self):
@@ -613,10 +620,17 @@ class InteractionManager:
             self._interaction_builder.interactions[InteractionBuilder.Graphs.STORIES_AND_JOKES],
             post_hook=self._set_vars_after_interaction
         )
-        self._planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN],
-            post_hook=self._set_vars_after_interaction
-        )
+        if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN_AFTER_EVAL],
+                post_hook=self._set_vars_after_interaction
+            )
+        else:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN],
+                post_hook=self._set_vars_after_interaction
+            )
+
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
         self._state_database.set(DatabaseKeys.IS_DONE_PROMPTED_TODAY, True)
         self._set_vars_after_interaction()
@@ -636,9 +650,10 @@ class InteractionManager:
         is_do_mindfulness = False
         if self._days_since_first_interaction() >= 3:
             num_of_values = 3
-            average_self_report = sum(
-                self._state_database.get(DatabaseKeys.SELF_REPORTS)[-num_of_values:]) / num_of_values
-            is_do_mindfulness = self._state_database.get(DatabaseKeys.FEELINGS_INDEX) < average_self_report
+            self_reports = self._state_database.get(DatabaseKeys.SELF_REPORTS)[-num_of_values:]
+            print(f"----- mindfulness self-reports: {self_reports} -----")
+            average_self_report = sum(self_reports) / num_of_values
+            is_do_mindfulness = int(self._state_database.get(DatabaseKeys.FEELINGS_INDEX)) < average_self_report
         return is_do_mindfulness
 
     # Long-term deployment version
