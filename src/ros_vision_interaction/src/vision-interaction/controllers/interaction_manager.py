@@ -436,6 +436,7 @@ class InteractionManager:
                     post_hook=self._set_vars_after_interaction
                 )
                 increment_db_value(self._state_database, DatabaseKeys.POST_SRT_INDEX)
+                # print(f"----- POST-SRT INDEX: {self._state_database.get(DatabaseKeys.POST_SRT_INDEX)}")
             increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
 
         self._set_new_task_info()
@@ -496,7 +497,7 @@ class InteractionManager:
             self._state_database.set(DatabaseKeys.ACT_RATINGS, new_rating)
         else:
             self._state_database.set(DatabaseKeys.ACT_RATINGS, ratings.update(new_rating))
-        print(f"----- ACT ratings: {self._state_database.get(DatabaseKeys.ACT_RATINGS)} -----")
+        # print(f"----- ACT ratings: {self._state_database.get(DatabaseKeys.ACT_RATINGS)} -----")
         self._set_vars_after_interaction()
 
     def _set_vars_after_perseverance(self):
@@ -559,6 +560,7 @@ class InteractionManager:
             )
 
     def _set_vars_after_continue_perseverance(self):
+        task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         if self._state_database.get(DatabaseKeys.IS_CONTINUE_PERSEVERANCE) == "Continue":
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
@@ -644,7 +646,7 @@ class InteractionManager:
         if self._days_since_first_interaction() >= 3:
             num_of_values = 3
             self_reports = self._state_database.get(DatabaseKeys.SELF_REPORTS)[-num_of_values:]
-            print(f"----- mindfulness self-reports: {self_reports} -----")
+            # print(f"----- mindfulness self-reports: {self_reports} -----")
             average_self_report = sum(self_reports) / num_of_values
             is_do_mindfulness = int(self._state_database.get(DatabaseKeys.FEELINGS_INDEX)) < average_self_report
         return is_do_mindfulness
