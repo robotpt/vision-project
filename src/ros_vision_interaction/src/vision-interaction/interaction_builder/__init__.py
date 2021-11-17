@@ -91,6 +91,7 @@ class InteractionBuilder:
             PROMPTED_CHECKIN,
             PROMPTED_PLAN_NEXT_CHECKIN,
             PROMPTED_PLAN_NEXT_CHECKIN_AFTER_EVAL,
+            PROMPTED_TALK_AGAIN_LATER,
             REMINDER_FOR_PROMPTED,
             RETRY_SPOT_READING,
             REVISIT_MINDFULNESS,

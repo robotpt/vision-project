@@ -136,8 +136,7 @@
         "nodes": {
             "set tomorrow's time": {
                 "transitions": [
-                    "talk again later",
-                    "set tomorrow's time"
+                    "talk again later"
                 ],
                 "content": "When should we plan to talk again tomorrow?",
                 "options": ["Next"],

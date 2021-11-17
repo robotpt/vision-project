@@ -184,14 +184,14 @@
                 "args": ["{'db': 'video to play', 'default value': ''}"]
             }
         },
-        "start_node_name": "feedback video"
+        "start_node_name": "introduce video"
     },
     "no feedback video": {
         "nodes": {
             "no video": {
                 "transitions": ["exit"],
                 "content": "{'var': 'no video'}",
-                "options": ["Next",  "Replay"],
+                "options": ["Next"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -430,8 +430,8 @@
         "nodes": {
             "perseverance": {
                 "transitions": ["exit"],
-                "content": "*question_1*",
-                "options": ["Done", "Unable to read"],
+                "content": "Go ahead and open the envelope, read the content aloud while using your magnifier, then tap 'Next'.",
+                "options": ["Next", "Unable to read"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "unable to read"
             }
