@@ -322,7 +322,7 @@ class InteractionManager:
         increment_db_value(self._state_database, DatabaseKeys.READING_EVAL_INDEX)
         self._spot_reading_counter = 0
         new_rating = int(self._state_database.get(DatabaseKeys.FEELINGS_INDEX))
-        print(f"----- self-rating: {new_rating} -----")
+        # print(f"----- self-rating: {new_rating} -----")
         grit_feedback_index = 0
 
         if self._state_database.get(DatabaseKeys.SELF_REPORTS) is None:
@@ -330,6 +330,7 @@ class InteractionManager:
         self_reports = self._state_database.get(DatabaseKeys.SELF_REPORTS)
         if len(self_reports) > 0:
             average_self_rating = sum(self_reports) / len(self_reports)
+            # print(f"----- avg self-rating: {average_self_rating} -----")
             if new_rating > average_self_rating:
                 grit_feedback_index = 1  # BETTER RATING
             if new_rating < average_self_rating:
@@ -337,8 +338,7 @@ class InteractionManager:
         self_reports.append(new_rating)
         self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
         self._state_database.set(DatabaseKeys.SELF_REPORTS, self_reports)
-        print(f"----- all self-reports: {self_reports} -----")
-        print(f"----- saved self-reports: {self._state_database.get(DatabaseKeys.SELF_REPORTS)} -----")
+        # print(f"----- saved self-reports: {self._state_database.get(DatabaseKeys.SELF_REPORTS)} -----")
 
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
@@ -559,13 +559,6 @@ class InteractionManager:
             )
 
     def _set_vars_after_continue_perseverance(self):
-        task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
-        if task_type == Tasks.SRT:
-            if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
-                self._planner.insert(
-                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
-                    post_hook=self._set_vars_after_interaction
-                )
         if self._state_database.get(DatabaseKeys.IS_CONTINUE_PERSEVERANCE) == "Continue":
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
