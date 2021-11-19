@@ -19,6 +19,7 @@ services:
     devices: 
       - /dev/dri:/dev/dri
       - /dev/snd:/dev/snd
+      - /dev/video4:/dev/video4
     volumes:
       - aws_config:/root/.aws/
       - mongodb_log:/root/mongodb_log
