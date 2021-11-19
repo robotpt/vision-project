@@ -28,6 +28,7 @@ class InteractionBuilder:
         FIRST_SCHEDULED_CHECKIN = "first scheduled checkin"
         GOAL_SETTING = "goal setting"
         GRIT_TRANSITION = "grit transition"
+        INTERACTION_DAY = "interaction day"
         INTRODUCE_EVALUATION = "introduce evaluation"
         INTRODUCE_MINDFULNESS = "introduce mindfulness"
         INTRODUCE_QT = "introduce QT"
@@ -72,6 +73,7 @@ class InteractionBuilder:
             FIRST_SCHEDULED_CHECKIN,
             GOAL_SETTING,
             GRIT_TRANSITION,
+            INTERACTION_DAY,
             INTRODUCE_EVALUATION,
             INTRODUCE_MINDFULNESS,
             INTRODUCE_QT,
@@ -229,11 +231,12 @@ class InteractionBuilder:
     def later_today_checkin_datetime(self, hours_as_str):
         try:
             hours = int(hours_as_str)
-        except (TypeError, ValueError):
-            logging.info("Could not set checkin for later today, defaulting to the current time tomorrow.")
+        except Exception as e:
+            print("Could not set checkin for later today, defaulting to the current time tomorrow.")
             hours = 24
         current_hour = datetime.datetime.now().hour
-        return datetime.datetime.now().replace(hour=current_hour+hours)
+        new_hour = (current_hour + hours) % 23
+        return datetime.datetime.now().replace(hour=new_hour)
 
     def check_reading_id(self, reading_id):
         expected_id = self._statedb.get(DatabaseKeys.CURRENT_READING_ID)

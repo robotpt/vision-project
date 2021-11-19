@@ -1,4 +1,15 @@
 {
+    "interaction day": {
+        "nodes": {
+            "interaction day": {
+                "transitions": ["exit"],
+                "content": "Interaction day {'db': 'interaction day'}.",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "interaction day"
+    },
     "ask to do scheduled": {
         "nodes": {
             "ask to do scheduled": {

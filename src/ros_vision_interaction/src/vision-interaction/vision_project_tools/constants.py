@@ -49,6 +49,7 @@ class DatabaseKeys:
     GOAL_RATING = "goal rating"
     GOOD_TO_CHAT = "good to chat"
     GRIT_FEEDBACK_INDEX = "grit feedback index"
+    INTERACTION_DAY = "interaction day"
     IREST_READING_INDEX = "IReST reading index"
     IS_CONTINUE_PERSEVERANCE = "is continue perseverance"
     IS_DO_EVALUATION = "is do evaluation"
@@ -140,6 +141,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.GOAL_RATING: 0,
     DatabaseKeys.GOOD_TO_CHAT: None,
     DatabaseKeys.GRIT_FEEDBACK_INDEX: 0,
+    DatabaseKeys.INTERACTION_DAY: 0,
     DatabaseKeys.IREST_READING_INDEX: -1,
     DatabaseKeys.IS_CONTINUE_PERSEVERANCE: None,
     DatabaseKeys.IS_DO_EVALUATION: None,

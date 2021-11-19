@@ -75,6 +75,7 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.FEELINGS_INDEX, None)
         self._state_database.set(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY, False)
         self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, None)
+        increment_db_value(self._state_database, DatabaseKeys.INTERACTION_DAY)
 
     def _daily_state_update(self):
         keys_to_check = {
