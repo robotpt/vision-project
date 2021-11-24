@@ -113,6 +113,17 @@ RUN \
 		gh \
 	&& rm -rf /var/lib/apt/lists/*
 
+ENV NVM_DIR /root/.nvm
+ENV NODE_VERSION 12.22.7
+
+# Setup HTTP server
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+RUN . ~/.nvm/nvm.sh && /bin/bash -c "source ~/.bashrc" && nvm install node
+RUN apt-get update -y \
+        && apt-get install -y npm \
+	&& npm install http-server -g \
+	&& ln -s /usr/bin/nodejs /usr/bin/node
+
 # Put things you want in your ~/.bashrc here
 RUN \
 	unset DEBIAN_FRONTEND \
@@ -126,6 +137,6 @@ alias rh='cd $ROS_WS'\n\
 alias gs='git status'\n\
 alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
-source ${ROS_WS}/devel/setup.bash\n\
-alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'" >> ~/.bashrc
+alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'\n\
+source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
