@@ -22,8 +22,10 @@
                 "color": "yellow", "unable to read": "False", "is scheduled": null}
     },
     "SKread": {
-        "200": {"word count": 67, "score": null, "color": "red", "unable to read": "False", "is scheduled": null},
-        "201": {"word count": 67, "score": null, "color": "red", "unable to read": "False", "is scheduled": null}
+        "200": {"word count": 67, "score": null, "annotator_score": null,
+            "color": "red", "unable to read": "False", "is scheduled": null},
+        "201": {"word count": 67, "score": null, "annotator_score": null,
+            "color": "red", "unable to read": "False", "is scheduled": null}
     },
     "spot reading": {
         "300": {
