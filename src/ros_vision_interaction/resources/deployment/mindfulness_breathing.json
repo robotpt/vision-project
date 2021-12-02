@@ -1,5 +1,6 @@
 {
     "mindfulness breathing": {
+        "speaking_rate": "x-slow",
         "nodes": {
             "introduce mindfulness": {
                 "transitions": ["breathing_1"],

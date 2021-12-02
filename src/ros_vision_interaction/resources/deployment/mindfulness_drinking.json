@@ -1,5 +1,6 @@
 {
     "mindfulness drinking": {
+        "speaking_rate": "x-slow",
         "nodes": {
             "introduce mindfulness": {
                 "transitions": ["drinking_1"],

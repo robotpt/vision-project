@@ -142,6 +142,10 @@ class InteractionBuilder:
     ):
         graph_dict = interactions_dict[graph_name]
         start_node_name = graph_dict["start_node_name"]
+        try:
+            speaking_rate = graph_dict["speaking_rate"]
+        except KeyError:
+            pass
         nodes = []
 
         valid_speaking_rates = [

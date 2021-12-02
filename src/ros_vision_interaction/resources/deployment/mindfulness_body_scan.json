@@ -1,5 +1,6 @@
 {
     "mindfulness body": {
+        "speaking_rate": "x-slow",
         "nodes": {
             "introduce mindfulness": {
                 "transitions": ["body_1"],
