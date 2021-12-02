@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.8
 import actionlib
+import argparse
 import datetime
 import pymongo
 import rospy
@@ -143,6 +144,7 @@ class RosVisionProjectDelegator:
             rospy.loginfo(f"Publishing to record interaction at {datetime.datetime.now()}")
             self._is_record_interaction_publisher.publish(True)
             self._start_interaction_client.wait_for_result()
+            rospy.loginfo(f"Publishing to stop recording interaction at {datetime.datetime.now()}")
             self._is_record_interaction_publisher.publish(False)
         return
 
@@ -213,6 +215,9 @@ class RosVisionProjectDelegator:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Flag for resetting database')
+    parser.add_argument('--is_reset_database', default=True)
+    args, _ = parser.parse_known_args()
 
     rospy.init_node("vision_project_delegator")
 
@@ -236,7 +241,8 @@ if __name__ == "__main__":
         statedb=state_database,
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
-        max_num_of_prompted_per_day=max_num_of_prompted_per_day
+        max_num_of_prompted_per_day=max_num_of_prompted_per_day,
+        is_reset_database=args.is_reset_database
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)

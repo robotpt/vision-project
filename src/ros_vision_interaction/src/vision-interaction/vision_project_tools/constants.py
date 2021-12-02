@@ -61,6 +61,7 @@ class DatabaseKeys:
     IS_DONE_PERSEVERANCE_TODAY = "is done perseverance today"
     IS_DONE_PROMPTED_TODAY = "is done prompted today"
     IS_INTERACTION_FINISHED = "is interaction finished"
+    IS_FIRST_STARTUP = "is first startup"
     IS_GIVEN_UP = "is given up"
     # IS_NEW_DIFFICULTY_LEVEL = "is new difficulty level"
     IS_OFF_CHECKIN = "is off checkin"
@@ -153,6 +154,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.IS_DONE_PERSEVERANCE_TODAY: False,
     DatabaseKeys.IS_DONE_PROMPTED_TODAY: False,
     DatabaseKeys.IS_INTERACTION_FINISHED: False,
+    DatabaseKeys.IS_FIRST_STARTUP: True,
     DatabaseKeys.IS_GIVEN_UP: [],
     # DatabaseKeys.IS_NEW_DIFFICULTY_LEVEL: False,
     DatabaseKeys.IS_OFF_CHECKIN: None,

@@ -1,4 +1,5 @@
 <launch>
+    <arg name="is_reset_database" default="true"/>
     <arg name="is_launch_controllers" default="true"/>
     <arg name="is_launch_evaluator" default="true"/>
     <arg name="is_launch_discord" default="true"/>
@@ -86,7 +87,9 @@
 
     <!-- launch controllers -->
     <group if="$(arg is_launch_controllers)">
-        <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
+        <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen">
+            <param name="is_reset_database" value="$(arg is_reset_database)" type="bool" />
+        </node>
         <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="interaction_manager" output="screen"/>
     </group>
 

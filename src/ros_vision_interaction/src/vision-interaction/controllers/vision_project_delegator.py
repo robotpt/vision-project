@@ -20,7 +20,8 @@ class VisionProjectDelegator:
             scheduled_window_minutes=15,
             minutes_between_interactions=1,
             max_num_of_prompted_per_day=3,
-            score_window=10
+            score_window=10,
+            is_reset_database=True
     ):
         self._state_database = statedb
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
@@ -32,7 +33,9 @@ class VisionProjectDelegator:
         self._is_run_interaction = False
 
         # for testing purposes
-        self._reset_database()
+        if self._state_database.get("is first startup") or is_reset_database:
+            print("Resetting database")
+            self._reset_database()
 
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
@@ -94,6 +97,8 @@ class VisionProjectDelegator:
         # make sure there is a scheduled session
         next_checkin_datetime = self._state_database.get(DatabaseKeys.NEXT_CHECKIN_DATETIME)
         if next_checkin_datetime is not None and next_checkin_datetime.date() < datetime.datetime.now().date():
+            delta = datetime.timedelta(days=1)
+            next_checkin_datetime = next_checkin_datetime + delta
             self._state_database.set(
                 DatabaseKeys.NEXT_CHECKIN_DATETIME,
                 next_checkin_datetime.replace(day=next_checkin_datetime.day + 1)
