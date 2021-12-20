@@ -8,7 +8,7 @@ vision-project:
     is_beta_testing: True
     is_debug: False
     update_window_seconds: 5
-    minutes_between_interactions: 5
+    minutes_between_interactions: 1
     scheduled_window_minutes: 15
   params:
     seconds_until_interaction_timeout: 3000
