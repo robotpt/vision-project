@@ -32,17 +32,20 @@ class VisionProjectDelegator:
 
         self._is_run_interaction = False
 
-        # for testing purposes
-        if self._state_database.get("is first startup") or is_reset_database:
-            print("Resetting database")
-            self._reset_database()
-
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
         self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
 
-        self.new_day_update()
+        # for testing purposes
+        if self._state_database.get("is first startup") or is_reset_database:
+            print("Resetting database")
+            self._reset_database()
+            self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
+            self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
+            task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
+            self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
+            self.new_day_update()
 
     def update(self):
         if self._is_new_day():
