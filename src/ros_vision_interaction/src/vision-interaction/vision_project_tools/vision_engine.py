@@ -20,10 +20,17 @@ class VisionInteractionEngine(InteractionEngine):
         pre_hook()
         while messager.is_active:
             msg = messager.get_message()
-            user_response = self._interface.run(msg)
-            if user_response == ERROR_RESPONSE:
-                run_post_hook = False
-                break
-            messager.transition(user_response)
+            try:
+                user_response = self._interface.run(msg)
+                if user_response == ERROR_RESPONSE:
+                    run_post_hook = False
+                    break
+                messager.transition(user_response)
+            except Exception as e:
+                print(e)
+                if run_post_hook:
+                    print("Error in interaction, running post-hook")
+                    post_hook()
+
         if run_post_hook:
             post_hook()
