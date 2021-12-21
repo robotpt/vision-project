@@ -161,22 +161,27 @@ class VisionProjectDelegator:
 
     def get_interaction_type(self):
         logging.info("Determining interaction type")
-        if self._is_first_interaction():
-            interaction_type = Interactions.FIRST_INTERACTION
-        elif self._is_time_for_scheduled_interaction():
-            interaction_type = Interactions.SCHEDULED_INTERACTION
-        elif self._is_run_too_many_prompted():
-            interaction_type = Interactions.TOO_MANY_PROMPTED
-        elif self._is_run_prompted_interaction():
-            interaction_type = Interactions.PROMPTED_INTERACTION
-        elif self._is_ask_to_do_scheduled():
-            interaction_type = Interactions.ASK_TO_DO_SCHEDULED
+        if not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME):
+            if self._is_first_interaction():
+                interaction_type = Interactions.FIRST_INTERACTION
+            else:
+                interaction_type = None
         else:
-            interaction_type = None
+            if self._is_time_for_scheduled_interaction():
+                interaction_type = Interactions.SCHEDULED_INTERACTION
+            elif self._is_run_too_many_prompted():
+                interaction_type = Interactions.TOO_MANY_PROMPTED
+            elif self._is_run_prompted_interaction():
+                interaction_type = Interactions.PROMPTED_INTERACTION
+            elif self._is_ask_to_do_scheduled():
+                interaction_type = Interactions.ASK_TO_DO_SCHEDULED
+            else:
+                interaction_type = None
         return interaction_type
 
     def _is_first_interaction(self):
-        return not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME)
+        return not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME) and \
+               self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER)
 
     def _is_time_for_scheduled_interaction(self):
         if not self._state_database.get(DatabaseKeys.NEXT_CHECKIN_DATETIME):

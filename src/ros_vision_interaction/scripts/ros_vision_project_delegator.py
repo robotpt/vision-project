@@ -149,19 +149,22 @@ class RosVisionProjectDelegator:
         return
 
     def _screen_tap_listener_callback(self, _):
-        last_interaction_time = self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME)
-        # TODO: change time btwn interactions to a few seconds
-        if last_interaction_time is not None:
-            enough_time_passed = datetime.datetime.now() - self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME) \
-                                 > self._minutes_between_interactions
-            if not enough_time_passed:
-                rospy.loginfo("Not enough time passed to initiate an interaction")
-        else:
-            enough_time_passed = False
-
-        if self._state_database.get(DatabaseKeys.IS_INTERACTION_FINISHED) and enough_time_passed:
-            rospy.loginfo("is prompted by user: True")
+        if not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME):
             self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, True)
+        else:
+            last_interaction_time = self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME)
+            # TODO: change time btwn interactions to a few seconds
+            if last_interaction_time is not None:
+                enough_time_passed = datetime.datetime.now() - self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME) \
+                                     > self._minutes_between_interactions
+                if not enough_time_passed:
+                    rospy.loginfo("Not enough time passed to initiate an interaction")
+            else:
+                enough_time_passed = False
+
+            if self._state_database.get(DatabaseKeys.IS_INTERACTION_FINISHED) and enough_time_passed:
+                rospy.loginfo("is prompted by user: True")
+                self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, True)
 
     def _discord_pick_callback(self, data):
         choice = data.data
