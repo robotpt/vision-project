@@ -1,9 +1,9 @@
 <launch>
-    <arg name="is_reset_database" default="true"/>
     <arg name="is_launch_controllers" default="true"/>
     <arg name="is_launch_evaluator" default="true"/>
     <arg name="is_launch_discord" default="true"/>
     <arg name="aws_voice_name" default="Joanna"/>
+    <arg name="is_launch_internet_speed_test" default="false"/>
     <arg name="face_port" default="8081"/>
     <arg name="gui_port" default="8082"/>
     <arg name="is_launch_sound_listener" default="false"/>
@@ -58,6 +58,7 @@
         <arg name="gui_port" value="$(arg gui_port)"/>
         <arg name="is_launch_sound_listener" default="$(arg is_launch_sound_listener)"/>
         <arg name="aws_voice_name" value="$(arg aws_voice_name)"/>
+        <arg name="is_launch_internet_speed_test" value="$(arg is_launch_internet_speed_test)"/>
     </include>
 
     <!-- launch QT NUC -->
@@ -105,9 +106,7 @@
 
     <!-- launch controllers -->
     <group if="$(arg is_launch_controllers)">
-        <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen">
-            <param name="is_reset_database" value="$(arg is_reset_database)" type="bool" />
-        </node>
+        <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
         <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="interaction_manager" output="screen"/>
     </group>
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.8
 import actionlib
-import argparse
 import datetime
 import pymongo
 import rospy
@@ -218,10 +217,6 @@ class RosVisionProjectDelegator:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Flag for resetting database')
-    parser.add_argument('--is_reset_database', default=True)
-    args, _ = parser.parse_known_args()
-
     rospy.init_node("vision_project_delegator")
 
     host = rospy.get_param("mongodb/host")
@@ -234,7 +229,8 @@ if __name__ == "__main__":
         collection_name=collection_name
     )
     init_db(state_database, INITIAL_STATE_DB)
-
+    
+    is_reset_database = rospy.get_param("vision-project/controllers/is_reset_database")
     update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
     scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
     minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
@@ -245,7 +241,7 @@ if __name__ == "__main__":
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
         max_num_of_prompted_per_day=max_num_of_prompted_per_day,
-        is_reset_database=args.is_reset_database
+        is_reset_database=is_reset_database
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)
