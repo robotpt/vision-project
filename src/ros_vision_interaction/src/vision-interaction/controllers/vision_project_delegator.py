@@ -21,7 +21,7 @@ class VisionProjectDelegator:
             minutes_between_interactions=1,
             max_num_of_prompted_per_day=3,
             score_window=10,
-            is_reset_database=True
+            is_reset_database=False
     ):
         self._state_database = statedb
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
@@ -38,7 +38,7 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
 
         # for testing purposes
-        if self._state_database.get("is first startup") or is_reset_database:
+        if self._state_database.get(DatabaseKeys.IS_FIRST_STARTUP) or is_reset_database:
             print("Resetting database")
             self._reset_database()
             self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
@@ -46,6 +46,7 @@ class VisionProjectDelegator:
             task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
             self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
             self.new_day_update()
+        self._state_database.set(DatabaseKeys.IS_INTERACTION_FINISHED, True)
 
     def update(self):
         if self._is_new_day():

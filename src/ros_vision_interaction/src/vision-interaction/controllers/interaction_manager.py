@@ -95,22 +95,26 @@ class InteractionManager:
                 self._state_database.set(DatabaseKeys.VIDEO_INTRO_INDEX, video_index)
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.FEEDBACK_VIDEO],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
             else:
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.NO_FEEDBACK_VIDEO],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
             if self._state_database.get(DatabaseKeys.LAST_SCORE) is not None and \
                     self._state_database.get(DatabaseKeys.BEST_SCORE) is not None:
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.LAST_EVALUATION],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
 
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_interaction
         )
 
@@ -124,11 +128,13 @@ class InteractionManager:
             self._set_spot_reading_counter()
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_spot_reading_eval
             )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.EVALUATION],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_evaluation
             )
 
@@ -148,6 +154,7 @@ class InteractionManager:
         logging.info("Building ask to do scheduled")
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_SCHEDULED],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_ask_to_do_scheduled,
         )
         return self._planner
@@ -156,6 +163,7 @@ class InteractionManager:
         logging.info("Building first interaction")
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_QT],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_first_interaction
         )
         return self._planner
@@ -164,6 +172,7 @@ class InteractionManager:
         self._set_new_task_info()
         self._planner.insert(
             plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_interaction
         )
 
@@ -178,11 +187,13 @@ class InteractionManager:
             self._set_spot_reading_counter()
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_spot_reading_eval
             )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PERSEVERANCE],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_perseverance
             )
 
@@ -191,10 +202,12 @@ class InteractionManager:
         # TODO: REMOVE INTERACTION_DAY FOR DEPLOYMENT
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.INTERACTION_DAY],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_interaction
         )
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_ASK_TO_CHAT],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_prompted_ask_to_chat
         )
         return self._planner
@@ -203,6 +216,7 @@ class InteractionManager:
         logging.info("Building scheduled interaction")
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_ASK_TO_CHAT],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_scheduled_ask_to_chat
         )
         return self._planner
@@ -211,6 +225,7 @@ class InteractionManager:
         logging.info("Building checkin limit reminder")
         self._planner.insert(
             plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.TOO_MANY_PROMPTED],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_too_many_prompted
         )
         return self._planner
@@ -220,15 +235,18 @@ class InteractionManager:
             self._state_database.set(DatabaseKeys.IS_OFF_CHECKIN, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_scheduled_ask_for_eval
             )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_prompted
             )
 
@@ -236,15 +254,18 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.IS_DO_EVAL_DURING_PROMPTED) == "Yes":
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_prompted
             )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_scheduled_ask_for_eval
             )
 
@@ -252,6 +273,7 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.IS_DO_EVALUATION) == "Yes":
             self._state_database.set(DatabaseKeys.IS_DO_EVALUATION, None)
             self._build_evaluation()
+        self._set_vars_after_interaction()
 
     def _set_vars_after_spot_reading_eval(self):
         task_id = self._state_database.get(DatabaseKeys.CURRENT_READING_ID)
@@ -303,10 +325,12 @@ class InteractionManager:
                 else:
                     self._planner.insert(
                         self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                        pre_hook=self._set_vars_before_interaction,
                         post_hook=self._set_vars_after_interaction
                     )
                     self._planner.insert(
                         self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+                        pre_hook=self._set_vars_before_interaction,
                         post_hook=self._set_vars_after_post_eval
                     )
             else:
@@ -315,10 +339,12 @@ class InteractionManager:
                 self._set_spot_reading_counter()
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_spot_reading_eval
                 )
 
@@ -346,6 +372,7 @@ class InteractionManager:
 
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_ask_to_do_perseverance
         )
 
@@ -357,16 +384,19 @@ class InteractionManager:
             if not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_FOR_EVAL_DURING_PROMPTED],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_ask_for_eval_during_scheduled
                 )
             else:
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_CHECKIN],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_prompted
                 )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_TALK_AGAIN_LATER],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
 
@@ -375,16 +405,19 @@ class InteractionManager:
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.SCHEDULED_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_scheduled_ask_for_eval
             )
         else:
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_NEXT_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
 
@@ -403,25 +436,30 @@ class InteractionManager:
                     mindfulness = InteractionBuilder.Graphs.MINDFULNESS_BODY_SCAN
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_MINDFULNESS],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_mindfulness
                 )
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[mindfulness],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_mindfulness
                 )
             if self._is_do_goal_setting():
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.GOAL_SETTING],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_goal_setting
                 )
             if self._state_database.get(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_PROMPT) >= 3:
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REMINDER_FOR_PROMPTED],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
 
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
 
@@ -431,12 +469,14 @@ class InteractionManager:
         if task_type == reading_task_tools.Tasks.IREST:
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
         if task_type == reading_task_tools.Tasks.SRT:
             if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
                 increment_db_value(self._state_database, DatabaseKeys.POST_SRT_INDEX)
@@ -447,8 +487,12 @@ class InteractionManager:
 
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_EVALUATION],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_post_eval
         )
+
+    def _set_vars_before_interaction(self):
+        self._state_database.set(DatabaseKeys.IS_INTERACTION_FINISHED, False)
 
     def _set_vars_after_interaction(self):
         self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, False)
@@ -460,19 +504,24 @@ class InteractionManager:
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.FIRST_SCHEDULED_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_EVALUATION],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_scheduled_ask_for_eval
             )
+            self._state_database.set(DatabaseKeys.IS_FIRST_STARTUP, False)
         else:
             self._state_database.set(DatabaseKeys.GOOD_TO_CHAT, None)
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_NEXT_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
         self._state_database.set(DatabaseKeys.FIRST_INTERACTION_DATETIME, datetime.datetime.now())
+        self._set_vars_after_interaction()
 
     def _set_vars_after_goal_setting(self):
         self._state_database.set(DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING, 0)
@@ -517,6 +566,7 @@ class InteractionManager:
                 if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
                     self._planner.insert(
                         plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
+                        pre_hook=self._set_vars_before_interaction,
                         post_hook=self._set_vars_after_interaction
                     )
                     increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
@@ -525,6 +575,7 @@ class InteractionManager:
             if task_type == Tasks.SPOT_READING:
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
                 self._spot_reading_attempts = 0
@@ -533,20 +584,24 @@ class InteractionManager:
             if task_type == reading_task_tools.Tasks.IREST:
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
 
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
             self._planner.insert(
-                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW]
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW],
+                pre_hook=self._set_vars_before_interaction
             )
         else:
             if task_type == Tasks.SPOT_READING:
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_FEEDBACK],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
             if task_type == Tasks.SRT:
@@ -554,12 +609,14 @@ class InteractionManager:
             if task_type == Tasks.IREST:
                 self._planner.insert(
                     plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_IREST],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
             self._set_new_task_info()
 
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.CONTINUE_PERSEVERANCE],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_continue_perseverance
             )
 
@@ -568,6 +625,7 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.IS_CONTINUE_PERSEVERANCE) == "Continue":
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.INTRODUCE_EVALUATION],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
             if task_type == Tasks.IREST:
@@ -576,6 +634,7 @@ class InteractionManager:
             if task_type == reading_task_tools.Tasks.SPOT_READING:
                 self._planner.insert(
                     self._interaction_builder.interactions[InteractionBuilder.Graphs.SPOT_READING_EVAL],
+                    pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_spot_reading_eval
                 )
             else:
@@ -587,10 +646,12 @@ class InteractionManager:
         else:
             self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
             self._planner.insert(
-                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD]
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD],
+                pre_hook=self._set_vars_before_interaction
             )
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
 
@@ -612,21 +673,25 @@ class InteractionManager:
         if self._state_database.get(DatabaseKeys.DAYS_WITHOUT_MAGNIFIER) > 3:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_IF_GIVEN_UP],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_ask_if_given_up
             )
 
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.STORIES_AND_JOKES],
+            pre_hook=self._set_vars_before_interaction,
             post_hook=self._set_vars_after_interaction
         )
         if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN_AFTER_EVAL],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
         else:
             self._planner.insert(
                 self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_PLAN_NEXT_CHECKIN],
+                pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_interaction
             )
 
