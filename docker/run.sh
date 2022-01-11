@@ -15,10 +15,10 @@ SERVICE_NAME="vision_project_dev"
 ROS_MASTER_URI=$ROS_MASTER_URI docker-compose up --build
 case "$MODE" in
 	run | start | up )
-		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "source ~/catkin_ws/devel/setup.bash && roslaunch ros_vision_interaction qt_sar_demo_interaction.launch"
+		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "sudo rm /dev/video0 && sudo ln -s /dev/video3 /dev/video0; source ~/catkin_ws/devel/setup.bash && roslaunch ros_vision_interaction qt_sar_demo_interaction.launch"
 		;;
 	terminal | terminal_debug | t )
-		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "source ~/catkin_ws/devel/setup.bash && bash"
+		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "sudo rm /dev/video0 && sudo ln -s /dev/video3 /dev/video0; source ~/catkin_ws/devel/setup.bash && bash"
 		;;
 	stop | kill | down )
 		docker-compose down
