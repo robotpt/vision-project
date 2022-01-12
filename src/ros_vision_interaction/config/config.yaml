@@ -7,6 +7,7 @@ vision-project:
   controllers:
     is_beta_testing: True
     is_debug: False
+    is_reset_database: True
     update_window_seconds: 5
     minutes_between_interactions: 1
     scheduled_window_minutes: 15
