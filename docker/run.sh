@@ -25,7 +25,7 @@ case "$MODE" in
 		;;
 	terminator | popup )
 		xhost +local: # share display on ubuntu platforms
-		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "terminator -e \"echo 'Entering Docker Container...' && bash\""
+		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "sudo rm /dev/video0 && sudo ln -s /dev/video3 /dev/video0; terminator -e \"echo 'Entering Docker Container...' && bash\""
 		;;
 	* )
 		echo "Not a valid command"

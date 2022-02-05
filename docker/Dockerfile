@@ -3,7 +3,7 @@
 # =======================================================
 # The minimum requirements for running the vision-project
 # =======================================================
-FROM osrf/ros:kinetic-desktop-full as vision_project_min
+FROM osrf/ros:melodic-desktop-full as vision_project_min
 
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
@@ -27,7 +27,7 @@ RUN \
 	&& git clone --branch ros1 https://github.com/RobotWebTools/rosbridge_suite.git \
 	&& git clone https://github.com/audrow/mongodb-statedb.git \
 	&& cd mongodb-statedb && /bin/bash -c "python3.8 -m pip install ." \
-	&& cd ../..; /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
+	&& cd ../..; /bin/bash -c "source /opt/ros/melodic/setup.bash && catkin_make"
 
 
 # ==============================================================
@@ -113,16 +113,23 @@ RUN \
 		gh \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV NVM_DIR /root/.nvm
-ENV NODE_VERSION 12.22.7
+# ENV NVM_DIR /root/.nvm
+# ENV NODE_VERSION 12.22.7
 
 # Setup HTTP server
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-RUN . ~/.nvm/nvm.sh && /bin/bash -c "source ~/.bashrc" && nvm install node
+# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+# RUN . ~/.nvm/nvm.sh && /bin/bash -c "source ~/.bashrc" && nvm install node
+# RUN sudo apt-get update -y \
+#        && apt-get install -y npm \
+#	&& npm install http-server -g \
+#	&& ln -s /usr/bin/nodejs /usr/bin/node
+
+
+# Setup dbus
 RUN apt-get update -y \
-        && apt-get install -y npm \
-	&& npm install http-server -g \
-	&& ln -s /usr/bin/nodejs /usr/bin/node
+	&& apt-get install -y dbus-x11 \
+	&& rm -rf /var/lib/apt/lists/*
+
 
 # Put things you want in your ~/.bashrc here
 RUN \
