@@ -125,6 +125,12 @@ RUN \
 #	&& ln -s /usr/bin/nodejs /usr/bin/node
 
 
+# Setup HTTP server
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+RUN sudo apt-get install nodejs
+RUN npm install http-server -g
+
+
 # Setup dbus
 RUN apt-get update -y \
 	&& apt-get install -y dbus-x11 \
