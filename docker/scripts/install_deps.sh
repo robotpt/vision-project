@@ -30,12 +30,12 @@ sudo apt-get install -y \
 	ffmpeg
 
 # Setup Python2 - for Cordial
-sudo apt-get install -y \
+sudo apt-get update && sudo apt-get install -y \
 	python \
 	python-pip \
 	python-scipy \
-	python-gst0.10 \
-	python-mock \
+#	python-gst0.10 \
+#	python-mock \
 	python-pyaudio
 python -m pip install --upgrade pip==20.3.3
 python -m pip install \
