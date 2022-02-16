@@ -136,6 +136,10 @@ RUN apt-get update -y \
 	&& apt-get install -y dbus-x11 \
 	&& rm -rf /var/lib/apt/lists/*
 
+ENV AWS_BUCKET_NAME clinic-beta-testing
+
+ENV HOSTNAME localhost
+
 
 # Put things you want in your ~/.bashrc here
 RUN \
@@ -153,3 +157,4 @@ alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'\n\
 source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
+RUN cd ${ROS_WS} &&  /bin/bash -c "source /opt/ros/melodic/setup.bash && catkin_make"
