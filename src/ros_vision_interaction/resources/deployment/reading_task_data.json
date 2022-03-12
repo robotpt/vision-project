@@ -89,11 +89,11 @@
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "315": {
-            "answer": [["60"], ["312.223.0197", "312/223/0197"], ["0"], ["06.27.19", "06/27/19"]], "score": null, "annotator_score": null,
+            "answer": [["60"], ["312.223.0197", "312/223/0197"], ["0"], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "316": {
-            "answer": [["3.91"], ["4/15/2013", "4.15.2013"]], "score": null, "annotator_score": null,
+            "answer": [["3.91"], ["4/15/2013", "4.15.2013"], ["3.49"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "317": {
