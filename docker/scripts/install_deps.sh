@@ -67,11 +67,3 @@ ${PYTHON3_VERSION} -m pip install --user \
 	discord.py==1.7.1 \
 	speechrecognition \
 	webrtcvad
-
-# Setup HTTP server
-# sudo apt-get install -y npm
-# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-# source ~/.bashrc && nvm install v12.22.7 && nvm use v12.22.7
-# sudo npm install http-server -g
-# sudo ln -s /usr/bin/nodejs /usr/bin/node
-
