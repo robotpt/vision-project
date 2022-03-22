@@ -136,7 +136,7 @@ RUN apt-get update -y \
 	&& apt-get install -y dbus-x11 \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV AWS_BUCKET_NAME clinic-beta-testing
+ENV AWS_BUCKET_NAME <your-bucket-name>
 
 ENV HOSTNAME localhost
 
