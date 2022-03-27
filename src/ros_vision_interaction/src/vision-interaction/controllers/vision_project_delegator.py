@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.8
 import datetime
+import json
 import logging
-import math
 import vision_project_tools.reading_task_tools as reading_task_tools
 
 from vision_project_tools import increment_db_value
@@ -21,7 +21,8 @@ class VisionProjectDelegator:
             minutes_between_interactions=1,
             max_num_of_prompted_per_day=3,
             score_window=10,
-            is_reset_database=False
+            is_reset_database=False,
+            db_file_path="/root/upload/"
     ):
         self._state_database = statedb
         self._update_window_seconds = datetime.timedelta(seconds=update_window_seconds)
@@ -29,6 +30,7 @@ class VisionProjectDelegator:
         self._minutes_between_interactions = datetime.timedelta(minutes=minutes_between_interactions)
         self._max_num_of_prompted_per_day = max_num_of_prompted_per_day
         self._score_window = score_window
+        self._db_file_path = db_file_path
 
         self._is_run_interaction = False
 
@@ -74,6 +76,7 @@ class VisionProjectDelegator:
         return datetime.datetime.now().date() > self._state_database.get(DatabaseKeys.LAST_UPDATE_DATETIME).date()
 
     def new_day_update(self):
+        self.write_to_db_upload_file()
         self._daily_reading_task_data_update()
         self._daily_state_update()
         self._update_act_variables()
@@ -179,6 +182,17 @@ class VisionProjectDelegator:
             else:
                 interaction_type = None
         return interaction_type
+
+    def write_to_db_upload_file(self):
+        db = {}
+        for key in self._state_database.get_keys():
+            if type(self._state_database.get(key)) is datetime.datetime:
+                db[key] = self._state_database.get(key).strftime("%m/%d/%Y, %H:%M:%S")
+            else:
+                db[key] = self._state_database.get(key)
+        file_path = f"{self._db_file_path}state_db_{datetime.datetime.now().strftime('%m%d%Y')}.json"
+        with open(file_path, "w") as f:
+            json.dump(db, f, indent=4, sort_keys=True)
 
     def _is_first_interaction(self):
         return not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME) and \

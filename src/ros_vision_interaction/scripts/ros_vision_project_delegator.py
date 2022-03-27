@@ -234,6 +234,7 @@ if __name__ == "__main__":
     update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
     scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
     minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
+    db_file_path = rospy.get_param("vision-project/data/db_file_path")
     max_num_of_prompted_per_day = rospy.get_param("vision-project/params/max_num_of_prompted_per_day")
 
     vision_project_delegator = VisionProjectDelegator(
@@ -241,7 +242,8 @@ if __name__ == "__main__":
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
         max_num_of_prompted_per_day=max_num_of_prompted_per_day,
-        is_reset_database=is_reset_database
+        is_reset_database=is_reset_database,
+        db_file_path=db_file_path
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)

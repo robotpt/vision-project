@@ -21,3 +21,4 @@ vision-project:
   data:
     evaluation: '/root/evaluation'
     data_capture: '/root/upload'
+    db_file_path: '/root/upload'
