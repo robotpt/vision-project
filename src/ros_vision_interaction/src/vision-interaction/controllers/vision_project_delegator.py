@@ -190,7 +190,7 @@ class VisionProjectDelegator:
                 db[key] = self._state_database.get(key).strftime("%m/%d/%Y, %H:%M:%S")
             else:
                 db[key] = self._state_database.get(key)
-        file_path = f"{self._db_file_path}state_db_{datetime.datetime.now().strftime('%m%d%Y')}.json"
+        file_path = f"{self._db_file_path}/state_db_{datetime.datetime.now().strftime('%m%d%Y')}.json"
         with open(file_path, "w") as f:
             json.dump(db, f, indent=4, sort_keys=True)
 
