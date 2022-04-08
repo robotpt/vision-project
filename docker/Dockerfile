@@ -23,7 +23,7 @@ RUN \
 	&& git clone --branch ${vision_project_branch} --recurse-submodules ${vision_project_remote} \
 	&& git clone https://github.com/robotpt/cordial.git \
 	&& git clone https://github.com/robotpt/qt-robot.git \
-	&& git clone https://github.com/robotpt/ros-data-capture.git \
+	&& git clone --branch add-webcam-script https://github.com/robotpt/ros-data-capture.git \
 	&& git clone --branch ros1 https://github.com/RobotWebTools/rosbridge_suite.git \
 	&& git clone https://github.com/audrow/mongodb-statedb.git \
 	&& cd mongodb-statedb && /bin/bash -c "python3.8 -m pip install ." \
