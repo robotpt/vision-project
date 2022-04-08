@@ -15,17 +15,17 @@ SERVICE_NAME="vision_project_dev"
 ROS_MASTER_URI=$ROS_MASTER_URI docker-compose up --build
 case "$MODE" in
 	run | start | up )
-		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "sudo rm /dev/video0 && sudo ln -s /dev/video3 /dev/video0; source ~/catkin_ws/devel/setup.bash && roslaunch ros_vision_interaction vision_project.launch"
+		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "source ~/catkin_ws/devel/setup.bash && roslaunch ros_vision_interaction vision_project.launch"
 		;;
 	terminal | terminal_debug | t )
-		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "sudo rm /dev/video0 && sudo ln -s /dev/video3 /dev/video0; source ~/catkin_ws/devel/setup.bash && bash"
+		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "source ~/catkin_ws/devel/setup.bash && bash"
 		;;
 	stop | kill | down )
 		docker-compose down
 		;;
 	terminator | popup )
 		xhost +local: # share display on ubuntu platforms
-		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "sudo rm /dev/video0 && sudo ln -s /dev/video3 /dev/video0; terminator -e \"echo 'Entering Docker Container...' && bash\""
+		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "terminator -e \"echo 'Entering Docker Container...' && bash\""
 		;;
 	* )
 		echo "Not a valid command"
