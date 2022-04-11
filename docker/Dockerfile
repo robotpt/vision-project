@@ -154,7 +154,7 @@ alias rh='cd $ROS_WS'\n\
 alias gs='git status'\n\
 alias code='code --user-data-dir /root/.visual_code/'\n\
 alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
-alias rvi='roslaunch ros-vision-interaction qt_sar_demo_interaction.launch'\n\
+alias rvi='roslaunch ros_vision_interaction vision_project.launch'\n\
 source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
 RUN cd ${ROS_WS} &&  /bin/bash -c "source /opt/ros/melodic/setup.bash && catkin_make"
