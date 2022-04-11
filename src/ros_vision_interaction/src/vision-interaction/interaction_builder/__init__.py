@@ -43,7 +43,7 @@ class InteractionBuilder:
         PLAN_NEXT_CHECKIN = "plan next checkin"
         POST_EVALUATION = "post evaluation"
         POST_IREST = "post IReST"
-        POST_SSRT = "post SSRT"
+        POST_SRT = "post SRT"
         PROMPTED_ASK_TO_CHAT = "prompted ask to chat"
         PROMPTED_CHECKIN = "prompted checkin"
         PROMPTED_PLAN_NEXT_CHECKIN = "prompted plan next checkin"
@@ -88,7 +88,7 @@ class InteractionBuilder:
             PLAN_CHECKIN_TOMORROW,
             POST_EVALUATION,
             POST_IREST,
-            POST_SSRT,
+            POST_SRT,
             PROMPTED_ASK_TO_CHAT,
             PROMPTED_CHECKIN,
             PROMPTED_PLAN_NEXT_CHECKIN,

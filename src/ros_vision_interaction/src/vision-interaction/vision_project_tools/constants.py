@@ -77,6 +77,7 @@ class DatabaseKeys:
     FEELINGS_INDEX = "feelings index"
     MINDFULNESS_INDEX = "mindfulness index"
     MINDFULNESS_RATING = "mindfulness rating"
+    MNREAD_INDEX = "MNread index"
     NEXT_CHECKIN_DATETIME = "next checkin datetime"
     NUM_OF_DAYS_SINCE_LAST_EVAL = "num of days since last eval"
     NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING = "num of days since last goal setting"
@@ -89,6 +90,7 @@ class DatabaseKeys:
     READING_EVAL_INDEX = "reading eval index"
     READING_EVAL_TYPE = "reading eval type"
     SELF_REPORTS = "self reports"
+    SKREAD_INDEX = "SKread index"
     SPOT_READING_ANSWER = "spot reading answer"
     SPOT_READING_COUNTER = "spot reading counter"
     SPOT_READING_INDEX = "spot reading index"
@@ -176,6 +178,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.FEELINGS_INDEX: None,
     DatabaseKeys.MINDFULNESS_INDEX: 0,
     DatabaseKeys.MINDFULNESS_RATING: 0,
+    DatabaseKeys.MNREAD_INDEX: 0,
     DatabaseKeys.NEXT_CHECKIN_DATETIME: None,
     DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_EVAL: 0,
     DatabaseKeys.NUM_OF_DAYS_SINCE_LAST_GOAL_SETTING: 0,
@@ -188,6 +191,7 @@ INITIAL_STATE_DB = {
     DatabaseKeys.READING_TASK_DATA: READING_TASK_DATA,
     DatabaseKeys.READING_EVAL_INDEX: 1,
     DatabaseKeys.READING_EVAL_TYPE: None,
+    DatabaseKeys.SKREAD_INDEX: 0,
     DatabaseKeys.SELF_REPORTS: [],
     DatabaseKeys.SPOT_READING_ANSWER: None,
     DatabaseKeys.SPOT_READING_INDEX: 0,

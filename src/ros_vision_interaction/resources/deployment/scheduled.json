@@ -325,16 +325,16 @@
         },
         "start_node_name": "feedback"
     },
-    "post SSRT": {
+    "post SRT": {
         "nodes": {
-            "post SSRT": {
-                "transitions": ["exit", "post SSRT"],
-                "content": "Related to the story you just read...{'var': 'post SSRT', 'index': '{'db': 'post SRT index'}'}",
+            "post SRT": {
+                "transitions": ["exit", "post SRT"],
+                "content": "Related to the story you just read...{'var': 'post SRT', 'index': '{'db': 'post SRT index'}'}",
                 "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
-        "start_node_name": "post SSRT"
+        "start_node_name": "post SRT"
     },
     "post IReST": {
         "nodes": {

@@ -199,7 +199,7 @@ class RosVisionProjectDelegator:
         if node_name in [
             InteractionBuilder.Graphs.POST_EVALUATION,
             InteractionBuilder.Graphs.POST_IREST,
-            InteractionBuilder.Graphs.POST_SSRT,
+            InteractionBuilder.Graphs.POST_SRT,
         ]:
             rospy.loginfo(f"Publishing to stop evaluation audio recording at {datetime.datetime.now()}")
             self._is_record_evaluation_publisher.publish(False)

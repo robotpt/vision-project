@@ -200,11 +200,11 @@ class InteractionManager:
     def _build_prompted_interaction(self):
         logging.info("Building prompted interaction")
         # TODO: REMOVE INTERACTION_DAY FOR DEPLOYMENT
-        self._planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.INTERACTION_DAY],
-            pre_hook=self._set_vars_before_interaction,
-            post_hook=self._set_vars_after_interaction
-        )
+        # self._planner.insert(
+        #     self._interaction_builder.interactions[InteractionBuilder.Graphs.INTERACTION_DAY],
+        #     pre_hook=self._set_vars_before_interaction,
+        #     post_hook=self._set_vars_after_interaction
+        # )
         self._planner.insert(
             self._interaction_builder.interactions[InteractionBuilder.Graphs.PROMPTED_ASK_TO_CHAT],
             pre_hook=self._set_vars_before_interaction,
@@ -475,13 +475,18 @@ class InteractionManager:
         if task_type == reading_task_tools.Tasks.SRT:
             if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
                 self._planner.insert(
-                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
+                    plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SRT],
                     pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
                 increment_db_value(self._state_database, DatabaseKeys.POST_SRT_INDEX)
                 # print(f"----- POST-SRT INDEX: {self._state_database.get(DatabaseKeys.POST_SRT_INDEX)}")
             increment_db_value(self._state_database, DatabaseKeys.SRT_READING_INDEX)
+
+        if task_type == reading_task_tools.Tasks.MNREAD:
+            increment_db_value(self._state_database, DatabaseKeys.MNREAD_INDEX)
+        if task_type == reading_task_tools.Tasks.SKREAD:
+            increment_db_value(self._state_database, DatabaseKeys.SKREAD_INDEX)
 
         self._set_new_task_info()
 
@@ -563,9 +568,10 @@ class InteractionManager:
             self._state_database.set(DatabaseKeys.PERSEVERANCE_COUNTER, 0)
 
             if task_type == reading_task_tools.Tasks.SRT:
+                #  QT should respond with a certain question after every 3 sustained reading tasks
                 if int(self._state_database.get(DatabaseKeys.CURRENT_READING_ID)) % 3 == 0:
                     self._planner.insert(
-                        plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SSRT],
+                        plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.POST_SRT],
                         pre_hook=self._set_vars_before_interaction,
                         post_hook=self._set_vars_after_interaction
                     )
@@ -587,6 +593,11 @@ class InteractionManager:
                     pre_hook=self._set_vars_before_interaction,
                     post_hook=self._set_vars_after_interaction
                 )
+
+            if task_type == reading_task_tools.Tasks.MNREAD:
+                increment_db_value(self._state_database, DatabaseKeys.MNREAD_INDEX)
+            if task_type == reading_task_tools.Tasks.SKREAD:
+                increment_db_value(self._state_database, DatabaseKeys.SKREAD_INDEX)
 
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD],

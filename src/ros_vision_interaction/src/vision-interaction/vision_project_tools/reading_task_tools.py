@@ -66,8 +66,6 @@ def get_reading_task_id(statedb, task_type, difficulty_level=None):
     reading_task_data = statedb.get(DatabaseKeys.READING_TASK_DATA)
     # tasks = reading_task_data[task_type][difficulty_level]
     tasks = reading_task_data[task_type]
-    # logging.info(f"Possible tasks: {tasks}")
-    possible_tasks = []
     if task_type == Tasks.SRT:
         index = statedb.get(DatabaseKeys.SRT_READING_INDEX)
         result = list(tasks.keys())[index]
@@ -77,11 +75,12 @@ def get_reading_task_id(statedb, task_type, difficulty_level=None):
     elif task_type == Tasks.SPOT_READING:
         index = statedb.get(DatabaseKeys.SPOT_READING_INDEX)
         result = list(tasks.keys())[index]
-    else:
-        for task in list(tasks.keys()):
-            if not tasks[task][TaskDataKeys.SCORE]:
-                possible_tasks.append(task)
-        result = random.choice(possible_tasks)
+    elif task_type == Tasks.MNREAD:
+        index = statedb.get(DatabaseKeys.MNREAD_INDEX)
+        result = list(tasks.keys())[index]
+    else:  # SKread
+        index = statedb.get(DatabaseKeys.SKREAD_INDEX)
+        result = list(tasks.keys())[index]
     return result
 
 
