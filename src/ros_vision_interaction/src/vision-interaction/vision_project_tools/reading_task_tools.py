@@ -48,14 +48,12 @@ def get_current_reading_task_type(statedb):
     elif reading_index == 5:  # Saturday
         task_type = Tasks.SRT
     elif reading_index == 6:  # Sunday
-        sunday_tasks = [Tasks.MNREAD, Tasks.SKREAD]
         scheduled_task = statedb.get(DatabaseKeys.SUNDAY_SCHEDULED_TASK)
-        if scheduled_task is not None:
-            sunday_tasks.remove(scheduled_task)
-            task_type = sunday_tasks[0]
+        # MNread on the first Sunday of the deployment, SKread for the second
+        if scheduled_task is None or statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+            task_type = Tasks.MNREAD
         else:
-            task_type = random.choice(sunday_tasks)
-            statedb.set(DatabaseKeys.SUNDAY_SCHEDULED_TASK, task_type)
+            task_type = Tasks.SKREAD
     else:
         logging.info(f"No tasks for weekday index {reading_index}, setting task type to 'spot reading'.")
         task_type = Tasks.SPOT_READING

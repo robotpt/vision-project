@@ -594,11 +594,6 @@ class InteractionManager:
                     post_hook=self._set_vars_after_interaction
                 )
 
-            if task_type == reading_task_tools.Tasks.MNREAD:
-                increment_db_value(self._state_database, DatabaseKeys.MNREAD_INDEX)
-            if task_type == reading_task_tools.Tasks.SKREAD:
-                increment_db_value(self._state_database, DatabaseKeys.SKREAD_INDEX)
-
             self._planner.insert(
                 plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.REWARD],
                 pre_hook=self._set_vars_before_interaction,
@@ -630,6 +625,11 @@ class InteractionManager:
                 pre_hook=self._set_vars_before_interaction,
                 post_hook=self._set_vars_after_continue_perseverance
             )
+
+        if task_type == reading_task_tools.Tasks.MNREAD:
+            increment_db_value(self._state_database, DatabaseKeys.MNREAD_INDEX)
+        if task_type == reading_task_tools.Tasks.SKREAD:
+            increment_db_value(self._state_database, DatabaseKeys.SKREAD_INDEX)
 
     def _set_vars_after_continue_perseverance(self):
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
