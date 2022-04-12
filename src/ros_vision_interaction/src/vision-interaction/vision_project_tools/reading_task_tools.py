@@ -48,10 +48,10 @@ def get_current_reading_task_type(statedb):
     elif reading_index == 5:  # Saturday
         task_type = Tasks.SRT
     elif reading_index == 6:  # Sunday
-        scheduled_task = statedb.get(DatabaseKeys.SUNDAY_SCHEDULED_TASK)
-        # MNread on the first Sunday of the deployment, SKread for the second
-        if scheduled_task is None or statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+        # MNread on the first Sunday (or the 7th day) of the deployment and for all perseverance readings
+        if statedb.get(DatabaseKeys.INTERACTION_DAY) == 7 or statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
             task_type = Tasks.MNREAD
+        # SKread for the second Sunday (or the 14th day)
         else:
             task_type = Tasks.SKREAD
     else:
