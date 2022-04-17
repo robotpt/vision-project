@@ -45,7 +45,7 @@
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "302": {
-            "answer": [["18007721213"], ["8007721213"]], "score": null, "annotator_score": null,
+            "answer": [["18007721213"]], "score": null, "annotator_score": null,
             "color": "light pink", "correct": null, "unable to read": "False", "is scheduled": null
         },
         "303": {
