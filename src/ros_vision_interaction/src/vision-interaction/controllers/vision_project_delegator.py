@@ -148,7 +148,7 @@ class VisionProjectDelegator:
         # update reading task index if reading task has been done
         if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
             current_index = self._state_database.get(DatabaseKeys.CURRENT_READING_INDEX)
-            new_index = (current_index + 1) % 6
+            new_index = (current_index + 1) % 7
             self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, new_index)
 
         new_id = reading_task_tools.get_new_day_reading_task(self._state_database)
