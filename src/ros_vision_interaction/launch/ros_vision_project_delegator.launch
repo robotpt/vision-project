@@ -1,3 +1,6 @@
 <launch>
-    <node pkg="ros_vision_interaction" type="ros_vision_project_manager.py" name="ros_vision_project_manager" output="screen" />
+
+    <arg name="is_reset_database" default="false"/>
+
+    <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="ros_vision_project_delegator" output="screen" />
 </launch>

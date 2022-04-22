@@ -369,12 +369,18 @@ class InteractionManager:
         self._state_database.set(DatabaseKeys.GRIT_FEEDBACK_INDEX, grit_feedback_index)
         self._state_database.set(DatabaseKeys.SELF_REPORTS, self_reports)
         # print(f"----- saved self-reports: {self._state_database.get(DatabaseKeys.SELF_REPORTS)} -----")
-
-        self._planner.insert(
-            self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
-            pre_hook=self._set_vars_before_interaction,
-            post_hook=self._set_vars_after_ask_to_do_perseverance
-        )
+        if self._state_database.get(DatabaseKeys.CURRENT_READING_TYPE) == Tasks.MNREAD:
+            self._planner.insert(
+                plan=self._interaction_builder.interactions[InteractionBuilder.Graphs.PLAN_CHECKIN_TOMORROW],
+                pre_hook=self._set_vars_before_interaction,
+                post_hook=self._set_vars_after_interaction
+            )
+        else:
+            self._planner.insert(
+                self._interaction_builder.interactions[InteractionBuilder.Graphs.ASK_TO_DO_PERSEVERANCE],
+                pre_hook=self._set_vars_before_interaction,
+                post_hook=self._set_vars_after_ask_to_do_perseverance
+            )
 
         self._set_vars_after_interaction()
 

@@ -35,16 +35,19 @@ class VisionProjectDelegator:
         self._is_run_interaction = False
 
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
-        self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
+        self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, 0)
         task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
         self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
 
         # for testing purposes
         if self._state_database.get(DatabaseKeys.IS_FIRST_STARTUP) or is_reset_database:
-            print("Resetting database")
+            if self._state_database.get(DatabaseKeys.IS_FIRST_STARTUP):
+                print("First startup")
+            else:
+                print("Resetting database")
             self._reset_database()
             self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
-            self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, datetime.datetime.now().weekday())
+            self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, 0)
             task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
             self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
             self.new_day_update()
@@ -56,6 +59,7 @@ class VisionProjectDelegator:
         self._state_database.set(DatabaseKeys.LAST_UPDATE_DATETIME, datetime.datetime.now())
 
     def increment_system_date(self):
+        """This method is only used for testing to simulate a new day."""
         date_times = [
             DatabaseKeys.FIRST_INTERACTION_DATETIME,
             DatabaseKeys.LAST_INTERACTION_DATETIME,
@@ -70,6 +74,7 @@ class VisionProjectDelegator:
         self.new_day_update()
 
     def _decrement_date(self, date_time):
+        """This method is only used for testing to simulate a new day."""
         return date_time - datetime.timedelta(days=1)
 
     def _is_new_day(self):
@@ -137,13 +142,14 @@ class VisionProjectDelegator:
         last_scores = self._state_database.get(DatabaseKeys.LAST_SCORES)
 
         try:
+            if current_score > best_scores[current_type] or best_scores[current_type] is None:
             if current_score > best_scores[current_type]:
                 best_scores[current_type] = current_score
                 self._state_database.set(DatabaseKeys.BEST_SCORES, best_scores)
             last_scores[current_type] = current_score
             self._state_database.set(DatabaseKeys.LAST_SCORES, last_scores)
         except TypeError:
-            logging.info("Last and best scores are not set, skipping update")
+            print("Last and best scores are not set, skipping update")
 
         # update reading task index if reading task has been done
         if self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY):

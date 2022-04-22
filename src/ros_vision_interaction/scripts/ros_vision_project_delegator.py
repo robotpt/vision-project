@@ -217,7 +217,14 @@ class RosVisionProjectDelegator:
 
 
 if __name__ == "__main__":
+    import argparse
+
     rospy.init_node("vision_project_delegator")
+
+    # Getting the instance_id for the parameters
+    parser = argparse.ArgumentParser(description='is_reset_database flag for delegator node')
+    parser.add_argument('--is_reset_database', help='is_reset_database flag for delegator node', default="false")
+    args, _ = parser.parse_known_args()
 
     host = rospy.get_param("mongodb/host")
     port = rospy.get_param("mongodb/port")
@@ -230,7 +237,7 @@ if __name__ == "__main__":
     )
     init_db(state_database, INITIAL_STATE_DB)
     
-    is_reset_database = rospy.get_param("vision-project/controllers/is_reset_database")
+    is_reset_database = args.is_reset_database
     update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
     scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
     minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")

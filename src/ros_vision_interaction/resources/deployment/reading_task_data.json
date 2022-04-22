@@ -17,17 +17,9 @@
     },
     "MNread": {
         "100": {"word count": 67, "score": null, "annotator_score": null,
-                "color": "yellow", "unable to read": "False", "is scheduled": null},
+                "color": "red", "unable to read": "False", "is scheduled": null},
         "101": {"word count": 67, "score": null, "annotator_score": null,
-                "color": "yellow", "unable to read": "False", "is scheduled": null},
-        "102": {"word count": 67, "score": null, "annotator_score": null,
-            "color": "yellow", "unable to read": "False", "is scheduled": null},
-        "103": {"word count": 67, "score": null, "annotator_score": null,
-                "color": "yellow", "unable to read": "False", "is scheduled": null},
-        "104": {"word count": 67, "score": null, "annotator_score": null,
-                "color": "yellow", "unable to read": "False", "is scheduled": null},
-        "105": {"word count": 67, "score": null, "annotator_score": null,
-                "color": "yellow", "unable to read": "False", "is scheduled": null}
+                "color": "red", "unable to read": "False", "is scheduled": null}
     },
     "SKread": {
         "200": {"word count": 67, "score": null, "annotator_score": null,

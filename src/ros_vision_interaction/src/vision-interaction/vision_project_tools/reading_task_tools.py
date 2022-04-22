@@ -35,19 +35,19 @@ def get_new_day_reading_task(statedb):
 
 def get_current_reading_task_type(statedb):
     reading_index = statedb.get(DatabaseKeys.CURRENT_READING_INDEX)
-    if reading_index == 0:  # Monday
-        task_type = Tasks.SPOT_READING
-    elif reading_index == 1:  # Tuesday
+    if reading_index == 0:
+        task_type = Tasks.MNREAD
+    elif reading_index == 1:
         task_type = Tasks.SRT
-    elif reading_index == 2:  # Wednesday
+    elif reading_index == 2:
         task_type = Tasks.SPOT_READING
-    elif reading_index == 3:  # Thursday
+    elif reading_index == 3:
         task_type = Tasks.IREST
-    elif reading_index == 4:  # Friday
+    elif reading_index == 4:
         task_type = Tasks.SPOT_READING
-    elif reading_index == 5:  # Saturday
+    elif reading_index == 5:
         task_type = Tasks.SRT
-    elif reading_index == 6:  # Sunday
+    elif reading_index == 6:
         # MNread on the first Sunday (or the 7th day) of the deployment and for all perseverance readings
         if statedb.get(DatabaseKeys.INTERACTION_DAY) < 7 or statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
             task_type = Tasks.MNREAD
@@ -121,7 +121,7 @@ def set_reading_task_value(statedb, task_id, data_type, value):
         #         reading_task_data[task_type][difficulty_level][task_id][TaskDataKeys.SCORE] = score
         if task_id in reading_task_data[task_type].keys():
             reading_task_data[task_type][task_id][data_type] = value
-            logging.info(f"Reading task '{task_id}' score set to {value}")
+            print(f"Reading task '{task_id}' score set to {value}")
     save_to_database(statedb, reading_task_data)
 
 
