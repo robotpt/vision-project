@@ -143,7 +143,6 @@ class VisionProjectDelegator:
 
         try:
             if current_score > best_scores[current_type] or best_scores[current_type] is None:
-            if current_score > best_scores[current_type]:
                 best_scores[current_type] = current_score
                 self._state_database.set(DatabaseKeys.BEST_SCORES, best_scores)
             last_scores[current_type] = current_score
