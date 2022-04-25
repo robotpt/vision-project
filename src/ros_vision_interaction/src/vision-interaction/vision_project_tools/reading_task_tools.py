@@ -121,6 +121,7 @@ def set_reading_task_value(statedb, task_id, data_type, value):
         #         reading_task_data[task_type][difficulty_level][task_id][TaskDataKeys.SCORE] = score
         if task_id in reading_task_data[task_type].keys():
             reading_task_data[task_type][task_id][data_type] = value
+            print(f"Reading task '{task_id}' {data_type} set to {value}")
             print(f"Reading task '{task_id}' score set to {value}")
     save_to_database(statedb, reading_task_data)
 

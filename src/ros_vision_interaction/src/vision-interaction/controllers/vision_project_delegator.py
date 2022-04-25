@@ -157,6 +157,8 @@ class VisionProjectDelegator:
             new_index = (current_index + 1) % 7
             self._state_database.set(DatabaseKeys.CURRENT_READING_INDEX, new_index)
 
+        task_type = reading_task_tools.get_current_reading_task_type(self._state_database)
+        self._state_database.set(DatabaseKeys.CURRENT_READING_TYPE, task_type)
         new_id = reading_task_tools.get_new_day_reading_task(self._state_database)
         self._state_database.set(DatabaseKeys.CURRENT_READING_ID, new_id)
         task_color = reading_task_tools.get_reading_task_data_value(self._state_database, new_id, TaskDataKeys.COLOR)

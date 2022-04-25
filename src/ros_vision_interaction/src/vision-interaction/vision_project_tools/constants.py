@@ -88,7 +88,6 @@ class DatabaseKeys:
     PERSEVERANCE_COUNTER = "perseverance counter"
     READING_TASK_DATA = "reading task data"
     READING_EVAL_INDEX = "reading eval index"
-    READING_EVAL_TYPE = "reading eval type"
     SELF_REPORTS = "self reports"
     SKREAD_INDEX = "SKread index"
     SPOT_READING_ANSWER = "spot reading answer"
@@ -190,7 +189,6 @@ INITIAL_STATE_DB = {
     DatabaseKeys.POST_SRT_INDEX: -1,
     DatabaseKeys.READING_TASK_DATA: READING_TASK_DATA,
     DatabaseKeys.READING_EVAL_INDEX: 1,
-    DatabaseKeys.READING_EVAL_TYPE: None,
     DatabaseKeys.SKREAD_INDEX: 0,
     DatabaseKeys.SELF_REPORTS: [],
     DatabaseKeys.SPOT_READING_ANSWER: None,
