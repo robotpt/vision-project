@@ -27,6 +27,10 @@
         "201": {"word count": 67, "score": null, "annotator_score": null,
             "color": "red", "unable to read": "False", "is scheduled": null}
     },
+    "MN_IREST": {
+        "600": {"word count": 67, "score": null, "annotator_score": null,
+                "color": "red", "unable to read": "False", "is scheduled": null}
+    },
     "spot reading": {
         "300": {
             "answer": [["345582553529950"], ["06/19", "06.19"]], "score": null, "annotator_score": null,

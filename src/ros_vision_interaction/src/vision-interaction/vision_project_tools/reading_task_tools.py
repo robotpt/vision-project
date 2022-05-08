@@ -14,6 +14,7 @@ class Tasks:
     SKREAD = "SKread"
     SPOT_READING = "spot reading"
     SRT = "SRT"
+    MN_IREST = "MN_IREST"
 
 
 class TaskDataKeys:
@@ -35,25 +36,27 @@ def get_new_day_reading_task(statedb):
 
 def get_current_reading_task_type(statedb):
     reading_index = statedb.get(DatabaseKeys.CURRENT_READING_INDEX)
-    if reading_index == 0:
-        task_type = Tasks.MNREAD
-    elif reading_index == 1:
-        task_type = Tasks.SRT
-    elif reading_index == 2:
-        task_type = Tasks.SPOT_READING
-    elif reading_index == 3:
-        task_type = Tasks.IREST
-    elif reading_index == 4:
-        task_type = Tasks.SPOT_READING
-    elif reading_index == 5:
-        task_type = Tasks.SRT
-    elif reading_index == 6:
-        # MNread on the first Sunday (or the 7th day) of the deployment and for all perseverance readings
-        if statedb.get(DatabaseKeys.INTERACTION_DAY) < 7 or statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+    if reading_index in [0, 14, 21, 28]:
+        if not statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
             task_type = Tasks.MNREAD
-        # SKread for the second Sunday (or the 14th day)
         else:
+            task_type = Tasks.SPOT_READING
+    elif reading_index in [1, 8, 15, 22, 29, 36]:
+        if not statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
+            task_type = Tasks.IREST
+        else:
+            task_type = Tasks.SPOT_READING
+    elif reading_index in [2, 9, 16, 23, 30, 37, 4, 11, 18, 25, 32, 39, 6, 13, 20, 27, 34]:
+        task_type = Tasks.SRT
+    elif reading_index in [3, 10, 17, 24, 31, 38, 5, 12, 19, 26, 33, 40]:
+        task_type = Tasks.SPOT_READING
+    elif reading_index in [7, 35]:
+        if not statedb.get(DatabaseKeys.IS_DONE_EVAL_TODAY):
             task_type = Tasks.SKREAD
+        else:
+            task_type = Tasks.SPOT_READING
+    elif reading_index == 41:
+        task_type = Tasks.MN_IREST
     else:
         logging.info(f"No tasks for weekday index {reading_index}, setting task type to 'spot reading'.")
         task_type = Tasks.SPOT_READING
