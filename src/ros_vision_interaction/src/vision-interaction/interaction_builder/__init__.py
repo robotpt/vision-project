@@ -1,5 +1,6 @@
 import datetime
 import logging
+import vision_project_tools.reading_task_tools as reading_task_tools
 
 from interaction_engine.messager.directed_graph import DirectedGraph
 from interaction_engine.messager.node import Node
@@ -7,11 +8,16 @@ from interaction_engine.text_populator import TextPopulator
 from interaction_engine.text_populator import DatabasePopulator
 from interaction_engine.text_populator import VarietyPopulator
 
+from vision_project_tools.constants import DatabaseKeys
+from vision_project_tools.reading_task_tools import TaskDataKeys
+
 logging.basicConfig(level=logging.INFO)
 
 
 class InteractionBuilder:
     class Graphs:
+        ASK_FOR_EVAL_DURING_PROMPTED = "ask for eval during prompted"
+        ASK_IF_GIVEN_UP = "ask if given up"
         ASK_TO_DO_EVALUATION = "ask to do evaluation"
         ASK_TO_DO_PERSEVERANCE = "ask to do perseverance"
         ASK_TO_DO_SCHEDULED = "ask to do scheduled"
@@ -19,26 +25,44 @@ class InteractionBuilder:
         CONTINUE_PERSEVERANCE = "is continue perseverance"
         EVALUATION = "evaluation"
         FEEDBACK_VIDEO = "feedback video"
+        FIRST_SCHEDULED_CHECKIN = "first scheduled checkin"
         GOAL_SETTING = "goal setting"
         GRIT_TRANSITION = "grit transition"
+        INTERACTION_DAY = "interaction day"
         INTRODUCE_EVALUATION = "introduce evaluation"
+        INTRODUCE_MINDFULNESS = "introduce mindfulness"
         INTRODUCE_QT = "introduce QT"
-        MINDFULNESS = "mindfulness"
+        LAST_EVALUATION = "last evaluation"
+        MINDFULNESS_BODY_SCAN = "mindfulness body"
+        MINDFULNESS_BREATHING = "mindfulness breathing"
+        MINDFULNESS_DRINKING = "mindfulness drinking"
+        NO_FEEDBACK_VIDEO = "no feedback video"
         NO_MAGNIFIER_USE = "no magnifier use"
         PERSEVERANCE = "perseverance"
         PLAN_CHECKIN_TOMORROW = "plan tomorrow's checkin"
         PLAN_NEXT_CHECKIN = "plan next checkin"
         POST_EVALUATION = "post evaluation"
+        POST_IREST = "post IReST"
+        POST_SRT = "post SRT"
         PROMPTED_ASK_TO_CHAT = "prompted ask to chat"
         PROMPTED_CHECKIN = "prompted checkin"
         PROMPTED_PLAN_NEXT_CHECKIN = "prompted plan next checkin"
+        PROMPTED_PLAN_NEXT_CHECKIN_AFTER_EVAL = "prompted plan next checkin after eval"
+        PROMPTED_TALK_AGAIN_LATER = "prompted talk again later"
         REMINDER_FOR_PROMPTED = "reminder for prompted"
+        RETRY_SPOT_READING = "retry spot reading"
+        REVISIT_MINDFULNESS = "revisit mindfulness"
         REWARD = "reward"
         SCHEDULED_ASK_TO_CHAT = "scheduled ask to chat"
         SCHEDULED_CHECKIN = "scheduled checkin"
+        SPOT_READING_EVAL = "spot reading evaluation"
+        SPOT_READING_FEEDBACK = "spot reading feedback"
+        STORIES_AND_JOKES = "stories and jokes"
         TOO_MANY_PROMPTED = "too many prompted"
 
         POSSIBLE_GRAPHS = [
+            ASK_FOR_EVAL_DURING_PROMPTED,
+            ASK_IF_GIVEN_UP,
             ASK_TO_DO_EVALUATION,
             ASK_TO_DO_PERSEVERANCE,
             ASK_TO_DO_SCHEDULED,
@@ -46,22 +70,39 @@ class InteractionBuilder:
             CONTINUE_PERSEVERANCE,
             EVALUATION,
             FEEDBACK_VIDEO,
+            FIRST_SCHEDULED_CHECKIN,
             GOAL_SETTING,
+            GRIT_TRANSITION,
+            INTERACTION_DAY,
             INTRODUCE_EVALUATION,
+            INTRODUCE_MINDFULNESS,
             INTRODUCE_QT,
-            MINDFULNESS,
+            LAST_EVALUATION,
+            MINDFULNESS_BODY_SCAN,
+            MINDFULNESS_BREATHING,
+            MINDFULNESS_DRINKING,
+            NO_FEEDBACK_VIDEO,
             NO_MAGNIFIER_USE,
             PERSEVERANCE,
             PLAN_NEXT_CHECKIN,
             PLAN_CHECKIN_TOMORROW,
             POST_EVALUATION,
+            POST_IREST,
+            POST_SRT,
             PROMPTED_ASK_TO_CHAT,
             PROMPTED_CHECKIN,
             PROMPTED_PLAN_NEXT_CHECKIN,
+            PROMPTED_PLAN_NEXT_CHECKIN_AFTER_EVAL,
+            PROMPTED_TALK_AGAIN_LATER,
             REMINDER_FOR_PROMPTED,
+            RETRY_SPOT_READING,
+            REVISIT_MINDFULNESS,
             REWARD,
             SCHEDULED_ASK_TO_CHAT,
             SCHEDULED_CHECKIN,
+            SPOT_READING_EVAL,
+            SPOT_READING_FEEDBACK,
+            STORIES_AND_JOKES,
             TOO_MANY_PROMPTED
         ]
 
@@ -69,7 +110,8 @@ class InteractionBuilder:
             self,
             interaction_dict,
             variations_files,
-            statedb
+            statedb,
+            speaking_rate="slow"
     ):
         self._interaction_dict = interaction_dict
         self._variations_files = variations_files
@@ -86,6 +128,7 @@ class InteractionBuilder:
                 self._interaction_dict,
                 graph_name,
                 self._text_populator,
+                speaking_rate=speaking_rate
             )
 
         self._possible_graphs = [graph for graph in self._interactions.values()]
@@ -95,10 +138,14 @@ class InteractionBuilder:
             interactions_dict,
             graph_name,
             text_populator=None,
-            speaking_rate=None
+            speaking_rate="slow"
     ):
         graph_dict = interactions_dict[graph_name]
         start_node_name = graph_dict["start_node_name"]
+        try:
+            speaking_rate = graph_dict["speaking_rate"]
+        except KeyError:
+            pass
         nodes = []
 
         valid_speaking_rates = [
@@ -188,20 +235,17 @@ class InteractionBuilder:
     def later_today_checkin_datetime(self, hours_as_str):
         try:
             hours = int(hours_as_str)
-        except (TypeError, ValueError):
-            logging.info("Could not set checkin for later today, defaulting to the current time tomorrow.")
+        except Exception as e:
+            print("Could not set checkin for later today, defaulting to the current time tomorrow.")
             hours = 24
         current_hour = datetime.datetime.now().hour
-        return datetime.datetime.now().replace(hour=current_hour+hours)
+        new_hour = (current_hour + hours) % 23
+        return datetime.datetime.now().replace(hour=new_hour)
 
     def check_reading_id(self, reading_id):
-        eval_index = self._statedb.get("reading eval index")
-        try:
-            expected_id = self._statedb.get("reading eval data")[eval_index]["id"]
-            correct_id = reading_id == expected_id
-        except IndexError:
-            correct_id = True
-        return correct_id
+        expected_id = self._statedb.get(DatabaseKeys.CURRENT_READING_ID)
+        is_correct_id = reading_id == expected_id
+        return is_correct_id
 
     @property
     def interactions(self):

@@ -4,15 +4,15 @@
             "ask to chat": {
                 "content": "{'var': 'ask to chat'}",
                 "message_type": "multiple choice one column",
-                "transitions": ["introduction", "exit"],
-                "options": ["Yes", "No"],
+                "transitions": ["introduction", "exit", "ask to chat"],
+                "options": ["Yes", "No", "Replay"],
                 "result_db_key": "good to chat"
             },
             "introduction": {
                 "content": "Hello there, my name is Q.T. and it's wonderful to meet you! Did you know that my vision is not perfect either? My vision is only as good as my camera. There are times when I may miss seeing something if it is outside of the view of my camera. I understand that it is tough when you don't always see what you need to see, but I always try to do my best to capture as much as I can with the camera that gives me eyesight. I would like for you to try your best to use whatever vision you have, even when it's tough.",
                 "message_type": "multiple choice one column",
-                "transitions": ["what's your name"],
-                "options": ["Next"]
+                "transitions": ["what's your name", "introduction"],
+                "options": ["Next", "Replay"]
             },
             "what's your name": {
                 "content": "In case you're wondering, my gender pronoun is <prosody rate=\"x-slow\">it</prosody>. I am really looking forward to interacting with you! I can share stories, tell funny jokes, hope to help you with your magnifier, and will ask you questions. I would like to ask you to please touch the black buttons on the tablet screen to let me know your responses as we interact. Next, I would like to get to know more about you. What's your name?",
@@ -23,5 +23,110 @@
             }
         },
         "start_node_name": "ask to chat"
+    },
+    "first scheduled checkin": {
+        "nodes": {
+            "how are you doing": {
+                "transitions": ["glad to hear", "sorry", "how are you doing"],
+                "content": "How are you doing today?",
+                "options": ["Well", "Not so good", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "glad to hear": {
+                "transitions": ["how do you feel about vision", "glad to hear"],
+                "content": "{'var': 'glad to hear'}",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "sorry": {
+                "transitions": ["joke 1", "sorry"],
+                "content": "{'var': 'sorry'}",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "joke 1": {
+                "transitions": ["did you use magnifier"],
+                "content": "{'var': 'joke'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "how do you feel about vision": {
+                "transitions": ["frustrated response", "no concerns response"],
+                "content": "How do you feel about your vision right now?",
+                "options": ["Frustrated", "No concerns"],
+                "message_type": "multiple choice one column"
+            },
+            "frustrated response": {
+                "transitions": ["joke 2", "frustrated response"],
+                "content": "{'var': 'frustrated response'}",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "no concerns response": {
+                "transitions": ["how was magnifier use"],
+                "content": "{'var': 'no concerns response'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "joke 2": {
+                "transitions": ["did you use magnifier"],
+                "content": "{'var': 'joke'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "did you use magnifier": {
+                "transitions": ["keep trying", "how was magnifier use"],
+                "content": "Have you used your magnifier recently?",
+                "options": ["No", "Yes"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is used magnifier today"
+            },
+            "how was magnifier use": {
+                "transitions": [
+                    "excellent",
+                    "good",
+                    "good",
+                    "fair",
+                    "fair",
+                    "poor",
+                    "how was magnifier use"
+                ],
+                "content": "{'db': 'user name', 'default value': ''}, how is it going with your magnifier?",
+                "options": ["10", "8", "6", "4", "2", "0", "Replay"],
+                "message_type": "image",
+                "args": ["https://drive.google.com/uc?export=view&id=1p9IkFzCCIqsdgdhAvVefK2E1d0lPObcO"]
+            },
+            "excellent": {
+                "transitions": ["exit"],
+                "content": "{'var': 'excellent response'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "good": {
+                "transitions": ["exit"],
+                "content": "{'var': 'good response'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "fair": {
+                "transitions": ["exit"],
+                "content": "{'var': 'fair response'}",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "poor": {
+                "transitions": ["exit", "poor"],
+                "content": "I am so sorry that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying.",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "keep trying": {
+                "transitions": ["exit", "keep trying"],
+                "content": "Oh, well don't forget about using it whenever you are struggling to read.",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "how are you doing"
     }
 }

@@ -10,5 +10,6 @@ controllers:
   node_name_topic: controllers/current_node_name
 discord:
   choices: annotators/choices
+  new_day: annotators/new_day
   pick: annotators/pick
   score: annotators/score

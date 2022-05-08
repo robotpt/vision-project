@@ -5,14 +5,20 @@ mongodb:
   collection_name: "state_db"
 vision-project:
   controllers:
+    is_beta_testing: True
     is_debug: False
+    is_reset_database: False
     update_window_seconds: 5
     minutes_between_interactions: 1
     scheduled_window_minutes: 15
   params:
-    seconds_until_interaction_timeout: 300
+    seconds_until_interaction_timeout: 3000
     max_num_of_prompted_per_day: 2
-    max_num_of_perseverance_readings: 5
+    max_num_of_perseverance_readings: 2
+    max_num_of_spot_reading_attempts: 1
+    num_of_ssrt: 3
+    speaking_rate: "slow"
   data:
     evaluation: '/root/evaluation'
     data_capture: '/root/upload'
+    db_file_path: '/root/upload'

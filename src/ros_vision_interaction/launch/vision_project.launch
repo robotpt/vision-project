@@ -1,11 +1,15 @@
 <launch>
     <arg name="is_launch_controllers" default="true"/>
     <arg name="is_launch_evaluator" default="true"/>
-    <arg name="aws_voice_name" default="Justin"/>
+    <arg name="is_launch_discord" default="true"/>
+    <arg name="is_reset_database" default="false"/>
+    <arg name="aws_voice_name" default="Joanna"/>
+    <arg name="is_launch_internet_speed_test" default="false"/>
     <arg name="face_port" default="8081"/>
     <arg name="gui_port" default="8082"/>
     <arg name="is_launch_sound_listener" default="false"/>
     <arg name="is_record_audio" default="true"/>
+    <arg name="is_use_webcam" default="false"/>
     <arg name="device" default="hw:1,0"/>
     <arg name="format" default="wave"/>
 
@@ -13,8 +17,16 @@
     <arg name="video_id" value="1"/>
     <arg name="upload_directory" value="/root/upload/"/>
     <param name="/data_capture/$(arg video_id)/video_capture/default_param/image_topic" value="camera/color/image_raw"/>
-    <param name="/data_capture/$(arg video_id)/video_capture/default_param/is_record_topic" value="data_capture/is_record_interaction"/>
-    <param name="/data_capture/$(arg video_id)/video_capture/default_param/output_directory" value="$(arg upload_directory)"/>
+
+    <group if="$(arg is_use_webcam)">
+        <param name="/data_capture/$(arg video_id)/webcam_capture/default_param/image_topic" value="webcam_capture/color/image_raw"/>
+        <param name="/data_capture/$(arg video_id)/webcam_capture/default_param/is_record_topic" value="data_capture/is_record_interaction"/>
+        <param name="/data_capture/$(arg video_id)/webcam_capture/default_param/output_directory" value="$(arg upload_directory)"/>
+   </group>
+   <group unless="$(arg is_use_webcam)">
+        <param name="/data_capture/$(arg video_id)/video_capture/default_param/is_record_topic" value="data_capture/is_record_interaction"/>
+        <param name="/data_capture/$(arg video_id)/video_capture/default_param/output_directory" value="$(arg upload_directory)"/>
+   </group>
 
     <!-- instance_id and params for data_capture/audio_capture multiple nodes-->
     <arg name="audio_id_1" value="1"/>
@@ -47,6 +59,7 @@
         <arg name="gui_port" value="$(arg gui_port)"/>
         <arg name="is_launch_sound_listener" default="$(arg is_launch_sound_listener)"/>
         <arg name="aws_voice_name" value="$(arg aws_voice_name)"/>
+        <arg name="is_launch_internet_speed_test" value="$(arg is_launch_internet_speed_test)"/>
     </include>
 
     <!-- launch QT NUC -->
@@ -60,9 +73,18 @@
         <arg name="upload_directory_path" default="$(arg upload_directory)"/>
         <arg name="bucket_name" default="$(env AWS_BUCKET_NAME)"/>
     </include>
-    <include file="$(find video_capture)/launch/capture.launch">
-        <arg name="instance_id" value="$(arg video_id)"/>
-    </include>
+    <group if="$(arg is_use_webcam)">
+        <include file="$(find video_capture)/launch/webcam_capture.launch">
+            <arg name="instance_id" value="$(arg video_id)"/>
+        </include>
+   </group>
+
+    <group unless="$(arg is_use_webcam)">
+        <include file="$(find video_capture)/launch/capture.launch">
+            <arg name="instance_id" value="$(arg video_id)"/>
+        </include>
+    </group>
+
     <!-- multiple audio capture nodes -->
     <include file="$(find audio_capture2)/launch/capture.launch">
         <arg name="is_launch_audio_capture" value="true"/>
@@ -85,13 +107,20 @@
 
     <!-- launch controllers -->
     <group if="$(arg is_launch_controllers)">
-        <node pkg="ros_vision_interaction" type="ros_vision_project_delegator.py" name="vision_project_delegator" output="screen"/>
+        <include file="$(find ros_vision_interaction)/launch/ros_vision_project_delegator.launch">
+            <arg name="is_reset_database" value="$(arg is_reset_database)"/>
+        </include>
         <node pkg="ros_vision_interaction" type="ros_interaction_manager.py" name="interaction_manager" output="screen"/>
     </group>
 
     <!-- launch reading evaluator -->
     <group if="$(arg is_launch_evaluator)">
         <node pkg="ros_vision_interaction" type="ros_reading_evaluator.py" name="reading_evaluator" output="screen"/>
+    </group>
+
+    <!-- launch discord bot -->
+    <group if="$(arg is_launch_discord)">
+        <node pkg="discord_bot" type="discord_bot.py" name="discord_bot" output="screen"/>
     </group>
 
     <!-- launch mongodb log -->

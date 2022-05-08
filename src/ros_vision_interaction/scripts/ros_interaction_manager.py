@@ -96,7 +96,11 @@ if __name__ == "__main__":
     interaction_files = [
         os.path.join(resources_directory, 'deployment', 'first_interaction.json'),
         os.path.join(resources_directory, 'deployment', 'scheduled.json'),
-        os.path.join(resources_directory, 'deployment', 'prompted.json')
+        os.path.join(resources_directory, 'deployment', 'prompted.json'),
+        os.path.join(resources_directory, 'deployment', 'goal_setting.json'),
+        os.path.join(resources_directory, 'deployment', 'mindfulness_body_scan.json'),
+        os.path.join(resources_directory, 'deployment', 'mindfulness_breathing.json'),
+        os.path.join(resources_directory, 'deployment', 'mindfulness_drinking.json')
     ]
     deployment_interaction_dict = {}
     for file in interaction_files:
@@ -108,6 +112,9 @@ if __name__ == "__main__":
     scheduled_variations_file = os.path.join(resources_directory, 'deployment', 'scheduled_variations.json')
 
     max_num_of_perseverance_readings = rospy.get_param("vision-project/params/max_num_of_perseverance_readings")
+    max_num_of_spot_reading_attempts = rospy.get_param("vision-project/params/max_num_of_spot_reading_attempts")
+    num_of_ssrt = rospy.get_param("vision-project/params/num_of_ssrt")
+    speaking_rate = rospy.get_param("vision-project/params/speaking_rate")
 
     interface = CordialInterface(
         state_database,
@@ -121,14 +128,16 @@ if __name__ == "__main__":
             grit_dialogue_variations_file,
             scheduled_variations_file
         ],
-        statedb=state_database
+        statedb=state_database,
+        speaking_rate=speaking_rate
     )
 
     interaction_manager = InteractionManager(
         statedb=state_database,
         interaction_builder=interaction_builder,
         interface=interface,
-        max_num_of_perseverance_readings=max_num_of_perseverance_readings
+        max_num_of_perseverance_readings=max_num_of_perseverance_readings,
+        max_num_of_spot_reading_attempts=max_num_of_spot_reading_attempts
     )
 
     ros_interaction_manager = RosInteractionManager(

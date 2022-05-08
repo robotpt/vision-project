@@ -10,6 +10,7 @@ from interaction_builder import InteractionBuilder
 from vision_project_tools import init_db
 from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB
 from vision_project_tools.engine_statedb import EngineStateDb as StateDb
+import vision_project_tools.reading_task_tools as reading_task_tools
 
 from cordial_msgs.msg import MouseEvent
 from ros_vision_interaction.msg import StartInteractionAction, StartInteractionGoal
@@ -48,6 +49,8 @@ class RosVisionProjectDelegator:
         node_name_topic = rospy.get_param("controllers/node_name_topic")
         pick_topic = rospy.get_param("discord/pick")
         choices_topic = rospy.get_param("discord/choices")
+        score_topic = rospy.get_param("discord/score")
+        new_day_topic = rospy.get_param("discord/new_day")
         self._is_record_interaction_publisher = rospy.Publisher(is_record_interaction_topic, Bool, queue_size=1)
         self._is_record_evaluation_publisher = rospy.Publisher(is_record_evaluation_topic, Bool, queue_size=1)
         self._is_record_perseverance_publisher = rospy.Publisher(is_record_perseverance_topic, Bool, queue_size=1)
@@ -70,6 +73,18 @@ class RosVisionProjectDelegator:
             queue_size=1
         )
         self._choices_publisher = rospy.Publisher(choices_topic, String, queue_size=1)
+        self._score_subscriber = rospy.Subscriber(
+            score_topic,
+            String,
+            callback=self._discord_score_callback,
+            queue_size=1
+        )
+        self._new_day_subscriber = rospy.Subscriber(
+            new_day_topic,
+            Bool,
+            callback=self._discord_new_day_callback,
+            queue_size=1
+        )
 
         # update scheduler
         self._scheduler = schedule.Scheduler()
@@ -84,6 +99,13 @@ class RosVisionProjectDelegator:
             False
         )
 
+        self._is_beta_testing = rospy.get_param(
+            "vision-project/controllers/is_beta_testing",
+            False
+        )
+        if self._is_beta_testing:
+            rospy.loginfo("Running in beta testing mode")
+
     def run_scheduler_once(self):
         self._scheduler.run_pending()
 
@@ -91,7 +113,7 @@ class RosVisionProjectDelegator:
         if not self._state_database.get(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY):
             self._format_and_publish_choices()
             self._state_database.set(DatabaseKeys.IS_PUBLISHED_CHOICES_TODAY, True)
-        rospy.loginfo("Running update")
+        # rospy.loginfo("Running update")
         self._delegator.update()
         interaction_type = self._delegator.get_interaction_type()
         if interaction_type is not None:
@@ -121,38 +143,64 @@ class RosVisionProjectDelegator:
             rospy.loginfo(f"Publishing to record interaction at {datetime.datetime.now()}")
             self._is_record_interaction_publisher.publish(True)
             self._start_interaction_client.wait_for_result()
+            rospy.loginfo(f"Publishing to stop recording interaction at {datetime.datetime.now()}")
             self._is_record_interaction_publisher.publish(False)
         return
 
     def _screen_tap_listener_callback(self, _):
-        last_interaction_time = self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME)
-        # TODO: change time btwn interactions to a few seconds
-        if last_interaction_time is not None:
-            enough_time_passed = datetime.datetime.now() - self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME) \
-                                 > self._minutes_between_interactions
-            if not enough_time_passed:
-                rospy.loginfo("Not enough time passed to initiate an interaction")
-        else:
-            enough_time_passed = False
-
-        if self._state_database.get(DatabaseKeys.IS_INTERACTION_FINISHED) and enough_time_passed:
-            rospy.loginfo("is prompted by user: True")
+        if not self._state_database.is_set(DatabaseKeys.FIRST_INTERACTION_DATETIME):
             self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, True)
+        else:
+            last_interaction_time = self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME)
+            # TODO: change time btwn interactions to a few seconds
+            if last_interaction_time is not None:
+                enough_time_passed = datetime.datetime.now() - self._state_database.get(DatabaseKeys.LAST_INTERACTION_DATETIME) \
+                                     > self._minutes_between_interactions
+                if not enough_time_passed:
+                    rospy.loginfo("Not enough time passed to initiate an interaction")
+            else:
+                enough_time_passed = False
+
+            if self._state_database.get(DatabaseKeys.IS_INTERACTION_FINISHED) and enough_time_passed:
+                rospy.loginfo("is prompted by user: True")
+                self._state_database.set(DatabaseKeys.IS_PROMPTED_BY_USER, True)
 
     def _discord_pick_callback(self, data):
         choice = data.data
         rospy.loginfo(f"Selected feedback video: {choice}")
-        video_dictionary = self._state_database.get(DatabaseKeys.FEEDBACK_VIDEOS)
-        self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, video_dictionary[choice])
+        self._state_database.set(DatabaseKeys.VIDEO_TO_PLAY, choice)
+
+    def _discord_score_callback(self, data):
+        feedback = data.data
+        task_id, score = feedback.split(",")
+        rospy.loginfo(f"Annotator score: {score}")
+        reading_task_tools.set_reading_task_value(
+            self._state_database,
+            task_id,
+            reading_task_tools.TaskDataKeys.ANNOTATOR_SCORE,
+            score
+        )
+
+    def _discord_new_day_callback(self, _):
+        if self._is_beta_testing:
+            rospy.loginfo("Incrementing system date")
+            self._delegator.increment_system_date()
 
     def _node_name_callback(self, data):
         node_name = data.data
         rospy.loginfo(f"Current graph name: {node_name}")
-        if node_name == InteractionBuilder.Graphs.EVALUATION:
+        if node_name in [
+            InteractionBuilder.Graphs.EVALUATION,
+            InteractionBuilder.Graphs.SPOT_READING_EVAL
+        ]:
             rospy.loginfo(f"Publishing to record evaluation audio at {datetime.datetime.now()}")
             self._is_record_evaluation_publisher.publish(True)
             self._is_recording_evaluation = True
-        if node_name == InteractionBuilder.Graphs.POST_EVALUATION:
+        if node_name in [
+            InteractionBuilder.Graphs.POST_EVALUATION,
+            InteractionBuilder.Graphs.POST_IREST,
+            InteractionBuilder.Graphs.POST_SRT,
+        ]:
             rospy.loginfo(f"Publishing to stop evaluation audio recording at {datetime.datetime.now()}")
             self._is_record_evaluation_publisher.publish(False)
             self._is_recording_evaluation = False
@@ -169,8 +217,14 @@ class RosVisionProjectDelegator:
 
 
 if __name__ == "__main__":
+    import argparse
 
     rospy.init_node("vision_project_delegator")
+
+    # Getting the instance_id for the parameters
+    parser = argparse.ArgumentParser(description='is_reset_database flag for delegator node')
+    parser.add_argument('--is_reset_database', help='is_reset_database flag for delegator node', default="false")
+    args, _ = parser.parse_known_args()
 
     host = rospy.get_param("mongodb/host")
     port = rospy.get_param("mongodb/port")
@@ -182,17 +236,21 @@ if __name__ == "__main__":
         collection_name=collection_name
     )
     init_db(state_database, INITIAL_STATE_DB)
-
+    
+    is_reset_database = args.is_reset_database
     update_window_seconds = rospy.get_param("vision-project/controllers/update_window_seconds")
     scheduled_window_minutes = rospy.get_param("vision-project/controllers/scheduled_window_minutes")
     minutes_between_interactions = rospy.get_param("vision-project/controllers/minutes_between_interactions")
+    db_file_path = rospy.get_param("vision-project/data/db_file_path")
     max_num_of_prompted_per_day = rospy.get_param("vision-project/params/max_num_of_prompted_per_day")
 
     vision_project_delegator = VisionProjectDelegator(
         statedb=state_database,
         update_window_seconds=update_window_seconds,
         minutes_between_interactions=minutes_between_interactions,
-        max_num_of_prompted_per_day=max_num_of_prompted_per_day
+        max_num_of_prompted_per_day=max_num_of_prompted_per_day,
+        is_reset_database=is_reset_database,
+        db_file_path=db_file_path
     )
 
     ros_vision_project_delegator = RosVisionProjectDelegator(vision_project_delegator)

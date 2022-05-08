@@ -1,22 +1,45 @@
 {
+    "interaction day": {
+        "nodes": {
+            "interaction day": {
+                "transitions": ["exit"],
+                "content": "Interaction day {'db': 'interaction day'}.",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "interaction day"
+    },
     "ask to do scheduled": {
         "nodes": {
             "ask to do scheduled": {
-                "transitions": "exit",
+                "transitions": ["exit", "exit","ask to do scheduled"],
                 "content": "Would you like to do the reading evaluation now, instead of at our scheduled time?",
-                "options": ["Yes", "No"],
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "is off checkin"
             }
         },
         "start_node_name": "ask to do scheduled"
     },
+    "ask for eval during prompted": {
+        "nodes": {
+            "ask for eval": {
+                "transitions": ["exit", "exit", "ask for eval"],
+                "content": "Will you be available to chat during our scheduled time later?",
+                "options": ["Yes", "No", "Replay"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "is do eval during prompted"
+            }
+        },
+        "start_node_name": "ask for eval"
+    },
     "too many prompted": {
         "nodes": {
             "reminder": {
-                "transitions": "exit",
-                "content": "I have really enjoyed speaking with you so many times today, but all the talking has made me pretty tired. I'm wiped out and need to recharge by taking a long nap. Let me get some shut eye, so I can be all refreshed and ready to chat with you again tomorrow. Good night!",
-                "options": ["Talk to you tomorrow!", "See you tomorrow!"],
+                "transitions": ["exit", "exit", "reminder"],
+                "content": "I have really enjoyed speaking with you so many times today, but all the talking has made me pretty tired. I'm wiped out and need to recharge by taking a long nap. Let me get some shut eye, so I can be all refreshed and ready to chat with you again tomorrow. Good bye, {'db': 'user name', 'default value': ''}!",
+                "options": ["Talk to you tomorrow!", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
@@ -25,14 +48,57 @@
     "prompted ask to chat": {
         "nodes": {
             "ask to chat": {
-                "transitions": "exit",
-                "content": "Hello {'db': 'user name', 'default value': ''}! It's so {'var': 'great'} when we get a chance to {'var': 'chat'}. Can you confirm is this is a good time?",
-                "options": ["Yes", "No"],
+                "transitions": ["exit", "exit", "ask to chat"],
+                "content": "Hello {'db': 'user name', 'default value': ''}! It's so {'var': 'great'} when we get a chance to {'var': 'chat'}. Can you confirm if this is a good time?",
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column",
                 "result_db_key": "good to chat"
             }
         },
         "start_node_name": "ask to chat"
+    },
+    "prompted talk again later": {
+        "nodes": {
+            "plan next checkin": {
+                "transitions": [
+                    "talk again later",
+                    "how many hours",
+                    "set tomorrow's time",
+                    "plan next checkin"
+                ],
+                "content": "{'var': 'plan next checkin'}",
+                "options": [
+                    "Scheduled time today",
+                    "Later today",
+                    "Set a time for tomorrow",
+                    "Replay"
+                ],
+                "message_type": "multiple choice one column"
+            },
+            "how many hours": {
+                "transitions": "talk again later",
+                "content": "Please enter the number of hours from now as 1 to 9.",
+                "options": "Next",
+                "message_type": "numpad",
+				"result_convert_from_str_fn": "later_today_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "set tomorrow's time": {
+                "transitions": ["talk again later"],
+                "content": "When is good for you?",
+                "options": ["Next"],
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": ["exit", "talk again later"],
+                "content": "Great, I can't wait to talk to you again then!",
+                "options": ["Bye!", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "plan next checkin"
     },
     "prompted plan next checkin": {
         "nodes": {
@@ -40,13 +106,15 @@
                 "transitions": [
                     "talk again later",
                     "how many hours",
-                    "set tomorrow's time"
+                    "set tomorrow's time",
+                    "plan next checkin"
                 ],
-                "content": "{'var': 'plan next checkin'}",
+                "content": "When should we plan to talk again?",
                 "options": [
                     "Scheduled time today",
                     "Later today",
-                    "Set a time for tomorrow"
+                    "Set a time for tomorrow",
+                    "Replay"
                 ],
                 "message_type": "multiple choice one column"
             },
@@ -59,21 +127,42 @@
                 "result_db_key": "next checkin datetime"
             },
             "set tomorrow's time": {
-                "transitions": "talk again later",
+                "transitions": ["talk again later"],
                 "content": "When is good for you?",
-                "options": "Next",
+                "options": ["Next"],
                 "message_type": "time entry",
 				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
                 "result_db_key": "next checkin datetime"
             },
             "talk again later": {
-                "transitions": "exit",
-                "content": "Great, I can't wait to talk to you again then!",
-                "options": "Bye!",
+                "transitions": ["exit", "talk again later"],
+                "content": "Great, I can't wait to talk to you again then! Bye-bye for now, and don't forget to use your magnifier!",
+                "options": ["Bye!", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
         "start_node_name": "plan next checkin"
+    },
+    "prompted plan next checkin after eval": {
+        "nodes": {
+            "set tomorrow's time": {
+                "transitions": [
+                    "talk again later"
+                ],
+                "content": "When should we plan to talk again tomorrow?",
+                "options": ["Next"],
+                "message_type": "time entry",
+				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
+                "result_db_key": "next checkin datetime"
+            },
+            "talk again later": {
+                "transitions": ["exit", "talk again later"],
+                "content": "Great, I can't wait to talk to you again then! Bye-bye for now, and don't forget to use your magnifier!",
+                "options": ["Bye!", "Replay"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "set tomorrow's time"
     },
     "prompted checkin": {
         "nodes": {
@@ -82,53 +171,52 @@
                     "great to hear",
                     "great to hear",
                     "great to hear",
-                    "great to hear",
-                    "great to hear",
                     "joke 1",
                     "joke 1",
                     "joke 1",
-                    "joke 1",
-                    "joke 1"
+                    "how do you feel about vision"
                 ],
                 "content": "How do you feel about your vision right now?",
-                "options": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                "options": ["10", "8", "6", "4", "2", "0", "Replay"],
                 "message_type": "image",
-                "args": ["../img/rating_chart.png"]
+                "args": ["https://drive.google.com/uc?export=view&id=1p9IkFzCCIqsdgdhAvVefK2E1d0lPObcO"],
+                "result_db_key": "feelings index"
             },
             "joke 1": {
-                "transitions": "talk about frustrations",
+                "transitions": ["talk about frustrations"],
                 "content": "{'var': 'joke'}",
-                "options": "Next",
-                "message_type": "multiple choice one column"
-            },
-            "talk about frustrations": {
-                "transitions": ["listening", "did you use magnifier"],
-                "content": "{'db': 'user name', 'default value': ''}, I know life is more challenging with your vision. Sometimes it helps to vent to someone who's there to listen. Care to tell me about your frustrations?",
-                "options": ["Yes", "No"],
-                "message_type": "multiple choice one column"
-            },
-            "listening": {
-                "transitions": "did you use magnifier",
-                "content": "I'm listening!",
                 "options": ["Next"],
                 "message_type": "multiple choice one column"
             },
-            "did you use magnifier": {
-                "transitions": ["how was magnifier use", "keep trying"],
-                "content": "Tell me, did you use your magnifier since the last time we spoke?",
-                "options": ["Yes", "No"],
+            "talk about frustrations": {
+                "transitions": ["listening", "did you use magnifier", "talk about frustrations"],
+                "content": "{'db': 'user name', 'default value': ''}, I know life is more challenging with your vision. Sometimes it helps to vent to someone who's there to listen. Care to tell me about your frustrations?",
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column"
             },
+            "listening": {
+                "transitions": ["did you use magnifier", "listening"],
+                "content": "I'm listening!",
+                "options": ["Next", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "did you use magnifier": {
+                "transitions": ["how was magnifier use", "keep trying", "did you use magnifier"],
+                "content": "Tell me, did you use your magnifier since the last time we spoke?",
+                "options": ["Yes", "No", "Replay"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "did use magnifier"
+            },
             "great to hear": {
-                "transitions": ["how was magnifier use", "keep trying"],
+                "transitions": ["how was magnifier use", "keep trying", "great to hear"],
                 "content": "That's {'var': 'great'} to hear. Tell me, did you use your magnifier since the last time we spoke?",
-                "options": ["Yes", "No"],
+                "options": ["Yes", "No", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "keep trying": {
-                "transitions": "exit",
+                "transitions": ["exit", "keep trying"],
                 "content": "Your magnifier can make a huge difference when it's tough to read something. Keep working with it and you'll find it helpful.",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "how was magnifier use": {
@@ -139,38 +227,73 @@
                     "fair",
                     "fair",
                     "poor",
-                    "poor"
+                    "how was magnifier use"
                 ],
                 "content": "Please share with me: how did it go with your magnifier?",
-                "options": ["1", "2", "3", "4", "5", "6", "7"],
+                "options": ["10", "8", "6", "4", "2", "0", "Replay"],
                 "message_type": "image",
-                "args": ["../img/rating_chart.png"]
+                "args": ["https://drive.google.com/uc?export=view&id=1p9IkFzCCIqsdgdhAvVefK2E1d0lPObcO"]
             },
             "excellent": {
-                "transitions": "exit",
+                "transitions": ["exit", "excellent"],
                 "content": "Fantastic! I'm so proud of you for doing so well!",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "good": {
-                "transitions": "exit",
+                "transitions": ["exit", "good"],
                 "content": "I am glad to hear it's going pretty well. Here's my advice: Let's aim to become great with your magnifier. I know that you can get there! Your future self will thank you.",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "fair": {
-                "transitions": "exit",
+                "transitions": ["exit", "fair"],
                 "content": "Let's see how we can make things better with practice. How about we pick a number of tries and do that many each day. Let's go for 2! It's not important that things go great each time, it's important that you give it a good try. How about that?",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             },
             "poor": {
-                "transitions": "exit",
+                "transitions": ["exit", "poor"],
                 "content": "I am so sorry that it has been hard to use the magnifier! It takes time to get better at it. Let's set a goal for tomorrow to just give it a try and not feel bad about however it goes. Each try counts, so you should feel good about trying.",
-                "options": "Next",
+                "options": ["Next", "Replay"],
                 "message_type": "multiple choice one column"
             }
         },
         "start_node_name": "how do you feel about vision"
+    },
+    "ask if given up": {
+        "nodes": {
+            "ask if given up": {
+                "transitions": ["exit", "exit", "ask if given up"],
+                "content": "Are you thinking of giving up on the magnifier or have you not needed it?",
+                "options": ["No need", "Gave up", "Replay"],
+                "message_type": "multiple choice one column",
+                "result_db_key": "ask if given up"
+            }
+        },
+        "start_node_name": "ask if given up"
+    },
+    "stories and jokes": {
+        "nodes": {
+            "ask for story": {
+                "transitions": ["read to QT", "exit", "ask for story"],
+                "content": "I love stories and jokes! Will you read me a story or tell me a joke? Or show me something that has been hard to read?",
+                "options": ["Yes", "Not right now", "Replay"],
+                "message_type": "multiple choice one column"
+            },
+            "read to QT": {
+                "transitions": ["that was great"],
+                "content": "I'm listening! Press 'Next' to let me know when you're done.",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            },
+            "that was great": {
+                "transitions": ["exit"],
+                "content": "That was {'var': 'great'}! Thank you for sharing!",
+                "options": ["Next"],
+                "message_type": "multiple choice one column"
+            }
+        },
+        "start_node_name": "ask for story"
     }
 }
