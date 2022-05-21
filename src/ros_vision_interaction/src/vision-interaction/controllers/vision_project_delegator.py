@@ -178,9 +178,9 @@ class VisionProjectDelegator:
             else:
                 interaction_type = None
         else:
-            if self._is_time_for_scheduled_interaction():
-                interaction_type = Interactions.SCHEDULED_INTERACTION
-            elif self._is_run_too_many_prompted():
+            # if self._is_time_for_scheduled_interaction():
+                # interaction_type = Interactions.SCHEDULED_INTERACTION
+            if self._is_run_too_many_prompted():
                 interaction_type = Interactions.TOO_MANY_PROMPTED
             elif self._is_run_prompted_interaction():
                 interaction_type = Interactions.PROMPTED_INTERACTION
@@ -223,11 +223,10 @@ class VisionProjectDelegator:
                 datetime.datetime.now()
             )
 
-            is_time = is_in_update_window or \
-                (is_prompted_in_scheduled_window and not
-                    self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and
+            # is_time = is_in_update_window or \
+            is_time = is_prompted_in_scheduled_window and \
+                    not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
                     self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER)
-                 )
 
         return is_time
 
@@ -237,9 +236,11 @@ class VisionProjectDelegator:
             self._scheduled_window_minutes,
             datetime.datetime.now()
         )
+        # return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
+               # not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
+               # not is_in_scheduled_window
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
-               not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY) and \
-               not is_in_scheduled_window
+               not self._state_database.get(DatabaseKeys.IS_DONE_EVAL_TODAY)
 
     def _is_run_prompted_interaction(self):
         return self._state_database.get(DatabaseKeys.IS_PROMPTED_BY_USER) and \
