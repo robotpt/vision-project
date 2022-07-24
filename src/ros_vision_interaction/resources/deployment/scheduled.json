@@ -15,7 +15,7 @@
         "nodes": {
             "set tomorrow's time": {
                 "transitions": "talk again later",
-                "content": "When should we plan to talk again tomorrow?",
+                "content": "What time might you want to chat tomorrow? Let's set the intention to talk again then, but you can always come at another time that works better tomorrow.",
                 "options": "Next",
                 "message_type": "time entry",
 				"result_convert_from_str_fn": "save_tomorrow_checkin_datetime",
@@ -23,7 +23,7 @@
             },
             "talk again later": {
                 "transitions": ["exit", "talk again later"],
-                "content": "Great, I can't wait to talk to you again then!",
+                "content": "Great, I can't wait to talk to you again!",
                 "options": ["Bye!", "Replay"],
                 "message_type": "multiple choice one column"
             }
