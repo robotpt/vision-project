@@ -136,7 +136,7 @@ RUN apt-get update -y \
 	&& apt-get install -y dbus-x11 \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV AWS_BUCKET_NAME <your-bucket-name>
+ENV AWS_BUCKET_NAME lux-ai-tester
 
 ENV HOSTNAME localhost
 
