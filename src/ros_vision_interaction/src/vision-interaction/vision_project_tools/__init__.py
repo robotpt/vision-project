@@ -1,3 +1,4 @@
+#!/usr/bin/python3.8
 import logging
 
 from vision_project_tools.constants import DatabaseKeys, INITIAL_STATE_DB, Interactions
