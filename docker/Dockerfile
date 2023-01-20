@@ -3,7 +3,7 @@
 # =======================================================
 # The minimum requirements for running the vision-project
 # =======================================================
-FROM osrf/ros:melodic-desktop-full as vision_project_min
+FROM osrf/ros:noetic-desktop-full as vision_project_min
 
 # Pass in a command line arguement to set the branch to use
 # e.g., docker build --build-arg vision_project_branch=master --target vision_project_dev .
@@ -27,7 +27,7 @@ RUN \
 	&& git clone --branch ros1 https://github.com/RobotWebTools/rosbridge_suite.git \
 	&& git clone https://github.com/audrow/mongodb-statedb.git \
 	&& cd mongodb-statedb && /bin/bash -c "python3.8 -m pip install ." \
-	&& cd ../..; /bin/bash -c "source /opt/ros/melodic/setup.bash && catkin_make"
+	&& cd ../..; /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
 
 
 # ==============================================================
@@ -83,12 +83,12 @@ RUN \
 	&& rm -rf /var/lib/apt/lists/* 
 
 # Setup Pycharm
-RUN \
-	wget https://download.jetbrains.com/python/pycharm-community-2020.2.1.tar.gz?_ga=2.164454841.706163669.1598639929-1052883321.1598639929 \
-	&& mv pycharm-community-* pycharm-community.tar.gz \
-	&& tar xfz pycharm-*.tar.gz -C /opt/ \
-	&& rm pycharm-community.tar.gz \
-	&& echo 'alias pycharm="/opt/pycharm-community*/bin/pycharm.sh"' >> /root/.bashrc 
+# RUN \
+	# wget https://download.jetbrains.com/python/pycharm-community-2020.2.1.tar.gz?_ga=2.164454841.706163669.1598639929-1052883321.1598639929 \
+	# && mv pycharm-community-* pycharm-community.tar.gz \
+	# && tar xfz pycharm-*.tar.gz -C /opt/ \
+	# && rm pycharm-community.tar.gz \
+	# && echo 'alias pycharm="/opt/pycharm-community*/bin/pycharm.sh"' >> /root/.bashrc 
 
 # Install Visual Studio Code
 RUN \
@@ -157,4 +157,4 @@ alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 alias rvi='roslaunch ros_vision_interaction vision_project.launch'\n\
 source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
-RUN cd ${ROS_WS} &&  /bin/bash -c "source /opt/ros/melodic/setup.bash && catkin_make"
+RUN cd ${ROS_WS} &&  /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"

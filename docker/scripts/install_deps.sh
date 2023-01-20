@@ -31,17 +31,9 @@ sudo apt-get install -y \
 
 # Setup Python2 - for Cordial
 sudo apt-get update && sudo apt-get install -y \
-	python \
-	python-pip \
-	python-scipy \
-	python-pyaudio
-python -m pip install --upgrade pip==20.3.3
-python -m pip install \
-	rospkg \
-	catkin_pkg \
-	boto3==1.12.11 \
-	soundfile==0.10.3.post1 \
-	speedtest-cli==2.1.2
+	python3-scipy \
+	python3-pyaudio
+# python3 -m pip install --upgrade pip==20.3.3
 
 # Setup Python3 - for the vision project
 sudo apt-get install -y \
@@ -66,4 +58,9 @@ ${PYTHON3_VERSION} -m pip install --user \
 	pymongo==3.11.4 \
 	discord.py==1.7.1 \
 	speechrecognition \
-	webrtcvad
+	webrtcvad \
+	rospkg \
+	catkin_pkg \
+	boto3==1.12.11 \
+	soundfile==0.10.3.post1 \
+	speedtest-cli==2.1.2
