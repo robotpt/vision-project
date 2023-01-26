@@ -18,7 +18,8 @@ case "$MODE" in
 		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run -d $SERVICE_NAME bash -c "source ~/catkin_ws/devel/setup.bash && roslaunch ros_vision_interaction vision_project.launch"
 		;;
 	terminal | terminal_debug | t )
-		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "source ~/catkin_ws/devel/setup.bash && bash"
+		# ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash -c "source ~/catkin_ws/devel/setup.bash && bash"
+		ROS_MASTER_URI=$ROS_MASTER_URI docker-compose run $SERVICE_NAME bash
 		;;
 	stop | kill | down )
 		docker-compose down

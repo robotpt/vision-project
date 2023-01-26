@@ -157,4 +157,6 @@ alias STRESS='stress -c $(nproc) -m $(nproc) -i $(nproc) -d $(nproc)'\n\
 alias rvi='roslaunch ros_vision_interaction vision_project.launch'\n\
 source ${ROS_WS}/devel/setup.bash" >> ~/.bashrc
 
-RUN cd ${ROS_WS} &&  /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
+RUN /bin/bash -c "sudo ln -s /usr/bin/python3 /usr/bin/python"
+
+RUN cd ${ROS_WS} &&  /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3"
